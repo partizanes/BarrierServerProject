@@ -1,0 +1,5 @@
+D:\dev\Info\BarrierServerProject\BarrierServerProject\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\dev\Info\BarrierServerProject\BarrierServerProject\bin\Debug\BarrierServerProject.exe
+D:\dev\Info\BarrierServerProject\BarrierServerProject\bin\Debug\BarrierServerProject.pdb
+D:\dev\Info\BarrierServerProject\BarrierServerProject\obj\x86\Debug\BarrierServerProject.exe
+D:\dev\Info\BarrierServerProject\BarrierServerProject\obj\x86\Debug\BarrierServerProject.pdb
