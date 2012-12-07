@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Net;
+using System.Collections;
+using System.Net.Sockets;
 
 namespace BarrierServerProject
 {
@@ -11,6 +14,19 @@ namespace BarrierServerProject
                 case "version":
                     {
                         return "Alpa 0.4.Created by Part!zanes";
+                    }
+                case "list":
+                    {
+                        Console.WriteLine("======================");
+
+                        foreach (DictionaryEntry de in Server.clients)
+                        {
+                            Color.WriteLineColor(de.Value.ToString(),"Cyan");
+                        }
+
+                        Console.WriteLine("======================");
+
+                        return "\nDone.";
                     }
                 case "logo":
                     {

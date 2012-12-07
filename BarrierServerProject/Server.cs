@@ -13,7 +13,7 @@ namespace BarrierServerProject
         //Cтатус сервера
         static bool isServerRunning;
         // Клиенты
-        static Hashtable clients;
+        public static Hashtable clients;
         // Сокет
         static Socket listener;
         // Порт
@@ -59,7 +59,7 @@ namespace BarrierServerProject
                     Socket client = listener.Accept();
                     // Теперь, обратившись к объекту client, мы сможем отсылать и принимать пакеты от последнего подключившегося пользователя.
                     // Добавляем подключенного клиента в список всех клиентов, для дальнейшей массовой рассылки пакетов
-                    clients.Add(client, "");
+                    clients.Add(client, client.RemoteEndPoint);
                     Color.WriteLineColor("Клиент добавлен: " + client.RemoteEndPoint, "Yellow");
                     // Начинаем принимать входящие пакеты
                     Thread thh = new Thread(delegate()
