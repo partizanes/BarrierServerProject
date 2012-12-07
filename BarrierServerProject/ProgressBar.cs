@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ConsoleFunctions
 {
     static class Code
     {
-        public static void OverwriteConsoleMessage(string message)
+        private static void OverwriteConsoleMessage(string message)
         {
             Console.CursorLeft = 0;
             int maxCharacterWidth = Console.WindowWidth - 1;
