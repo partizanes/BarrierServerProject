@@ -11,7 +11,7 @@ namespace BarrierServerProject
     class Server
     {
         //Cтатус сервера
-        static bool isServerRunning;
+        public static bool isServerRunning;
         // Клиенты
         public static Hashtable clients;
         // Сокет

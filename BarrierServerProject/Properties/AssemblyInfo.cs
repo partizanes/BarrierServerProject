@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Управление общими сведениями о сборке осуществляется с помощью 
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("BarrierServerProject")]
+[assembly: AssemblyTitle("")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("mag41")]
-[assembly: AssemblyProduct("BarrierServerProject")]
+[assembly: AssemblyCompany("by Part!zanes")]
+[assembly: AssemblyProduct("")]
 [assembly: AssemblyCopyright("Copyright © mag41 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
