@@ -30,6 +30,12 @@ namespace BarrierServerProject
 
                         return "\nDone.";
                     }
+                case "clr":
+                case "clear":
+                    {
+                        Console.Clear();
+                        return "done.";
+                    }
                 case "logo":
                     {
                         Logo LogoLoad = new Logo();
@@ -64,6 +70,7 @@ namespace BarrierServerProject
                         Color.WriteLineColor("help    Выводит информацию о коммандах\n", "Cyan");
                         Color.WriteLineColor("status  Выводит статус сервера\n", "Cyan");
                         Color.WriteLineColor("command Выводит информацию о коммандах\n", "Cyan");
+                        Color.WriteLineColor("clr     Очищает окно программы\n", "Cyan");
                         return "done.";
 
                     }
