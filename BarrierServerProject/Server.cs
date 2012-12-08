@@ -78,12 +78,17 @@ namespace BarrierServerProject
         {
             Thread th = new Thread(delegate()
             {
+                User user = new User();
+
                 while (isServerRunning)
                 {
                     try
                     {
                          if (!r_client.Connected)
                             return;
+
+                        user.ipaddress = IPAddress.Parse(((IPEndPoint)r_client.RemoteEndPoint).Address.ToString());
+                        user.port = ((IPEndPoint)r_client.RemoteEndPoint).Port;
 
                         byte[] bytes  = new byte[256];
 
@@ -108,7 +113,7 @@ namespace BarrierServerProject
                             string msg_data = split_data[1].Substring(5, (Convert.ToInt32(str_len))-4); //сообщение
 
                             //передача разобранных параметров
-                            Packages.parse(com_id, com_type , msg_data);
+                            Packages.parse(com_id, com_type , msg_data, user);
                         }
                     }
                     catch(SocketException exc)
