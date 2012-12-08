@@ -7,18 +7,18 @@ namespace BarrierServerProject
 {
     class Packages
     {
-        public static void parse(uint p_id,string com)
+        public static void parse(string p_id,string com,string msg)
         {
             switch (p_id)
             {
-                case 0:
-                    Console.WriteLine("username: " + com);
+                case "00":
+                    Console.WriteLine("username: " + msg);
                     break;
-                case 1:
-                    Console.WriteLine("password: " + com);
+                case "01":
+                    Console.WriteLine("password: " + msg);
                     break;
-                case 2:
-                    Console.WriteLine(p_id + " | " + com);
+                case "02":
+                    Console.WriteLine(msg);
                     break;
             }
         }

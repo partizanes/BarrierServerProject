@@ -85,27 +85,30 @@ namespace BarrierServerProject
                          if (!r_client.Connected)
                             return;
 
-                        byte[] bytes = new byte[1024];
+                        byte[] bytes  = new byte[256];
 
                         r_client.Receive(bytes);
 
                         if (bytes.Length != 0)
                         {
+                            //Принимаемый пакет разбор структуры
+
                             string data = Encoding.UTF8.GetString(bytes);
 
                             string[] split_data = data.Split(new Char[] { '|' });
 
-                            if (split_data.Length != 2)
-                            {
-                                Console.WriteLine("Структура неверна!");
-                            }
-                            else
-                            {
-                                UInt32 p_id = Convert.ToUInt32(split_data[0].Replace("\0", ""));
-                                string com = split_data[1].Replace("\0", "");
+                            // 10|01 0 11234
 
-                                Packages.parse(p_id, com);
-                            }
+                            string str_len = split_data[0];  // длина строки
+
+                            string com_id = split_data[1].Substring(0, 2);  // id команды
+
+                            string com_type = split_data[1].Substring(3, 1); // type команды
+
+                            string msg_data = split_data[1].Substring(5, (Convert.ToInt32(str_len))-4); //сообщение
+
+                            //передача разобранных параметров
+                            Packages.parse(com_id, com_type , msg_data);
                         }
                     }
                     catch(SocketException exc)
