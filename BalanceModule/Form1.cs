@@ -26,6 +26,11 @@ namespace BalanceModule
         private MySqlConnection serverConn;
         private string connStr;
 
+        private bool drag = false;
+        private Point start_point = new Point(0, 0);
+        private bool draggable = true;
+        private string exclude_list = "";
+
         public Form1()
         {
             InitializeComponent();
@@ -33,14 +38,22 @@ namespace BalanceModule
 
         private void Form1_Shown(object sender, EventArgs e)
         {
-            Test_Click();
+            listBox1.Items.Add("Модуль загружен!");
+
+            Thread thh = new Thread(delegate()
+            {
+                Test_Click();
+            });;
+            thh.Start();
         }
 
         private void Test_Click()
         {
+            //Thread.Sleep(2000);
+
             if (cas.Init() < 0)
             {
-                Console.WriteLine("Init fail");
+                listBox1.Items.Add("Отказ инициализации библиотеки.");
                 return;
             }
 
@@ -50,26 +63,56 @@ namespace BalanceModule
 
             dr = dbf.ExecuteReader("SELECT ip,name,port,model  FROM struct.dbf");
 
-            if (dr == null)
-                return;
+            if (!dr.HasRows)
+                this.Invoke((Action)delegate { listBox1.Items.Add("База весов пустая!"); });
 
             while (dr.Read())
             {
-                m_ip = dr.GetString(0);
-                m_name = Convertall(dr.GetString(1).Replace(" ",""), Encoding.GetEncoding(866), Encoding.GetEncoding(1251));
-                m_port = Convert.ToInt32(dr.GetString(2));
-                m_model = Convert.ToInt32(dr.GetString(3));
+                try
+                {
+                    m_ip = dr.GetString(0);
+                    m_name = Convertall(dr.GetString(1).Replace(" ", ""), Encoding.GetEncoding(866), Encoding.GetEncoding(1251));
+                    m_port = Convert.ToInt32(dr.GetString(2));
+                    m_model = Convert.ToInt32(dr.GetString(3));
+                }
+                catch (System.Exception ex)
+                {
+                    //Console.WriteLine(ex.Message);
+                    //TODO Написать обработчик исключений ,с отправкой на сервер отчетов ;
+                    this.Invoke((Action)delegate { listBox1.Items.Add("Произошло исключение при считывании параметров весов! Адрес" + m_ip + " Имя: " + m_name + " Порт: " + m_port + " Модель: " + m_model); });
+                    this.Invoke((Action)delegate { listBox1.Items.Add("Текст исключения: " + ex.Message); });
+
+                    Log.log_write(ex.Message, "Exception", "Exception");
+
+                    continue;
+                }
 
                 if (cas.Connection(m_ip, m_port, 1, m_model) == -1)
                 {
-                    Console.WriteLine("Connect fail");
-                    return;
+                    this.Invoke((Action)delegate { listBox1.Items.Add("Соединение с весами " + m_ip + ": " + m_port + " не удалось!"); });
+
+                    int i = 3;
+
+                    while (i != 0)
+                    {
+                        this.Invoke((Action)delegate { listBox1.Items.Add("Пробуем еще раз..."); });
+                        Thread.Sleep(2000);
+                        if (cas.Connection(m_ip, m_port, 1, m_model) != -1)
+                            i = 0;
+                        else
+                        {
+                            this.Invoke((Action)delegate { listBox1.Items.Add("Соединение с весами " + m_ip + ": " + m_port + " не удалось!"); });
+                            i--;
+                        }
+                    }
+
+                    continue;
                 }
 
                 if (cas.RecvPLU() < 0)
                 {
-                    Console.WriteLine("Connect fail");
-                    return;
+                    this.Invoke((Action)delegate { listBox1.Items.Add("Соединение не удалось!Количество полученых записей меньше 0"); });
+                    continue;
                 }
                     /* 
                     1	Disconnect or don't start
@@ -102,7 +145,7 @@ namespace BalanceModule
                     r = cas.GetState();
                     string str = "";
                     cas.GetTransStatus(m_ip, ref str);  //ipadress
-                    Console.WriteLine(str);
+                    this.Invoke((Action)delegate { listBox1.Items.Add(str); });
                 }
 
                 string dataplu = "";
@@ -116,32 +159,30 @@ namespace BalanceModule
             }
 
             cas.DeInit();
-            Console.WriteLine("Выполнено!");
-            Console.WriteLine(count_error);
+
+            this.Invoke((Action)delegate { listBox1.Items.Add("Выполнено!"); });
+            this.Invoke((Action)delegate { listBox1.Items.Add("Количество найденых проблем: " + count_error); });
         }
 
         private void parse_plu_str(string str)
         {
-            string articul = str.Substring(5, 5);
+            try
+            {
+                string articul = str.Substring(5, 5);
 
-            string barcode = str.Substring(28, 13);
+                string barcode = str.Substring(28, 13);
 
-            Int32 price_c = int.Parse(str.Substring(14, 10));
-            string name = str.Substring(159, 54);
+                Int32 price_c = int.Parse(str.Substring(14, 10));
 
-            //Console.WriteLine(articul + " " + barcode + " " + name + " " + price_c);
+                string name = str.Substring(159, 54);
 
-            query_sql(articul, price_c);
-        }
+                query_sql(articul, price_c);
+            }
 
-        private string Convertall(string value, Encoding src, Encoding trg)
-        {
-            Decoder dec = src.GetDecoder();
-            byte[] ba = trg.GetBytes(value);
-            int len = dec.GetCharCount(ba, 0, ba.Length);
-            char[] ca = new char[len];
-            dec.GetChars(ba, 0, ba.Length, ca, 0);
-            return new string(ca);
+            catch (System.Exception ex)
+            {
+                this.Invoke((Action)delegate { listBox1.Items.Add("Текст исключения: " + ex.Message); });
+            }
         }
 
         private void query_sql(string articul, Int32 price)
@@ -164,7 +205,7 @@ namespace BalanceModule
                 if (!reader.HasRows)
                 {
                     count_error++;
-                    Console.WriteLine(articul + " Цена Не найдена на кассе!");
+                    this.Invoke((Action)delegate { listBox1.Items.Add(articul + " Цена Не найдена на кассе!"); });
                 }
 
                 while (reader.Read())
@@ -173,14 +214,14 @@ namespace BalanceModule
 
                     if (price != price_c)
                     {
-                        Console.WriteLine(articul + " " + reader.GetString(0) + " Цена на весах: " + price + " Цена на кассе: " + price_c);
+                        this.Invoke((Action)delegate { listBox1.Items.Add(articul + " " + reader.GetString(0) + " Цена на весах: " + price + " Цена на кассе: " + price_c); });
                         count_error++;
                     }
                 }
             }
-            catch(Exception exc) 
-            { 
-                MessageBox.Show(exc.Message); 
+            catch(Exception ex)
+            {
+                this.Invoke((Action)delegate { listBox1.Items.Add("Текст исключения: " + ex.Message); });
             }
             finally
             {
@@ -189,6 +230,128 @@ namespace BalanceModule
                     serverConn.Close();
                 }
             }
+        }
+
+        //end main block
+
+        private string Convertall(string value, Encoding src, Encoding trg)
+        {
+            Decoder dec = src.GetDecoder();
+            byte[] ba = trg.GetBytes(value);
+            int len = dec.GetCharCount(ba, 0, ba.Length);
+            char[] ca = new char[len];
+            dec.GetChars(ba, 0, ba.Length, ca, 0);
+            return new string(ca);
+        }
+
+        //form move block
+
+        protected override void OnControlAdded(ControlEventArgs e)
+        {
+            if (this.Draggable && (this.ExcludeList.IndexOf(e.Control.Name) == -1))
+            {
+                e.Control.MouseDown += new MouseEventHandler(Form_MouseDown);
+                e.Control.MouseUp += new MouseEventHandler(Form_MouseUp);
+                e.Control.MouseMove += new MouseEventHandler(Form_MouseMove);
+            }
+            base.OnControlAdded(e);
+        }
+
+        void Form_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.drag = true;
+            this.start_point = new Point(e.X, e.Y);
+        }
+
+        void Form_MouseUp(object sender, MouseEventArgs e)
+        {
+            this.drag = false;
+        }
+
+        void Form_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (this.drag)
+            {
+                Point p1 = new Point(e.X, e.Y);
+                Point p2 = this.PointToScreen(p1);
+                Point p3 = new Point(p2.X - this.start_point.X,
+                                     p2.Y - this.start_point.Y);
+                this.Location = p3;
+            }
+        }
+
+        private void listBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (this.drag)
+            {
+                Point p1 = new Point(e.X, e.Y);
+                Point p2 = this.PointToScreen(p1);
+                Point p3 = new Point(p2.X - this.start_point.X,
+                                     p2.Y - this.start_point.Y);
+                this.Location = p3;
+            }
+        }
+
+        private void listBox1_MouseUp(object sender, MouseEventArgs e)
+        {
+            this.drag = false;
+        }
+
+        private void listBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.drag = true;
+            this.start_point = new Point(e.X, e.Y);
+        }
+
+        private void splitContainer1_Panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.drag = true;
+            this.start_point = new Point(e.X, e.Y);
+        }
+
+        private void splitContainer1_Panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (this.drag)
+            {
+                Point p1 = new Point(e.X, e.Y);
+                Point p2 = this.PointToScreen(p1);
+                Point p3 = new Point(p2.X - this.start_point.X,
+                                     p2.Y - this.start_point.Y);
+                this.Location = p3;
+            }
+        }
+
+        private void splitContainer1_Panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            this.drag = false;
+        }
+
+        public string ExcludeList
+        {
+            set
+            {
+                this.exclude_list = value;
+            }
+            get
+            {
+                return this.exclude_list.Trim();
+            }
+        }
+
+        public bool Draggable
+        {
+            set
+            {
+                this.draggable = value;
+            }
+            get
+            {
+                return this.draggable;
+            }
+        }
+        private void listBox1_SelectedValueChanged(object sender, EventArgs e)
+        {
+            panel1.Focus();
         }
     }
 }
