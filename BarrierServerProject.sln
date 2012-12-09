@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarrierServerProject", "BarrierServerProject\BarrierServerProject.csproj", "{85EDBD74-7A16-44FE-AA22-1216DF405058}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalanceModule", "BalanceModule\BalanceModule.csproj", "{E2D2F9A2-9FCA-422A-B41A-0E4E27762013}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -13,6 +15,10 @@ Global
 		{85EDBD74-7A16-44FE-AA22-1216DF405058}.Debug|x86.Build.0 = Debug|x86
 		{85EDBD74-7A16-44FE-AA22-1216DF405058}.Release|x86.ActiveCfg = Release|x86
 		{85EDBD74-7A16-44FE-AA22-1216DF405058}.Release|x86.Build.0 = Release|x86
+		{E2D2F9A2-9FCA-422A-B41A-0E4E27762013}.Debug|x86.ActiveCfg = Debug|x86
+		{E2D2F9A2-9FCA-422A-B41A-0E4E27762013}.Debug|x86.Build.0 = Debug|x86
+		{E2D2F9A2-9FCA-422A-B41A-0E4E27762013}.Release|x86.ActiveCfg = Release|x86
+		{E2D2F9A2-9FCA-422A-B41A-0E4E27762013}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

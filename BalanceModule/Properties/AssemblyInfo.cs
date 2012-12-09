@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // Управление общими сведениями о сборке осуществляется с помощью 
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("")]
+[assembly: AssemblyTitle("BalanceModule")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("by Part!zanes")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("Copyright © partizanes 2012")]
+[assembly: AssemblyCompany("mag41")]
+[assembly: AssemblyProduct("BalanceModule")]
+[assembly: AssemblyCopyright("Copyright © mag41 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID служит для идентификации библиотеки типов, если этот проект будет видимым для COM
-[assembly: Guid("2b7a3885-fefd-4e4c-afbb-74fb7e5aa4b8")]
+[assembly: Guid("ac940301-fad2-4e41-b586-d1ed656ea02e")]
 
 // Сведения о версии сборки состоят из следующих четырех значений:
 //
