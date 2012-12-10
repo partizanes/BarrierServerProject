@@ -31,6 +31,8 @@ namespace BalanceModule
         private bool draggable = true;
         private string exclude_list = "";
 
+        private int[] data_delete = new int[5000];
+
         public Form1()
         {
             InitializeComponent();
@@ -53,7 +55,7 @@ namespace BalanceModule
 
             if (cas.Init() < 0)
             {
-                listBox1.Items.Add("Отказ инициализации библиотеки.");
+                this.Invoke((Action)delegate { listBox1.Items.Add("Отказ инициализации библиотеки."); });
                 return;
             }
 
@@ -162,6 +164,14 @@ namespace BalanceModule
 
             this.Invoke((Action)delegate { listBox1.Items.Add("Выполнено!"); });
             this.Invoke((Action)delegate { listBox1.Items.Add("Количество найденых проблем: " + count_error); });
+
+            int count = 0;
+
+            while (count < count_error)
+            {
+                delete_plu(data_delete[count].ToString());
+                count++;
+            }
         }
 
         private void parse_plu_str(string str)
@@ -183,6 +193,64 @@ namespace BalanceModule
             {
                 this.Invoke((Action)delegate { listBox1.Items.Add("Текст исключения: " + ex.Message); });
             }
+        }
+
+        private bool delete_plu(string articul)
+        {
+            if (articul == "0")
+                return true;
+
+            if (cas.Init() < 0)
+            {
+                listBox1.Items.Add("Отказ инициализации библиотеки.");
+                return false;
+            }
+
+
+            if (cas.Connection(m_ip, m_port, 1, m_model) == -1)
+            {
+                this.Invoke((Action)delegate { listBox1.Items.Add("Соединение с весами " + m_ip + ": " + m_port + " не удалось!"); });
+
+                int i = 3;
+
+                while (i != 0)
+                {
+                    this.Invoke((Action)delegate { listBox1.Items.Add("Пробуем еще раз..."); });
+                    Thread.Sleep(2000);
+                    if (cas.Connection(m_ip, m_port, 1, m_model) != -1)
+                        i = 0;
+                    else
+                    {
+                        this.Invoke((Action)delegate { listBox1.Items.Add("Соединение с весами " + m_ip + ": " + m_port + " не удалось!"); });
+                        i--;
+                    }
+                }
+            }
+
+            int pluno = int.Parse(articul);
+
+            if (cas.DeletePLU(1, pluno) != 1)
+            {
+                this.Invoke((Action)delegate { listBox1.Items.Add("Удалить товар с весов не удалось:" + m_ip); });
+                return false;
+            }
+            else
+                this.Invoke((Action)delegate { listBox1.Items.Add("C Весов : "+ m_ip +" удален товар:" + articul ); });
+
+            int r = cas.GetState();
+
+            while (!(r == 99 || r == 55 || r == 30))
+            {
+                r = cas.GetState();
+                string str = "";
+                cas.GetTransStatus(m_ip, ref str);
+                this.Invoke((Action)delegate { listBox1.Items.Add(str); });
+                Thread.Sleep(1000);
+            }
+
+            cas.DisconnectAll();
+            cas.DeInit();
+            return true;
         }
 
         private void query_sql(string articul, Int32 price)
@@ -216,6 +284,8 @@ namespace BalanceModule
                     {
                         this.Invoke((Action)delegate { listBox1.Items.Add(articul + " " + reader.GetString(0) + " Цена на весах: " + price + " Цена на кассе: " + price_c); });
                         count_error++;
+                        data_delete[count_error] = int.Parse(articul);
+                        //delete_plu(articul);
                     }
                 }
             }
@@ -349,6 +419,7 @@ namespace BalanceModule
                 return this.draggable;
             }
         }
+
         private void listBox1_SelectedValueChanged(object sender, EventArgs e)
         {
             panel1.Focus();

@@ -55,7 +55,7 @@ namespace BalanceModule
             this.splitContainer1.BackColor = System.Drawing.Color.Black;
             this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.splitContainer1.ForeColor = System.Drawing.Color.Red;
-            this.splitContainer1.Location = new System.Drawing.Point(12, 12);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -69,7 +69,7 @@ namespace BalanceModule
             // 
             this.splitContainer1.Panel2.Controls.Add(this.listBox1);
             this.splitContainer1.Size = new System.Drawing.Size(598, 281);
-            this.splitContainer1.SplitterDistance = 40;
+            this.splitContainer1.SplitterDistance = 34;
             this.splitContainer1.TabIndex = 1;
             // 
             // listBox1
@@ -95,7 +95,7 @@ namespace BalanceModule
             // 
             this.panel1.BackColor = System.Drawing.Color.Black;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Location = new System.Drawing.Point(617, 12);
+            this.panel1.Location = new System.Drawing.Point(600, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(220, 281);
             this.panel1.TabIndex = 2;
@@ -104,8 +104,8 @@ namespace BalanceModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Magenta;
-            this.ClientSize = new System.Drawing.Size(839, 305);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.ClientSize = new System.Drawing.Size(822, 282);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.cas);
@@ -113,9 +113,8 @@ namespace BalanceModule
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Opacity = 0.8D;
             this.Text = "BalanceModule";
-            this.TransparencyKey = System.Drawing.Color.Magenta;
+            this.TransparencyKey = System.Drawing.Color.Coral;
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form_MouseMove);
