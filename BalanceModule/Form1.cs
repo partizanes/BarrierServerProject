@@ -33,9 +33,25 @@ namespace BalanceModule
 
         private int[] data_delete = new int[5000];
 
+        public const Int32 LB_INSERTSTRING = 49741;
+
         public Form1()
         {
             InitializeComponent();
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+
+            if (m.Msg == LB_INSERTSTRING)
+            {
+                listBox1.SelectionMode = SelectionMode.One;
+                listBox1.SetSelected(listBox1.Items.Count - 1, true);
+                listBox1.SetSelected(listBox1.Items.Count - 1, false);
+
+            }
+
         }
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -148,6 +164,7 @@ namespace BalanceModule
                     string str = "";
                     cas.GetTransStatus(m_ip, ref str);  //ipadress
                     this.Invoke((Action)delegate { listBox1.Items.Add(str); });
+                    Thread.Sleep(1000);
                 }
 
                 string dataplu = "";
@@ -157,21 +174,18 @@ namespace BalanceModule
                     parse_plu_str(dataplu);
                 }
 
+                //cas.DisconnectAll();
+                this.Invoke((Action)delegate { listBox1.Items.Add("Сканирование " + m_ip + " завершено!"); });
+                this.Invoke((Action)delegate { listBox1.Items.Add("Количество найденых проблем: " + count_error); });
+
                 cas.DisconnectAll();
+
+                delete_plu();
+
+                this.Invoke((Action)delegate { listBox1.Items.Add("Удаление с весов " + m_ip + " завершено!"); });
             }
 
             cas.DeInit();
-
-            this.Invoke((Action)delegate { listBox1.Items.Add("Выполнено!"); });
-            this.Invoke((Action)delegate { listBox1.Items.Add("Количество найденых проблем: " + count_error); });
-
-            int count = 0;
-
-            while (count < count_error)
-            {
-                delete_plu(data_delete[count].ToString());
-                count++;
-            }
         }
 
         private void parse_plu_str(string str)
@@ -195,62 +209,67 @@ namespace BalanceModule
             }
         }
 
-        private bool delete_plu(string articul)
+        private void delete_plu()
         {
-            if (articul == "0")
-                return true;
+            int count = 0;
 
-            if (cas.Init() < 0)
+            while (count < count_error)
             {
-                listBox1.Items.Add("Отказ инициализации библиотеки.");
-                return false;
-            }
-
-
-            if (cas.Connection(m_ip, m_port, 1, m_model) == -1)
-            {
-                this.Invoke((Action)delegate { listBox1.Items.Add("Соединение с весами " + m_ip + ": " + m_port + " не удалось!"); });
-
-                int i = 3;
-
-                while (i != 0)
+                if (cas.Connection(m_ip, m_port, 1, m_model) == -1)
                 {
-                    this.Invoke((Action)delegate { listBox1.Items.Add("Пробуем еще раз..."); });
-                    Thread.Sleep(2000);
-                    if (cas.Connection(m_ip, m_port, 1, m_model) != -1)
-                        i = 0;
-                    else
+                    this.Invoke((Action)delegate { listBox1.Items.Add("Соединение с весами " + m_ip + ": " + m_port + " не удалось!"); });
+
+                    int i = 3;
+
+                    while (i != 0)
                     {
-                        this.Invoke((Action)delegate { listBox1.Items.Add("Соединение с весами " + m_ip + ": " + m_port + " не удалось!"); });
-                        i--;
+                        this.Invoke((Action)delegate { listBox1.Items.Add("Пробуем еще раз..."); });
+                        Thread.Sleep(2000);
+                        if (cas.Connection(m_ip, m_port, 1, m_model) != -1)
+                            i = 0;
+                        else
+                        {
+                            this.Invoke((Action)delegate { listBox1.Items.Add("Соединение с весами " + m_ip + ": " + m_port + " не удалось!"); });
+                            i--;
+                        }
                     }
                 }
+
+                string articul = data_delete[count].ToString();
+
+                if (articul == "0")
+                {
+                    count++;
+                    cas.DisconnectAll();
+                    continue;
+                }
+
+                int pluno = int.Parse(articul);
+
+                if (cas.DeletePLU(1, pluno) != 1)
+                {
+                    this.Invoke((Action)delegate { listBox1.Items.Add("Удалить товар с весов не удалось:" + m_ip); });
+                    cas.DisconnectAll();
+                    continue;
+                }
+                else
+                    this.Invoke((Action)delegate { listBox1.Items.Add("C Весов : " + m_ip + " удален товар:" + articul); });
+
+                int r = cas.GetState();
+
+                while (!(r == 99 || r == 55))
+                {
+                    r = cas.GetState();
+                    string str = "";
+                    cas.GetTransStatus(m_ip, ref str);
+                    this.Invoke((Action)delegate { listBox1.Items.Add(str); });
+                    Thread.Sleep(1000);
+                }
+
+                count++;
+                cas.DisconnectAll();
             }
-
-            int pluno = int.Parse(articul);
-
-            if (cas.DeletePLU(1, pluno) != 1)
-            {
-                this.Invoke((Action)delegate { listBox1.Items.Add("Удалить товар с весов не удалось:" + m_ip); });
-                return false;
-            }
-            else
-                this.Invoke((Action)delegate { listBox1.Items.Add("C Весов : "+ m_ip +" удален товар:" + articul ); });
-
-            int r = cas.GetState();
-
-            while (!(r == 99 || r == 55 || r == 30))
-            {
-                r = cas.GetState();
-                string str = "";
-                cas.GetTransStatus(m_ip, ref str);
-                this.Invoke((Action)delegate { listBox1.Items.Add(str); });
-                Thread.Sleep(1000);
-            }
-
-            cas.DisconnectAll();
-            cas.DeInit();
-            return true;
+            return;
         }
 
         private void query_sql(string articul, Int32 price)
