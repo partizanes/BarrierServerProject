@@ -135,7 +135,7 @@ namespace BalanceModule
             // 
             // timer_start_scan
             // 
-            this.timer_start_scan.Interval = 7200000;
+            this.timer_start_scan.Interval = 21600000;
             this.timer_start_scan.Tick += new System.EventHandler(this.timer_start_scan_Tick);
             // 
             // Form1
