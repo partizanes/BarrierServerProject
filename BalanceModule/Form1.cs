@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Data.OleDb;
-using Balance_module;
-using System.IO;
+using System.Drawing;
+using System.Text;
 using System.Threading;
+using System.Windows.Forms;
+using Balance_module;
 using MySql.Data.MySqlClient;
 
 namespace BalanceModule
@@ -33,25 +29,30 @@ namespace BalanceModule
 
         private int[] data_delete = new int[5000];
 
-        public const Int32 LB_INSERTSTRING = 49741;
+        Server server = new Server();
 
         public Form1()
         {
-            InitializeComponent();
+                InitializeComponent();
         }
 
         protected override void WndProc(ref Message m)
         {
             base.WndProc(ref m);
 
-            if (m.Msg == LB_INSERTSTRING)
+            switch (m.Msg)
             {
-                listBox1.SelectionMode = SelectionMode.One;
-                listBox1.SetSelected(listBox1.Items.Count - 1, true);
-                listBox1.SetSelected(listBox1.Items.Count - 1, false);
-
+                case 49741:
+                case 49615:
+                case 49566:
+                case 49313:
+                case 49541:
+                case 49770:
+                    listBox1.SelectionMode = SelectionMode.One;
+                    listBox1.SetSelected(listBox1.Items.Count - 1, true);
+                    listBox1.SetSelected(listBox1.Items.Count - 1, false);
+                        break;
             }
-
         }
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -60,19 +61,51 @@ namespace BalanceModule
 
             Thread thh = new Thread(delegate()
             {
-                Test_Click();
-            });;
+                send_msg("BS 0 123456");
+
+                StartScan();
+            }); ;
+            thh.Name = "Сканирование";
             thh.Start();
         }
 
-        private void Test_Click()
+        private void restart()
         {
-            //Thread.Sleep(2000);
+            send_msg("BS 1 Запуск запланированной проверки весов.");
 
+            string EntryTime = DateTime.Now.ToLongTimeString().Replace(":","_");
+            string EntryDate = DateTime.Today.ToShortDateString().Replace(".", "_");
+
+            foreach (string item in listBox1.Items)
+            {
+                Log.log_write(item, "Backup", EntryDate +"_"+ EntryTime );
+            }
+
+            this.Invoke((Action)delegate { checkedListBox1.Items.Clear(); });
+            this.Invoke((Action)delegate { listBox1.Items.Clear(); });
+
+            list_msg("Сделана копия событий: " + EntryDate + "_" + EntryTime+".log");
+
+             Thread thh = new Thread(delegate()
+            {
+                StartScan();
+            }); ;
+            thh.Name = "Повторное Сканирование";
+            list_msg("Запуск запланированного сканирования...");
+            thh.Start();
+        }
+
+        private void send_msg(string msg)
+        {
+            server.Sender(msg);
+        }
+
+        private void StartScan()
+        {
             if (cas.Init() < 0)
             {
-                this.Invoke((Action)delegate { listBox1.Items.Add("Отказ инициализации библиотеки."); });
-                return;
+                list_msg("Отказ инициализации библиотеки.");
+                    return;
             }
 
             OleDbDataReader dr; 
@@ -82,55 +115,69 @@ namespace BalanceModule
             dr = dbf.ExecuteReader("SELECT ip,name,port,model  FROM struct.dbf");
 
             if (!dr.HasRows)
-                this.Invoke((Action)delegate { listBox1.Items.Add("База весов пустая!"); });
+                list_msg("База весов пустая!");
 
             while (dr.Read())
             {
                 try
                 {
-                    m_ip = dr.GetString(0);
+                    m_ip = dr.GetString(0).Replace(" ","");
                     m_name = Convertall(dr.GetString(1).Replace(" ", ""), Encoding.GetEncoding(866), Encoding.GetEncoding(1251));
                     m_port = Convert.ToInt32(dr.GetString(2));
                     m_model = Convert.ToInt32(dr.GetString(3));
+
+                    this.Invoke((Action)delegate { checkedListBox1.Items.Add(m_ip + ":" + m_port + " " + m_name); });
                 }
                 catch (System.Exception ex)
                 {
-                    //Console.WriteLine(ex.Message);
                     //TODO Написать обработчик исключений ,с отправкой на сервер отчетов ;
-                    this.Invoke((Action)delegate { listBox1.Items.Add("Произошло исключение при считывании параметров весов! Адрес" + m_ip + " Имя: " + m_name + " Порт: " + m_port + " Модель: " + m_model); });
-                    this.Invoke((Action)delegate { listBox1.Items.Add("Текст исключения: " + ex.Message); });
+                    list_msg("Произошло исключение при считывании параметров весов! Адрес" + m_ip + " Имя: " + m_name + " Порт: " + m_port + " Модель: " + m_model);
+                    list_msg("Текст исключения: " + ex.Message);
 
                     Log.log_write(ex.Message, "Exception", "Exception");
 
-                    continue;
+                    break;
                 }
 
                 if (cas.Connection(m_ip, m_port, 1, m_model) == -1)
                 {
-                    this.Invoke((Action)delegate { listBox1.Items.Add("Соединение с весами " + m_ip + ": " + m_port + " не удалось!"); });
+                    list_msg("Соединение с весами " + m_ip + ": " + m_port + " не удалось!");
 
                     int i = 3;
 
                     while (i != 0)
                     {
-                        this.Invoke((Action)delegate { listBox1.Items.Add("Пробуем еще раз..."); });
-                        Thread.Sleep(2000);
-                        if (cas.Connection(m_ip, m_port, 1, m_model) != -1)
-                            i = 0;
-                        else
+                        try
                         {
-                            this.Invoke((Action)delegate { listBox1.Items.Add("Соединение с весами " + m_ip + ": " + m_port + " не удалось!"); });
-                            i--;
+                            list_msg("Пробуем еще раз...");
+                            Thread.Sleep(2000);
+
+                            if (cas.Connection(m_ip, m_port, 1, m_model) != -1)
+                                i = 0;
+                            else
+                            {
+                                list_msg("Соединение с весами " + m_ip + ": " + m_port + " не удалось!");
+                                i--;
+                            }
+                        }
+                        catch
+                        {
+                            i = 0;
+                            send_msg("BS 1 BalanceModule: Соединение с весами " + m_ip + ": " + m_port + " не удалось!");
+                        }
+                        finally
+                        {
+                            if (i == 0)
+                                send_msg("BS 1 BalanceModule: " + m_ip + ": " + m_port + " весы пропущены!");
                         }
                     }
-
                     continue;
                 }
 
                 if (cas.RecvPLU() < 0)
                 {
-                    this.Invoke((Action)delegate { listBox1.Items.Add("Соединение не удалось!Количество полученых записей меньше 0"); });
-                    continue;
+                    list_msg("Соединение не удалось!Количество полученых записей меньше 0");
+                    break ;
                 }
                     /* 
                     1	Disconnect or don't start
@@ -163,7 +210,7 @@ namespace BalanceModule
                     r = cas.GetState();
                     string str = "";
                     cas.GetTransStatus(m_ip, ref str);  //ipadress
-                    this.Invoke((Action)delegate { listBox1.Items.Add(str); });
+                    list_msg(str);
                     Thread.Sleep(1000);
                 }
 
@@ -174,18 +221,47 @@ namespace BalanceModule
                     parse_plu_str(dataplu);
                 }
 
-                //cas.DisconnectAll();
-                this.Invoke((Action)delegate { listBox1.Items.Add("Сканирование " + m_ip + " завершено!"); });
-                this.Invoke((Action)delegate { listBox1.Items.Add("Количество найденых проблем: " + count_error); });
+                list_msg("Сканирование " + m_ip + " завершено!");
+                list_msg("Количество найденых проблем: " + count_error);
+                send_msg("BS 1 "+ m_ip +" "+ m_name + " Количество найденых проблем: " + count_error);
 
                 cas.DisconnectAll();
 
                 delete_plu();
 
-                this.Invoke((Action)delegate { listBox1.Items.Add("Удаление с весов " + m_ip + " завершено!"); });
+                list_msg("Удаление с весов " + m_ip + " завершено!");
+
+                this.Invoke((Action)delegate { checkedListBox1.SetItemChecked(checkedListBox1.Items.IndexOf(m_ip + ":" + m_port + " " + m_name),true); });
             }
 
-            cas.DeInit();
+            list_msg("Деинициализация...");
+            send_msg("BS 1 Спящий режим активирован.");
+
+            try
+            {
+                cas.DeInit();
+            }
+            catch (System.Exception)
+            {
+                Application.Exit();
+            }
+            finally
+            {
+                timer_par();
+                send_msg("BS 1 Деактивация спящего режима через: " + (timer_start_scan.Interval)/3600000 + " часа");
+            }
+        }
+
+        private void timer_par()
+        {
+            try
+            {
+                this.Invoke((Action)delegate { timer_start_scan.Enabled = true; });
+            }
+            catch
+            {
+                return;
+            }
         }
 
         private void parse_plu_str(string str)
@@ -205,7 +281,7 @@ namespace BalanceModule
 
             catch (System.Exception ex)
             {
-                this.Invoke((Action)delegate { listBox1.Items.Add("Текст исключения: " + ex.Message); });
+                list_msg("Текст исключения: " + ex.Message);
             }
         }
 
@@ -217,19 +293,19 @@ namespace BalanceModule
             {
                 if (cas.Connection(m_ip, m_port, 1, m_model) == -1)
                 {
-                    this.Invoke((Action)delegate { listBox1.Items.Add("Соединение с весами " + m_ip + ": " + m_port + " не удалось!"); });
+                    list_msg("Соединение с весами " + m_ip + ": " + m_port + " не удалось!");
 
                     int i = 3;
 
                     while (i != 0)
                     {
-                        this.Invoke((Action)delegate { listBox1.Items.Add("Пробуем еще раз..."); });
+                        list_msg("Пробуем еще раз...");
                         Thread.Sleep(2000);
                         if (cas.Connection(m_ip, m_port, 1, m_model) != -1)
                             i = 0;
                         else
                         {
-                            this.Invoke((Action)delegate { listBox1.Items.Add("Соединение с весами " + m_ip + ": " + m_port + " не удалось!"); });
+                            list_msg("Соединение с весами " + m_ip + ": " + m_port + " не удалось!");
                             i--;
                         }
                     }
@@ -248,12 +324,12 @@ namespace BalanceModule
 
                 if (cas.DeletePLU(1, pluno) != 1)
                 {
-                    this.Invoke((Action)delegate { listBox1.Items.Add("Удалить товар с весов не удалось:" + m_ip); });
+                    list_msg("Удалить товар с весов не удалось:" + m_ip);
                     cas.DisconnectAll();
                     continue;
                 }
                 else
-                    this.Invoke((Action)delegate { listBox1.Items.Add("C Весов : " + m_ip + " удален товар:" + articul); });
+                    list_msg("C Весов : " + m_ip + " удален товар:" + articul);
 
                 int r = cas.GetState();
 
@@ -262,7 +338,7 @@ namespace BalanceModule
                     r = cas.GetState();
                     string str = "";
                     cas.GetTransStatus(m_ip, ref str);
-                    this.Invoke((Action)delegate { listBox1.Items.Add(str); });
+                    list_msg(str);
                     Thread.Sleep(1000);
                 }
 
@@ -292,7 +368,7 @@ namespace BalanceModule
                 if (!reader.HasRows)
                 {
                     count_error++;
-                    this.Invoke((Action)delegate { listBox1.Items.Add(articul + " Цена Не найдена на кассе!"); });
+                    list_msg(articul + " Цена Не найдена на кассе!");
                 }
 
                 while (reader.Read())
@@ -301,16 +377,15 @@ namespace BalanceModule
 
                     if (price != price_c)
                     {
-                        this.Invoke((Action)delegate { listBox1.Items.Add(articul + " " + reader.GetString(0) + " Цена на весах: " + price + " Цена на кассе: " + price_c); });
+                        list_msg(articul + " " + reader.GetString(0) + " Цена на весах: " + price + " Цена на кассе: " + price_c);
                         count_error++;
                         data_delete[count_error] = int.Parse(articul);
-                        //delete_plu(articul);
                     }
                 }
             }
             catch(Exception ex)
             {
-                this.Invoke((Action)delegate { listBox1.Items.Add("Текст исключения: " + ex.Message); });
+                list_msg(ex.Message);
             }
             finally
             {
@@ -442,6 +517,25 @@ namespace BalanceModule
         private void listBox1_SelectedValueChanged(object sender, EventArgs e)
         {
             panel1.Focus();
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            send_msg("BS 9 00");
+            Thread.Sleep(1000);
+            server.disc_client = false;
+        }
+
+        private void list_msg(string msg)
+        {
+            try { this.Invoke((Action)delegate { listBox1.Items.Add(msg); }); }
+
+            catch { return; }
+        }
+
+        private void timer_start_scan_Tick(object sender, EventArgs e)
+        {
+            restart();
         }
     }
 }

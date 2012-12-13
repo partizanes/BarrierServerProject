@@ -13,6 +13,11 @@ namespace BarrierServerProject
                         Console.ForegroundColor = ConsoleColor.Red;
                         break;
                     }
+                case "DarkBlue":
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                        break;
+                    }
                 case "Green":
                     {
                         Console.ForegroundColor = ConsoleColor.Green;

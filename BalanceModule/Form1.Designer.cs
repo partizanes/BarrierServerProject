@@ -29,15 +29,20 @@ namespace BalanceModule
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.cas = new AxForCasLib.AxForCas();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.timer_start_scan = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.cas)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // cas
@@ -84,7 +89,7 @@ namespace BalanceModule
             this.listBox1.Margin = new System.Windows.Forms.Padding(0);
             this.listBox1.Name = "listBox1";
             this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.listBox1.Size = new System.Drawing.Size(591, 224);
+            this.listBox1.Size = new System.Drawing.Size(591, 208);
             this.listBox1.TabIndex = 0;
             this.listBox1.SelectedValueChanged += new System.EventHandler(this.listBox1_SelectedValueChanged);
             this.listBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDown);
@@ -95,10 +100,43 @@ namespace BalanceModule
             // 
             this.panel1.BackColor = System.Drawing.Color.Black;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.checkedListBox1);
             this.panel1.Location = new System.Drawing.Point(599, 3);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(220, 256);
             this.panel1.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label1.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.label1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.label1.Location = new System.Drawing.Point(39, 5);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(144, 26);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "BalanceModule";
+            // 
+            // checkedListBox1
+            // 
+            this.checkedListBox1.BackColor = System.Drawing.Color.Black;
+            this.checkedListBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.checkedListBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.checkedListBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkedListBox1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.checkedListBox1.Location = new System.Drawing.Point(0, 45);
+            this.checkedListBox1.Name = "checkedListBox1";
+            this.checkedListBox1.Size = new System.Drawing.Size(216, 195);
+            this.checkedListBox1.TabIndex = 0;
+            // 
+            // timer_start_scan
+            // 
+            this.timer_start_scan.Interval = 7200000;
+            this.timer_start_scan.Tick += new System.EventHandler(this.timer_start_scan_Tick);
             // 
             // Form1
             // 
@@ -117,6 +155,7 @@ namespace BalanceModule
             this.Opacity = 0.9D;
             this.Text = "BalanceModule";
             this.TransparencyKey = System.Drawing.Color.Coral;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form_MouseMove);
@@ -125,6 +164,8 @@ namespace BalanceModule
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -133,8 +174,11 @@ namespace BalanceModule
 
         private AxForCasLib.AxForCas cas;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Panel panel1;
+        private CheckedListBox checkedListBox1;
+        private Label label1;
+        public  ListBox listBox1;
+        private Timer timer_start_scan;
     }
 }
 

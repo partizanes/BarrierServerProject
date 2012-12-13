@@ -23,7 +23,6 @@ namespace BarrierServerProject
         // Список потоков
         static List<Thread> threads = new List<Thread>();
 
-
         public static void ServerStart()
         {
             Thread thd = new Thread(delegate()
@@ -42,7 +41,7 @@ namespace BarrierServerProject
                 SocketAccepter();
 
             });
-
+            thd.Name = "Слушает порт";
             thd.Start();
             threads.Add(thd);
         }
@@ -66,31 +65,32 @@ namespace BarrierServerProject
                     {
                         MessageReceiver(client);
                     });
+                    thh.Name = "Получение данных";
                     thh.Start();
                 }
             });
-
+            th.Name = "Слушает порт";
             th.Start();
             threads.Add(th);
         }
 
         private static void MessageReceiver(Socket r_client)
         {
-            Thread th = new Thread(delegate()
-            {
+//             Thread th = new Thread(delegate()
+//             {
                 User user = new User();
 
                 while (isServerRunning)
                 {
                     try
                     {
-                         if (!r_client.Connected)
+                        if (!r_client.Connected)
                             return;
 
                         user.ipaddress = IPAddress.Parse(((IPEndPoint)r_client.RemoteEndPoint).Address.ToString());
                         user.port = ((IPEndPoint)r_client.RemoteEndPoint).Port;
 
-                        byte[] bytes  = new byte[256];
+                        byte[] bytes = new byte[256];
 
                         r_client.Receive(bytes);
 
@@ -106,17 +106,33 @@ namespace BarrierServerProject
 
                             string str_len = split_data[0];  // длина строки
 
+                            int converted;
+
+                            if (int.TryParse(str_len, out converted))
+                            {
+                                if (Convert.ToInt32(str_len) != split_data[1].Replace("\0", "").Length)
+                                    return;
+                            }
+                            else
+                            {
+                                if (converted == 0)
+                                    return;
+
+                                Color.WriteLineColor("Пакет поврежден!", "Red");
+                                return;
+                            }
+
                             string com_id = split_data[1].Substring(0, 2);  // id команды
 
                             string com_type = split_data[1].Substring(3, 1); // type команды
 
-                            string msg_data = split_data[1].Substring(5, (Convert.ToInt32(str_len))-4); //сообщение
+                            string msg_data = split_data[1].Substring(5, (Convert.ToInt32(str_len)) - 4); //сообщение
 
                             //передача разобранных параметров
-                            Packages.parse(com_id, com_type , msg_data, user);
+                            Packages.parse(com_id, com_type, msg_data, user,r_client);
                         }
                     }
-                    catch(SocketException exc)
+                    catch (SocketException exc)
                     {
                         if (exc.ErrorCode == 10054)
                         {
@@ -129,23 +145,28 @@ namespace BarrierServerProject
 
                             if (!abort_thread(Thread.CurrentThread))
                             {
-                                Color.WriteLineColor("Поток не завершен!","Red");
+                                Color.WriteLineColor("Поток не завершен!", "Red");
                             }
 
                             break;
                         }
                     }
-                    catch(Exception exc) 
-                    { 
+
+                    catch(ThreadAbortException) { break; }
+
+                    catch (Exception exc)
+                    {
                         Console.WriteLine(exc.Message);
+                        Thread.Sleep(5000);
                     }
                 }
-            });
-            th.Start();
-            threads.Add(th);
+//             });
+//             th.Name = "Пользовательский поток сервера";
+//             th.Start();
+//             threads.Add(th);
         }
 
-        private static Boolean abort_thread(Thread th)
+        public static Boolean abort_thread(Thread th)
         {
             try
             {

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace BalanceModule
@@ -13,9 +11,20 @@ namespace BalanceModule
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            if (System.Diagnostics.Process.GetProcessesByName(Application.ProductName).Length > 1)
+            {
+                MessageBox.Show("Приложение уже запущено!");
+                //System.Threading.Thread.Sleep(5000);
+                Application.Exit();
+            }
+            else
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Form1());
+            }
+
         }
     }
 }
