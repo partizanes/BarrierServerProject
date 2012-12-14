@@ -11,20 +11,29 @@ namespace BalanceModule
     class Server
     {
         //=========================================================================================
-        private static Socket client;
+        public static Socket client;
         private static IPAddress ip = IPAddress.Parse("127.0.0.1"); //TODO config!!!
         private const int port = 1991;
         private static List<Thread> threads = new List<Thread>();
         public  bool disc_client = true;
         //=========================================================================================
+
         public void Disconnect()
         {
             client.Blocking = false;
             client.Close();
         }
 
+        public static  void remove_tr()
+        {
+             threads.Remove(Thread.CurrentThread);
+        }
+
         public void Connect()
         {
+            if (!disc_client)
+                return;
+
             listbox_msg("Соединение...");
 
             try
@@ -40,6 +49,9 @@ namespace BalanceModule
                     listbox_msg("Подключение к серверу не удалось.Пробуем переподключиться... ");
 
                     Thread.Sleep(5000);
+
+                    if (disc_client)
+                        return;
 
                     if (!client.Connected)
                         Connect();
@@ -57,6 +69,9 @@ namespace BalanceModule
 
         public void Sender(string msg)
         {
+            if (!disc_client)
+                return;
+
             bool stat = true;
 
             try
@@ -66,6 +81,13 @@ namespace BalanceModule
 
                 while (client == null || !client.Connected)
                 {
+                    if (!disc_client)
+                    {
+                        stat = false;
+                        ThreadAbort.th_abort();
+                        return;
+                    }
+
                     listbox_msg("Соединение отсутствует. ");
                     Connect();
                     Thread.Sleep(2000);
@@ -109,8 +131,29 @@ namespace BalanceModule
 
         private void listbox_msg(string msg)
         {
-            try { (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.Items.Add(msg); })); }
-            catch { }
+            if (!disc_client)
+                return;
+
+            try
+            {
+                (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.Items.Add(msg); }));
+                (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.SelectionMode = SelectionMode.One; }));
+                (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.SetSelected((Application.OpenForms[0] as Form1).listBox1.Items.Count - 1, true); }));
+                (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.SetSelected((Application.OpenForms[0] as Form1).listBox1.Items.Count - 1, false); }));
+            }
+            catch
+            {
+                try
+                {
+                    Thread.CurrentThread.Abort();
+                }
+                catch
+                {
+                    Thread.CurrentThread.Join();
+                    Thread.ResetAbort();
+                    threads.Remove(Thread.CurrentThread);
+                }
+            }
         }
 
         private static void Receiver()

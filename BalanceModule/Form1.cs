@@ -48,9 +48,11 @@ namespace BalanceModule
                 case 49313:
                 case 49541:
                 case 49770:
-                    listBox1.SelectionMode = SelectionMode.One;
-                    listBox1.SetSelected(listBox1.Items.Count - 1, true);
-                    listBox1.SetSelected(listBox1.Items.Count - 1, false);
+                case 49567:
+                case 49547:
+                    (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.SelectionMode = SelectionMode.One; }));
+                    (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.SetSelected(listBox1.Items.Count - 1, true); }));
+                    (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.SetSelected(listBox1.Items.Count - 1, false); }));
                         break;
             }
         }
@@ -98,10 +100,18 @@ namespace BalanceModule
         private void send_msg(string msg)
         {
             server.Sender(msg);
-        }
+         }
+
+
 
         private void StartScan()
         {
+            if (!server.disc_client)
+            {
+                ThreadAbort.th_abort();
+                return;
+            }
+
             if (cas.Init() < 0)
             {
                 list_msg("Отказ инициализации библиотеки.");
@@ -521,9 +531,9 @@ namespace BalanceModule
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            send_msg("BS 9 00");
             Thread.Sleep(1000);
             server.disc_client = false;
+            Application.Exit();
         }
 
         private void list_msg(string msg)
@@ -536,6 +546,12 @@ namespace BalanceModule
         private void timer_start_scan_Tick(object sender, EventArgs e)
         {
             restart();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (Server.client.Connected)
+                send_msg("BS 9 00");
         }
     }
 }

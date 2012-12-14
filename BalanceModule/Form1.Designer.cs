@@ -155,6 +155,7 @@ namespace BalanceModule
             this.Opacity = 0.9D;
             this.Text = "BalanceModule";
             this.TransparencyKey = System.Drawing.Color.Coral;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form_MouseDown);
