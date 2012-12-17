@@ -204,7 +204,7 @@ namespace BalanceModule
 
                             string msg_data = split_data[1].Substring(5, (Convert.ToInt32(str_len)) - 4); //сообщение
 
-                            //передача разобранных параметров
+                            //TODO packet parser
                             //Packages.parse(com_id, com_type, msg_data, user,r_client);
                             (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.Items.Add(msg_data); }));
                         }
