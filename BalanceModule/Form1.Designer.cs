@@ -38,8 +38,11 @@ namespace BalanceModule
             this.label1 = new System.Windows.Forms.Label();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.timer_start_scan = new System.Windows.Forms.Timer(this.components);
+            this.label2 = new System.Windows.Forms.Label();
+            this.BalanceModule = new System.Windows.Forms.NotifyIcon(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.cas)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -66,6 +69,7 @@ namespace BalanceModule
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.label2);
             this.splitContainer1.Panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.splitContainer1_Panel1_MouseDown);
             this.splitContainer1.Panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.splitContainer1_Panel1_MouseMove);
             this.splitContainer1.Panel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.splitContainer1_Panel1_MouseUp);
@@ -120,6 +124,7 @@ namespace BalanceModule
             this.label1.Size = new System.Drawing.Size(144, 26);
             this.label1.TabIndex = 1;
             this.label1.Text = "BalanceModule";
+            this.label1.DoubleClick += new System.EventHandler(this.label1_DoubleClick);
             // 
             // checkedListBox1
             // 
@@ -135,8 +140,26 @@ namespace BalanceModule
             // 
             // timer_start_scan
             // 
-            this.timer_start_scan.Interval = 21600000;
+            this.timer_start_scan.Interval = 7200000;
             this.timer_start_scan.Tick += new System.EventHandler(this.timer_start_scan_Tick);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.ForeColor = System.Drawing.Color.Yellow;
+            this.label2.Location = new System.Drawing.Point(8, 8);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(0, 16);
+            this.label2.TabIndex = 0;
+            // 
+            // BalanceModule
+            // 
+            this.BalanceModule.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.BalanceModule.BalloonTipText = "BalanceModule";
+            this.BalanceModule.Icon = ((System.Drawing.Icon)(resources.GetObject("BalanceModule.Icon")));
+            this.BalanceModule.Text = "BalanceModule";
+            this.BalanceModule.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.BalanceModule_MouseDoubleClick);
             // 
             // Form1
             // 
@@ -162,6 +185,8 @@ namespace BalanceModule
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Form_MouseUp);
             ((System.ComponentModel.ISupportInitialize)(this.cas)).EndInit();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
@@ -180,6 +205,8 @@ namespace BalanceModule
         private Label label1;
         public  ListBox listBox1;
         private Timer timer_start_scan;
+        private Label label2;
+        private NotifyIcon BalanceModule;
     }
 }
 

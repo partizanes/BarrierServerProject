@@ -301,6 +301,11 @@ namespace BalanceModule
 
             while (count < count_error)
             {
+                label2.Text = count + " / " + count_error;
+
+                if (BalanceModule.Visible == true)
+                    BalanceModule.ShowBalloonTip(1, "", label2.Text, ToolTipIcon.None);
+
                 if (cas.Connection(m_ip, m_port, 1, m_model) == -1)
                 {
                     list_msg("Соединение с весами " + m_ip + ": " + m_port + " не удалось!");
@@ -336,6 +341,7 @@ namespace BalanceModule
                 {
                     list_msg("Удалить товар с весов не удалось:" + m_ip);
                     cas.DisconnectAll();
+                    count++; //check this
                     continue;
                 }
                 else
@@ -355,6 +361,9 @@ namespace BalanceModule
                 count++;
                 cas.DisconnectAll();
             }
+
+            label2.Text = "";
+
             return;
         }
 
@@ -379,6 +388,7 @@ namespace BalanceModule
                 {
                     count_error++;
                     list_msg(articul + " Цена Не найдена на кассе!");
+                    data_delete[count_error] = int.Parse(articul);
                 }
 
                 while (reader.Read())
@@ -531,14 +541,21 @@ namespace BalanceModule
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Thread.Sleep(1000);
+            //Thread.Sleep(1000);
             server.disc_client = false;
             Application.Exit();
         }
 
         private void list_msg(string msg)
         {
-            try { this.Invoke((Action)delegate { listBox1.Items.Add(msg); }); }
+            try
+            {
+                this.Invoke((Action)delegate { listBox1.Items.Add(msg); });
+
+                this.Invoke((Action)delegate { listBox1.SelectionMode = SelectionMode.One; });
+                this.Invoke((Action)delegate { listBox1.SetSelected(listBox1.Items.Count - 1, true); });
+                this.Invoke((Action)delegate { listBox1.SetSelected(listBox1.Items.Count - 1, false); });
+            }
 
             catch { return; }
         }
@@ -552,6 +569,20 @@ namespace BalanceModule
         {
             if (Server.client.Connected)
                 send_msg("BS 9 00");
+
+            BalanceModule.Visible = false;
+        }
+
+        private void BalanceModule_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            BalanceModule.Visible = false;
+            this.Visible = true;
+        }
+
+        private void label1_DoubleClick(object sender, EventArgs e)
+        {
+            BalanceModule.Visible = true;
+            this.Visible = false;
         }
     }
 }
