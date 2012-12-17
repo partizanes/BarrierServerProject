@@ -61,6 +61,7 @@ namespace BarrierServerProject
                     clients.Add(client, client.RemoteEndPoint);
                     Color.WriteLineColor("Клиент добавлен: " + client.RemoteEndPoint, "Yellow");
                     // Начинаем принимать входящие пакеты
+
                     Thread thh = new Thread(delegate()
                     {
                         MessageReceiver(client);
@@ -204,7 +205,7 @@ namespace BarrierServerProject
 
             return;
         }
-        private static void MessageSender(Socket c_client, byte[] bytes)
+        public static void MessageSender(Socket c_client, byte[] bytes)
         {
             try
             {

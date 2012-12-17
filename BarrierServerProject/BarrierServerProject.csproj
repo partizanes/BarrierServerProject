@@ -51,6 +51,7 @@
     <Compile Include="Command.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Logo.cs" />
+    <Compile Include="Msg.cs" />
     <Compile Include="Packages.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProgressBar.cs" />
