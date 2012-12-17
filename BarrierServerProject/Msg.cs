@@ -13,6 +13,10 @@ namespace BarrierServerProject
         {
             try
             {
+                int size = msg.Length;
+
+                msg = size + "|" + msg;
+
                 byte[] bytes = new byte[256];  //TODO CHECK THIS SIZE
                 bytes = Encoding.UTF8.GetBytes(msg);
 

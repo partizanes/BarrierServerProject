@@ -19,7 +19,7 @@ namespace BarrierServerProject
                     user.username = msg;    //not use
                     break;
                 case "01":
-                    Msg.SendUser("BalanceModule", "Идентификация пройдена.");   //not use
+                    Msg.SendUser("BalanceModule", "BS 1 Идентификация пройдена.");   //not use
                     break;
                 case "02":
                     Console.WriteLine(user.username);   //not use
@@ -33,7 +33,7 @@ namespace BarrierServerProject
                             user.userid = 1;
                             Server.clients[r_client] = "BalanceModule";
                             Color.WriteLineColor("Модуль проверки весов загружен!","Cyan");
-                            Msg.SendUser("ModuleBalance", "Идентификация пройдена.");
+                            Msg.SendUser("BalanceModule", "BS 1 Идентификация пройдена.");
                                 break;
                         case "1":
                             Color.WriteLineColor(msg, "Cyan");

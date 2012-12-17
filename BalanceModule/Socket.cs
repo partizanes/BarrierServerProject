@@ -158,30 +158,66 @@ namespace BalanceModule
 
         private static void Receiver()
         {
-//             Thread th = new Thread(delegate()
-//             {
-//                 while (client_running)
-//                 {
-//                     try
-//                     {
-//                         byte[] bytes = new byte[1024];
-//                         // Принимает данные от сервера в формате "X|Y"
-//                         client.Receive(bytes);
-//                         if (bytes.Length != 0)
-//                         {
-//                             string data = Encoding.UTF8.GetString(bytes);
-//                             string[] split_data = data.Split(new Char[] { '|' });
-//                             Console.WriteLine(data.Replace("\0", ""));
-//                         }
-//                     }
-//                     catch (Exception exc)
-//                     {
-//                         (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.Items.Add(exc.Message); }));
-//                     }
-//                 }
-//             });
-//             th.Start();
-//             threads.Add(th);
+            Thread th = new Thread(delegate()
+            {
+                Server server = new Server();
+
+                while (server.disc_client)
+                {
+                    try
+                    {
+                        byte[] bytes = new byte[256];
+
+                        client.Receive(bytes);
+
+                        if (bytes.Length != 0)
+                        {
+                            //Принимаемый пакет разбор структуры
+
+                            string data = Encoding.UTF8.GetString(bytes);
+
+                            string[] split_data = data.Split(new Char[] { '|' });
+
+                            // 10|01 0 11234
+
+                            string str_len = split_data[0];  // длина строки
+
+                            int converted;
+
+                            if (int.TryParse(str_len, out converted))
+                            {
+                                if (Convert.ToInt32(str_len) != split_data[1].Replace("\0", "").Length)
+                                    return;
+                            }
+                            else
+                            {
+                                if (converted == 0)
+                                    return;
+
+                                (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.Items.Add("Пакет поврежден!"); }));
+                                    return;
+                            }
+
+                            string com_id = split_data[1].Substring(0, 2);  // id команды
+
+                            string com_type = split_data[1].Substring(3, 1); // type команды
+
+                            string msg_data = split_data[1].Substring(5, (Convert.ToInt32(str_len)) - 4); //сообщение
+
+                            //передача разобранных параметров
+                            //Packages.parse(com_id, com_type, msg_data, user,r_client);
+                            (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.Items.Add(msg_data); }));
+                        }
+                    }
+
+                    catch (Exception exc)
+                    {
+                        (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.Items.Add(exc.Message); }));
+                    }
+                }
+        });
+            th.Start();
+            threads.Add(th);
         }
     }
 }
