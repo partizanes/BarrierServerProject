@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.OleDb;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -29,6 +30,21 @@ namespace BalanceModule
 
         private int[] data_delete = new int[5000];
 
+        //import dll from use configuration file
+        [DllImport("kernel32.dll")]
+        static extern uint GetPrivateProfileString(
+        string lpAppName,
+        string lpKeyName,
+        string lpDefault,
+        StringBuilder lpReturnedString,
+        uint nSize,
+        string lpFileName);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool WritePrivateProfileString(string lpAppName,
+           string lpKeyName, string lpString, string lpFileName);
+
         Server server = new Server();
 
         public Form1()
@@ -38,6 +54,7 @@ namespace BalanceModule
 
         protected override void WndProc(ref Message m)
         {
+            //mb this not need . Check this and remove
             base.WndProc(ref m);
 
             switch (m.Msg)
@@ -100,9 +117,7 @@ namespace BalanceModule
         private void send_msg(string msg)
         {
             server.Sender(msg);
-         }
-
-
+        }
 
         private void StartScan()
         {
@@ -170,10 +185,11 @@ namespace BalanceModule
                                 i--;
                             }
                         }
-                        catch
+                        catch(Exception ex)
                         {
                             i = 0;
                             send_msg("BS 1 BalanceModule: Соединение с весами " + m_ip + ": " + m_port + " не удалось!");
+                            Log.log_write(ex.Message, "Exception", "Exception");
                         }
                         finally
                         {
@@ -221,7 +237,7 @@ namespace BalanceModule
                     string str = "";
                     cas.GetTransStatus(m_ip, ref str);  //ipadress
                     list_msg(str);
-                    Thread.Sleep(100);
+                    Thread.Sleep(500);
                 }
 
                 string dataplu = "";
@@ -251,8 +267,9 @@ namespace BalanceModule
             {
                 cas.DeInit();
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
+                Log.log_write(ex.Message, "Exception", "Exception");
                 Application.Exit();
             }
             finally
@@ -268,8 +285,9 @@ namespace BalanceModule
             {
                 this.Invoke((Action)delegate { timer_start_scan.Enabled = true; });
             }
-            catch
+            catch(Exception ex)
             {
+                Log.log_write(ex.Message, "Exception", "Exception");
                 return;
             }
         }
@@ -288,9 +306,6 @@ namespace BalanceModule
 
                 string name = str.Substring(159, 54);
 
-                if (Convert.ToInt32(articul) > 74050)
-                    Log.log_write(str, "2", "2");
-
                 if (check_articul > 0)
                     articul = check_articul + articul;
 
@@ -300,12 +315,18 @@ namespace BalanceModule
             catch (System.Exception ex)
             {
                 list_msg("Текст исключения: " + ex.Message);
+                Log.log_write(ex.Message, "Exception", "Exception");
             }
         }
 
         private void delete_plu()
         {
             int count = 0;
+
+            string EntryTime = DateTime.Now.ToLongTimeString().Replace(":", "_");
+            string EntryDate = DateTime.Today.ToShortDateString().Replace(".", "_");
+
+            this.Invoke((Action)delegate { label2.Visible = true; ; });
 
             while (count < count_error)
             {
@@ -353,7 +374,10 @@ namespace BalanceModule
                     continue;
                 }
                 else
+                {
                     list_msg("C Весов : " + m_ip + " удален товар:" + articul);
+                    Log.articul_write(articul, "remove_" + m_ip + "_" + EntryDate + "_" + EntryTime);
+                }
 
                 int r = cas.GetState();
 
@@ -363,14 +387,14 @@ namespace BalanceModule
                     string str = "";
                     cas.GetTransStatus(m_ip, ref str);
                     list_msg(str);
-                    Thread.Sleep(100);
+                    Thread.Sleep(300);
                 }
 
                 count++;
                 cas.DisconnectAll();
             }
 
-            this.Invoke((Action)delegate { label2.Text = ""; });
+            this.Invoke((Action)delegate { label2.Visible = false; });
 
             return;
         }
@@ -398,7 +422,7 @@ namespace BalanceModule
                     count_error++;
                     list_msg(articul + " Цена Не найдена на кассе!");
                     list_msg(articul + " Цена на весах: " + price); //remove after debug
-                    Log.log_write(articul, "1", "1");
+                    Log.log_write(articul + "Причина:Цена не найдена на кассе","INFO","REASON");
                 }
 
                 while (reader.Read())
@@ -409,6 +433,7 @@ namespace BalanceModule
                     {
                         data_delete[count_error] = int.Parse(articul);
                         list_msg(articul + " " + reader.GetString(0) + " Цена на весах: " + price + " Цена на кассе: " + price_c);
+                        Log.log_write(articul + "Причина:Цены не равны ;Цена на весах: " + price + " Цена на кассе: " + price_c, "INFO", "REASON");
                         count_error++;
                     }
                 }
@@ -416,6 +441,7 @@ namespace BalanceModule
             catch(Exception ex)
             {
                 list_msg(ex.Message);
+                Log.log_write(ex.Message, "Exception", "Mysql_Exception");
             }
             finally
             {
@@ -567,7 +593,11 @@ namespace BalanceModule
                 this.Invoke((Action)delegate { listBox1.SetSelected(listBox1.Items.Count - 1, false); });
             }
 
-            catch { return; }
+            catch(Exception ex)
+            {
+                Log.log_write(ex.Message, "Exception", "Exception");
+                return;
+            }
         }
 
         private void timer_start_scan_Tick(object sender, EventArgs e)
