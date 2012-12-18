@@ -36,7 +36,7 @@ namespace BarrierServerProject
                             Msg.SendUser("BalanceModule", "BS 1 Идентификация пройдена.");
                                 break;
                         case "1":
-                            Color.WriteLineColor(msg, "Cyan");
+                            Color.WriteLineColor("BM: " + msg, "Cyan");
                                 break;
                         case "9":
                             Color.WriteLineColor("Модуль проверки весов отключен!", "Red");

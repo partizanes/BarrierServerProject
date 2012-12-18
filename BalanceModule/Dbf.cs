@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.OleDb;
 
-namespace Balance_module
+namespace BalanceModule
 {
     class Dbf
     {

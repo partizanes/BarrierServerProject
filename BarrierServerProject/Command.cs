@@ -59,18 +59,35 @@ namespace BarrierServerProject
                         Environment.Exit(0);
                         return "quit";
                     }
+                case "bs next start":
+                    {
+                        int hour;
+
+                        Color.WriteLineColor("Введите через какое время запусить модуль(в часах)", "Yellow");
+
+                        if (int.TryParse(Console.ReadLine(), out hour))
+                        {
+                            Msg.SendUser("BalanceModule", "ST 0 " + hour);
+                            return "Отправлено!";
+                        }
+                        else
+                        {
+                            return "Неверный тип параметра!";
+                        }
+                    }
                 case "help":
                 case "command":
                     {
-                        Color.WriteLineColor("\nauthor  Выводит информацию об авторе\n", "Cyan");
-                        Color.WriteLineColor("logo    Выводит логотип\n", "Cyan");
-                        Color.WriteLineColor("list    Пользователи онлайн\n", "Cyan");
-                        Color.WriteLineColor("version Выводит версию\n", "Cyan");
-                        Color.WriteLineColor("quit    Аварийно завершает приложение\n", "Cyan");
-                        Color.WriteLineColor("help    Выводит информацию о коммандах\n", "Cyan");
-                        Color.WriteLineColor("status  Выводит статус сервера\n", "Cyan");
-                        Color.WriteLineColor("command Выводит информацию о коммандах\n", "Cyan");
-                        Color.WriteLineColor("clr     Очищает окно программы\n", "Cyan");
+                        Color.WriteLineColor("\nauthor          Выводит информацию об авторе\n", "Cyan");
+                        Color.WriteLineColor("logo              Выводит логотип\n", "Cyan");
+                        Color.WriteLineColor("list              Пользователи онлайн\n", "Cyan");
+                        Color.WriteLineColor("version           Выводит версию\n", "Cyan");
+                        Color.WriteLineColor("quit              Аварийно завершает приложение\n", "Cyan");
+                        Color.WriteLineColor("help              Выводит информацию о коммандах\n", "Cyan");
+                        Color.WriteLineColor("status            Выводит статус сервера\n", "Cyan");
+                        Color.WriteLineColor("command           Выводит информацию о коммандах\n", "Cyan");
+                        Color.WriteLineColor("clr               Очищает окно программы\n", "Cyan");
+                        Color.WriteLineColor("bs next start     Устанавливает время запуска проверки весов в часах\n", "Cyan");
                         return "done.";
 
                     }

@@ -3,7 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using BalanceModule;
 
-namespace Balance_module
+namespace BalanceModule
 {
     class Log
     {

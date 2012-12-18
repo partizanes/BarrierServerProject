@@ -204,7 +204,7 @@ namespace BalanceModule
         private CheckedListBox checkedListBox1;
         private Label label1;
         public  ListBox listBox1;
-        private Timer timer_start_scan;
+        public Timer timer_start_scan;
         private Label label2;
         private NotifyIcon BalanceModule;
     }
