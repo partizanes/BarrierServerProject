@@ -221,7 +221,7 @@ namespace BalanceModule
                     string str = "";
                     cas.GetTransStatus(m_ip, ref str);  //ipadress
                     list_msg(str);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(100);
                 }
 
                 string dataplu = "";
@@ -278,6 +278,8 @@ namespace BalanceModule
         {
             try
             {
+                Int32 check_articul = int.Parse(str.Substring(4, 1));
+
                 string articul = str.Substring(5, 5);
 
                 string barcode = str.Substring(28, 13);
@@ -285,6 +287,12 @@ namespace BalanceModule
                 Int32 price_c = int.Parse(str.Substring(14, 10));
 
                 string name = str.Substring(159, 54);
+
+                if (Convert.ToInt32(articul) > 74050)
+                    Log.log_write(str, "2", "2");
+
+                if (check_articul > 0)
+                    articul = check_articul + articul;
 
                 query_sql(articul, price_c);
             }
@@ -301,7 +309,7 @@ namespace BalanceModule
 
             while (count < count_error)
             {
-                label2.Text = count + " / " + count_error;
+                this.Invoke((Action)delegate { label2.Text = count + " / " + count_error; });
 
                 if (BalanceModule.Visible == true)
                     BalanceModule.ShowBalloonTip(1, "", label2.Text, ToolTipIcon.None);
@@ -355,14 +363,14 @@ namespace BalanceModule
                     string str = "";
                     cas.GetTransStatus(m_ip, ref str);
                     list_msg(str);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(100);
                 }
 
                 count++;
                 cas.DisconnectAll();
             }
 
-            label2.Text = "";
+            this.Invoke((Action)delegate { label2.Text = ""; });
 
             return;
         }
@@ -386,9 +394,11 @@ namespace BalanceModule
 
                 if (!reader.HasRows)
                 {
+                    data_delete[count_error] = int.Parse(articul);
                     count_error++;
                     list_msg(articul + " Цена Не найдена на кассе!");
-                    data_delete[count_error] = int.Parse(articul);
+                    list_msg(articul + " Цена на весах: " + price); //remove after debug
+                    Log.log_write(articul, "1", "1");
                 }
 
                 while (reader.Read())
@@ -397,9 +407,9 @@ namespace BalanceModule
 
                     if (price != price_c)
                     {
+                        data_delete[count_error] = int.Parse(articul);
                         list_msg(articul + " " + reader.GetString(0) + " Цена на весах: " + price + " Цена на кассе: " + price_c);
                         count_error++;
-                        data_delete[count_error] = int.Parse(articul);
                     }
                 }
             }
