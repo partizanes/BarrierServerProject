@@ -18,7 +18,15 @@ namespace BalanceModule
             {
                 components.Dispose();
             }
-            base.Dispose(disposing);
+            try
+            {
+                base.Dispose(disposing);
+            }
+            catch
+            {
+
+            }
+
         }
 
         #region Код, автоматически созданный конструктором форм Windows

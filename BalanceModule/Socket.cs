@@ -12,8 +12,8 @@ namespace BalanceModule
     {
         //=========================================================================================
         public static Socket client;
-        private static IPAddress ip = IPAddress.Parse("127.0.0.1"); //TODO config!!!
-        private const int port = 1991;
+        private static IPAddress ip = IPAddress.Parse(Config.GetParametr("server_ip")); //TODO config!!!
+        private int port = int.Parse(Config.GetParametr("server_port"));
         private static List<Thread> threads = new List<Thread>();
         public  bool disc_client = true;
         //=========================================================================================

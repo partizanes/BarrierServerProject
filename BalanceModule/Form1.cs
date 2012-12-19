@@ -30,21 +30,6 @@ namespace BalanceModule
 
         private int[] data_delete = new int[5000];
 
-        //import dll from use configuration file
-        [DllImport("kernel32.dll")]
-        static extern uint GetPrivateProfileString(
-        string lpAppName,
-        string lpKeyName,
-        string lpDefault,
-        StringBuilder lpReturnedString,
-        uint nSize,
-        string lpFileName);
-
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool WritePrivateProfileString(string lpAppName,
-           string lpKeyName, string lpString, string lpFileName);
-
         Server server = new Server();
 
         public Form1()
@@ -138,6 +123,9 @@ namespace BalanceModule
             Dbf dbf = new Dbf();
 
             dr = dbf.ExecuteReader("SELECT ip,name,port,model  FROM struct.dbf");
+
+            if (dr == null)
+                return;
 
             if (!dr.HasRows)
                 list_msg("База весов пустая!");
@@ -242,10 +230,15 @@ namespace BalanceModule
 
                 string dataplu = "";
 
-                while (cas.RecvPLUData(ref dataplu) >= 0)
+                try
                 {
-                    parse_plu_str(dataplu);
+                    while (cas.RecvPLUData(ref dataplu) >= 0)
+                    {
+                        parse_plu_str(dataplu);
+                    }
                 }
+
+                catch { return; }
 
                 list_msg("Сканирование " + m_ip + " завершено!");
                 list_msg("Количество найденых проблем: " + count_error);
@@ -422,7 +415,7 @@ namespace BalanceModule
                     count_error++;
                     list_msg(articul + " Цена Не найдена на кассе!");
                     list_msg(articul + " Цена на весах: " + price); //remove after debug
-                    Log.log_write(articul + "Причина:Цена не найдена на кассе","INFO","REASON");
+                    Log.log_write(articul + " Причина:Цена не найдена на кассе","INFO","REASON");
                 }
 
                 while (reader.Read())
@@ -438,10 +431,27 @@ namespace BalanceModule
                     }
                 }
             }
+            catch (MySqlException exc)
+            {
+                //TODO Обработка кодов при невозможности соединения
+                // http://dev.mysql.com/doc/refman/4.1/en/error-messages-client.html#error_cr_conn_host_error
+                Log.log_write(exc.Message, "Exception", "Mysql_Exception_snf");
+                Log.log_write(exc.ErrorCode.ToString(), "Exception", "Mysql_Exception_snf");
+                Log.log_write(exc.Number.ToString(), "Exception", "Mysql_Exception_snf");
+
+                switch (exc.Number)
+                {
+                case 2002:
+                case 2003:
+                    Log.log_write(exc.Number.ToString(), "Debug", "Mysql_Exception_snf");
+                    query_sql(articul, price);
+                    break;
+                }
+            }
             catch(Exception ex)
             {
                 list_msg(ex.Message);
-                Log.log_write(ex.Message, "Exception", "Mysql_Exception");
+                Log.log_write(ex.Message, "Exception", "Exception");
             }
             finally
             {
