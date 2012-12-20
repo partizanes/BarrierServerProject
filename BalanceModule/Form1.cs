@@ -589,7 +589,7 @@ namespace BalanceModule
         {
             //Thread.Sleep(1000);
             server.disc_client = false;
-            Application.Exit();
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
 
         private void list_msg(string msg)

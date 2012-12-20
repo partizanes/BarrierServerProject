@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 
 namespace BalanceModule
@@ -24,6 +22,11 @@ namespace BalanceModule
         static extern bool WritePrivateProfileString(string lpAppName,
            string lpKeyName, string lpString, string lpFileName);
 
+        public static void Set(string section, string key, string value)
+        {
+            WritePrivateProfileString(section, key, value, Environment.CurrentDirectory + "\\config.ini");
+        }
+
         public static string GetParametr(string par)
         {
             StringBuilder buffer = new StringBuilder(50, 50);
@@ -42,30 +45,45 @@ namespace BalanceModule
         {
             try
             {
-                Form2 testDialog = new Form2();
+                bool st = true;
 
-                testDialog.label_info.Text = testDialog.label_info.Text +" "+ par;
+                Form2 parDialog = new Form2();
 
-                testDialog.button1.DialogResult = DialogResult.OK;
+                parDialog.label_info.Text = parDialog.label_info.Text +" "+ par;
 
-                testDialog.button1.Enabled = true;
+                parDialog.button1.DialogResult = DialogResult.OK;
 
-                if (testDialog.ShowDialog() == DialogResult.OK)
+                parDialog.buttonQuit.DialogResult = DialogResult.Cancel;
+
+                parDialog.button1.Enabled = true;
+
+                while (st)
                 {
-                    if (testDialog.TextBox1.Text.Length == 0)
+                    switch (parDialog.ShowDialog())
                     {
-                        MessageBox.Show("Введите данные!");
+                        case DialogResult.Cancel:
+                            System.Diagnostics.Process.GetCurrentProcess().Kill();
+                            break;
+                        case DialogResult.OK:
+                            if (parDialog.TextBox1.Text.Length > 0)
+                            {
+                                st = false;
+                                Set("SETTINGS", par, parDialog.TextBox1.Text);
+                                return parDialog.TextBox1.Text;
+                            }
+                            else
+                                MessageBox.Show("Введите данные!");
+                            break;
                     }
-                    else
-                        return testDialog.TextBox1.Text;
                 }
             }
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                Log.log_write(ex.Message, "Form2", "exception");
             }
 
-            return "null";
+            return null;
         }
     }
 }

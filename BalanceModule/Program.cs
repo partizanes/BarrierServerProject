@@ -15,7 +15,6 @@ namespace BalanceModule
             if (System.Diagnostics.Process.GetProcessesByName(Application.ProductName).Length > 1)
             {
                 MessageBox.Show("Приложение уже запущено!");
-                //System.Threading.Thread.Sleep(5000);
                 Application.Exit();
             }
             else
