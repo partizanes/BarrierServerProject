@@ -319,10 +319,11 @@ namespace BalanceModule
             string EntryTime = DateTime.Now.ToLongTimeString().Replace(":", "_");
             string EntryDate = DateTime.Today.ToShortDateString().Replace(".", "_");
 
-            this.Invoke((Action)delegate { label2.Visible = true; ; });
+            this.Invoke((Action)delegate { label2.Text = ""; });
 
-            while (count < count_error)
+            while (count <= count_error)
             {
+                //checked this
                 this.Invoke((Action)delegate { label2.Text = count + " / " + count_error; });
 
                 if (BalanceModule.Visible == true)
@@ -387,7 +388,7 @@ namespace BalanceModule
                 cas.DisconnectAll();
             }
 
-            this.Invoke((Action)delegate { label2.Visible = false; });
+            this.Invoke((Action)delegate { label2.Text = ""; });
 
             return;
         }

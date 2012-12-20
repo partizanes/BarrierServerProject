@@ -17,7 +17,7 @@ namespace BarrierServerProject
 
                 msg = size + "|" + msg;
 
-                byte[] bytes = new byte[256];  //TODO CHECK THIS SIZE
+                byte[] bytes = new byte[Encoding.UTF8.GetBytes(msg).Length];  //FIXME IF NOT WORK
                 bytes = Encoding.UTF8.GetBytes(msg);
 
                 foreach (DictionaryEntry de in Server.clients)
