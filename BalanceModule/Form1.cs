@@ -250,6 +250,13 @@ namespace BalanceModule
 
                 list_msg("Удаление с весов " + m_ip + " завершено!");
 
+                Array.Clear(data_delete, 0, data_delete.Length);
+
+                count_error = 0;
+
+                this.Invoke((Action)delegate { label2.Text = ""; });
+                this.Invoke((Action)delegate { label2.Refresh(); });
+
                 this.Invoke((Action)delegate { checkedListBox1.SetItemChecked(checkedListBox1.Items.IndexOf(m_ip + ":" + m_port + " " + m_name),true); });
             }
 
@@ -389,6 +396,7 @@ namespace BalanceModule
             }
 
             this.Invoke((Action)delegate { label2.Text = ""; });
+            this.Invoke((Action)delegate { label2.Refresh(); });
 
             return;
         }
@@ -427,7 +435,7 @@ namespace BalanceModule
                     {
                         data_delete[count_error] = int.Parse(articul);
                         list_msg(articul + " " + reader.GetString(0) + " Цена на весах: " + price + " Цена на кассе: " + price_c);
-                        Log.log_write(articul + "Причина:Цены не равны ;Цена на весах: " + price + " Цена на кассе: " + price_c, "INFO", "REASON");
+                        Log.log_write(articul + " Причина:Цены не равны ;Цена на весах: " + price + " Цена на кассе: " + price_c, "INFO", "REASON");
                         count_error++;
                     }
                 }
@@ -453,6 +461,7 @@ namespace BalanceModule
             {
                 list_msg(ex.Message);
                 Log.log_write(ex.Message, "Exception", "Exception");
+                Log.log_write(ex.ToString(), "Debug", "Mysql_Exception_snf");
             }
             finally
             {
