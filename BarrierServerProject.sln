@@ -1,12 +1,14 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarrierServerProject", "BarrierServerProject\BarrierServerProject.csproj", "{85EDBD74-7A16-44FE-AA22-1216DF405058}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalanceModule", "BalanceModule\BalanceModule.csproj", "{E2D2F9A2-9FCA-422A-B41A-0E4E27762013}"
 	ProjectSection(ProjectDependencies) = postProject
 		{85EDBD74-7A16-44FE-AA22-1216DF405058} = {85EDBD74-7A16-44FE-AA22-1216DF405058}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrioritySales", "PrioritySales\PrioritySales.csproj", "{081990E9-A49F-45A5-A394-3C5CFEC68042}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,6 +24,10 @@ Global
 		{E2D2F9A2-9FCA-422A-B41A-0E4E27762013}.Debug|x86.Build.0 = Debug|x86
 		{E2D2F9A2-9FCA-422A-B41A-0E4E27762013}.Release|x86.ActiveCfg = Release|x86
 		{E2D2F9A2-9FCA-422A-B41A-0E4E27762013}.Release|x86.Build.0 = Release|x86
+		{081990E9-A49F-45A5-A394-3C5CFEC68042}.Debug|x86.ActiveCfg = Debug|x86
+		{081990E9-A49F-45A5-A394-3C5CFEC68042}.Debug|x86.Build.0 = Debug|x86
+		{081990E9-A49F-45A5-A394-3C5CFEC68042}.Release|x86.ActiveCfg = Release|x86
+		{081990E9-A49F-45A5-A394-3C5CFEC68042}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
