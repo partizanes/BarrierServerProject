@@ -40,7 +40,7 @@
             this.LabelMsg = new System.Windows.Forms.Label();
             this.buttonLogin = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.login_textbox = new System.Windows.Forms.TextBox();
+            this.TextboxLogin = new System.Windows.Forms.TextBox();
             this.textboxPass = new System.Windows.Forms.TextBox();
             this.labelLogin = new System.Windows.Forms.Label();
             this.labelPass = new System.Windows.Forms.Label();
@@ -56,7 +56,6 @@
             // 
             this.TaskbarIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("TaskbarIcon.Icon")));
             this.TaskbarIcon.Text = "Action";
-            this.TaskbarIcon.Visible = true;
             this.TaskbarIcon.DoubleClick += new System.EventHandler(this.TaskbarIcon_DoubleClick);
             // 
             // login_panel
@@ -71,7 +70,7 @@
             this.login_panel.Controls.Add(this.LabelMsg);
             this.login_panel.Controls.Add(this.buttonLogin);
             this.login_panel.Controls.Add(this.label1);
-            this.login_panel.Controls.Add(this.login_textbox);
+            this.login_panel.Controls.Add(this.TextboxLogin);
             this.login_panel.Controls.Add(this.textboxPass);
             this.login_panel.Controls.Add(this.labelLogin);
             this.login_panel.Controls.Add(this.labelPass);
@@ -149,6 +148,7 @@
             this.buttonLogin.TabIndex = 3;
             this.buttonLogin.Text = "Войти";
             this.buttonLogin.UseVisualStyleBackColor = true;
+            this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click);
             this.buttonLogin.Enter += new System.EventHandler(this.login_button_Enter);
             this.buttonLogin.Leave += new System.EventHandler(this.login_button_Leave);
             // 
@@ -167,17 +167,17 @@
             this.label1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.label1_MouseMove);
             this.label1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label1_MouseUp);
             // 
-            // login_textbox
+            // TextboxLogin
             // 
-            this.login_textbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.login_textbox.Location = new System.Drawing.Point(91, 73);
-            this.login_textbox.MaxLength = 10;
-            this.login_textbox.Name = "login_textbox";
-            this.login_textbox.Size = new System.Drawing.Size(196, 22);
-            this.login_textbox.TabIndex = 0;
-            this.login_textbox.Enter += new System.EventHandler(this.login_textbox_Enter);
-            this.login_textbox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.login_textbox_KeyDown);
-            this.login_textbox.Leave += new System.EventHandler(this.login_textbox_Leave);
+            this.TextboxLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TextboxLogin.Location = new System.Drawing.Point(91, 73);
+            this.TextboxLogin.MaxLength = 10;
+            this.TextboxLogin.Name = "TextboxLogin";
+            this.TextboxLogin.Size = new System.Drawing.Size(196, 22);
+            this.TextboxLogin.TabIndex = 0;
+            this.TextboxLogin.Enter += new System.EventHandler(this.login_textbox_Enter);
+            this.TextboxLogin.KeyDown += new System.Windows.Forms.KeyEventHandler(this.login_textbox_KeyDown);
+            this.TextboxLogin.Leave += new System.EventHandler(this.login_textbox_Leave);
             // 
             // textboxPass
             // 
@@ -248,7 +248,6 @@
             this.MinimizeBox = false;
             this.Name = "AuthForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.TopMost = true;
             this.TransparencyKey = System.Drawing.Color.Navy;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AuthForm_FormClosed);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AuthForm_MouseDown);
@@ -264,18 +263,18 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel login_panel;
-        private System.Windows.Forms.Button buttonLogin;
-        private System.Windows.Forms.TextBox login_textbox;
+        private System.Windows.Forms.TextBox TextboxLogin;
         public System.Windows.Forms.TextBox textboxPass;
         private System.Windows.Forms.Label labelLogin;
         private System.Windows.Forms.Label labelPass;
         private System.Windows.Forms.Timer labelTimerMsg;
-        private System.Windows.Forms.Label LabelMsg;
+        public System.Windows.Forms.Label LabelMsg;
         private System.Windows.Forms.CheckBox check_save_login;
         private System.Windows.Forms.Label LabelHide;
-        private System.Windows.Forms.NotifyIcon TaskbarIcon;
         private System.Windows.Forms.Label LabelExit;
         private System.Windows.Forms.Label LabelSetting;
         private System.Windows.Forms.Label LabelVersion;
+        public System.Windows.Forms.Button buttonLogin;
+        public System.Windows.Forms.NotifyIcon TaskbarIcon;
     }
 }

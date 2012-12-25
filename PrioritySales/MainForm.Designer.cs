@@ -1,6 +1,6 @@
 ﻿namespace PrioritySales
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Требуется переменная конструктора.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -36,6 +36,10 @@
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label_user = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.LabelHide = new System.Windows.Forms.Label();
+            this.LabelExit = new System.Windows.Forms.Label();
+            this.LabelSetting = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button5
@@ -86,9 +90,9 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Black;
-            this.panel1.Location = new System.Drawing.Point(153, 13);
+            this.panel1.Location = new System.Drawing.Point(153, 33);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(627, 533);
+            this.panel1.Size = new System.Drawing.Size(611, 507);
             this.panel1.TabIndex = 5;
             // 
             // label_user
@@ -103,7 +107,52 @@
             this.label_user.TabIndex = 6;
             this.label_user.Text = "____________";
             // 
-            // Form1
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("Mistral", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.label1.Location = new System.Drawing.Point(29, 128);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(106, 42);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "ACTION";
+            // 
+            // LabelHide
+            // 
+            this.LabelHide.AutoSize = true;
+            this.LabelHide.BackColor = System.Drawing.Color.Transparent;
+            this.LabelHide.ForeColor = System.Drawing.Color.Yellow;
+            this.LabelHide.Location = new System.Drawing.Point(749, 9);
+            this.LabelHide.Name = "LabelHide";
+            this.LabelHide.Size = new System.Drawing.Size(13, 13);
+            this.LabelHide.TabIndex = 7;
+            this.LabelHide.Text = "с";
+            // 
+            // LabelExit
+            // 
+            this.LabelExit.AutoSize = true;
+            this.LabelExit.BackColor = System.Drawing.Color.Transparent;
+            this.LabelExit.ForeColor = System.Drawing.Color.Yellow;
+            this.LabelExit.Location = new System.Drawing.Point(768, 9);
+            this.LabelExit.Name = "LabelExit";
+            this.LabelExit.Size = new System.Drawing.Size(12, 13);
+            this.LabelExit.TabIndex = 8;
+            this.LabelExit.Text = "x";
+            // 
+            // LabelSetting
+            // 
+            this.LabelSetting.AutoSize = true;
+            this.LabelSetting.BackColor = System.Drawing.Color.Transparent;
+            this.LabelSetting.ForeColor = System.Drawing.Color.Yellow;
+            this.LabelSetting.Location = new System.Drawing.Point(730, 9);
+            this.LabelSetting.Name = "LabelSetting";
+            this.LabelSetting.Size = new System.Drawing.Size(13, 13);
+            this.LabelSetting.TabIndex = 9;
+            this.LabelSetting.Text = "н";
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -112,6 +161,10 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(792, 590);
             this.ControlBox = false;
+            this.Controls.Add(this.LabelSetting);
+            this.Controls.Add(this.LabelExit);
+            this.Controls.Add(this.LabelHide);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.label_user);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.button5);
@@ -124,8 +177,10 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.TransparencyKey = System.Drawing.Color.Navy;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -140,6 +195,10 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label_user;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label LabelHide;
+        private System.Windows.Forms.Label LabelExit;
+        private System.Windows.Forms.Label LabelSetting;
     }
 }
 

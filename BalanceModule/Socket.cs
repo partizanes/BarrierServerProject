@@ -12,7 +12,7 @@ namespace BalanceModule
     {
         //=========================================================================================
         public static Socket client;
-        private static IPAddress ip = IPAddress.Parse(Config.GetParametr("server_ip")); //TODO config!!!
+        private static IPAddress ip = IPAddress.Parse(Config.GetParametr("server_ip"));
         private int port = int.Parse(Config.GetParametr("server_port"));
         private static List<Thread> threads = new List<Thread>();
         public  bool disc_client = true;
@@ -204,7 +204,6 @@ namespace BalanceModule
 
                             string msg_data = split_data[1].Substring(5, (Convert.ToInt32(str_len)) - 4); //сообщение
 
-                            //TODO packet parser
                             Packages.parse(com_id, com_type, msg_data);
                         }
                     }

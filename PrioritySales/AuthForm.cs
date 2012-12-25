@@ -2,31 +2,97 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace PrioritySales
 {
     public partial class AuthForm : Form
     {
-        public const string ver = "0.03 alfa";
+        public const string ver = "0.15 alfa";
         public int xOffset, yOffset;
         public bool isMouseDown = false;
         private Point mouseOffset;
+
+        public static void HideThis()
+        {
+            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).Hide(); }));
+        }
 
         public AuthForm()
         {
             InitializeComponent();
             LabelVersion.Text = ver;
+
+            bool st = false;
+
+            if (bool.TryParse((Config.GetParametr("SaveLastLogin")), out st))
+            {
+                if (st)
+                {
+                    check_save_login.Checked = true;
+                    TextboxLogin.Text = Config.GetParametr("LastLogin");
+                    TextboxLogin.Select(TextboxLogin.Text.Length, 0);
+                }
+            }
+        }
+
+        public void buttonCancel_Click()
+        {
+            buttonLogin.Text = "Войти";
+        }
+
+        private void buttonLogin_Click(object sender, EventArgs e)
+        {
+            if (buttonLogin.Text != "Отмена")
+            {
+                if (TextboxLogin.Text.Length < 3 || textboxPass.Text.Length < 1)
+                {
+                    set_msg_on_timer("         Чего то не хватает!");
+                }
+                else
+                {
+                    if (check_save_login.Checked)
+                    {
+                        Config.Set("SETTINGS", "SaveLastLogin", "true");
+                        Config.Set("SETTINGS", "LastLogin", TextboxLogin.Text);
+                    }
+                    else
+                    {
+                        Config.Set("SETTINGS", "SaveLastLogin", "false");
+                        Config.Set("SETTINGS", "LastLogin", "");
+                    }
+
+                    buttonLogin.Text = "Отмена";
+
+                    Thread thh = new Thread(delegate()
+                    {
+                        Server.Connect();
+
+                        if(Server.server.Connected)
+                            Server.Sender("CL 0 " + TextboxLogin.Text + ":" + textboxPass.Text);
+                        else
+                            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).buttonCancel_Click(); }));
+                    }); ;
+                    thh.Name = "Авторизация";
+                    Server.threads.Add(thh);
+                    thh.Start();
+                }
+            }
+            else
+                buttonCancel_Click();
         }
 
         private void login_textbox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
             {
-                if (login_textbox.TextLength < 3)
+                if (TextboxLogin.TextLength < 3)
                 {
                     Random rnd = new Random();
                     int i = rnd.Next(3);
@@ -58,7 +124,7 @@ namespace PrioritySales
                             set_msg_on_timer("      Очень приятно ;) я Action!");
                             break;
                         case 1:
-                            set_msg_on_timer("           Привет " + login_textbox.Text + "!");
+                            set_msg_on_timer("           Привет " + TextboxLogin.Text + "!");
                             break;
                         case 2:
                             set_msg_on_timer("              Готов к работе!");
@@ -69,13 +135,13 @@ namespace PrioritySales
                 }
             }
 
-	if (e.KeyCode == Keys.Escape)
-	{
-		Application.Exit();
-	}
+            if (e.KeyCode == Keys.Escape)
+            {
+                Application.Exit();
+            }
         }
 
-        private void set_msg_on_timer(string text)
+        public void set_msg_on_timer(string text)
         {
             labelTimerMsg.Enabled = false;
             labelTimerMsg.Interval = 3000;
@@ -123,7 +189,7 @@ namespace PrioritySales
 
             if (e.KeyCode == Keys.Left || e.KeyCode == Keys.Up)
             {
-                login_textbox.Focus();
+                TextboxLogin.Focus();
             }
 
             if (e.KeyCode == Keys.Escape)
@@ -217,7 +283,16 @@ namespace PrioritySales
 
         private void pass_textbox_Enter(object sender, EventArgs e)
         {
-            labelPass.ForeColor = Color.Green;
+            if (TextboxLogin.Text.Length < 3)
+            {
+                TextboxLogin.Focus();
+                return;
+            }
+            else
+            {
+                check_save_login.Visible = true;
+                labelPass.ForeColor = Color.Green;
+            }
         }
 
         private void pass_textbox_Leave(object sender, EventArgs e)
@@ -279,6 +354,8 @@ namespace PrioritySales
         private void AuthForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             TaskbarIcon.Visible = false;
+            Process.GetCurrentProcess().Kill();
         }
+
     }
 }

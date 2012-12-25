@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 
@@ -25,6 +26,33 @@ namespace BarrierServerProject
                     Console.WriteLine(user.username);   //not use
                     Console.WriteLine(user.ipaddress);  //not use
                     Console.WriteLine(user.port);       //not use
+                    break;
+                case "CL":
+                    user.userid = 0;
+                    switch (com)
+                    {
+                        case "0":
+                            string[] split_data = msg.Replace("\0","").Replace(" ", "").Split(new Char[] { ':' });
+
+                            if ((split_data[0].ToString() == "partizanes") && (split_data[1].ToString() == "216567"))
+                            {
+                                Server.clients[r_client] = split_data[0];
+                                Color.WriteLineColor(split_data[0] + " Добавлен!", "Cyan");
+                                Msg.SendUser(split_data[0], "CL 1 Идентификация пройдена.");
+                            }
+                            else
+                            {
+                                Server.clients[r_client] = split_data[0];
+                                Msg.SendUser(split_data[0], "CL 0 Идентификация не пройдена.");
+                                Color.WriteLineColor(split_data[0] +" авторизация неудачна", "Red");
+                            }
+
+                            using (MD5 md5Hash = MD5.Create())
+                            {
+                                Color.WriteLineColor(split_data[0] + " " + GetMd5Hash(md5Hash, split_data[1]), "Red");
+                                break;
+                            }
+                    }
                     break;
                 case "BS":
                     switch (com)
@@ -48,6 +76,20 @@ namespace BarrierServerProject
                     }
                         break;
             }
+        }
+
+        static string GetMd5Hash(MD5 md5Hash, string input)
+        {
+            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+            StringBuilder sBuilder = new StringBuilder();
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+
+            return sBuilder.ToString();
         }
     }
 }

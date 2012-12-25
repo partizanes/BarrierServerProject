@@ -32,7 +32,7 @@ namespace PrioritySales
                 Config.Set("SETTINGS", "PortAgentServer", TextBoxPortAgentServer.Text);
                 Config.Set("SETTINGS", "PortCashServer", TextBoxPortCashServer.Text);
 
-                Config.Set("SETTINGS", "SaveLastUser", CheckBoxSaveLastUser.CheckState.ToString());
+                Config.Set("SETTINGS", "SaveLastLogin", CheckBoxSaveLastUser.Checked.ToString());
             }
             catch (System.Exception ex)
             {
@@ -56,16 +56,14 @@ namespace PrioritySales
                 TextBoxPortAgentServer.Text = Config.GetParametr("PortAgentServer");
                 TextBoxPortCashServer.Text = Config.GetParametr("PortCashServer");
 
-                Boolean stat;
+                Boolean st = false;
 
-                if (Boolean.TryParse(Config.GetParametr("SaveLastUser"), out stat))
+                if (bool.TryParse((Config.GetParametr("SaveLastLogin")), out st))
                 {
-                    CheckBoxSaveLastUser.Checked = stat;
-                }
-                else
-                {
-                    CheckBoxSaveLastUser.Checked = false;
-                    Config.Set("SETTINGS", "SaveLastUser", "false");
+                    if (st)
+                    {
+                        CheckBoxSaveLastUser.Checked = st;
+                    }
                 }
             }
             catch (System.Exception ex)
