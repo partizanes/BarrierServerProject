@@ -118,16 +118,5 @@ namespace PrioritySales
         {
             ButtonExit.ForeColor = Color.DodgerBlue;
         }
-
-        //             ButtonAdd.Font = new System.Drawing.Font("Times New Roman", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-        //             ButtonAdd.ForeColor = Color.Yellow;
-        // 
-        //             LabelButtonAdd.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-        //             LabelButtonAdd.ForeColor = Color.DodgerBlue;
-        //             
-//                if (e.KeyCode == Keys.Right)
-//             {
-//                 LabelButtonList.Focus();
-//             }
     }
 }
