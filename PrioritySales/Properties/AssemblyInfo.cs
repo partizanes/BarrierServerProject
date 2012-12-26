@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // Управление общими сведениями о сборке осуществляется с помощью 
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("PrioritySales")]
+[assembly: AssemblyTitle("")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("mag41")]
-[assembly: AssemblyProduct("PrioritySales")]
-[assembly: AssemblyCopyright("Copyright © mag41 2012")]
+[assembly: AssemblyCompany("by Part!zanes")]
+[assembly: AssemblyProduct("")]
+[assembly: AssemblyCopyright("Copyright © partizanes 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

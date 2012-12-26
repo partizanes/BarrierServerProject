@@ -14,7 +14,7 @@ namespace PrioritySales
 {
     public partial class AuthForm : Form
     {
-        public const string ver = "0.15 alfa";
+        public const string ver = "0.53 alfa";
         public int xOffset, yOffset;
         public bool isMouseDown = false;
         private Point mouseOffset;
@@ -51,6 +51,12 @@ namespace PrioritySales
         {
             if (buttonLogin.Text != "Отмена")
             {
+                if (Config.GetParametr("IpAuthServer") == "" || Config.GetParametr("PortAuthServer") == "")
+                {
+                    MessageBox.Show("Не настроены параметры подлючения.Для настройки подключения нажмите значок 'н' в верхем правом углу формы авторизации двойным нажатием мыши или обратитесь к администратору.");
+                        return;
+                }
+
                 if (TextboxLogin.Text.Length < 3 || textboxPass.Text.Length < 1)
                 {
                     set_msg_on_timer("         Чего то не хватает!");
@@ -85,7 +91,7 @@ namespace PrioritySales
                 }
             }
             else
-                buttonCancel_Click();
+                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).buttonCancel_Click(); }));
         }
 
         private void login_textbox_KeyDown(object sender, KeyEventArgs e)

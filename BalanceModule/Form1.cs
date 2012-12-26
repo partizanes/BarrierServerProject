@@ -275,7 +275,7 @@ namespace BalanceModule
             finally
             {
                 timer_par();
-                send_msg("BS 1 Деактивация спящего режима через: " + (timer_start_scan.Interval)/3600000 + " часа");
+                send_msg("BS 1 Деактивация спящего режима через: " + (timer_start_scan.Interval)/3600000 + " часа\n");
             }
         }
 

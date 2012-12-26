@@ -43,5 +43,91 @@ namespace PrioritySales
         {
             (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).Hide(); }));
         }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            ButtonAdd.Focus();
+        }
+
+        private void ButtonAdd_Enter(object sender, EventArgs e)
+        {
+            ButtonAdd.ForeColor = Color.Green;
+        }
+
+        private void ButtonAdd_Leave(object sender, EventArgs e)
+        {
+            ButtonAdd.ForeColor = Color.DodgerBlue;
+        }
+
+        private void ButtonList_Enter(object sender, EventArgs e)
+        {
+            ButtonList.ForeColor = Color.Green;
+        }
+
+        private void ButtonList_Leave(object sender, EventArgs e)
+        {
+            ButtonList.ForeColor = Color.DodgerBlue;
+        }
+
+        private void ButtonMsg_Enter(object sender, EventArgs e)
+        {
+            ButtonMsg.ForeColor = Color.Green;
+        }
+
+        private void ButtonMsg_Leave(object sender, EventArgs e)
+        {
+            ButtonMsg.ForeColor = Color.DodgerBlue;
+        }
+
+        private void ButtonUnk_Enter(object sender, EventArgs e)
+        {
+            ButtonUnk.ForeColor = Color.Green;
+        }
+
+        private void ButtonUnk_Leave(object sender, EventArgs e)
+        {
+            ButtonUnk.ForeColor = Color.DodgerBlue;
+        }
+
+        private void ButtonSetting_Enter(object sender, EventArgs e)
+        {
+            ButtonSetting.ForeColor = Color.Green;
+        }
+
+        private void ButtonSetting_Leave(object sender, EventArgs e)
+        {
+            ButtonSetting.ForeColor = Color.DodgerBlue;
+        }
+
+        private void ButtonHide_Enter(object sender, EventArgs e)
+        {
+            ButtonHide.ForeColor = Color.Green;
+        }
+
+        private void ButtonHide_Leave(object sender, EventArgs e)
+        {
+            ButtonHide.ForeColor = Color.DodgerBlue;
+        }
+
+        private void ButtonExit_Enter(object sender, EventArgs e)
+        {
+            ButtonExit.ForeColor = Color.Green;
+        }
+
+        private void ButtonExit_Leave(object sender, EventArgs e)
+        {
+            ButtonExit.ForeColor = Color.DodgerBlue;
+        }
+
+        //             ButtonAdd.Font = new System.Drawing.Font("Times New Roman", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+        //             ButtonAdd.ForeColor = Color.Yellow;
+        // 
+        //             LabelButtonAdd.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+        //             LabelButtonAdd.ForeColor = Color.DodgerBlue;
+        //             
+//                if (e.KeyCode == Keys.Right)
+//             {
+//                 LabelButtonList.Focus();
+//             }
     }
 }
