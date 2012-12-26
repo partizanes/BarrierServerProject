@@ -41,7 +41,7 @@ namespace PrioritySales
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            AuthForm.HideThis();
+            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).Hide(); }));
         }
     }
 }

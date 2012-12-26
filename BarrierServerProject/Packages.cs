@@ -38,7 +38,7 @@ namespace BarrierServerProject
                             {
                                 Server.clients[r_client] = split_data[0];
                                 Color.WriteLineColor(split_data[0] + " Добавлен!", "Cyan");
-                                Msg.SendUser(split_data[0], "CL 1 Идентификация пройдена.");
+                                Msg.SendUser(split_data[0], "CL 1 " + split_data[0]);
                             }
                             else
                             {

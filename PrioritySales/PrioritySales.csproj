@@ -106,6 +106,7 @@
     <None Include="Resources\f551.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\SettingForm.png" />
     <None Include="Resources\f55.png" />
     <Content Include="app.ico" />
     <Content Include="Resources\form3.png" />

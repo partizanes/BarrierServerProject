@@ -45,6 +45,10 @@
             this.TextBoxIpCashServer = new System.Windows.Forms.TextBox();
             this.LabelIpCashServer = new System.Windows.Forms.Label();
             this.ButtonSettingBack = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // LabelIpAuthServer
@@ -165,29 +169,53 @@
             this.ButtonSettingBack.Enter += new System.EventHandler(this.ButtonSettingBack_Enter);
             this.ButtonSettingBack.Leave += new System.EventHandler(this.ButtonSettingBack_Leave);
             // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.LabelIpAuthServer);
+            this.panel1.Controls.Add(this.TextBoxIpAuthServer);
+            this.panel1.Controls.Add(this.TextBoxPortCashServer);
+            this.panel1.Controls.Add(this.LabelIpAgentServer);
+            this.panel1.Controls.Add(this.LabelCashPortServer);
+            this.panel1.Controls.Add(this.TextBoxlIpAgentServer);
+            this.panel1.Controls.Add(this.TextBoxIpCashServer);
+            this.panel1.Controls.Add(this.LabelPortAuthServer);
+            this.panel1.Controls.Add(this.LabelIpCashServer);
+            this.panel1.Controls.Add(this.TextBoxPortAuthServer);
+            this.panel1.Controls.Add(this.LabelPortAgentServer);
+            this.panel1.Controls.Add(this.TextBoxPortAgentServer);
+            resources.ApplyResources(this.panel1, "panel1");
+            this.panel1.Name = "panel1";
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.Transparent;
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.panel2, "panel2");
+            this.panel2.Name = "panel2";
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.Transparent;
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.panel3, "panel3");
+            this.panel3.Name = "panel3";
+            // 
             // SettingForm
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Navy;
-            this.BackgroundImage = global::PrioritySales.Properties.Resources.f55;
+            this.BackgroundImage = global::PrioritySales.Properties.Resources.SettingForm;
             this.ControlBox = false;
+            this.Controls.Add(this.panel3);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.ButtonSettingBack);
-            this.Controls.Add(this.TextBoxPortCashServer);
-            this.Controls.Add(this.LabelCashPortServer);
-            this.Controls.Add(this.TextBoxIpCashServer);
-            this.Controls.Add(this.LabelIpCashServer);
             this.Controls.Add(this.CheckBoxSaveLastUser);
-            this.Controls.Add(this.TextBoxPortAgentServer);
-            this.Controls.Add(this.LabelPortAgentServer);
-            this.Controls.Add(this.TextBoxPortAuthServer);
-            this.Controls.Add(this.LabelPortAuthServer);
             this.Controls.Add(this.LabelSetting);
             this.Controls.Add(this.LabelApplication);
-            this.Controls.Add(this.TextBoxlIpAgentServer);
-            this.Controls.Add(this.LabelIpAgentServer);
-            this.Controls.Add(this.TextBoxIpAuthServer);
-            this.Controls.Add(this.LabelIpAuthServer);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
@@ -199,6 +227,8 @@
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SettingForm_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.SettingForm_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.SettingForm_MouseUp);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -222,5 +252,8 @@
         private System.Windows.Forms.TextBox TextBoxIpCashServer;
         private System.Windows.Forms.Label LabelIpCashServer;
         private System.Windows.Forms.Button ButtonSettingBack;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel3;
     }
 }

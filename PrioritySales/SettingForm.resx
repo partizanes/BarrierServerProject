@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="LabelIpAuthServer.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="LabelIpAuthServer.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -129,7 +126,7 @@
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="LabelIpAuthServer.Location" type="System.Drawing.Point, System.Drawing">
-    <value>24, 43</value>
+    <value>22, 19</value>
   </data>
   <data name="LabelIpAuthServer.Size" type="System.Drawing.Size, System.Drawing">
     <value>178, 15</value>
@@ -147,16 +144,13 @@
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;LabelIpAuthServer.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>panel1</value>
   </data>
   <data name="&gt;&gt;LabelIpAuthServer.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>0</value>
   </data>
-  <metadata name="TextBoxIpAuthServer.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="TextBoxIpAuthServer.Location" type="System.Drawing.Point, System.Drawing">
-    <value>208, 42</value>
+    <value>206, 18</value>
   </data>
   <data name="TextBoxIpAuthServer.MaxLength" type="System.Int32, mscorlib">
     <value>16</value>
@@ -174,14 +168,11 @@
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;TextBoxIpAuthServer.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>panel1</value>
   </data>
   <data name="&gt;&gt;TextBoxIpAuthServer.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>1</value>
   </data>
-  <metadata name="LabelIpAgentServer.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="LabelIpAgentServer.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -193,7 +184,7 @@
     <value>NoControl</value>
   </data>
   <data name="LabelIpAgentServer.Location" type="System.Drawing.Point, System.Drawing">
-    <value>25, 74</value>
+    <value>23, 50</value>
   </data>
   <data name="LabelIpAgentServer.Size" type="System.Drawing.Size, System.Drawing">
     <value>177, 15</value>
@@ -211,16 +202,13 @@
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;LabelIpAgentServer.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>panel1</value>
   </data>
   <data name="&gt;&gt;LabelIpAgentServer.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>3</value>
   </data>
-  <metadata name="TextBoxlIpAgentServer.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="TextBoxlIpAgentServer.Location" type="System.Drawing.Point, System.Drawing">
-    <value>208, 74</value>
+    <value>206, 50</value>
   </data>
   <data name="TextBoxlIpAgentServer.MaxLength" type="System.Int32, mscorlib">
     <value>16</value>
@@ -238,14 +226,11 @@
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;TextBoxlIpAgentServer.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>panel1</value>
   </data>
   <data name="&gt;&gt;TextBoxlIpAgentServer.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>5</value>
   </data>
-  <metadata name="LabelApplication.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="LabelApplication.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -274,11 +259,8 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;LabelApplication.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>6</value>
   </data>
-  <metadata name="LabelSetting.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="LabelSetting.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -310,11 +292,8 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;LabelSetting.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>5</value>
   </data>
-  <metadata name="LabelPortAuthServer.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="LabelPortAuthServer.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -325,7 +304,7 @@
     <value>NoControl</value>
   </data>
   <data name="LabelPortAuthServer.Location" type="System.Drawing.Point, System.Drawing">
-    <value>392, 43</value>
+    <value>390, 19</value>
   </data>
   <data name="LabelPortAuthServer.Size" type="System.Drawing.Size, System.Drawing">
     <value>160, 15</value>
@@ -343,16 +322,13 @@
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;LabelPortAuthServer.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>panel1</value>
   </data>
   <data name="&gt;&gt;LabelPortAuthServer.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>7</value>
   </data>
-  <metadata name="TextBoxPortAuthServer.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="TextBoxPortAuthServer.Location" type="System.Drawing.Point, System.Drawing">
-    <value>558, 43</value>
+    <value>556, 19</value>
   </data>
   <data name="TextBoxPortAuthServer.MaxLength" type="System.Int32, mscorlib">
     <value>6</value>
@@ -370,16 +346,13 @@
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;TextBoxPortAuthServer.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>panel1</value>
   </data>
   <data name="&gt;&gt;TextBoxPortAuthServer.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
-  <metadata name="TextBoxPortAgentServer.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="TextBoxPortAgentServer.Location" type="System.Drawing.Point, System.Drawing">
-    <value>558, 74</value>
+    <value>556, 50</value>
   </data>
   <data name="TextBoxPortAgentServer.MaxLength" type="System.Int32, mscorlib">
     <value>6</value>
@@ -397,14 +370,11 @@
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;TextBoxPortAgentServer.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>panel1</value>
   </data>
   <data name="&gt;&gt;TextBoxPortAgentServer.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>11</value>
   </data>
-  <metadata name="LabelPortAgentServer.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="LabelPortAgentServer.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -415,7 +385,7 @@
     <value>NoControl</value>
   </data>
   <data name="LabelPortAgentServer.Location" type="System.Drawing.Point, System.Drawing">
-    <value>392, 74</value>
+    <value>390, 50</value>
   </data>
   <data name="LabelPortAgentServer.Size" type="System.Drawing.Size, System.Drawing">
     <value>159, 15</value>
@@ -433,14 +403,11 @@
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;LabelPortAgentServer.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>panel1</value>
   </data>
   <data name="&gt;&gt;LabelPortAgentServer.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>10</value>
   </data>
-  <metadata name="CheckBoxSaveLastUser.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="CheckBoxSaveLastUser.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -472,13 +439,10 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;CheckBoxSaveLastUser.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>4</value>
   </data>
-  <metadata name="TextBoxPortCashServer.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="TextBoxPortCashServer.Location" type="System.Drawing.Point, System.Drawing">
-    <value>558, 104</value>
+    <value>556, 80</value>
   </data>
   <data name="TextBoxPortCashServer.MaxLength" type="System.Int32, mscorlib">
     <value>6</value>
@@ -496,14 +460,11 @@
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;TextBoxPortCashServer.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>panel1</value>
   </data>
   <data name="&gt;&gt;TextBoxPortCashServer.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
-  <metadata name="LabelCashPortServer.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="LabelCashPortServer.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -514,7 +475,7 @@
     <value>NoControl</value>
   </data>
   <data name="LabelCashPortServer.Location" type="System.Drawing.Point, System.Drawing">
-    <value>392, 104</value>
+    <value>390, 80</value>
   </data>
   <data name="LabelCashPortServer.Size" type="System.Drawing.Size, System.Drawing">
     <value>116, 15</value>
@@ -532,16 +493,13 @@
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;LabelCashPortServer.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>panel1</value>
   </data>
   <data name="&gt;&gt;LabelCashPortServer.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>4</value>
   </data>
-  <metadata name="TextBoxIpCashServer.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="TextBoxIpCashServer.Location" type="System.Drawing.Point, System.Drawing">
-    <value>208, 104</value>
+    <value>206, 80</value>
   </data>
   <data name="TextBoxIpCashServer.MaxLength" type="System.Int32, mscorlib">
     <value>16</value>
@@ -559,14 +517,11 @@
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;TextBoxIpCashServer.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>panel1</value>
   </data>
   <data name="&gt;&gt;TextBoxIpCashServer.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>6</value>
   </data>
-  <metadata name="LabelIpCashServer.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="LabelIpCashServer.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -577,7 +532,7 @@
     <value>NoControl</value>
   </data>
   <data name="LabelIpCashServer.Location" type="System.Drawing.Point, System.Drawing">
-    <value>25, 104</value>
+    <value>23, 80</value>
   </data>
   <data name="LabelIpCashServer.Size" type="System.Drawing.Size, System.Drawing">
     <value>134, 15</value>
@@ -595,14 +550,11 @@
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;LabelIpCashServer.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>panel1</value>
   </data>
   <data name="&gt;&gt;LabelIpCashServer.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>8</value>
   </data>
-  <metadata name="ButtonSettingBack.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="ButtonSettingBack.Location" type="System.Drawing.Point, System.Drawing">
     <value>208, 477</value>
   </data>
@@ -625,12 +577,72 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;ButtonSettingBack.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 21</value>
+  </data>
+  <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>659, 133</value>
+  </data>
+  <data name="panel1.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="&gt;&gt;panel1.Name" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;panel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="panel2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 160</value>
+  </data>
+  <data name="panel2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>659, 133</value>
+  </data>
+  <data name="panel2.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="&gt;&gt;panel2.Name" xml:space="preserve">
+    <value>panel2</value>
+  </data>
+  <data name="&gt;&gt;panel2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel2.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panel2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="panel3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 299</value>
+  </data>
+  <data name="panel3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>659, 133</value>
+  </data>
+  <data name="panel3.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="&gt;&gt;panel3.Name" xml:space="preserve">
+    <value>panel3</value>
+  </data>
+  <data name="&gt;&gt;panel3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel3.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panel3.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="$this.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
@@ -2307,6 +2319,9 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAA
 </value>
+  </data>
+  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterScreen</value>

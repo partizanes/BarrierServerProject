@@ -28,9 +28,11 @@ namespace PrioritySales
                             (Application.OpenForms[0] as AuthForm).buttonLogin.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).buttonLogin.PerformClick(); }));
                             break;
                         case "1":
-                            AuthForm.HideThis();
+                            //AuthForm.HideThis();
+                            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).Hide(); }));
                             MainForm mf = new MainForm();
                             (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.Show(); }));
+                            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.LabelUserName.Text += msg; }));
                             break;
                     }
                     break;

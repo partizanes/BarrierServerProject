@@ -139,7 +139,13 @@ namespace PrioritySales
                             Packages.parse(com_id, com_type, msg_data);
                         }
                     }
+                    catch (SocketException ex)
+                    {
+                        if (ex.ErrorCode == 10054)
+                            Application.Exit();
 
+                        //TODO FORM RECCONECT TO SERVER!!!!
+                    }
                     catch (Exception exc)
                     {
                         (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).LabelMsg.Text = exc.Message; }));
