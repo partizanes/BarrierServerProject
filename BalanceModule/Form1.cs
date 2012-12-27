@@ -29,6 +29,7 @@ namespace BalanceModule
         private string exclude_list = "";
 
         private int[] data_delete = new int[5000];
+        private int CountMysqlTimeoutException = 10;
 
         Server server = new Server();
 
@@ -438,6 +439,19 @@ namespace BalanceModule
                         Log.log_write(articul + " Причина:Цены не равны ;Цена на весах: " + price + " Цена на кассе: " + price_c, "INFO", "REASON");
                         count_error++;
                     }
+                }
+            }
+            catch (TimeoutException ex)
+            {
+                Log.log_write("Сервер Mysql не ответил вовремя,будет произведена попытка переподключения \n Текст исключения: " + ex.Message, "Exception", "Mysql_Exception_Timeout");
+
+                //to eliminate the cycle decreases with each error variable
+
+                if (CountMysqlTimeoutException > 0)
+                {
+                    CountMysqlTimeoutException--;
+
+                    query_sql(articul, price);
                 }
             }
             catch (MySqlException exc)
