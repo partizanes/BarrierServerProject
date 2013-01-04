@@ -38,7 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AxInterop.ForCasLib">
-      <HintPath>..\..\Barrier\BarrierServerProject\BalanceModule\AxInterop.ForCasLib.dll</HintPath>
+      <HintPath>..\BalanceModule\AxInterop.ForCasLib.dll</HintPath>
     </Reference>
     <Reference Include="Interop.ForCasLib">
       <HintPath>..\..\Barrier\BarrierServerProject\BalanceModule\Interop.ForCasLib.dll</HintPath>

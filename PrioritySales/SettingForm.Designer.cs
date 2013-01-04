@@ -48,7 +48,10 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.LabelDebugLevel = new System.Windows.Forms.Label();
+            this.TextBoxDebugLevel = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // LabelIpAuthServer
@@ -192,6 +195,8 @@
             // 
             this.panel2.BackColor = System.Drawing.Color.Transparent;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.LabelDebugLevel);
+            this.panel2.Controls.Add(this.TextBoxDebugLevel);
             resources.ApplyResources(this.panel2, "panel2");
             this.panel2.Name = "panel2";
             // 
@@ -201,6 +206,18 @@
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.panel3, "panel3");
             this.panel3.Name = "panel3";
+            // 
+            // LabelDebugLevel
+            // 
+            resources.ApplyResources(this.LabelDebugLevel, "LabelDebugLevel");
+            this.LabelDebugLevel.BackColor = System.Drawing.Color.Transparent;
+            this.LabelDebugLevel.ForeColor = System.Drawing.Color.White;
+            this.LabelDebugLevel.Name = "LabelDebugLevel";
+            // 
+            // TextBoxDebugLevel
+            // 
+            resources.ApplyResources(this.TextBoxDebugLevel, "TextBoxDebugLevel");
+            this.TextBoxDebugLevel.Name = "TextBoxDebugLevel";
             // 
             // SettingForm
             // 
@@ -229,6 +246,8 @@
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.SettingForm_MouseUp);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -255,5 +274,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Label LabelDebugLevel;
+        private System.Windows.Forms.TextBox TextBoxDebugLevel;
     }
 }

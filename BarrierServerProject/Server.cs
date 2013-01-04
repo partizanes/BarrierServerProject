@@ -10,17 +10,11 @@ namespace BarrierServerProject
 {
     class Server
     {
-        //Cтатус сервера
         public static bool isServerRunning;
-        // Клиенты
         public static Hashtable clients;
-        // Сокет
         static Socket listener;
-        // Порт
         static int port = 1991;
-        // Точка для прослушки входящих соединений (состоит из адреса и порта)
         static IPEndPoint Point;
-        // Список потоков
         static List<Thread> threads = new List<Thread>();
 
         public static void ServerStart()
@@ -30,11 +24,8 @@ namespace BarrierServerProject
                 clients = new Hashtable(30);
                 isServerRunning = true;
                 listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                // Определяем конечную точку, IPAddress.Any означает что наш сервер будет принимать входящие соединения с любых адресов
                 Point = new IPEndPoint(IPAddress.Any, port);
-                // Связываем сокет с конечной точкой
                 listener.Bind(Point);
-                // Начинаем слушать входящие соединения
                 Color.WriteLineColor("Использую порт: " + port, "Yellow");
                 listener.Listen(10);
 
@@ -53,14 +44,10 @@ namespace BarrierServerProject
             {
                 while (isServerRunning)
                 {
-                    // Создаем новый сокет, по которому мы сможем обращаться клиенту
-                    // Этот цикл остановится, пока какой-нибудь клиент не попытается присоединиться к серверу
                     Socket client = listener.Accept();
-                    // Теперь, обратившись к объекту client, мы сможем отсылать и принимать пакеты от последнего подключившегося пользователя.
-                    // Добавляем подключенного клиента в список всех клиентов, для дальнейшей массовой рассылки пакетов
+
                     clients.Add(client, client.RemoteEndPoint);
                     Color.WriteLineColor("Клиент добавлен: " + client.RemoteEndPoint, "Yellow");
-                    // Начинаем принимать входящие пакеты
 
                     Thread thh = new Thread(delegate()
                     {
@@ -77,8 +64,6 @@ namespace BarrierServerProject
 
         private static void MessageReceiver(Socket r_client)
         {
-//             Thread th = new Thread(delegate()
-//             {
                 User user = new User();
 
                 while (isServerRunning)
@@ -161,10 +146,6 @@ namespace BarrierServerProject
                         Thread.Sleep(5000);
                     }
                 }
-//             });
-//             th.Name = "Пользовательский поток сервера";
-//             th.Start();
-//             threads.Add(th);
         }
 
         public static Boolean abort_thread(Thread th)

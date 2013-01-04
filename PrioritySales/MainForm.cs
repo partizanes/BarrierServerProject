@@ -13,7 +13,7 @@ namespace PrioritySales
     public partial class MainForm : Form
     {
         private int m_stat_auth = 0;
- 
+
 
         public MainForm()
         {

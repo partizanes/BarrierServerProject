@@ -14,7 +14,9 @@ namespace PrioritySales
 {
     public partial class AuthForm : Form
     {
-        public const string ver = "0.53 alfa";
+        public static int log_level = 3;
+
+        public const string ver = "0.59 alfa";
         public int xOffset, yOffset;
         public bool isMouseDown = false;
         private Point mouseOffset;
@@ -27,6 +29,16 @@ namespace PrioritySales
         public AuthForm()
         {
             InitializeComponent();
+
+            try
+            {
+                log_level = int.Parse(Config.GetParametr("log_level"));
+            }
+            catch (FormatException)
+            {
+                Config.Set("SETTINGS", "log_level", "3");
+            }
+
             LabelVersion.Text = ver;
 
             bool st = false;

@@ -600,6 +600,63 @@
   <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="LabelDebugLevel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="LabelDebugLevel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="LabelDebugLevel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="LabelDebugLevel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>22, 20</value>
+  </data>
+  <data name="LabelDebugLevel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>108, 15</value>
+  </data>
+  <data name="LabelDebugLevel.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="LabelDebugLevel.Text" xml:space="preserve">
+    <value>Уровень отладки</value>
+  </data>
+  <data name="&gt;&gt;LabelDebugLevel.Name" xml:space="preserve">
+    <value>LabelDebugLevel</value>
+  </data>
+  <data name="&gt;&gt;LabelDebugLevel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LabelDebugLevel.Parent" xml:space="preserve">
+    <value>panel2</value>
+  </data>
+  <data name="&gt;&gt;LabelDebugLevel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="TextBoxDebugLevel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>206, 19</value>
+  </data>
+  <data name="TextBoxDebugLevel.MaxLength" type="System.Int32, mscorlib">
+    <value>16</value>
+  </data>
+  <data name="TextBoxDebugLevel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>128, 20</value>
+  </data>
+  <data name="TextBoxDebugLevel.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;TextBoxDebugLevel.Name" xml:space="preserve">
+    <value>TextBoxDebugLevel</value>
+  </data>
+  <data name="&gt;&gt;TextBoxDebugLevel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TextBoxDebugLevel.Parent" xml:space="preserve">
+    <value>panel2</value>
+  </data>
+  <data name="&gt;&gt;TextBoxDebugLevel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <data name="panel2.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 160</value>
   </data>
@@ -2319,9 +2376,6 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAA
 </value>
-  </data>
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterScreen</value>

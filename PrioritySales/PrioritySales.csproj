@@ -37,12 +37,15 @@
     <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.VisualBasic.PowerPacks.Vs, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -56,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="Debug.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -116,6 +120,12 @@
     <None Include="Resources\f55.png" />
     <Content Include="app.ico" />
     <Content Include="Resources\form3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Serialization\Serialization.csproj">
+      <Project>{be889d41-d30f-4fdb-8638-b0dbd7e66c11}</Project>
+      <Name>Serialization</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

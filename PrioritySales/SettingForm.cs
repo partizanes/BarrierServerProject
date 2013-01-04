@@ -32,6 +32,8 @@ namespace PrioritySales
                 Config.Set("SETTINGS", "PortAgentServer", TextBoxPortAgentServer.Text);
                 Config.Set("SETTINGS", "PortCashServer", TextBoxPortCashServer.Text);
 
+                Config.Set("SETTINGS", "log_level", TextBoxDebugLevel.Text);
+
                 Config.Set("SETTINGS", "SaveLastLogin", CheckBoxSaveLastUser.Checked.ToString());
             }
             catch (System.Exception ex)
@@ -55,6 +57,7 @@ namespace PrioritySales
                 TextBoxPortAuthServer.Text = Config.GetParametr("PortAuthServer");
                 TextBoxPortAgentServer.Text = Config.GetParametr("PortAgentServer");
                 TextBoxPortCashServer.Text = Config.GetParametr("PortCashServer");
+                TextBoxDebugLevel.Text = Config.GetParametr("log_level");
 
                 Boolean st = false;
 
