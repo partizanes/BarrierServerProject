@@ -7,7 +7,6 @@ namespace BalanceModule
 {
     class Config
     {    
-        //import dll from use configuration file
         [DllImport("kernel32.dll")]
         static extern uint GetPrivateProfileString(
         string lpAppName,

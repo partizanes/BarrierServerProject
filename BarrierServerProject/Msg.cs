@@ -4,26 +4,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using Serialization;
 
 namespace BarrierServerProject
 {
     class Msg
     {
-        public static bool SendUser(string user_name, string msg)
+        public static bool SendUser(string user_name, string group, int type, string msg)
         {
             try
             {
-                int size = msg.Length;
+                MSG m = new MSG(group, type, msg);
 
-                msg = size + "|" + msg;
+                byte[] buf = new byte[1024];
 
-                byte[] bytes = new byte[Encoding.UTF8.GetBytes(msg).Length];  //FIXME IF NOT WORK
-                bytes = Encoding.UTF8.GetBytes(msg);
+                buf = Util.Serialization(m);
 
                 foreach (DictionaryEntry de in Server.clients)
                 {
                     if ((de.Value).ToString() == user_name)
-                        Server.MessageSender((Socket)de.Key, bytes);
+                        Server.MessageSender((Socket)de.Key, buf);
                 }
             }
             catch (System.Exception ex)
@@ -36,7 +36,6 @@ namespace BarrierServerProject
 
             return true;
         }
-
         //TODO send to group users
     }
 }

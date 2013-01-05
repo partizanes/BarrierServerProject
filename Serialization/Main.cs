@@ -7,11 +7,11 @@ namespace Serialization
     [Serializable]
     public class MSG
     {
-        public int group;
+        public string group;
         public int type;
         public string message;
 
-        public MSG(int i, int s, string s2)
+        public MSG(string i, int s, string s2)
         {
             group = i;
             type = s;

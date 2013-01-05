@@ -12,38 +12,27 @@ namespace BarrierServerProject
 {
     class Packages
     {
-        public static void parse(string p_id, string com, string msg, User user,System.Net.Sockets.Socket r_client)
+        public static void parse(string p_id, int com, string msg, User user,System.Net.Sockets.Socket r_client)
         {
             switch (p_id)
             {
-                case "00":
-                    user.username = msg;    //not use
-                    break;
-                case "01":
-                    Msg.SendUser("BalanceModule", "BS 1 Идентификация пройдена.");   //not use
-                    break;
-                case "02":
-                    Console.WriteLine(user.username);   //not use
-                    Console.WriteLine(user.ipaddress);  //not use
-                    Console.WriteLine(user.port);       //not use
-                    break;
-                case "CL":
+                case "PrioritySale":
                     user.userid = 0;
                     switch (com)
                     {
-                        case "0":
+                        case 0:
                             string[] split_data = msg.Replace("\0","").Replace(" ", "").Split(new Char[] { ':' });
 
                             if ((split_data[0].ToString() == "partizanes") && (split_data[1].ToString() == "216567"))
                             {
                                 Server.clients[r_client] = split_data[0];
                                 Color.WriteLineColor(split_data[0] + " Добавлен!", "Cyan");
-                                Msg.SendUser(split_data[0], "CL 1 " + split_data[0]);
+                                Msg.SendUser(split_data[0], "PrioritySale", 1, split_data[0]);
                             }
                             else
                             {
                                 Server.clients[r_client] = split_data[0];
-                                Msg.SendUser(split_data[0], "CL 0 Идентификация не пройдена.");
+                                Msg.SendUser(split_data[0], "PrioritySale", 0, "Идентификация не пройдена.");
                                 Color.WriteLineColor(split_data[0] +" авторизация неудачна", "Red");
                             }
 
@@ -54,19 +43,23 @@ namespace BarrierServerProject
                             }
                     }
                     break;
-                case "BS":
+                case "BalanceModule":
                     switch (com)
                     {
-                        case "0":
+                        case 0:
                             user.userid = 1;
                             Server.clients[r_client] = "BalanceModule";
                             Color.WriteLineColor("Модуль проверки весов загружен!","Cyan");
-                            Msg.SendUser("BalanceModule", "BS 1 Идентификация пройдена.");
+                            Msg.SendUser("BalanceModule", "BS", 1, "Идентификация пройдена.");
                                 break;
-                        case "1":
-                            Color.WriteLineColor("BM: " + msg, "Cyan");
+                        case 1:
+                            Color.WriteLineColor(msg, "Cyan");
                                 break;
-                        case "9":
+                        case 2:
+                                user.userid = 1;
+                                Server.clients[r_client] = "BalanceModule";
+                                break;
+                        case 9:
                             Color.WriteLineColor("Модуль проверки весов отключен!", "Red");
                             Thread.Sleep(3000);
                             r_client.Disconnect(false);

@@ -93,7 +93,7 @@ namespace PrioritySales
                         Server.Connect();
 
                         if(Server.server.Connected)
-                            Server.Sender("CL 0 " + TextboxLogin.Text + ":" + textboxPass.Text);
+                            Server.Sender("PrioritySale", 0, TextboxLogin.Text + ":" + textboxPass.Text);
                         else
                             (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).buttonCancel_Click(); }));
                     }); ;

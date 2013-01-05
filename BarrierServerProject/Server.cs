@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Serialization;
 
 namespace BarrierServerProject
 {
@@ -80,43 +81,14 @@ namespace BarrierServerProject
 
                         r_client.Receive(bytes);
 
-                        if (bytes.Length != 0)
-                        {
-                            //Принимаемый пакет разбор структуры
+                        MSG msg1 = new MSG("0",0, "null");
 
-                            string data = Encoding.UTF8.GetString(bytes);
+                        msg1 = Util.DeSerialization(bytes);
 
-                            string[] split_data = data.Split(new Char[] { '|' });
+                        //add debug paramter
+                        Console.WriteLine("[DEBUG] " + msg1.group + " " + msg1.type + " " + msg1.message );
 
-                            // 10|01 0 11234
-
-                            string str_len = split_data[0];  // длина строки
-
-                            int converted;
-
-                            if (int.TryParse(str_len, out converted))
-                            {
-                                if (Convert.ToInt32(str_len) != split_data[1].Replace("\0", "").Length)
-                                    return;
-                            }
-                            else
-                            {
-                                if (converted == 0)
-                                    return;
-
-                                Color.WriteLineColor("Пакет поврежден!", "Red");
-                                return;
-                            }
-
-                            string com_id = split_data[1].Substring(0, 2);  // id команды
-
-                            string com_type = split_data[1].Substring(3, 1); // type команды
-
-                            string msg_data = split_data[1].Substring(5, (Convert.ToInt32(str_len)) - 4); //сообщение
-
-                            //передача разобранных параметров
-                            Packages.parse(com_id, com_type, msg_data, user,r_client);
-                        }
+                        Packages.parse(msg1.group, msg1.type, msg1.message, user, r_client);
                     }
                     catch (SocketException exc)
                     {
@@ -192,7 +164,6 @@ namespace BarrierServerProject
             {
                 // Отправляем пакет
                 c_client.Send(bytes);
-
             }
             catch { }
         }

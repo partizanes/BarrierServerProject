@@ -67,7 +67,7 @@ namespace BarrierServerProject
 
                         if (int.TryParse(Console.ReadLine(), out hour))
                         {
-                            Msg.SendUser("BalanceModule", "ST 0 " + hour);
+                            Msg.SendUser("BalanceModule", "SleepTime", 0, hour.ToString());
                             return "Отправлено!";
                         }
                         else

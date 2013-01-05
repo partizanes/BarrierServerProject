@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Serialization;
 
 namespace BalanceModule
 {
@@ -67,7 +68,7 @@ namespace BalanceModule
             }
         }
 
-        public void Sender(string msg)
+        public void Sender(string id, int type, string msg)
         {
             if (!disc_client)
                 return;
@@ -93,15 +94,13 @@ namespace BalanceModule
                     Thread.Sleep(2000);
                 }
 
-                int size = msg.Length;
+                MSG m = new MSG(id, type, msg);
 
-                string send_packet = size + "|" + msg;
+                byte[] buf = new byte[1024];
 
-                byte[] bytes = new byte[Encoding.UTF8.GetBytes(send_packet).Length];
+                buf = Util.Serialization(m);
 
-                bytes = Encoding.UTF8.GetBytes(send_packet);
-
-                client.Send(bytes);
+                client.Send(buf);
             }
             catch (SocketException se)
             {
@@ -113,7 +112,7 @@ namespace BalanceModule
 
                     Thread.Sleep(3000);
 
-                    Sender(msg);
+                    Sender(id, type, msg);
                 }
             }
             catch (Exception exc)
@@ -162,7 +161,9 @@ namespace BalanceModule
             {
                 Server server = new Server();
 
-                while (server.disc_client)
+                server.Sender("BalanceModule", 2, "status");
+
+                while (client.Connected)
                 {
                     try
                     {
@@ -170,48 +171,32 @@ namespace BalanceModule
 
                         client.Receive(bytes);
 
-                        if (bytes.Length != 0)
-                        {
-                            //Принимаемый пакет разбор структуры
+                        MSG msg1 = new MSG("0", 0, "null");
 
-                            string data = Encoding.UTF8.GetString(bytes);
+                        msg1 = Util.DeSerialization(bytes);
 
-                            string[] split_data = data.Split(new Char[] { '|' });
-
-                            // 10|01 0 11234
-
-                            string str_len = split_data[0];  // длина строки
-
-                            int converted;
-
-                            if (int.TryParse(str_len, out converted))
-                            {
-                                if (Convert.ToInt32(str_len) != split_data[1].Replace("\0", "").Length)
-                                    return;
-                            }
-                            else
-                            {
-                                if (converted == 0)
-                                    return;
-
-                                (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.Items.Add("Пакет поврежден!"); }));
-                                    return;
-                            }
-
-                            string com_id = split_data[1].Substring(0, 2);  // id комманды
-
-                            string com_type = split_data[1].Substring(3, 1); // type комманды
-
-                            string msg_data = split_data[1].Substring(5, (Convert.ToInt32(str_len)) - 4); //сообщение
-
-                            Packages.parse(com_id, com_type, msg_data);
-                        }
+                        Packages.parse(msg1.group, msg1.type, msg1.message);
                     }
-
+                    catch (SocketException exc)
+                    {
+                        Thread.Sleep(5000);
+                        continue;
+                    }
                     catch (Exception exc)
                     {
                         (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.Items.Add(exc.Message); }));
                     }
+                }
+
+                if (!client.Connected)
+                {
+                    try { Thread.CurrentThread.Abort(); }
+                    catch
+                    {
+                        Thread.CurrentThread.Join();
+                        Thread.ResetAbort();
+                    }
+
                 }
         });
             th.Start();

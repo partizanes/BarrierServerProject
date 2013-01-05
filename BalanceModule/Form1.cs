@@ -66,7 +66,7 @@ namespace BalanceModule
 
             Thread thh = new Thread(delegate()
             {
-                send_msg("BS 0 123456");
+                send_msg("BalanceModule",0,"hello!");
 
                 StartScan();
             }); ;
@@ -76,7 +76,7 @@ namespace BalanceModule
 
         private void restart()
         {
-            send_msg("BS 1 Запуск запланированной проверки весов.");
+            send_msg("BalanceModule", 1, "Запуск запланированной проверки весов.");
 
             string EntryTime = DateTime.Now.ToLongTimeString().Replace(":","_");
             string EntryDate = DateTime.Today.ToShortDateString().Replace(".", "_");
@@ -100,9 +100,9 @@ namespace BalanceModule
             thh.Start();
         }
 
-        private void send_msg(string msg)
+        private void send_msg(string p_id, int com, string msg)
         {
-            server.Sender(msg);
+            server.Sender(p_id,com,msg);
         }
 
         private void StartScan()
@@ -177,13 +177,13 @@ namespace BalanceModule
                         catch(Exception ex)
                         {
                             i = 0;
-                            send_msg("BS 1 BalanceModule: Соединение с весами " + m_ip + ": " + m_port + " не удалось!");
+                            send_msg("BalanceModule", 1, "BalanceModule: Соединение с весами " + m_ip + ": " + m_port + " не удалось!");
                             Log.log_write(ex.Message, "Exception", "Exception");
                         }
                         finally
                         {
                             if (i == 0)
-                                send_msg("BS 1 BalanceModule: " + m_ip + ": " + m_port + " весы пропущены!");
+                                send_msg("BalanceModule", 1, "BalanceModule: " + m_ip + ": " + m_port + " весы пропущены!");
                         }
                     }
                     continue;
@@ -243,7 +243,7 @@ namespace BalanceModule
 
                 list_msg("Сканирование " + m_ip + " завершено!");
                 list_msg("Количество найденых проблем: " + count_error);
-                send_msg("BS 1 "+ m_ip +" "+ m_name + " Количество найденых проблем: " + count_error);
+                send_msg("BalanceModule", 1, m_ip +" "+ m_name + " Количество найденых проблем: " + count_error);
 
                 cas.DisconnectAll();
 
@@ -262,7 +262,7 @@ namespace BalanceModule
             }
 
             list_msg("Деинициализация...");
-            send_msg("BS 1 Спящий режим активирован.");
+            send_msg("BalanceModule", 1, "Спящий режим активирован.");
 
             try
             {
@@ -276,7 +276,7 @@ namespace BalanceModule
             finally
             {
                 timer_par();
-                send_msg("BS 1 Деактивация спящего режима через: " + (timer_start_scan.Interval)/3600000 + " часа\n");
+                send_msg("BalanceModule", 1, "Деактивация спящего режима через: " + (timer_start_scan.Interval)/3600000 + " часа\n");
             }
         }
 
@@ -642,7 +642,7 @@ namespace BalanceModule
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (Server.client.Connected)
-                send_msg("BS 9 00");
+                send_msg("BalanceModule", 9, "Bye!");
 
             BalanceModule.Visible = false;
         }

@@ -63,12 +63,6 @@ namespace BalanceModule
                 Log.log_write(ex.Message, "Exception", "Exception");
                 return null;
             }
-            finally
-            {
-//                 if (conn.State == ConnectionState.Open)
-//                     conn.Close();
-            }
-            
         }
     }
 }

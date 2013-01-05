@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serialization;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -48,17 +49,15 @@ namespace PrioritySales
             }
         }
 
-        public static void Sender(string msg)
+        public static void Sender(string group, int type, string msg)
         {
-            int size = msg.Length;
+            MSG m = new MSG(group, type, msg);
 
-            string send_packet = size + "|" + msg;
+            byte[] buf = new byte[1024];
 
-            byte[] bytes = new byte[Encoding.UTF8.GetBytes(send_packet).Length];
+            buf = Util.Serialization(m);
 
-            bytes = Encoding.UTF8.GetBytes(send_packet);
-
-            server.Send(bytes);
+            server.Send(buf);
 
             try
             {
@@ -111,32 +110,11 @@ namespace PrioritySales
                         {
                             //Принимаемый пакет разбор структуры
 
-                            string data = Encoding.UTF8.GetString(bytes);
+                            MSG m = new MSG("0", 0, "null");
 
-                            string[] split_data = data.Split(new Char[] { '|' });
+                            m = Util.DeSerialization(bytes);
 
-                            string str_len = split_data[0];  // длина строки
-
-                            int converted;
-
-                            if (int.TryParse(str_len, out converted))
-                            {
-                                if (Convert.ToInt32(str_len) != split_data[1].Replace("\0", "").Length)
-                                    return;
-                            }
-                            else
-                            {
-                                if (converted == 0)
-                                    return;
-                            }
-
-                            string com_id = split_data[1].Substring(0, 2);  // id комманды
-
-                            string com_type = split_data[1].Substring(3, 1); // type комманды
-
-                            string msg_data = split_data[1].Substring(5, (Convert.ToInt32(str_len)) - 4); //сообщение
-
-                            Packages.parse(com_id, com_type, msg_data);
+                            Packages.parse(m.group, m.type, m.message);
                         }
                     }
                     catch (SocketException ex)
