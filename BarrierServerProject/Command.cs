@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Security.Cryptography;
 
 namespace BarrierServerProject
 {
@@ -54,6 +55,34 @@ namespace BarrierServerProject
                             return "";
                         }
                     }
+                case "user add":
+                    {
+                        Color.WriteLineColor("Введите логин пароль", "Yellow");
+                        string line = Console.ReadLine();
+                        string[] split_data = line.Replace("\0", "").Split(new Char[] { ' ' });
+                        Dbf dbf = new Dbf();
+                        using (MD5 md5Hash = MD5.Create())
+                        {
+                            string hash = Packages.GetMd5Hash(md5Hash, (Packages.GetMd5Hash(md5Hash, "1?234%5aZ!") + Packages.GetMd5Hash(md5Hash, split_data[1])));
+                            if (dbf.ExecuteNonQuery("INSERT INTO users.dbf (name,hash) VALUES ('" + split_data[0] + "','" + hash + "')"))
+                                return "Успешно!";
+                            else
+                                return "Ошибка!";
+                        }
+                    }
+                case "user del":
+                    {
+                        Color.WriteLineColor("Введите имя пользователя которого хотите удалить...", "Yellow");
+
+                        Dbf dbf = new Dbf();
+
+                        string line = Console.ReadLine();
+
+                        if (dbf.ExecuteNonQuery("DELETE FROM users.dbf WHERE NAME ='" + line + "'" ))
+                            return "Успешно!";
+                        else
+                            return "Ошибка!";
+                    }
                 case "quit":
                     {
                         Environment.Exit(0);
@@ -78,7 +107,7 @@ namespace BarrierServerProject
                 case "help":
                 case "command":
                     {
-                        Color.WriteLineColor("\nauthor          Выводит информацию об авторе\n", "Cyan");
+                        Color.WriteLineColor("\nauthor            Выводит информацию об авторе\n", "Cyan");
                         Color.WriteLineColor("logo              Выводит логотип\n", "Cyan");
                         Color.WriteLineColor("list              Пользователи онлайн\n", "Cyan");
                         Color.WriteLineColor("version           Выводит версию\n", "Cyan");
@@ -88,6 +117,8 @@ namespace BarrierServerProject
                         Color.WriteLineColor("command           Выводит информацию о коммандах\n", "Cyan");
                         Color.WriteLineColor("clr               Очищает окно программы\n", "Cyan");
                         Color.WriteLineColor("bs next start     Устанавливает время запуска проверки весов в часах\n", "Cyan");
+                        Color.WriteLineColor("user add          Добавляет пользователя (логин пароль)\n", "Cyan");
+                        Color.WriteLineColor("user delete       Удаляет пользователя (логин)\n", "Cyan");
                         return "done.";
 
                     }

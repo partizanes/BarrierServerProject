@@ -177,7 +177,7 @@ namespace BalanceModule
 
                         Packages.parse(packet.group, packet.type, packet.message);
                     }
-                    catch (SocketException exc)
+                    catch (SocketException)
                     {
                         Thread.Sleep(5000);
                         continue;

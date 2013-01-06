@@ -7,6 +7,8 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using System.Data.OleDb;
+using System.Windows.Forms;
 
 namespace BarrierServerProject
 {
@@ -23,7 +25,16 @@ namespace BarrierServerProject
                         case 0:
                             string[] split_data = msg.Replace("\0","").Replace(" ", "").Split(new Char[] { ':' });
 
-                            if ((split_data[0].ToString() == "partizanes") && (split_data[1].ToString() == "216567"))
+                            Dbf dbf = new Dbf();
+
+                            OleDbDataReader dr;
+
+                            dr = dbf.ExecuteReader("SELECT name,hash FROM users.dbf WHERE name = '" + split_data[0] + "' AND hash = '" + split_data[1] + "'");
+
+                            if (dr == null)
+                                Log.log_write("Запрос вернул null", "Exception", "Exception");
+
+                            if (dr.Read())
                             {
                                 Server.clients[r_client] = split_data[0];
                                 Color.WriteLineColor(split_data[0] + " Добавлен!", "Cyan");
@@ -38,7 +49,7 @@ namespace BarrierServerProject
 
                             using (MD5 md5Hash = MD5.Create())
                             {
-                                Color.WriteLineColor(split_data[0] + " " + GetMd5Hash(md5Hash, split_data[1]), "Red");
+                                Color.WriteLineColor(split_data[0] + " " + split_data[1], "Red");
                                 break;
                             }
                     }
@@ -71,7 +82,7 @@ namespace BarrierServerProject
             }
         }
 
-        static string GetMd5Hash(MD5 md5Hash, string input)
+        public static string GetMd5Hash(MD5 md5Hash, string input)
         {
             byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
 

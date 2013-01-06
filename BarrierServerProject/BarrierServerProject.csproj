@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Color.cs" />
     <Compile Include="Command.cs" />
+    <Compile Include="Dbf.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Logo.cs" />
     <Compile Include="Msg.cs" />

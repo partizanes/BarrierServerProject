@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Security.Cryptography;
 
 namespace PrioritySales
 {
@@ -92,8 +93,15 @@ namespace PrioritySales
                     {
                         Server.Connect();
 
+                        string hash;
+
+                        using (MD5 md5Hash = MD5.Create())
+                        {
+                            hash = GetMd5Hash(md5Hash,(GetMd5Hash(md5Hash, "1?234%5aZ!") + GetMd5Hash(md5Hash, textboxPass.Text)));
+                        }
+
                         if(Server.server.Connected)
-                            Server.Sender("PrioritySale", 0, TextboxLogin.Text + ":" + textboxPass.Text);
+                            Server.Sender("PrioritySale", 0, TextboxLogin.Text + ":" + hash);
                         else
                             (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).buttonCancel_Click(); }));
                     }); ;
@@ -104,6 +112,20 @@ namespace PrioritySales
             }
             else
                 (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).buttonCancel_Click(); }));
+        }
+
+        public static string GetMd5Hash(MD5 md5Hash, string input)
+        {
+            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+            StringBuilder sBuilder = new StringBuilder();
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+
+            return sBuilder.ToString();
         }
 
         private void login_textbox_KeyDown(object sender, KeyEventArgs e)
