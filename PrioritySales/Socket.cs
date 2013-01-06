@@ -51,11 +51,11 @@ namespace PrioritySales
 
         public static void Sender(string group, int type, string msg)
         {
-            MSG m = new MSG(group, type, msg);
+            MSG packet = new MSG(group, type, msg);
 
             byte[] buf = new byte[1024];
 
-            buf = Util.Serialization(m);
+            buf = Util.Serialization(packet);
 
             server.Send(buf);
 
@@ -102,7 +102,7 @@ namespace PrioritySales
                 {
                     try
                     {
-                        byte[] bytes = new byte[256];
+                        byte[] bytes = new byte[1024];
 
                         client.Receive(bytes);
 
@@ -110,11 +110,11 @@ namespace PrioritySales
                         {
                             //Принимаемый пакет разбор структуры
 
-                            MSG m = new MSG("0", 0, "null");
+                            MSG packet = new MSG("0", 0, "null");
 
-                            m = Util.DeSerialization(bytes);
+                            packet = Util.DeSerialization(bytes);
 
-                            Packages.parse(m.group, m.type, m.message);
+                            Packages.parse(packet.group, packet.type, packet.message);
                         }
                     }
                     catch (SocketException ex)

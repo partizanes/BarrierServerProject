@@ -14,11 +14,11 @@ namespace BarrierServerProject
         {
             try
             {
-                MSG m = new MSG(group, type, msg);
+                MSG packet = new MSG(group, type, msg);
 
                 byte[] buf = new byte[1024];
 
-                buf = Util.Serialization(m);
+                buf = Util.Serialization(packet);
 
                 foreach (DictionaryEntry de in Server.clients)
                 {

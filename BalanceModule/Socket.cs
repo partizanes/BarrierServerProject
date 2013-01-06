@@ -94,11 +94,11 @@ namespace BalanceModule
                     Thread.Sleep(2000);
                 }
 
-                MSG m = new MSG(id, type, msg);
+                MSG packet = new MSG(id, type, msg);
 
                 byte[] buf = new byte[1024];
 
-                buf = Util.Serialization(m);
+                buf = Util.Serialization(packet);
 
                 client.Send(buf);
             }
@@ -171,11 +171,11 @@ namespace BalanceModule
 
                         client.Receive(bytes);
 
-                        MSG msg1 = new MSG("0", 0, "null");
+                        MSG packet = new MSG("0", 0, "null");
 
-                        msg1 = Util.DeSerialization(bytes);
+                        packet = Util.DeSerialization(bytes);
 
-                        Packages.parse(msg1.group, msg1.type, msg1.message);
+                        Packages.parse(packet.group, packet.type, packet.message);
                     }
                     catch (SocketException exc)
                     {
@@ -198,7 +198,29 @@ namespace BalanceModule
                     }
 
                 }
+
+                //mb this alternative method
+/*                catch (SocketException exc)
+                {
+                        if (exc.ErrorCode == 10054 || exc.ErrorCode == 10057)
+                        {
+                            (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.Items.Add("Сервер разорвал соединениe.Будет выполнена попытка переподключения..." ); }));
+                            (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.SelectionMode = SelectionMode.One; }));
+                            (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.SetSelected((Application.OpenForms[0] as Form1).listBox1.Items.Count - 1, true); }));
+                            (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.SetSelected((Application.OpenForms[0] as Form1).listBox1.Items.Count - 1, false); }));
+
+                            Thread.Sleep(10000);
+                            try
+                            {
+                                Thread.CurrentThread.Abort();
+                                Thread.CurrentThread.Join();
+                            }
+                            catch{Receiver();}
+                        }
+                }
+*/
         });
+            th.Name = "Приём сообщений";
             th.Start();
             threads.Add(th);
         }

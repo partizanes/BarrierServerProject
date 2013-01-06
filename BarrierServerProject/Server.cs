@@ -81,14 +81,14 @@ namespace BarrierServerProject
 
                         r_client.Receive(bytes);
 
-                        MSG msg1 = new MSG("0",0, "null");
+                        MSG packet = new MSG("0", 0, "null");
 
-                        msg1 = Util.DeSerialization(bytes);
+                        packet = Util.DeSerialization(bytes);
 
                         //add debug paramter
-                        Console.WriteLine("[DEBUG] " + msg1.group + " " + msg1.type + " " + msg1.message );
+                        Console.WriteLine("[DEBUG] " + packet.group + " " + packet.type + " " + packet.message);
 
-                        Packages.parse(msg1.group, msg1.type, msg1.message, user, r_client);
+                        Packages.parse(packet.group, packet.type, packet.message, user, r_client);
                     }
                     catch (SocketException exc)
                     {
