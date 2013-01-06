@@ -77,7 +77,7 @@ namespace BarrierServerProject
                         user.ipaddress = IPAddress.Parse(((IPEndPoint)r_client.RemoteEndPoint).Address.ToString());
                         user.port = ((IPEndPoint)r_client.RemoteEndPoint).Port;
 
-                        byte[] bytes = new byte[256];
+                        byte[] bytes = new byte[1024];
 
                         r_client.Receive(bytes);
 
