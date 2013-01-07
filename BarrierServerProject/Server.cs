@@ -59,8 +59,7 @@ namespace BarrierServerProject
 
                     Thread thh = new Thread(delegate()
                     {
-                        try { MessageReceiver(client); }
-                        catch (System.IO.FileNotFoundException) { } //TODO Serialization.dll search or msg
+                        MessageReceiver(client);
                     });
                     thh.Name = "Получение данных";
                     thh.Start();
