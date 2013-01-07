@@ -30,6 +30,8 @@ namespace BarrierServerProject
             }
             else
             {
+                CheckDll();
+
                 ShowWindow(ConsoleHandle, SW_MAXIMIZE);
 
                 Logo LogoLoad = new Logo();
@@ -63,7 +65,7 @@ namespace BarrierServerProject
             Environment.Exit(0);
         }
 
-        private void CheckDll()
+        private static void CheckDll()
         {
             while (!System.IO.File.Exists(Environment.CurrentDirectory + "\\" + "users.dbf"))
             {
