@@ -7,28 +7,31 @@ namespace BarrierServerProject
 {
     class Program
     {
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        static IntPtr ConsoleHandle = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
+
+        private const int SW_MINIMIZE = 6;
+
+        private const int SW_MAXIMIZE = 3;
+
         static void Main(string[] args)
         {
             if (System.Diagnostics.Process.GetProcessesByName(Application.ProductName).Length > 1)
             {
-               Color.WriteLineColor("\n", "Red");
-               Color.WriteLineColor("Приложение уже запущено!", "Red");
-               Color.WriteLineColor("\n", "Red");
-               Color.WriteLineColor("Запускаю завершение работы...", "Red");
-               Color.WriteLineColor("\n", "Red");
+                Color.WriteLineColor("\n", "Red");
+                Color.WriteLineColor("Приложение уже запущено!", "Red");
+                Color.WriteLineColor("\n", "Red");
+                Color.WriteLineColor("Запускаю завершение работы...", "Red");
+                Color.WriteLineColor("\n", "Red");
 
-                int i = 10;
-
-                while (i != 0)
-                {
-                    Code.RenderConsoleProgress(i * 10, '\u2592', ConsoleColor.Red, "Завершение работы сервера через [" + i.ToString() + " second]");
-                    Thread.Sleep(1000);
-                    i--;
-                }
-                Environment.Exit(0);
+                another_run();
             }
             else
             {
+                ShowWindow(ConsoleHandle, SW_MAXIMIZE);
+
                 Logo LogoLoad = new Logo();
 
                 LogoLoad.LogoLoad();
@@ -45,6 +48,31 @@ namespace BarrierServerProject
                 string com = Console.ReadLine().ToLower();
 
                 Color.WriteLineColor(Command.SwitchCommand(com),"Yellow");
+            }
+        }
+        public static void another_run()
+        {
+            int i = 10;
+
+            while (i != 0)
+            {
+                Code.RenderConsoleProgress(i * 10, '\u2592', ConsoleColor.Red, "Завершение работы сервера через [" + i.ToString() + " second]");
+                Thread.Sleep(1000);
+                i--;
+            }
+            Environment.Exit(0);
+        }
+
+        private void CheckDll()
+        {
+            while (!System.IO.File.Exists(Environment.CurrentDirectory + "\\" + "users.dbf"))
+            {
+                MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "В папке с программой отсутствует нужная для работы база данных пользователей users.dbf \n Скопируйте в папку с программой базу данных пользователей и нажмите ок!");
+            }
+
+            while (!System.IO.File.Exists(Environment.CurrentDirectory + "\\" + "Serialization.dll"))
+            {
+                MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "В папке с программой отсутствует нужная для работы библиотека Serialization.dll \n Скопируйте в папку с программой библиотеку и нажмите ок!");
             }
         }
     }

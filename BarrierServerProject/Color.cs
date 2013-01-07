@@ -45,7 +45,7 @@ namespace BarrierServerProject
                     }
             }
 
-            Console.WriteLine(value.PadRight(Console.WindowWidth - 1)); // <-- see note
+            Console.WriteLine(("[" + DateTime.Now.ToLongTimeString() + "] " + value).PadRight(Console.WindowWidth - 1)); // <-- see note
 
             Console.ResetColor();
         }

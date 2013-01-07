@@ -26,7 +26,14 @@ namespace BarrierServerProject
                 isServerRunning = true;
                 listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 Point = new IPEndPoint(IPAddress.Any, port);
-                listener.Bind(Point);
+                try { listener.Bind(Point); }
+                catch (SocketException) {
+                    Color.WriteLineColor("Порт " + port + " занят другим приложением!", "Red");
+                    Color.WriteLineColor("Освободите порт " +  port + " и перезапустите приложение: " , "Yellow");
+                    Thread.Sleep(2000);
+                    Program.another_run();
+                }
+
                 Color.WriteLineColor("Использую порт: " + port, "Yellow");
                 listener.Listen(10);
 
@@ -86,7 +93,7 @@ namespace BarrierServerProject
                         packet = Util.DeSerialization(bytes);
 
                         //add debug paramter
-                        Console.WriteLine("[DEBUG] " + packet.group + " " + packet.type + " " + packet.message);
+                        Console.WriteLine("[" + DateTime.Now.ToLongTimeString() + "] " + "[DEBUG] " + packet.group + " " + packet.type + " " + packet.message);
 
                         Packages.parse(packet.group, packet.type, packet.message, user, r_client);
                     }
@@ -114,7 +121,7 @@ namespace BarrierServerProject
 
                     catch (Exception exc)
                     {
-                        Console.WriteLine(exc.Message);
+                        Console.WriteLine("[" + DateTime.Now.ToLongTimeString() + "] " + exc.Message);
                         Thread.Sleep(5000);
                     }
                 }
@@ -132,11 +139,11 @@ namespace BarrierServerProject
             }
             catch (ThreadAbortException abortException)
             {
-                Console.WriteLine((string)abortException.ExceptionState);
+                Console.WriteLine("[" + DateTime.Now.ToLongTimeString() + "] " + (string)abortException.ExceptionState);
             }
             catch (System.Exception exc)
             {
-                Console.WriteLine(exc.Message);
+                Console.WriteLine("[" + DateTime.Now.ToLongTimeString() + "] " + exc.Message);
                 return false;
             }
             Color.WriteLineColor("Поток завершен успешно", "Green");

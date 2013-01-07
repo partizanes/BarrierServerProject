@@ -8,6 +8,7 @@ using System.Threading;
 using System.Windows.Forms;
 using BalanceModule;
 using MySql.Data.MySqlClient;
+using System.IO;
 
 namespace BalanceModule
 {
@@ -35,7 +36,9 @@ namespace BalanceModule
 
         public Form1()
         {
-                InitializeComponent();
+            CheckDll();
+
+            InitializeComponent();
         }
 
         protected override void WndProc(ref Message m)
@@ -60,13 +63,31 @@ namespace BalanceModule
             }
         }
 
+        private void CheckDll()
+        {
+            while (!File.Exists(Environment.CurrentDirectory + "\\" + "AxInterop.ForCasLib.dll"))
+            {
+                MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "В папке с программой отсутствует нужная для работы библиотека AxInterop.ForCasLib.dll \n Скопируйте в папку с программой библиотеку и нажмите ок!");
+            }
+
+            while (!File.Exists(Environment.CurrentDirectory + "\\" + "Interop.ForCasLib.dll"))
+            {
+                MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "В папке с программой отсутствует нужная для работы библиотека Interop.ForCasLib.dll \n Скопируйте в папку с программой библиотеку и нажмите ок!");
+            }
+
+            while (!File.Exists(Environment.CurrentDirectory + "\\" + "Serialization.dll"))
+            {
+                MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "В папке с программой отсутствует нужная для работы библиотека Serialization.dll \n Скопируйте в папку с программой библиотеку и нажмите ок!");
+            }
+        }
+
         private void Form1_Shown(object sender, EventArgs e)
         {
-            listBox1.Items.Add("Модуль загружен!");
+            listBox1.Items.Add("[" + DateTime.Now.ToLongTimeString() + "] " + "Модуль загружен!");
 
             Thread thh = new Thread(delegate()
             {
-                send_msg("BalanceModule",0,"hello!");
+                send_msg("BalanceModule", 0, "hello!");
 
                 StartScan();
             }); ;
@@ -140,7 +161,7 @@ namespace BalanceModule
                     m_port = Convert.ToInt32(dr.GetString(2));
                     m_model = Convert.ToInt32(dr.GetString(3));
 
-                    this.Invoke((Action)delegate { checkedListBox1.Items.Add(m_ip + ":" + m_port + " " + m_name); });
+                    this.Invoke((Action)delegate { checkedListBox1.Items.Add("[" + DateTime.Now.ToLongTimeString() + "] " + m_ip + ":" + m_port + " " + m_name); });
                 }
                 catch (System.Exception ex)
                 {
@@ -620,7 +641,7 @@ namespace BalanceModule
         {
             try
             {
-                this.Invoke((Action)delegate { listBox1.Items.Add(msg); });
+                this.Invoke((Action)delegate { listBox1.Items.Add("[" + DateTime.Now.ToLongTimeString() + "] " + msg); });
 
                 this.Invoke((Action)delegate { listBox1.SelectionMode = SelectionMode.One; });
                 this.Invoke((Action)delegate { listBox1.SetSelected(listBox1.Items.Count - 1, true); });

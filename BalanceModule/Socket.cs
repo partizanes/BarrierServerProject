@@ -41,6 +41,7 @@ namespace BalanceModule
             {
                 client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 client.Connect(ip, port);
+
                 Receiver();
             }
             catch (SocketException se)
@@ -135,7 +136,7 @@ namespace BalanceModule
 
             try
             {
-                (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.Items.Add(msg); }));
+                (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.Items.Add("[" + DateTime.Now.ToLongTimeString() + "] " + msg); }));
                 (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.SelectionMode = SelectionMode.One; }));
                 (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.SetSelected((Application.OpenForms[0] as Form1).listBox1.Items.Count - 1, true); }));
                 (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.SetSelected((Application.OpenForms[0] as Form1).listBox1.Items.Count - 1, false); }));
@@ -167,7 +168,7 @@ namespace BalanceModule
                 {
                     try
                     {
-                        byte[] bytes = new byte[256];
+                        byte[] bytes = new byte[1028];
 
                         client.Receive(bytes);
 
@@ -184,7 +185,7 @@ namespace BalanceModule
                     }
                     catch (Exception exc)
                     {
-                        (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.Items.Add(exc.Message); }));
+                        (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.Items.Add("[" + DateTime.Now.ToLongTimeString() + "] " + exc.Message); }));
                     }
                 }
 
