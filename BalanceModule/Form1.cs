@@ -161,12 +161,12 @@ namespace BalanceModule
                     m_port = Convert.ToInt32(dr.GetString(2));
                     m_model = Convert.ToInt32(dr.GetString(3));
 
-                    this.Invoke((Action)delegate { checkedListBox1.Items.Add("[" + DateTime.Now.ToLongTimeString() + "] " + m_ip + ":" + m_port + " " + m_name); });
+                    this.Invoke((Action)delegate { checkedListBox1.Items.Add(m_ip + ":" + m_port + " " + m_name); });
                 }
                 catch (System.Exception ex)
                 {
                     //TODO Написать обработчик исключений ,с отправкой на сервер отчетов ;
-                    list_msg("Произошло исключение при считывании параметров весов! Адрес" + m_ip + " Имя: " + m_name + " Порт: " + m_port + " Модель: " + m_model);
+                    list_msg("Произошло исключение при считывании параметров весов! Адрес" + m_ip + " �?мя: " + m_name + " Порт: " + m_port + " Модель: " + m_model);
                     list_msg("Текст исключения: " + ex.Message);
 
                     Log.log_write(ex.Message, "Exception", "Exception");
