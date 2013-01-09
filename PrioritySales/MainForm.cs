@@ -40,11 +40,6 @@ namespace PrioritySales
             Process.GetCurrentProcess().Kill(); 
         }
 
-        private void MainForm_Shown(object sender, EventArgs e)
-        {
-            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).Hide(); }));
-        }
-
         private void MainForm_Load(object sender, EventArgs e)
         {
             ButtonAdd.Focus();

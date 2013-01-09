@@ -27,6 +27,14 @@ namespace PrioritySales
             (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).Hide(); }));
         }
 
+        public void check_dll()
+        {
+            while (!System.IO.File.Exists(Environment.CurrentDirectory + "\\" + "Serialization.dll"))
+            {
+                MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "В папке с программой отсутствует нужная для работы база данных пользователей Serialization.dll \n Скопируйте в папку с программой базу данных пользователей и нажмите ок!");
+            }
+        }
+
         public AuthForm()
         {
             InitializeComponent();
