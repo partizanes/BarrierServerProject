@@ -55,7 +55,7 @@ namespace BarrierServerProject
                     Socket client = listener.Accept();
 
                     clients.Add(client, client.RemoteEndPoint);
-                    Color.WriteLineColor("Клиент добавлен: " + client.RemoteEndPoint, "Yellow");
+                    Color.WriteLineColor("Установлено соединение: " + client.RemoteEndPoint, "Yellow");
 
                     Thread thh = new Thread(delegate()
                     {
@@ -101,7 +101,7 @@ namespace BarrierServerProject
                     {
                         if (exc.ErrorCode == 10054)
                         {
-                            Color.WriteLineColor("Клиент отключился!" + r_client.RemoteEndPoint, "Cyan");
+                            Color.WriteLineColor("Клиент отключился: " + Server.clients[r_client], "Cyan");
 
                             if (!r_client.Connected)
                                 r_client.Disconnect(true);

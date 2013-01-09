@@ -15,7 +15,7 @@ namespace PrioritySales
         public static void parse(string p_id, int com, string msg)
         {
             switch (p_id)
-            {  
+            {
                 case "PrioritySale":
                     switch (com)
                     {

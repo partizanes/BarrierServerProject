@@ -25,7 +25,7 @@ namespace PrioritySales
                 return;  
 
             listbox_msg("                Соединение...");
- 
+
             try
             {
                 server.Connect(ip, port);

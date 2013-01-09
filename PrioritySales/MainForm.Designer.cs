@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.PanelUpWindow = new System.Windows.Forms.Panel();
             this.ButtonUnk = new System.Windows.Forms.Button();
@@ -65,6 +66,7 @@
             this.StylePanelMainUp = new System.Windows.Forms.Panel();
             this.StylePanelMainDown = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.NotifyIconAction = new System.Windows.Forms.NotifyIcon(this.components);
             this.PanelUpWindow.SuspendLayout();
             this.PanelDownWindow.SuspendLayout();
             this.PanelUpLeftWindow.SuspendLayout();
@@ -118,6 +120,7 @@
             this.ButtonExit.TabIndex = 7;
             this.ButtonExit.Text = "Выход";
             this.ButtonExit.UseVisualStyleBackColor = false;
+            this.ButtonExit.Click += new System.EventHandler(this.ButtonExit_Click);
             this.ButtonExit.Enter += new System.EventHandler(this.ButtonExit_Enter);
             this.ButtonExit.Leave += new System.EventHandler(this.ButtonExit_Leave);
             // 
@@ -132,6 +135,7 @@
             this.ButtonHide.TabIndex = 6;
             this.ButtonHide.Text = "Свернуть";
             this.ButtonHide.UseVisualStyleBackColor = false;
+            this.ButtonHide.Click += new System.EventHandler(this.ButtonHide_Click);
             this.ButtonHide.Enter += new System.EventHandler(this.ButtonHide_Enter);
             this.ButtonHide.Leave += new System.EventHandler(this.ButtonHide_Leave);
             // 
@@ -449,6 +453,12 @@
             this.panel1.Size = new System.Drawing.Size(1, 36);
             this.panel1.TabIndex = 14;
             // 
+            // NotifyIconAction
+            // 
+            this.NotifyIconAction.Icon = ((System.Drawing.Icon)(resources.GetObject("NotifyIconAction.Icon")));
+            this.NotifyIconAction.Text = "Action";
+            this.NotifyIconAction.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIconAction_MouseDoubleClick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -525,6 +535,7 @@
         private System.Windows.Forms.Button ButtonHide;
         private System.Windows.Forms.Button ButtonSetting;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.NotifyIcon NotifyIconAction;
     }
 }
 

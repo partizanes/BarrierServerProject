@@ -78,6 +78,18 @@ namespace BarrierServerProject
                             Server.clients.Remove(r_client);
                                 break;
                     }
+                    break;
+                case "User":
+                    switch (com)
+                    {
+                        case 0000:
+                            Color.WriteLineColor(Server.clients[r_client] + ": Завершение сеанса.", "Red");
+                            Thread.Sleep(3000);
+                            r_client.Disconnect(false);
+                            r_client.Close();
+                            Server.clients.Remove(r_client);
+                                break;
+                    }
                         break;
             }
         }

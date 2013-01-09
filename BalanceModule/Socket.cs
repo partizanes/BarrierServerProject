@@ -168,7 +168,7 @@ namespace BalanceModule
                 {
                     try
                     {
-                        byte[] bytes = new byte[1028];
+                        byte[] bytes = new byte[1024];
 
                         client.Receive(bytes);
 

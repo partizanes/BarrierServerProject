@@ -20,14 +20,14 @@ namespace BarrierServerProject
                     }
                 case "list":
                     {
-                        Color.WriteLineColor("======================\n","Cyan");
+                        Console.WriteLine("======================\n","Cyan");
 
                         foreach (DictionaryEntry de in Server.clients)
                         {
-                            Color.WriteLineColor(de.Value.ToString(),"Cyan");
+                            Console.WriteLine(de.Value.ToString(), "Cyan");
                         }
 
-                        Color.WriteLineColor("\n======================","Cyan");
+                        Console.WriteLine("\n======================", "Cyan");
 
                         return "\nDone.";
                     }

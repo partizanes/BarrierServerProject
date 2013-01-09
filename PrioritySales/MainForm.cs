@@ -36,6 +36,7 @@ namespace PrioritySales
         {
             AuthForm af = new AuthForm();
             af.TaskbarIcon.Visible = false;
+            NotifyIconAction.Visible = false;
             Process.GetCurrentProcess().Kill(); 
         }
 
@@ -117,6 +118,26 @@ namespace PrioritySales
         private void ButtonExit_Leave(object sender, EventArgs e)
         {
             ButtonExit.ForeColor = Color.DodgerBlue;
+        }
+
+        private void ButtonExit_Click(object sender, EventArgs e)
+        {
+            string[] split_data = LabelUserName.Text.Split(new Char[] { ':' });
+            Server.Sender("User", 0000, split_data[1] + ": Bye!");
+            System.Threading.Thread.Sleep(500);
+            Application.Exit();
+        }
+
+        private void ButtonHide_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            NotifyIconAction.Visible = true;
+        }
+
+        private void NotifyIconAction_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.Show();
+            NotifyIconAction.Visible = false;
         }
     }
 }
