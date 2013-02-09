@@ -1,6 +1,6 @@
 ﻿namespace PrioritySales
 {
-    partial class MainForm
+     partial class MainForm
     {
         /// <summary>
         /// Требуется переменная конструктора.
@@ -203,6 +203,7 @@
             this.StylePanelUpRight.Name = "StylePanelUpRight";
             this.StylePanelUpRight.Size = new System.Drawing.Size(1, 40);
             this.StylePanelUpRight.TabIndex = 0;
+            this.StylePanelUpRight.Visible = false;
             // 
             // StylePanelUpLeft
             // 
@@ -211,6 +212,7 @@
             this.StylePanelUpLeft.Name = "StylePanelUpLeft";
             this.StylePanelUpLeft.Size = new System.Drawing.Size(3, 38);
             this.StylePanelUpLeft.TabIndex = 1;
+            this.StylePanelUpLeft.Visible = false;
             // 
             // StylePanelUpDown
             // 
@@ -219,6 +221,7 @@
             this.StylePanelUpDown.Name = "StylePanelUpDown";
             this.StylePanelUpDown.Size = new System.Drawing.Size(606, 3);
             this.StylePanelUpDown.TabIndex = 2;
+            this.StylePanelUpDown.Visible = false;
             // 
             // StylePanelUpUp
             // 
@@ -227,6 +230,7 @@
             this.StylePanelUpUp.Name = "StylePanelUpUp";
             this.StylePanelUpUp.Size = new System.Drawing.Size(606, 3);
             this.StylePanelUpUp.TabIndex = 3;
+            this.StylePanelUpUp.Visible = false;
             // 
             // LabelUserName
             // 
@@ -274,6 +278,7 @@
             this.StylePanelDownLeft.Name = "StylePanelDownLeft";
             this.StylePanelDownLeft.Size = new System.Drawing.Size(3, 36);
             this.StylePanelDownLeft.TabIndex = 0;
+            this.StylePanelDownLeft.Visible = false;
             // 
             // StylePanelDownRight
             // 
@@ -282,6 +287,7 @@
             this.StylePanelDownRight.Name = "StylePanelDownRight";
             this.StylePanelDownRight.Size = new System.Drawing.Size(3, 36);
             this.StylePanelDownRight.TabIndex = 1;
+            this.StylePanelDownRight.Visible = false;
             // 
             // StylePanelDownDown
             // 
@@ -290,6 +296,7 @@
             this.StylePanelDownDown.Name = "StylePanelDownDown";
             this.StylePanelDownDown.Size = new System.Drawing.Size(763, 1);
             this.StylePanelDownDown.TabIndex = 2;
+            this.StylePanelDownDown.Visible = false;
             // 
             // StylePanelDownUp
             // 
@@ -298,6 +305,7 @@
             this.StylePanelDownUp.Name = "StylePanelDownUp";
             this.StylePanelDownUp.Size = new System.Drawing.Size(763, 1);
             this.StylePanelDownUp.TabIndex = 3;
+            this.StylePanelDownUp.Visible = false;
             // 
             // PanelUpLeftWindow
             // 
@@ -320,6 +328,7 @@
             this.StylePanelLabelDown.Name = "StylePanelLabelDown";
             this.StylePanelLabelDown.Size = new System.Drawing.Size(147, 3);
             this.StylePanelLabelDown.TabIndex = 0;
+            this.StylePanelLabelDown.Visible = false;
             // 
             // StylePanelLabelUp
             // 
@@ -328,6 +337,7 @@
             this.StylePanelLabelUp.Name = "StylePanelLabelUp";
             this.StylePanelLabelUp.Size = new System.Drawing.Size(147, 3);
             this.StylePanelLabelUp.TabIndex = 1;
+            this.StylePanelLabelUp.Visible = false;
             // 
             // StylePanelLabelRight
             // 
@@ -336,6 +346,7 @@
             this.StylePanelLabelRight.Name = "StylePanelLabelRight";
             this.StylePanelLabelRight.Size = new System.Drawing.Size(3, 38);
             this.StylePanelLabelRight.TabIndex = 2;
+            this.StylePanelLabelRight.Visible = false;
             // 
             // StylePanelLabelLeft
             // 
@@ -344,6 +355,7 @@
             this.StylePanelLabelLeft.Name = "StylePanelLabelLeft";
             this.StylePanelLabelLeft.Size = new System.Drawing.Size(3, 38);
             this.StylePanelLabelLeft.TabIndex = 3;
+            this.StylePanelLabelLeft.Visible = false;
             // 
             // PanelLeftWindow
             // 
@@ -365,6 +377,7 @@
             this.StylePanelLeftDown.Name = "StylePanelLeftDown";
             this.StylePanelLeftDown.Size = new System.Drawing.Size(150, 3);
             this.StylePanelLeftDown.TabIndex = 0;
+            this.StylePanelLeftDown.Visible = false;
             // 
             // StylePanelLeftUp
             // 
@@ -373,6 +386,7 @@
             this.StylePanelLeftUp.Name = "StylePanelLeftUp";
             this.StylePanelLeftUp.Size = new System.Drawing.Size(150, 3);
             this.StylePanelLeftUp.TabIndex = 1;
+            this.StylePanelLeftUp.Visible = false;
             // 
             // StylePanelLeftLeft
             // 
@@ -381,6 +395,7 @@
             this.StylePanelLeftLeft.Name = "StylePanelLeftLeft";
             this.StylePanelLeftLeft.Size = new System.Drawing.Size(2, 475);
             this.StylePanelLeftLeft.TabIndex = 2;
+            this.StylePanelLeftLeft.Visible = false;
             // 
             // StylePanelLeftRight
             // 
@@ -389,6 +404,7 @@
             this.StylePanelLeftRight.Name = "StylePanelLeftRight";
             this.StylePanelLeftRight.Size = new System.Drawing.Size(3, 478);
             this.StylePanelLeftRight.TabIndex = 3;
+            this.StylePanelLeftRight.Visible = false;
             // 
             // panel5
             // 
@@ -420,6 +436,7 @@
             this.StylePanelMainRight.Name = "StylePanelMainRight";
             this.StylePanelMainRight.Size = new System.Drawing.Size(2, 476);
             this.StylePanelMainRight.TabIndex = 0;
+            this.StylePanelMainRight.Visible = false;
             // 
             // StylePanelMainLeft
             // 
@@ -428,6 +445,7 @@
             this.StylePanelMainLeft.Name = "StylePanelMainLeft";
             this.StylePanelMainLeft.Size = new System.Drawing.Size(2, 475);
             this.StylePanelMainLeft.TabIndex = 1;
+            this.StylePanelMainLeft.Visible = false;
             // 
             // StylePanelMainUp
             // 
@@ -436,6 +454,7 @@
             this.StylePanelMainUp.Name = "StylePanelMainUp";
             this.StylePanelMainUp.Size = new System.Drawing.Size(606, 2);
             this.StylePanelMainUp.TabIndex = 2;
+            this.StylePanelMainUp.Visible = false;
             // 
             // StylePanelMainDown
             // 
@@ -444,6 +463,7 @@
             this.StylePanelMainDown.Name = "StylePanelMainDown";
             this.StylePanelMainDown.Size = new System.Drawing.Size(606, 2);
             this.StylePanelMainDown.TabIndex = 3;
+            this.StylePanelMainDown.Visible = false;
             // 
             // panel1
             // 

@@ -108,14 +108,17 @@ namespace PrioritySales
                             hash = GetMd5Hash(md5Hash,(GetMd5Hash(md5Hash, "1?234%5aZ!") + GetMd5Hash(md5Hash, textboxPass.Text)));
                         }
 
-                        if(Server.server.Connected)
+                        if (Server.server.Connected)
+                        {
                             Server.Sender("PrioritySale", 0, TextboxLogin.Text + ":" + hash);
+                        }
                         else
                             (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).buttonCancel_Click(); }));
                     }); ;
                     thh.Name = "Авторизация";
                     Server.threads.Add(thh);
                     thh.Start();
+                    //thh.Join();
                 }
             }
             else
