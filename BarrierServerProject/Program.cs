@@ -67,7 +67,7 @@ namespace BarrierServerProject
 
         private static void CheckDll()
         {
-            while (!System.IO.File.Exists(Environment.CurrentDirectory + "\\" + "users.dbf"))
+            while (!System.IO.File.Exists(Environment.CurrentDirectory + "\\data\\" + "users.dbf"))
             {
                 MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "В папке с программой отсутствует нужная для работы база данных пользователей users.dbf \n Скопируйте в папку с программой базу данных пользователей и нажмите ок!");
             }

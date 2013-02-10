@@ -19,11 +19,13 @@ namespace BarrierServerProject
             switch (p_id)
             {
                 case "PrioritySale":
+
                     user.userid = 0;
+
                     switch (com)
                     {
                         case 0:
-                            string[] split_data = msg.Replace("\0","").Replace(" ", "").Split(new Char[] { ':' });
+                            string[] split_data = msg.Replace("\0", "").Replace(" ", "").Split(new Char[] { ':' });
 
                             Dbf dbf = new Dbf();
 
@@ -39,6 +41,7 @@ namespace BarrierServerProject
                                 Server.clients[r_client] = split_data[0];
                                 Color.WriteLineColor(split_data[0] + " Добавлен!", "Cyan");
                                 Msg.SendUser(split_data[0], "PrioritySale", 1, split_data[0]);
+                                user.username = split_data[0];
                             }
                             else
                             {
@@ -52,6 +55,24 @@ namespace BarrierServerProject
                                 Color.WriteLineColor(split_data[0] + " " + split_data[1], "Red");
                                 break;
                             }
+
+                        case 5:
+                            string[] sd = msg.Replace("\0", "").Replace(" ", "").Split(new Char[] { ':' });
+
+                            string bar = sd[0];
+                            string count = sd[1];
+                            string price = sd[2];
+
+                            DateTime datetime = new DateTime();
+
+                            datetime = Convert.ToDateTime(sd[3]);
+
+                            if (BalanceAddItem("INSERT INTO balance.dbf (barcode,price,count,date) VALUES ('" + bar + "'," + price + "," + count + ",{^" + datetime.ToString("yyyy-MM-dd") + "})"))
+                                Msg.SendUser(user.username, "PrioritySale", 2, "                Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.");
+                            else
+                                Msg.SendUser(user.username, "PrioritySale", 3, "                                                                      Отклонено!");
+
+                            break;
                     }
                     break;
                 case "BalanceModule":
@@ -106,6 +127,23 @@ namespace BarrierServerProject
             }
 
             return sBuilder.ToString();
+        }
+
+        public static bool BalanceAddItem(string str)
+        {
+            Dbf dbf = new Dbf();
+
+            try
+            {
+                dbf.ExecuteNonQuery(str);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false;
+            }
+
+            return true;
         }
     }
 }

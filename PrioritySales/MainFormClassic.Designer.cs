@@ -48,6 +48,8 @@
             this.PanelMainBlock = new System.Windows.Forms.Panel();
             this.PanelAddBg = new System.Windows.Forms.Panel();
             this.PanelAddTask = new System.Windows.Forms.Panel();
+            this.LabelPrice = new System.Windows.Forms.Label();
+            this.TextboxPrice = new System.Windows.Forms.TextBox();
             this.LabelInfo = new System.Windows.Forms.Label();
             this.ButtonTurn = new System.Windows.Forms.Button();
             this.msg_label = new System.Windows.Forms.Label();
@@ -286,6 +288,8 @@
             // PanelAddTask
             // 
             this.PanelAddTask.BackColor = System.Drawing.Color.Black;
+            this.PanelAddTask.Controls.Add(this.LabelPrice);
+            this.PanelAddTask.Controls.Add(this.TextboxPrice);
             this.PanelAddTask.Controls.Add(this.LabelInfo);
             this.PanelAddTask.Controls.Add(this.ButtonTurn);
             this.PanelAddTask.Controls.Add(this.msg_label);
@@ -302,6 +306,26 @@
             this.PanelAddTask.Size = new System.Drawing.Size(513, 307);
             this.PanelAddTask.TabIndex = 0;
             this.PanelAddTask.Visible = false;
+            // 
+            // LabelPrice
+            // 
+            this.LabelPrice.AutoSize = true;
+            this.LabelPrice.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.LabelPrice.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.LabelPrice.Location = new System.Drawing.Point(411, 105);
+            this.LabelPrice.Name = "LabelPrice";
+            this.LabelPrice.Size = new System.Drawing.Size(41, 16);
+            this.LabelPrice.TabIndex = 0;
+            this.LabelPrice.Text = "Цена";
+            // 
+            // TextboxPrice
+            // 
+            this.TextboxPrice.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TextboxPrice.Location = new System.Drawing.Point(379, 124);
+            this.TextboxPrice.Name = "TextboxPrice";
+            this.TextboxPrice.Size = new System.Drawing.Size(105, 35);
+            this.TextboxPrice.TabIndex = 0;
+            this.TextboxPrice.TabStop = false;
             // 
             // LabelInfo
             // 
@@ -321,11 +345,13 @@
             this.ButtonTurn.Location = new System.Drawing.Point(164, 262);
             this.ButtonTurn.Name = "ButtonTurn";
             this.ButtonTurn.Size = new System.Drawing.Size(200, 23);
-            this.ButtonTurn.TabIndex = 9;
+            this.ButtonTurn.TabIndex = 0;
+            this.ButtonTurn.TabStop = false;
             this.ButtonTurn.Text = "Поставить в очередь";
             this.ButtonTurn.UseVisualStyleBackColor = false;
             this.ButtonTurn.Click += new System.EventHandler(this.ButtonTurn_Click);
             this.ButtonTurn.Enter += new System.EventHandler(this.ButtonTurn_Enter);
+            this.ButtonTurn.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ButtonTurn_KeyDown);
             this.ButtonTurn.Leave += new System.EventHandler(this.ButtonTurn_Leave);
             // 
             // msg_label
@@ -353,7 +379,7 @@
             this.LabelCountAdd.AutoSize = true;
             this.LabelCountAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.LabelCountAdd.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.LabelCountAdd.Location = new System.Drawing.Point(306, 105);
+            this.LabelCountAdd.Location = new System.Drawing.Point(278, 105);
             this.LabelCountAdd.Name = "LabelCountAdd";
             this.LabelCountAdd.Size = new System.Drawing.Size(86, 16);
             this.LabelCountAdd.TabIndex = 0;
@@ -397,10 +423,11 @@
             // TextboxCountAdd
             // 
             this.TextboxCountAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.TextboxCountAdd.Location = new System.Drawing.Point(304, 124);
+            this.TextboxCountAdd.Location = new System.Drawing.Point(276, 124);
             this.TextboxCountAdd.Name = "TextboxCountAdd";
             this.TextboxCountAdd.Size = new System.Drawing.Size(88, 35);
             this.TextboxCountAdd.TabIndex = 0;
+            this.TextboxCountAdd.TabStop = false;
             this.TextboxCountAdd.Enter += new System.EventHandler(this.TextboxCountAdd_Enter);
             this.TextboxCountAdd.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextboxCountAdd_KeyDown);
             this.TextboxCountAdd.Leave += new System.EventHandler(this.TextboxCountAdd_Leave);
@@ -415,6 +442,7 @@
             this.TextboxNameItem.ReadOnly = true;
             this.TextboxNameItem.Size = new System.Drawing.Size(461, 26);
             this.TextboxNameItem.TabIndex = 0;
+            this.TextboxNameItem.TabStop = false;
             // 
             // TextboxAddBar
             // 
@@ -424,6 +452,7 @@
             this.TextboxAddBar.Name = "TextboxAddBar";
             this.TextboxAddBar.Size = new System.Drawing.Size(178, 35);
             this.TextboxAddBar.TabIndex = 0;
+            this.TextboxAddBar.TabStop = false;
             this.TextboxAddBar.Enter += new System.EventHandler(this.TextboxAddBar_Enter);
             this.TextboxAddBar.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextboxAddBar_KeyDown);
             this.TextboxAddBar.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextboxAddBar_KeyPress);
@@ -480,7 +509,7 @@
         private System.Windows.Forms.Panel panel7;
         public System.Windows.Forms.Label LabelUserName;
         private System.Windows.Forms.Button ButtonUnk2;
-        private System.Windows.Forms.Panel PanelAddBg;
+        public System.Windows.Forms.Panel PanelAddBg;
         private System.Windows.Forms.Panel PanelAddTask;
         private System.Windows.Forms.Label msg_label;
         private System.Windows.Forms.Label LabelNameItem;
@@ -488,12 +517,14 @@
         private System.Windows.Forms.Label DataTimeLabel;
         private System.Windows.Forms.Label LabelButtonItem;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
-        private System.Windows.Forms.TextBox TextboxCountAdd;
-        private System.Windows.Forms.TextBox TextboxNameItem;
-        private System.Windows.Forms.TextBox TextboxAddBar;
-        private System.Windows.Forms.Button ButtonTurn;
-        private System.Windows.Forms.Label LabelInfo;
-        private System.Windows.Forms.Timer TimerClearMsg;
+        public System.Windows.Forms.Button ButtonTurn;
+        private System.Windows.Forms.Label LabelPrice;
+        public System.Windows.Forms.Label LabelInfo;
+        public System.Windows.Forms.TextBox TextboxNameItem;
+        public System.Windows.Forms.Timer TimerClearMsg;
+        public System.Windows.Forms.TextBox TextboxCountAdd;
+        public System.Windows.Forms.TextBox TextboxAddBar;
+        public System.Windows.Forms.TextBox TextboxPrice;
 
 
 

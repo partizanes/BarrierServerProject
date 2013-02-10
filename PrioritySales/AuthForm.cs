@@ -17,7 +17,7 @@ namespace PrioritySales
     {
         public static int log_level = 3;
 
-        public const string ver = "0.59 alfa";
+        public const string ver = "0.65 alfa";
         public int xOffset, yOffset;
         public bool isMouseDown = false;
         private Point mouseOffset;

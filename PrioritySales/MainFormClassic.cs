@@ -4,19 +4,22 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace PrioritySales
 {
     public partial class MainFormClassic : Form
     {
-        public MainFormClassic()
+        public  MainFormClassic()
         {
             InitializeComponent();
         }
 
         private bool nonNumberEntered = false;
+        private int pricelistId = 1;
 
         // ForeColor for all button block start
 
@@ -121,14 +124,12 @@ namespace PrioritySales
 
             if (PanelAddBg.Visible == false)
             {
-                PanelAddBg.Visible = true;
-                PanelAddTask.Visible = true;
+                PanelAddHide(false);
                 TextboxAddBar.Focus();
             }
             else
             {
-                PanelAddBg.Visible = false;
-                PanelAddTask.Visible = false;
+                PanelAddHide(true);
                 ButtonAdd.Focus();
             }
         }
@@ -157,12 +158,12 @@ namespace PrioritySales
                         PanelAddBg.Visible = false;            
                         PanelAddTask.Visible = false;
                         ButtonAdd.Focus();
-                        break;
+                        return;
                     }
                 case Keys.Up:
                     {
                         dateTimePicker1.Focus();
-                        break;
+                        return;
                     }
                 case Keys.Right:
                 case Keys.Down:
@@ -176,8 +177,33 @@ namespace PrioritySales
                             return;
                         }
 
+                        Mysql mysql = new Mysql();
+
+                        MySql.Data.MySqlClient.MySqlDataReader dr = mysql.ExecuteReader("SELECT a.name, b.price \n" +
+                            "FROM trm_in_var C \n" +
+                            "LEFT JOIN trm_in_items A ON A.id=C.item \n" +
+                            "LEFT JOIN trm_in_pricelist_items B ON B.item=c.item \n" +
+                            "WHERE a.id='" + TextboxAddBar.Text + "'\n" +
+                            " AND (b.pricelist_id=" + pricelistId + ")");
+
+                        if (!dr.HasRows)
+                        {
+                            DeclineErr(true, "                                          Штрихкод не найден в базу!");
+                            TextboxAddBar.Text = "";
+                            TextboxAddBar.Focus();
+                            return;
+                        }
+
+                        if (dr.Read())
+                        {
+                            TextboxNameItem.Text = dr.GetString(0);
+                            string[] split_data = dr.GetString(1).Split(new Char[] { ',' });
+                            TextboxPrice.Text = Convert.ToInt32(split_data[0]).ToString();
+                        }
+
+
                         TextboxCountAdd.Focus();
-                        break;
+                        return;
                     }
             }
 
@@ -224,8 +250,7 @@ namespace PrioritySales
             {
                 case Keys.Escape:
                     {
-                        PanelAddBg.Visible = false;
-                        PanelAddTask.Visible = false;
+                        PanelAddHide(true);
                         ButtonAdd.Focus();
                         break;
                     }
@@ -268,11 +293,14 @@ namespace PrioritySales
                         TextboxAddBar.Text = "";
                         TextboxCountAdd.Text = "";
                         TextboxNameItem.Text = "";
+                        TextboxPrice.Text = "";
                         TextboxAddBar.Focus();
                         break;
                     }
                 case Keys.Right:
-                case Keys.Enter:  
+                    TextboxPrice.Focus();
+                    break;
+                case Keys.Enter:
                 case Keys.Down:
                     {
                         ButtonTurn.Focus();
@@ -294,8 +322,10 @@ namespace PrioritySales
             
             int count;
 
-            if (int.TryParse(TextboxCountAdd.Text, out count))
+            if (!int.TryParse(TextboxCountAdd.Text, out count))
                 ButtonTurn.ForeColor = Color.Red;
+            else
+                ButtonTurn.ForeColor = Color.Green;
         }
 
         private void ButtonTurn_Leave(object sender, EventArgs e)
@@ -312,18 +342,46 @@ namespace PrioritySales
             {
                 DeclineErr(true, "                                          Баркод должен быть более 4 цифр!");
                 TextboxAddBar.Focus();
+                return;
             }
 
             if (TextboxNameItem.Text.Length < 3)
             {
                 DeclineErr(true, "                  Внимание!Не выбран товар для постановки в очередь!");
                 TextboxAddBar.Focus();
+                return;
             }
-            else if (int.TryParse(TextboxCountAdd.Text, out count))
+
+            if (!int.TryParse(TextboxCountAdd.Text, out count))
             {
                     DeclineErr(true, "                      Внимание!В поле количество должно быть число!");
                     TextboxCountAdd.Focus();
+                    return;
             }
+
+            if (TextboxPrice.Text.Length < 2)
+            {
+                DeclineErr(true, "                      Внимание!Цена должна быть более 3 символов!");
+                TextboxPrice.Focus();
+                return;
+            }
+
+            Thread thh = new Thread(delegate()
+            {
+                Server.Connect();
+
+                if (Server.server.Connected)
+                {
+                    DateTime datetime = new DateTime();
+
+                    datetime = Convert.ToDateTime(dateTimePicker1.Text);
+
+                    Server.Sender("PrioritySale", 5, TextboxAddBar.Text + ":" + TextboxCountAdd.Text + ":" + TextboxPrice.Text + ":" + datetime.ToShortDateString());
+                }
+            }); ;
+            thh.Name = "Авторизация";
+            Server.threads.Add(thh);
+            thh.Start();
         }
 
         private void TimerClearMsg_Tick(object sender, EventArgs e)
@@ -343,7 +401,7 @@ namespace PrioritySales
             }
         }
 
-        private void DeclineErr(bool st,string txt)
+        public void DeclineErr(bool st,string txt)
         {
             TimerClearMsg.Enabled = false;
 
@@ -358,10 +416,50 @@ namespace PrioritySales
             }
             else
             {
+                PanelAddBg.BackColor = Color.Green;
+                ButtonTurn.ForeColor = Color.Green;
+                LabelInfo.ForeColor = Color.Green;
+                LabelInfo.Text = txt;
+                TimerClearMsg.Enabled = true;
+                return;
+            }
+        }
 
+        private void PanelAddHide(bool st)
+        {
+            if (st)
+            {
+                PanelAddBg.Visible = false;
+                PanelAddTask.Visible = false;
+            }
+            else
+            {
+                PanelAddBg.Visible = true;
+                PanelAddTask.Visible = true;
             }
 
-
+            TextboxPrice.Text = "";
+            TextboxAddBar.Text = "";
+            TextboxCountAdd.Text = "";
+            TextboxNameItem.Text = "";
+            PanelAddBg.BackColor = Color.DodgerBlue;
+            ButtonTurn.ForeColor = Color.DodgerBlue;
+            TimerClearMsg.Enabled = false;
+            LabelInfo.Text = "";
+        }
+        private void ButtonTurn_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                    PanelAddHide(true);
+                    ButtonAdd.Focus();
+                    break;
+                case Keys.Up:
+                    TextboxCountAdd.Text = "";
+                    TextboxCountAdd.Focus();
+                    break;
+            }
         }
     }
 }
