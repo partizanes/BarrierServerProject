@@ -21,6 +21,8 @@ namespace PrioritySales
         private bool nonNumberEntered = false;
         private int pricelistId = 1;
 
+        //TODO FORM MOVE 
+
         // ForeColor for all button block start
 
         private void MainFormClassic_Shown(object sender, EventArgs e)
@@ -186,12 +188,18 @@ namespace PrioritySales
                             "WHERE a.id='" + TextboxAddBar.Text + "'\n" +
                             " AND (b.pricelist_id=" + pricelistId + ")");
 
+                        if (dr == null)
+                        {
+                            DeclineErr(true, "                             Запрос ничего не вернул,повторите попытку!");
+                                return;
+                        }
+
                         if (!dr.HasRows)
                         {
-                            DeclineErr(true, "                                          Штрихкод не найден в базу!");
+                            DeclineErr(true, "                                          Штрихкод не найден в базе!");
                             TextboxAddBar.Text = "";
                             TextboxAddBar.Focus();
-                            return;
+                                return;
                         }
 
                         if (dr.Read())

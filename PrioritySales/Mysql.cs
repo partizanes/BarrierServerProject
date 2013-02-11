@@ -16,6 +16,7 @@ namespace PrioritySales
 
         public Boolean ExecuteNonQuery(string str)
         {
+            //TODO read info about connect from config
             connStr = string.Format("server={0};uid={1};pwd={2};database={3};", "192.168.1.100", "pricechecker", "***REMOVED***", "ukmserver");
 
             serverConn = new MySqlConnection(connStr);
@@ -30,6 +31,21 @@ namespace PrioritySales
 
                 return true;
             }
+
+            catch (TimeoutException ex)
+            {
+                //TODO User msg about this
+                Log.log_write("Сервер Mysql не ответил вовремя,будет произведена попытка переподключения \n Текст исключения: " + ex.Message, "Exception", "Mysql_Exception_Timeout");
+
+                while(serverConn.State != ConnectionState.Open)
+                    serverConn.Open();
+
+                if(serverConn.State == ConnectionState.Open)
+                    cmd.ExecuteNonQuery();
+
+                return true;
+            }
+
             catch (System.Exception ex)
             {
                 Log.log_write(ex.Message, "Exception", "Exception");
@@ -44,9 +60,9 @@ namespace PrioritySales
 
         public MySqlDataReader ExecuteReader(string str)
         {
-            MySqlDataReader reader;
-
-            connStr = string.Format("server={0};uid={1};pwd={2};database={3};", "192.168.1.3", "pricechecker", "***REMOVED***", "ukmserver");
+            MySqlDataReader reader = null;
+            //TODO read info about connect from config
+            connStr = string.Format("server={0};uid={1};pwd={2};database={3};", "192.168.1.100", "pricechecker", "***REMOVED***", "ukmserver");
 
             serverConn = new MySqlConnection(connStr);
 
@@ -60,6 +76,21 @@ namespace PrioritySales
 
                 return reader;
             }
+
+            catch (TimeoutException ex)
+            {
+                //TODO User msg about this
+                Log.log_write("Сервер Mysql не ответил вовремя,будет произведена попытка переподключения \n Текст исключения: " + ex.Message, "Exception", "Mysql_Exception_Timeout");
+
+                while (serverConn.State != ConnectionState.Open)
+                    serverConn.Open();
+
+                if (serverConn.State == ConnectionState.Open)
+                    reader = cmd.ExecuteReader();
+
+                return reader;
+            }
+
             catch (System.Exception ex)
             {
                 Log.log_write(ex.Message, "Exception", "Exception");

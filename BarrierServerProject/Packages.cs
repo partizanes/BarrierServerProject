@@ -70,10 +70,15 @@ namespace BarrierServerProject
                             string time = sd[4];
 
                             if (dbf.ExecuteNonQuery("INSERT INTO balance.dbf (barcode,price,count,date,time) VALUES ('" + bar + "'," + price + "," + count + ",{^" + datetime.ToString("yyyy-MM-dd") + "},'" + time + "')"))
+                            {
+                                Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.", "Green");
                                 Msg.SendUser(user.username, "PrioritySale", 2, "                Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.");
+                            }
                             else
-                                Msg.SendUser(user.username, "PrioritySale", 3, "                                                                      Отклонено!");
-
+                            {
+                                Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + count + " Отклонён!", "Red");
+                                Msg.SendUser(user.username, "PrioritySale", 3, "                                                                     Отклонено!");
+                            }
                             break;
                     }
                     break;

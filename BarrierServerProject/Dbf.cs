@@ -27,6 +27,7 @@ namespace BarrierServerProject
             }
             catch (System.Exception ex)
             {
+                Color.WriteLineColor(ex.Message, "Red");
                 Log.log_write(ex.Message, "Exception", "Exception");
                 return false;
             }
@@ -60,6 +61,7 @@ namespace BarrierServerProject
             }
             catch (System.Exception ex)
             {
+                Color.WriteLineColor(ex.Message, "Red");
                 Log.log_write(ex.Message, "Exception", "Exception");
                 return null;
             }
