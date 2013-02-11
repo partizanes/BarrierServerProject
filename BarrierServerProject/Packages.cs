@@ -14,6 +14,8 @@ namespace BarrierServerProject
 {
     class Packages
     {
+        static Dbf dbf = new Dbf();
+
         public static void parse(string p_id, int com, string msg, User user,System.Net.Sockets.Socket r_client)
         {
             switch (p_id)
@@ -26,8 +28,6 @@ namespace BarrierServerProject
                     {
                         case 0:
                             string[] split_data = msg.Replace("\0", "").Replace(" ", "").Split(new Char[] { ':' });
-
-                            Dbf dbf = new Dbf();
 
                             OleDbDataReader dr;
 
@@ -67,7 +67,9 @@ namespace BarrierServerProject
 
                             datetime = Convert.ToDateTime(sd[3]);
 
-                            if (BalanceAddItem("INSERT INTO balance.dbf (barcode,price,count,date) VALUES ('" + bar + "'," + price + "," + count + ",{^" + datetime.ToString("yyyy-MM-dd") + "})"))
+                            string time = sd[4];
+
+                            if (dbf.ExecuteNonQuery("INSERT INTO balance.dbf (barcode,price,count,date,time) VALUES ('" + bar + "'," + price + "," + count + ",{^" + datetime.ToString("yyyy-MM-dd") + "},'" + time + "')"))
                                 Msg.SendUser(user.username, "PrioritySale", 2, "                Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.");
                             else
                                 Msg.SendUser(user.username, "PrioritySale", 3, "                                                                      Отклонено!");
@@ -127,23 +129,6 @@ namespace BarrierServerProject
             }
 
             return sBuilder.ToString();
-        }
-
-        public static bool BalanceAddItem(string str)
-        {
-            Dbf dbf = new Dbf();
-
-            try
-            {
-                dbf.ExecuteNonQuery(str);
-            }
-            catch (System.Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return false;
-            }
-
-            return true;
         }
     }
 }
