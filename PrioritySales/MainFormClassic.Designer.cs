@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFormClassic));
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.panel6 = new System.Windows.Forms.Panel();
+            this.PanelMainClassic = new System.Windows.Forms.Panel();
+            this.PanelBackButton = new System.Windows.Forms.Panel();
+            this.PanelButton = new System.Windows.Forms.Panel();
             this.ButtonUnk2 = new System.Windows.Forms.Button();
             this.ButtonExit = new System.Windows.Forms.Button();
             this.ButtonAdd = new System.Windows.Forms.Button();
@@ -41,10 +41,10 @@
             this.ButtonHide = new System.Windows.Forms.Button();
             this.ButtonMsg = new System.Windows.Forms.Button();
             this.ButtonUnk = new System.Windows.Forms.Button();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.panel7 = new System.Windows.Forms.Panel();
+            this.PanelBackInfoBar = new System.Windows.Forms.Panel();
+            this.PanelInfoBar = new System.Windows.Forms.Panel();
             this.LabelUserName = new System.Windows.Forms.Label();
-            this.panel4 = new System.Windows.Forms.Panel();
+            this.PanelBackMain = new System.Windows.Forms.Panel();
             this.PanelMainBlock = new System.Windows.Forms.Panel();
             this.PanelAddBg = new System.Windows.Forms.Panel();
             this.PanelAddTask = new System.Windows.Forms.Panel();
@@ -62,53 +62,59 @@
             this.TextboxNameItem = new System.Windows.Forms.TextBox();
             this.TextboxAddBar = new System.Windows.Forms.TextBox();
             this.TimerClearMsg = new System.Windows.Forms.Timer(this.components);
-            this.panel1.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel6.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.panel7.SuspendLayout();
-            this.panel4.SuspendLayout();
+            this.PanelMainClassic.SuspendLayout();
+            this.PanelBackButton.SuspendLayout();
+            this.PanelButton.SuspendLayout();
+            this.PanelBackInfoBar.SuspendLayout();
+            this.PanelInfoBar.SuspendLayout();
+            this.PanelBackMain.SuspendLayout();
             this.PanelMainBlock.SuspendLayout();
             this.PanelAddBg.SuspendLayout();
             this.PanelAddTask.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panel1
+            // PanelMainClassic
             // 
-            this.panel1.BackColor = System.Drawing.Color.Black;
-            this.panel1.Controls.Add(this.panel3);
-            this.panel1.Controls.Add(this.panel2);
-            this.panel1.Controls.Add(this.panel4);
-            this.panel1.Location = new System.Drawing.Point(1, 1);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(681, 528);
-            this.panel1.TabIndex = 0;
+            this.PanelMainClassic.BackColor = System.Drawing.Color.Black;
+            this.PanelMainClassic.Controls.Add(this.PanelBackButton);
+            this.PanelMainClassic.Controls.Add(this.PanelBackInfoBar);
+            this.PanelMainClassic.Controls.Add(this.PanelBackMain);
+            this.PanelMainClassic.Location = new System.Drawing.Point(1, 1);
+            this.PanelMainClassic.Name = "PanelMainClassic";
+            this.PanelMainClassic.Size = new System.Drawing.Size(681, 528);
+            this.PanelMainClassic.TabIndex = 0;
+            this.PanelMainClassic.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PanelMainClassic_MouseDown);
+            this.PanelMainClassic.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PanelMainClassic_MouseMove);
+            this.PanelMainClassic.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PanelMainClassic_MouseUp);
             // 
-            // panel3
+            // PanelBackButton
             // 
-            this.panel3.BackColor = System.Drawing.Color.DodgerBlue;
-            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel3.Controls.Add(this.panel6);
-            this.panel3.Location = new System.Drawing.Point(11, 11);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(659, 54);
-            this.panel3.TabIndex = 26;
+            this.PanelBackButton.BackColor = System.Drawing.Color.DodgerBlue;
+            this.PanelBackButton.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelBackButton.Controls.Add(this.PanelButton);
+            this.PanelBackButton.Location = new System.Drawing.Point(11, 11);
+            this.PanelBackButton.Name = "PanelBackButton";
+            this.PanelBackButton.Size = new System.Drawing.Size(659, 54);
+            this.PanelBackButton.TabIndex = 26;
             // 
-            // panel6
+            // PanelButton
             // 
-            this.panel6.BackColor = System.Drawing.Color.Black;
-            this.panel6.Controls.Add(this.ButtonUnk2);
-            this.panel6.Controls.Add(this.ButtonExit);
-            this.panel6.Controls.Add(this.ButtonAdd);
-            this.panel6.Controls.Add(this.ButtonSetting);
-            this.panel6.Controls.Add(this.ButtonList);
-            this.panel6.Controls.Add(this.ButtonHide);
-            this.panel6.Controls.Add(this.ButtonMsg);
-            this.panel6.Controls.Add(this.ButtonUnk);
-            this.panel6.Location = new System.Drawing.Point(1, 1);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(655, 50);
-            this.panel6.TabIndex = 0;
+            this.PanelButton.BackColor = System.Drawing.Color.Black;
+            this.PanelButton.Controls.Add(this.ButtonUnk2);
+            this.PanelButton.Controls.Add(this.ButtonExit);
+            this.PanelButton.Controls.Add(this.ButtonAdd);
+            this.PanelButton.Controls.Add(this.ButtonSetting);
+            this.PanelButton.Controls.Add(this.ButtonList);
+            this.PanelButton.Controls.Add(this.ButtonHide);
+            this.PanelButton.Controls.Add(this.ButtonMsg);
+            this.PanelButton.Controls.Add(this.ButtonUnk);
+            this.PanelButton.Location = new System.Drawing.Point(1, 1);
+            this.PanelButton.Name = "PanelButton";
+            this.PanelButton.Size = new System.Drawing.Size(655, 50);
+            this.PanelButton.TabIndex = 0;
+            this.PanelButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PanelButton_MouseDown);
+            this.PanelButton.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PanelButton_MouseMove);
+            this.PanelButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PanelButton_MouseUp);
             // 
             // ButtonUnk2
             // 
@@ -225,24 +231,27 @@
             this.ButtonUnk.Enter += new System.EventHandler(this.ButtonUnk_Enter);
             this.ButtonUnk.Leave += new System.EventHandler(this.ButtonUnk_Leave);
             // 
-            // panel2
+            // PanelBackInfoBar
             // 
-            this.panel2.BackColor = System.Drawing.Color.DodgerBlue;
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.panel7);
-            this.panel2.Location = new System.Drawing.Point(11, 478);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(660, 39);
-            this.panel2.TabIndex = 25;
+            this.PanelBackInfoBar.BackColor = System.Drawing.Color.DodgerBlue;
+            this.PanelBackInfoBar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelBackInfoBar.Controls.Add(this.PanelInfoBar);
+            this.PanelBackInfoBar.Location = new System.Drawing.Point(11, 478);
+            this.PanelBackInfoBar.Name = "PanelBackInfoBar";
+            this.PanelBackInfoBar.Size = new System.Drawing.Size(660, 39);
+            this.PanelBackInfoBar.TabIndex = 25;
             // 
-            // panel7
+            // PanelInfoBar
             // 
-            this.panel7.BackColor = System.Drawing.Color.Black;
-            this.panel7.Controls.Add(this.LabelUserName);
-            this.panel7.Location = new System.Drawing.Point(1, 1);
-            this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(656, 35);
-            this.panel7.TabIndex = 0;
+            this.PanelInfoBar.BackColor = System.Drawing.Color.Black;
+            this.PanelInfoBar.Controls.Add(this.LabelUserName);
+            this.PanelInfoBar.Location = new System.Drawing.Point(1, 1);
+            this.PanelInfoBar.Name = "PanelInfoBar";
+            this.PanelInfoBar.Size = new System.Drawing.Size(656, 35);
+            this.PanelInfoBar.TabIndex = 0;
+            this.PanelInfoBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PanelInfoBar_MouseDown);
+            this.PanelInfoBar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PanelInfoBar_MouseMove);
+            this.PanelInfoBar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PanelInfoBar_MouseUp);
             // 
             // LabelUserName
             // 
@@ -255,16 +264,19 @@
             this.LabelUserName.Size = new System.Drawing.Size(112, 19);
             this.LabelUserName.TabIndex = 0;
             this.LabelUserName.Text = "Пользователь:  ";
+            this.LabelUserName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LabelUserName_MouseDown);
+            this.LabelUserName.MouseMove += new System.Windows.Forms.MouseEventHandler(this.LabelUserName_MouseMove);
+            this.LabelUserName.MouseUp += new System.Windows.Forms.MouseEventHandler(this.LabelUserName_MouseUp);
             // 
-            // panel4
+            // PanelBackMain
             // 
-            this.panel4.BackColor = System.Drawing.Color.DodgerBlue;
-            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel4.Controls.Add(this.PanelMainBlock);
-            this.panel4.Location = new System.Drawing.Point(11, 73);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(660, 392);
-            this.panel4.TabIndex = 24;
+            this.PanelBackMain.BackColor = System.Drawing.Color.DodgerBlue;
+            this.PanelBackMain.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelBackMain.Controls.Add(this.PanelMainBlock);
+            this.PanelBackMain.Location = new System.Drawing.Point(11, 73);
+            this.PanelBackMain.Name = "PanelBackMain";
+            this.PanelBackMain.Size = new System.Drawing.Size(660, 392);
+            this.PanelBackMain.TabIndex = 24;
             // 
             // PanelMainBlock
             // 
@@ -274,6 +286,9 @@
             this.PanelMainBlock.Name = "PanelMainBlock";
             this.PanelMainBlock.Size = new System.Drawing.Size(656, 388);
             this.PanelMainBlock.TabIndex = 0;
+            this.PanelMainBlock.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PanelMainBlock_MouseDown);
+            this.PanelMainBlock.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PanelMainBlock_MouseMove);
+            this.PanelMainBlock.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PanelMainBlock_MouseUp);
             // 
             // PanelAddBg
             // 
@@ -469,20 +484,20 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DodgerBlue;
             this.ClientSize = new System.Drawing.Size(684, 530);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.PanelMainClassic);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainFormClassic";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Shown += new System.EventHandler(this.MainFormClassic_Shown);
-            this.panel1.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel6.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            this.panel7.ResumeLayout(false);
-            this.panel7.PerformLayout();
-            this.panel4.ResumeLayout(false);
+            this.PanelMainClassic.ResumeLayout(false);
+            this.PanelBackButton.ResumeLayout(false);
+            this.PanelButton.ResumeLayout(false);
+            this.PanelBackInfoBar.ResumeLayout(false);
+            this.PanelInfoBar.ResumeLayout(false);
+            this.PanelInfoBar.PerformLayout();
+            this.PanelBackMain.ResumeLayout(false);
             this.PanelMainBlock.ResumeLayout(false);
             this.PanelAddBg.ResumeLayout(false);
             this.PanelAddTask.ResumeLayout(false);
@@ -493,12 +508,12 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Panel PanelMainClassic;
+        private System.Windows.Forms.Panel PanelBackButton;
+        private System.Windows.Forms.Panel PanelBackInfoBar;
+        private System.Windows.Forms.Panel PanelBackMain;
         private System.Windows.Forms.Panel PanelMainBlock;
-        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Panel PanelButton;
         private System.Windows.Forms.Button ButtonExit;
         private System.Windows.Forms.Button ButtonAdd;
         private System.Windows.Forms.Button ButtonSetting;
@@ -506,7 +521,7 @@
         private System.Windows.Forms.Button ButtonHide;
         private System.Windows.Forms.Button ButtonMsg;
         private System.Windows.Forms.Button ButtonUnk;
-        private System.Windows.Forms.Panel panel7;
+        private System.Windows.Forms.Panel PanelInfoBar;
         public System.Windows.Forms.Label LabelUserName;
         private System.Windows.Forms.Button ButtonUnk2;
         public System.Windows.Forms.Panel PanelAddBg;

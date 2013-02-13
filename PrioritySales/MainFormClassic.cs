@@ -21,7 +21,9 @@ namespace PrioritySales
         private bool nonNumberEntered = false;
         private int pricelistId = 1;
 
-        //TODO FORM MOVE 
+        public int xOffset, yOffset;
+        public bool isMouseDown = false;
+        private Point mouseOffset;
 
         // ForeColor for all button block start
 
@@ -469,5 +471,97 @@ namespace PrioritySales
                     break;
             }
         }
+
+
+        //
+        // MainForm MOVE BlockStart
+        //
+        private void form_MouseUp()
+        {
+            isMouseDown = false;
+        }
+        private void form_MouseDown(MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                xOffset = -e.X - SystemInformation.FrameBorderSize.Width;
+                yOffset = -e.Y - SystemInformation.FrameBorderSize.Height;
+                mouseOffset = new Point(xOffset, yOffset);
+                isMouseDown = true;
+            }
+        }
+        private void form_move(MouseEventArgs e, int xa, int ya)
+        {
+
+            if (isMouseDown)
+            {
+                Point mousePos = Control.MousePosition;
+                mousePos.Offset(mouseOffset.X - xa, mouseOffset.Y - ya);
+                Location = mousePos;
+            }
+        }
+        private void PanelMainClassic_MouseDown(object sender, MouseEventArgs e)
+        {
+            form_MouseDown(e);
+        }
+        private void PanelMainClassic_MouseMove(object sender, MouseEventArgs e)
+        {
+            form_move(e, 0, 0);
+        }
+        private void PanelMainClassic_MouseUp(object sender, MouseEventArgs e)
+        {
+            form_MouseUp();
+        }
+        private void PanelButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            form_MouseDown(e);
+        }
+        private void PanelButton_MouseMove(object sender, MouseEventArgs e)
+        {
+            form_move(e, PanelButton.Location.X + PanelBackButton.Location.X, PanelButton.Location.Y + PanelBackButton.Location.Y);
+        }
+        private void PanelButton_MouseUp(object sender, MouseEventArgs e)
+        {
+            form_MouseUp();
+        }
+        private void PanelMainBlock_MouseDown(object sender, MouseEventArgs e)
+        {
+            form_MouseDown(e);
+        }
+        private void PanelMainBlock_MouseMove(object sender, MouseEventArgs e)
+        {
+            form_move(e, PanelMainBlock.Location.X + PanelBackMain.Location.X, PanelMainBlock.Location.Y + PanelBackMain.Location.Y);
+        }
+        private void PanelMainBlock_MouseUp(object sender, MouseEventArgs e)
+        {
+            form_MouseUp();
+        }
+        private void PanelInfoBar_MouseDown(object sender, MouseEventArgs e)
+        {
+            form_MouseDown(e);
+        }
+        private void PanelInfoBar_MouseMove(object sender, MouseEventArgs e)
+        {
+            form_move(e, PanelInfoBar.Location.X + PanelBackInfoBar.Location.X, PanelInfoBar.Location.Y + PanelBackInfoBar.Location.Y);
+        }
+        private void PanelInfoBar_MouseUp(object sender, MouseEventArgs e)
+        {
+            form_MouseUp();
+        }
+        private void LabelUserName_MouseDown(object sender, MouseEventArgs e)
+        {
+            form_MouseDown(e);
+        }
+        private void LabelUserName_MouseMove(object sender, MouseEventArgs e)
+        {
+            form_move(e, PanelInfoBar.Location.X + PanelBackInfoBar.Location.X + LabelUserName.Location.X, PanelInfoBar.Location.Y + PanelBackInfoBar.Location.Y + LabelUserName.Location.Y);
+        }
+        private void LabelUserName_MouseUp(object sender, MouseEventArgs e)
+        {
+            form_MouseUp();
+        }
+        //
+        // MainForm MOVE BlockEnd
+        //
     }
 }
