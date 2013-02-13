@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckSail.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="Dbf.cs" />
