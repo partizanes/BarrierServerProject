@@ -16,6 +16,8 @@ namespace PrioritySales
         public  MainFormClassic()
         {
             InitializeComponent();
+
+            dateTimePicker1.CustomFormat = "dd-MM-yyyy HH:mm:ss";
         }
 
         private bool nonNumberEntered = false;
@@ -386,7 +388,7 @@ namespace PrioritySales
 
                     datetime = Convert.ToDateTime(dateTimePicker1.Text);
 
-                    Server.Sender("PrioritySale", 5, TextboxAddBar.Text + ":" + TextboxCountAdd.Text + ":" + TextboxPrice.Text + ":" + datetime.ToShortDateString() + ":" + DateTime.Now.ToLongTimeString().Replace(":","."));
+                    Server.Sender("PrioritySale", 5, TextboxAddBar.Text + ":" + TextboxCountAdd.Text + ":" + TextboxPrice.Text + ":" + datetime.ToShortDateString() + ":" + datetime.ToLongTimeString().Replace(":", "."));
                 }
             }); ;
             thh.Name = "Авторизация";
