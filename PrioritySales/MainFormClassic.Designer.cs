@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFormClassic));
             this.PanelMainClassic = new System.Windows.Forms.Panel();
             this.PanelBackButton = new System.Windows.Forms.Panel();
@@ -61,6 +62,14 @@
             this.TextboxCountAdd = new System.Windows.Forms.TextBox();
             this.TextboxNameItem = new System.Windows.Forms.TextBox();
             this.TextboxAddBar = new System.Windows.Forms.TextBox();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Barcode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NameItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CountStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DateCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Action = new System.Windows.Forms.DataGridViewButtonColumn();
             this.TimerClearMsg = new System.Windows.Forms.Timer(this.components);
             this.PanelMainClassic.SuspendLayout();
             this.PanelBackButton.SuspendLayout();
@@ -71,6 +80,7 @@
             this.PanelMainBlock.SuspendLayout();
             this.PanelAddBg.SuspendLayout();
             this.PanelAddTask.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // PanelMainClassic
@@ -186,6 +196,7 @@
             this.ButtonList.TabIndex = 2;
             this.ButtonList.Text = "Список";
             this.ButtonList.UseVisualStyleBackColor = false;
+            this.ButtonList.Click += new System.EventHandler(this.ButtonList_Click);
             this.ButtonList.Enter += new System.EventHandler(this.ButtonList_Enter);
             this.ButtonList.Leave += new System.EventHandler(this.ButtonList_Leave);
             // 
@@ -282,6 +293,7 @@
             // 
             this.PanelMainBlock.BackColor = System.Drawing.Color.Black;
             this.PanelMainBlock.Controls.Add(this.PanelAddBg);
+            this.PanelMainBlock.Controls.Add(this.dataGridView1);
             this.PanelMainBlock.Location = new System.Drawing.Point(1, 1);
             this.PanelMainBlock.Name = "PanelMainBlock";
             this.PanelMainBlock.Size = new System.Drawing.Size(656, 388);
@@ -294,7 +306,7 @@
             // 
             this.PanelAddBg.BackColor = System.Drawing.Color.DodgerBlue;
             this.PanelAddBg.Controls.Add(this.PanelAddTask);
-            this.PanelAddBg.Location = new System.Drawing.Point(77, 40);
+            this.PanelAddBg.Location = new System.Drawing.Point(640, 362);
             this.PanelAddBg.Name = "PanelAddBg";
             this.PanelAddBg.Size = new System.Drawing.Size(517, 311);
             this.PanelAddBg.TabIndex = 6;
@@ -474,6 +486,104 @@
             this.TextboxAddBar.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextboxAddBar_KeyPress);
             this.TextboxAddBar.Leave += new System.EventHandler(this.TextboxAddBar_Leave);
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToResizeColumns = false;
+            this.dataGridView1.AllowUserToResizeRows = false;
+            this.dataGridView1.BackgroundColor = System.Drawing.Color.Black;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Barcode,
+            this.NameItem,
+            this.CountStart,
+            this.Count,
+            this.Status,
+            this.DateCol,
+            this.Action});
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.DodgerBlue;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.DodgerBlue;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridView1.EnableHeadersVisualStyles = false;
+            this.dataGridView1.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.dataGridView1.Location = new System.Drawing.Point(1, 1);
+            this.dataGridView1.MultiSelect = false;
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView1.Size = new System.Drawing.Size(653, 384);
+            this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.TabStop = false;
+            this.dataGridView1.Visible = false;
+            // 
+            // Barcode
+            // 
+            this.Barcode.Frozen = true;
+            this.Barcode.HeaderText = "Штрихкод";
+            this.Barcode.Name = "Barcode";
+            this.Barcode.ReadOnly = true;
+            // 
+            // NameItem
+            // 
+            this.NameItem.Frozen = true;
+            this.NameItem.HeaderText = "Наименование";
+            this.NameItem.Name = "NameItem";
+            this.NameItem.ReadOnly = true;
+            this.NameItem.Width = 200;
+            // 
+            // CountStart
+            // 
+            this.CountStart.Frozen = true;
+            this.CountStart.HeaderText = "Количество";
+            this.CountStart.Name = "CountStart";
+            this.CountStart.ReadOnly = true;
+            this.CountStart.Width = 70;
+            // 
+            // Count
+            // 
+            this.Count.Frozen = true;
+            this.Count.HeaderText = "Остаток";
+            this.Count.Name = "Count";
+            this.Count.ReadOnly = true;
+            this.Count.Width = 65;
+            // 
+            // Status
+            // 
+            this.Status.Frozen = true;
+            this.Status.HeaderText = "Статус";
+            this.Status.Name = "Status";
+            this.Status.ReadOnly = true;
+            this.Status.Width = 65;
+            // 
+            // DateCol
+            // 
+            this.DateCol.Frozen = true;
+            this.DateCol.HeaderText = "Дата";
+            this.DateCol.Name = "DateCol";
+            this.DateCol.ReadOnly = true;
+            this.DateCol.Width = 70;
+            // 
+            // Action
+            // 
+            this.Action.Frozen = true;
+            this.Action.HeaderText = "Действие";
+            this.Action.Name = "Action";
+            this.Action.ReadOnly = true;
+            this.Action.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Action.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Action.Width = 80;
+            // 
             // TimerClearMsg
             // 
             this.TimerClearMsg.Interval = 3000;
@@ -503,6 +613,7 @@
             this.PanelAddBg.ResumeLayout(false);
             this.PanelAddTask.ResumeLayout(false);
             this.PanelAddTask.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -541,6 +652,14 @@
         public System.Windows.Forms.TextBox TextboxCountAdd;
         public System.Windows.Forms.TextBox TextboxAddBar;
         public System.Windows.Forms.TextBox TextboxPrice;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Barcode;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NameItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CountStart;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Count;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Status;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DateCol;
+        private System.Windows.Forms.DataGridViewButtonColumn Action;
 
 
 

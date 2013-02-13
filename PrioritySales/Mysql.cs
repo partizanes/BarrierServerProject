@@ -53,8 +53,12 @@ namespace PrioritySales
                 //TODO User msg about this
                 Log.log_write("Сервер Mysql не ответил вовремя,будет произведена попытка переподключения \n Текст исключения: " + ex.Message, "Exception", "Mysql_Exception_Timeout");
 
-                while(serverConn.State != ConnectionState.Open)
-                    serverConn.Open();
+                try
+                {
+                    while (serverConn.State != ConnectionState.Open)
+                        serverConn.Open();
+                }
+                catch { }
 
                 if(serverConn.State == ConnectionState.Open)
                     cmd.ExecuteNonQuery();
@@ -123,10 +127,14 @@ namespace PrioritySales
             catch (TimeoutException ex)
             {
                 //TODO User msg about this
+                //CHECK THIS EXCEPTION XP
                 Log.log_write("Сервер Mysql не ответил вовремя,будет произведена попытка переподключения \n Текст исключения: " + ex.Message, "Exception", "Mysql_Exception_Timeout");
-
-                while (serverConn.State != ConnectionState.Open)
-                    serverConn.Open();
+                try
+                {
+                    while (serverConn.State != ConnectionState.Open)
+                        serverConn.Open();
+                }
+                catch { }
 
                 if (serverConn.State == ConnectionState.Open)
                     reader = cmd.ExecuteReader();

@@ -183,38 +183,8 @@ namespace PrioritySales
                             return;
                         }
 
-                        Mysql mysql = new Mysql();
+                        getname();
 
-                        MySql.Data.MySqlClient.MySqlDataReader dr = mysql.ExecuteReader("SELECT a.name, b.price \n" +
-                            "FROM trm_in_var C \n" +
-                            "LEFT JOIN trm_in_items A ON A.id=C.item \n" +
-                            "LEFT JOIN trm_in_pricelist_items B ON B.item=c.item \n" +
-                            "WHERE a.id='" + TextboxAddBar.Text + "'\n" +
-                            " AND (b.pricelist_id=" + pricelistId + ")");
-
-                        if (dr == null)
-                        {
-                            DeclineErr(true, "                             Запрос ничего не вернул,повторите попытку!");
-                                return;
-                        }
-
-                        if (!dr.HasRows)
-                        {
-                            DeclineErr(true, "                                          Штрихкод не найден в базе!");
-                            TextboxAddBar.Text = "";
-                            TextboxAddBar.Focus();
-                                return;
-                        }
-
-                        if (dr.Read())
-                        {
-                            TextboxNameItem.Text = dr.GetString(0);
-                            string[] split_data = dr.GetString(1).Split(new Char[] { ',' });
-                            TextboxPrice.Text = Convert.ToInt32(split_data[0]).ToString();
-                        }
-
-
-                        TextboxCountAdd.Focus();
                         return;
                     }
             }
@@ -225,13 +195,46 @@ namespace PrioritySales
                 {
                     if (e.KeyCode != Keys.Back)
                     {
-                        nonNumberEntered = true;
+                        if (Control.ModifierKeys != Keys.Control)
+                            nonNumberEntered = true;
                     }
                 }
             }
 
             if (Control.ModifierKeys == Keys.Shift)
                 nonNumberEntered = true;
+
+            if (Control.ModifierKeys == Keys.Control)
+            {
+                if (e.KeyCode == Keys.V)
+                {
+                    nonNumberEntered = false;
+                    TextboxAddBar.Text = Clipboard.GetText();
+
+                    if (TextboxAddBar.Text.Length == 12)
+                    {
+                        getname();
+                    }
+                }
+
+                if (e.KeyCode == Keys.X)
+                {
+                    nonNumberEntered = false;
+                }
+
+                if (e.KeyCode == Keys.C)
+                {
+                    nonNumberEntered = false;
+                }
+
+                if (e.KeyCode == Keys.A)
+                {
+                    nonNumberEntered = false;
+                    TextboxAddBar.SelectAll();
+                }
+
+                return;
+            }
 
             if (nonNumberEntered)
             {
@@ -245,6 +248,45 @@ namespace PrioritySales
         //END TextboxBarAction
 
         //START DateTimeAction
+
+        private void getname()
+        {
+            Mysql mysql = new Mysql();
+
+            MySql.Data.MySqlClient.MySqlDataReader dr = mysql.ExecuteReader("SELECT a.name, b.price \n" +
+                "FROM trm_in_var C \n" +
+                "LEFT JOIN trm_in_items A ON A.id=C.item \n" +
+                "LEFT JOIN trm_in_pricelist_items B ON B.item=c.item \n" +
+                "WHERE a.id='" + TextboxAddBar.Text + "'\n" +
+                " AND (b.pricelist_id=" + pricelistId + ")");
+
+            if (dr == null)
+            {
+                DeclineErr(true, "                             Запрос ничего не вернул,повторите попытку!");
+                return;
+            }
+
+            if (!dr.HasRows)
+            {
+                DeclineErr(true, "                                             Штрихкод не найден в базе!");
+                TextboxAddBar.Text = "";
+                TextboxCountAdd.Text = "";
+                TextboxNameItem.Text = "";
+                TextboxPrice.Text = "";
+                TextboxAddBar.Focus();
+                return;
+            }
+
+            if (dr.Read())
+            {
+                TextboxNameItem.Text = dr.GetString(0);
+                string[] split_data = dr.GetString(1).Split(new Char[] { ',' });
+                TextboxPrice.Text = Convert.ToInt32(split_data[0]).ToString();
+            }
+
+
+            TextboxCountAdd.Focus();
+        }
 
         private void dateTimePicker1_Enter(object sender, EventArgs e)
         {
@@ -565,5 +607,19 @@ namespace PrioritySales
         //
         // MainForm MOVE BlockEnd
         //
+
+        private void ButtonList_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.Visible == false)
+            {
+                dataGridView1.Visible = true;
+                dataGridView1.Rows.Add("4811702000108", "1", "2", "3", "4", "5");
+            }
+            else
+            {
+                dataGridView1.Visible = false;
+                dataGridView1.Rows.Clear();
+            }
+        }
     }
 }
