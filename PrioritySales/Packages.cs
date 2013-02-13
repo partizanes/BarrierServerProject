@@ -13,7 +13,7 @@ namespace PrioritySales
 {
     class Packages
     {
-        static MainFormClassic mf = new MainFormClassic();
+        public static MainFormClassic mf = new MainFormClassic();
 
         public static void parse(string p_id, int com, string msg)
         {
