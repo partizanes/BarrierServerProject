@@ -16,7 +16,6 @@ namespace LsTradeAgent
             switch (p_id)
             {
                 case "LS":
-
                     switch (com)
                     {
                         case 0:
@@ -27,6 +26,14 @@ namespace LsTradeAgent
                         case 2:
                             break;
                         case 3:
+                            break;
+                    }
+                    break;
+                case "DR":
+                    switch (com)
+                    {
+                        case 0:
+                            Color.WriteLineColor("Принято: " + msg, "Yellow");
                             break;
                     }
                     break;

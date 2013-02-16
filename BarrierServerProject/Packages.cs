@@ -36,6 +36,15 @@ namespace BarrierServerProject
                             Server.clients[r_client] = p_id;
                             Color.WriteLineColor("Модуль связи с LsTrade загружен!","Cyan");
                             Msg.SendUser("LsTradeAgent", "LS", 1, "Идентификация пройдена.");
+
+                            //check thread work
+                            Thread th = new Thread(delegate()
+                                {
+                                    CheckSail.StartCheck();
+                                });
+                                th.Name = "Проверка очередности";
+                                th.Start();
+
                                 break;
                     }
                     break;

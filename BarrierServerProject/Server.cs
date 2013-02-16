@@ -43,14 +43,6 @@ namespace BarrierServerProject
             thd.Name = "Слушает порт";
             thd.Start();
             threads.Add(thd);
-
-            Thread th = new Thread(delegate()
-            {
-                CheckSail.StartCheck();
-            });
-            th.Name = "Проверка очередности";
-            th.Start();
-            threads.Add(th);
         }
 
         private static void SocketAccepter()
