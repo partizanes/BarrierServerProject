@@ -20,6 +20,25 @@ namespace BarrierServerProject
         {
             switch (p_id)
             {
+                case "LsTradeAgent":
+                    switch (com)
+                    {
+                        case 0:
+                            Color.WriteLineColor(msg, "DarkBlue");
+                            Color.WriteLineColor("Модуль связи с LsTrade отключен!", "Red");
+                            Thread.Sleep(3000);
+                            r_client.Disconnect(false);
+                            r_client.Close();
+                            Server.clients.Remove(r_client);
+                            break;
+                        case 1:
+                            user.userid = 2;
+                            Server.clients[r_client] = p_id;
+                            Color.WriteLineColor("Модуль связи с LsTrade загружен!","Cyan");
+                            Msg.SendUser("LsTradeAgent", "LS", 1, "Идентификация пройдена.");
+                                break;
+                    }
+                    break;
                 case "PrioritySale":
 
                     user.userid = 0;

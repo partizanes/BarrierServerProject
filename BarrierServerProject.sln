@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReceveAndSend", "ReceveAndS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serialization", "Serialization\Serialization.csproj", "{BE889D41-D30F-4FDB-8638-B0DBD7E66C11}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LsTradeAgent", "LsTradeAgent\LsTradeAgent.csproj", "{DB76B15D-1D8A-45F7-9EEB-68ECEE40CCEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,16 @@ Global
 		{BE889D41-D30F-4FDB-8638-B0DBD7E66C11}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{BE889D41-D30F-4FDB-8638-B0DBD7E66C11}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{BE889D41-D30F-4FDB-8638-B0DBD7E66C11}.Release|x86.ActiveCfg = Release|Any CPU
+		{DB76B15D-1D8A-45F7-9EEB-68ECEE40CCEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB76B15D-1D8A-45F7-9EEB-68ECEE40CCEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB76B15D-1D8A-45F7-9EEB-68ECEE40CCEE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DB76B15D-1D8A-45F7-9EEB-68ECEE40CCEE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DB76B15D-1D8A-45F7-9EEB-68ECEE40CCEE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DB76B15D-1D8A-45F7-9EEB-68ECEE40CCEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB76B15D-1D8A-45F7-9EEB-68ECEE40CCEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB76B15D-1D8A-45F7-9EEB-68ECEE40CCEE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DB76B15D-1D8A-45F7-9EEB-68ECEE40CCEE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DB76B15D-1D8A-45F7-9EEB-68ECEE40CCEE}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
