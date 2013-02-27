@@ -36,6 +36,9 @@
   <PropertyGroup>
     <ApplicationIcon>blue-mail-send.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NewRelease|x86'">
+    <OutputPath>bin\x86\NewRelease\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AxInterop.ForCasLib">
       <HintPath>..\BalanceModule\AxInterop.ForCasLib.dll</HintPath>

@@ -46,6 +46,9 @@ namespace BarrierServerProject
                                 th.Start();
 
                                 break;
+                        case 8:
+                                CheckSail.CheckSend = true;
+                                break;
                     }
                     break;
                 case "PrioritySale":

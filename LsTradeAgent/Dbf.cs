@@ -8,7 +8,6 @@ namespace LsTradeAgent
 {
     class Dbf
     {
-
         static string LsTradeDir = Config.GetParametr("LsTradeDir");
 
         public static OleDbDataReader dbf_read(string str)
@@ -50,11 +49,9 @@ namespace LsTradeAgent
             }
             finally
             {
-               // conn.Close();
-
-                if (isExecuting)
+                if (isExecuting && Program.Debug)
                 {
-                    Color.WriteLineColor("Запрос завершен успешно!", ConsoleColor.Cyan);
+                    Color.WriteLineColor("[DEBUG] Запрос завершен успешно!", ConsoleColor.Cyan);
                 }
             }
         }

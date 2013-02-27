@@ -68,6 +68,9 @@
     <StartupObject>
     </StartupObject>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NewRelease|x86'">
+    <OutputPath>bin\x86\NewRelease\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AxInterop.ForCasLib">
       <HintPath>.\AxInterop.ForCasLib.dll</HintPath>

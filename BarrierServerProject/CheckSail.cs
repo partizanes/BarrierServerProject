@@ -12,6 +12,8 @@ namespace BarrierServerProject
 {
     public static class CheckSail
     {
+        public static bool CheckSend = false;
+
         public static void StartCheck()
         {
             while(!File.Exists(Environment.CurrentDirectory + "\\data\\" + "balance.dbf"))
@@ -45,11 +47,16 @@ namespace BarrierServerProject
                     object count = dr.GetValue(2);
                     DateTime date = Convert.ToDateTime((dr.GetDateTime(3).ToString().Replace(" 0:00:00", "") + " " + dr.GetString(4).Replace(".", ":")));
 
-                    Console.WriteLine(bar + ";" + price + ";" + count + ";" + date);
+                    Color.WriteLineColor("[DEBUG] " + bar + ";" + price + ";" + count + ";" + date,ConsoleColor.Gray);
 
                     Msg.SendUser("LsTradeAgent", "DR", 0, bar + ";" + price + ";" + count + ";" + date);
 
-                    Thread.Sleep(5000);
+                    while (!CheckSend)
+                    {
+                        Thread.Sleep(500);
+                    }
+
+                    CheckSend = false;
                 }
             }
         }

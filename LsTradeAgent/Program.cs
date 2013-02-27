@@ -9,6 +9,8 @@ namespace LsTradeAgent
 {
     class Program
     {
+        public static Boolean Debug = Convert.ToBoolean(Config.GetParametr("Debug"));
+
         static void Main(string[] args)
         {
             if (System.Diagnostics.Process.GetProcessesByName(Application.ProductName).Length > 1)
