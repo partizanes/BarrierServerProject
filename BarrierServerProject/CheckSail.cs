@@ -49,7 +49,7 @@ namespace BarrierServerProject
 
                     Msg.SendUser("LsTradeAgent", "DR", 0, bar + ";" + price + ";" + count + ";" + date);
 
-                    Thread.Sleep(100);
+                    Thread.Sleep(5000);
                 }
             }
         }
