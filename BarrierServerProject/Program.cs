@@ -20,11 +20,11 @@ namespace BarrierServerProject
         {
             if (System.Diagnostics.Process.GetProcessesByName(Application.ProductName).Length > 1)
             {
-                Color.WriteLineColor("\n", "Red");
-                Color.WriteLineColor("Приложение уже запущено!", "Red");
-                Color.WriteLineColor("\n", "Red");
-                Color.WriteLineColor("Запускаю завершение работы...", "Red");
-                Color.WriteLineColor("\n", "Red");
+                Color.WriteLineColor("\n", ConsoleColor.Red);
+                Color.WriteLineColor("Приложение уже запущено!", ConsoleColor.Red);
+                Color.WriteLineColor("\n", ConsoleColor.Red);
+                Color.WriteLineColor("Запускаю завершение работы...", ConsoleColor.Red);
+                Color.WriteLineColor("\n", ConsoleColor.Red);
 
                 another_run();
             }
@@ -45,11 +45,11 @@ namespace BarrierServerProject
 
             while (true)
             {
-                Color.WriteLineColor("\nВведите комманду:", "Green");
+                Color.WriteLineColor("\nВведите комманду:", ConsoleColor.Green);
 
                 string com = Console.ReadLine().ToLower();
 
-                Color.WriteLineColor(Command.SwitchCommand(com),"Yellow");
+                Color.WriteLineColor(Command.SwitchCommand(com), ConsoleColor.Yellow);
             }
         }
         public static void another_run()

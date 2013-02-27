@@ -21,7 +21,7 @@ namespace LsTradeAgent
                         case 0:
                             break;
                         case 1:
-                            Color.WriteLineColor(msg, "Cyan");
+                            Color.WriteLineColor(msg, ConsoleColor.Cyan);
                             break;
                         case 2:
                             break;
@@ -33,7 +33,7 @@ namespace LsTradeAgent
                     switch (com)
                     {
                         case 0:
-                            Color.WriteLineColor("Принято: " + msg, "Yellow");
+                            Color.WriteLineColor("Принято: " + msg, ConsoleColor.Yellow);
                             break;
                     }
                     break;

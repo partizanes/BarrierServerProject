@@ -24,8 +24,8 @@ namespace BarrierServerProject
                     switch (com)
                     {
                         case 0:
-                            Color.WriteLineColor(msg, "DarkBlue");
-                            Color.WriteLineColor("Модуль связи с LsTrade отключен!", "Red");
+                            Color.WriteLineColor(msg, ConsoleColor.DarkBlue);
+                            Color.WriteLineColor("Модуль связи с LsTrade отключен!", ConsoleColor.Red);
                             Thread.Sleep(3000);
                             r_client.Disconnect(false);
                             r_client.Close();
@@ -34,7 +34,7 @@ namespace BarrierServerProject
                         case 1:
                             user.userid = 2;
                             Server.clients[r_client] = p_id;
-                            Color.WriteLineColor("Модуль связи с LsTrade загружен!","Cyan");
+                            Color.WriteLineColor("Модуль связи с LsTrade загружен!",ConsoleColor.Cyan);
                             Msg.SendUser("LsTradeAgent", "LS", 1, "Идентификация пройдена.");
 
                             //check thread work
@@ -67,7 +67,7 @@ namespace BarrierServerProject
                             if (dr.Read())
                             {
                                 Server.clients[r_client] = split_data[0];
-                                Color.WriteLineColor(split_data[0] + " Добавлен!", "Cyan");
+                                Color.WriteLineColor(split_data[0] + " Добавлен!", ConsoleColor.Cyan);
                                 Msg.SendUser(split_data[0], "PrioritySale", 1, split_data[0]);
                                 user.username = split_data[0];
                             }
@@ -75,12 +75,12 @@ namespace BarrierServerProject
                             {
                                 Server.clients[r_client] = split_data[0];
                                 Msg.SendUser(split_data[0], "PrioritySale", 0, "Идентификация не пройдена.");
-                                Color.WriteLineColor(split_data[0] +" авторизация неудачна", "Red");
+                                Color.WriteLineColor(split_data[0] +" авторизация неудачна", ConsoleColor.Red);
                             }
 
                             using (MD5 md5Hash = MD5.Create())
                             {
-                                Color.WriteLineColor(split_data[0] + " " + split_data[1], "Red");
+                                Color.WriteLineColor(split_data[0] + " " + split_data[1], ConsoleColor.Red);
                                 break;
                             }
 
@@ -99,12 +99,12 @@ namespace BarrierServerProject
 
                             if (dbf.ExecuteNonQuery("INSERT INTO balance.dbf (barcode,price,count,date,time) VALUES ('" + bar + "'," + price + "," + count + ",{^" + datetime.ToString("yyyy-MM-dd") + "},'" + time + "')"))
                             {
-                                Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.", "Green");
+                                Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.", ConsoleColor.Green);
                                 Msg.SendUser(user.username, "PrioritySale", 2, "                Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.");
                             }
                             else
                             {
-                                Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + count + " Отклонён!", "Red");
+                                Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + count + " Отклонён!", ConsoleColor.Red);
                                 Msg.SendUser(user.username, "PrioritySale", 3, "                                                                     Отклонено!");
                             }
                             break;
@@ -116,18 +116,18 @@ namespace BarrierServerProject
                         case 0:
                             user.userid = 1;
                             Server.clients[r_client] = "BalanceModule";
-                            Color.WriteLineColor("Модуль проверки весов загружен!","Cyan");
+                            Color.WriteLineColor("Модуль проверки весов загружен!",ConsoleColor.Cyan);
                             Msg.SendUser("BalanceModule", "BS", 1, "Идентификация пройдена.");
                                 break;
                         case 1:
-                            Color.WriteLineColor(msg, "Cyan");
+                            Color.WriteLineColor(msg, ConsoleColor.Cyan);
                                 break;
                         case 2:
                                 user.userid = 1;
                                 Server.clients[r_client] = "BalanceModule";
                                 break;
                         case 9:
-                            Color.WriteLineColor("Модуль проверки весов отключен!", "Red");
+                            Color.WriteLineColor("Модуль проверки весов отключен!", ConsoleColor.Red);
                             Thread.Sleep(3000);
                             r_client.Disconnect(false);
                             r_client.Close();
@@ -139,7 +139,7 @@ namespace BarrierServerProject
                     switch (com)
                     {
                         case 0000:
-                            Color.WriteLineColor(Server.clients[r_client] + ": Завершение сеанса.", "Red");
+                            Color.WriteLineColor(Server.clients[r_client] + ": Завершение сеанса.", ConsoleColor.Red);
                             Thread.Sleep(3000);
                             r_client.Disconnect(false);
                             r_client.Close();

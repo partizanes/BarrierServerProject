@@ -34,9 +34,9 @@ namespace LsTradeAgent
 
             if (buffer.ToString() == "null")
             {
-                Color.WriteLineColor("Не заданы параметры подключения сервера.Отсутствует параметр " + par, "Red");
-                Color.WriteLineColor("Установите параметры и запустите приложение снова.", "Red");
-                Color.WriteLineColor("Завершение работы через 10 секунд.\n", "Yellow");
+                Color.WriteLineColor("Не заданы параметры подключения сервера.Отсутствует параметр " + par,  ConsoleColor.Red);
+                Color.WriteLineColor("Установите параметры и запустите приложение снова.",  ConsoleColor.Red);
+                Color.WriteLineColor("Завершение работы через 10 секунд.\n", ConsoleColor.Yellow);
                 Thread.Sleep(10000);
                 Environment.Exit(0);
             }

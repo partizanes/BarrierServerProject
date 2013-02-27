@@ -30,7 +30,7 @@ namespace BarrierServerProject
             {
                 //parse this error and other send to administrator 
                 Log.log_write(ex.Message, "Exception", "exception");
-                Color.WriteLineColor(ex.Message, "Red");
+                Color.WriteLineColor(ex.Message, ConsoleColor.Red);
                 return false;
             }
 

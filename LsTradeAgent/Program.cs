@@ -13,11 +13,11 @@ namespace LsTradeAgent
         {
             if (System.Diagnostics.Process.GetProcessesByName(Application.ProductName).Length > 1)
             {
-                Color.WriteLineColor("\n", "Red");
-                Color.WriteLineColor("Приложение уже запущено!", "Red");
-                Color.WriteLineColor("\n", "Red");
-                Color.WriteLineColor("Завершение работы через 5 секунд..", "Red");
-                Color.WriteLineColor("\n", "Red");
+                Color.WriteLineColor("\n", ConsoleColor.Red);
+                Color.WriteLineColor("Приложение уже запущено!", ConsoleColor.Red);
+                Color.WriteLineColor("\n", ConsoleColor.Red);
+                Color.WriteLineColor("Завершение работы через 5 секунд..", ConsoleColor.Red);
+                Color.WriteLineColor("\n", ConsoleColor.Red);
 
                 Thread.Sleep(5000);
 
@@ -40,11 +40,11 @@ namespace LsTradeAgent
 
                 while (true)
                 {
-                    //Color.WriteLineColor("\nВведите комманду:", "Green");
+                    //Color.WriteLineColor("\nВведите комманду:", ConsoleColor.Green);
                        
                     //string com = Console.ReadLine().ToLower();
 
-                    //Color.WriteLineColor(Command.SwitchCommand(com), "Yellow");
+                    //Color.WriteLineColor(Command.SwitchCommand(com), ConsoleColor.Yellow);
                 }
             }
         }
@@ -58,7 +58,7 @@ namespace LsTradeAgent
         {
             while (!System.IO.File.Exists(Environment.CurrentDirectory + "\\" + "Serialization.dll"))
             {
-                Color.WriteLineColor("[" + DateTime.Now.ToLongTimeString() + "] " + "В папке с программой отсутствует нужная для работы библиотека Serialization.dll \n Скопируйте в папку с программой библиотеку и нажмите ок!","Red");
+                Color.WriteLineColor("[" + DateTime.Now.ToLongTimeString() + "] " + "В папке с программой отсутствует нужная для работы библиотека Serialization.dll \n Скопируйте в папку с программой библиотеку и нажмите ок!",ConsoleColor.Red);
             }
         }
 

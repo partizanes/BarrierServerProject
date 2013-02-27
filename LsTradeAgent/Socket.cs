@@ -22,7 +22,7 @@ namespace LsTradeAgent
             if (server.Connected)
                 return;
 
-            Color.WriteLineColor("Соединение...","Green");
+            Color.WriteLineColor("Соединение...", ConsoleColor.Green);
 
             try
             {
@@ -34,15 +34,15 @@ namespace LsTradeAgent
             {
                 if (exc.ErrorCode == 10061)
                 {
-                    Color.WriteLineColor("Сервер недоступен.","Red");
-                    Color.WriteLineColor("Сервер возможно отключен или недоступен в данный момент времени , уточните параметры сервера в настройках и повторите подключение \n Текст исключения: " + exc.Message, "Red");
+                    Color.WriteLineColor("Сервер недоступен.", ConsoleColor.Red);
+                    Color.WriteLineColor("Сервер возможно отключен или недоступен в данный момент времени , уточните параметры сервера в настройках и повторите подключение \n Текст исключения: " + exc.Message,  ConsoleColor.Red);
                 }
 
                 while (!server.Connected)
                 {
-                    Color.WriteLineColor("Пробую переподключиться...", "Green");
+                    Color.WriteLineColor("Пробую переподключиться...", ConsoleColor.Green);
                     try { server.Connect(ip, port); }
-                    catch { Color.WriteLineColor("Сервер недоступен.", "Red"); }
+                    catch { Color.WriteLineColor("Сервер недоступен.",  ConsoleColor.Red); }
                     Thread.Sleep(3000);
                 }
 
@@ -50,13 +50,13 @@ namespace LsTradeAgent
             }
             catch (System.Exception ex)
             {
-                Color.WriteLineColor("Текст исключения: " + ex.Message,"Red");
+                Color.WriteLineColor("Текст исключения: " + ex.Message, ConsoleColor.Red);
             }
             finally
             {
                 if (server.Connected)
                 {
-                    Color.WriteLineColor("Соединение установлено.", "Green");
+                    Color.WriteLineColor("Соединение установлено.", ConsoleColor.Green);
                     Sender("LsTradeAgent", 1, "hello!");
                 }
             }
@@ -115,7 +115,7 @@ namespace LsTradeAgent
                     }
                     catch (Exception exc)
                     {
-                        Color.WriteLineColor("Текст исключения: " + exc.Message, "Red");
+                        Color.WriteLineColor("Текст исключения: " + exc.Message,  ConsoleColor.Red);
                     }
                 }
             });

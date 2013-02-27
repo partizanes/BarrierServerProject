@@ -16,7 +16,7 @@ namespace BarrierServerProject
         {
             while(!File.Exists(Environment.CurrentDirectory + "\\data\\" + "balance.dbf"))
             {
-                Color.WriteLineColor("Для проверки очередности продаж в папке программы 'data'\n должен находиться файл базы данных balance.dbf.\n\nПовторная проверка наличия файла через 10 секунд!", "REd");
+                Color.WriteLineColor("Для проверки очередности продаж в папке программы 'data'\n должен находиться файл базы данных balance.dbf.\n\nПовторная проверка наличия файла через 10 секунд!", ConsoleColor.Red);
                 Thread.Sleep(10000);
             }
             Thread.Sleep(5000);
@@ -36,7 +36,7 @@ namespace BarrierServerProject
                     return;
 
                 if (!dr.HasRows)
-                    Color.WriteLineColor("База очередности пустая!","Red");
+                    Color.WriteLineColor("База очередности пустая!",ConsoleColor.Red);
 
                 while (dr.Read())
                 {

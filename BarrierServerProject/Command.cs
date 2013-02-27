@@ -20,14 +20,14 @@ namespace BarrierServerProject
                     }
                 case "list":
                     {
-                        Console.WriteLine("======================\n","Cyan");
+                        Console.WriteLine("======================\n", ConsoleColor.Cyan);
 
                         foreach (DictionaryEntry de in Server.clients)
                         {
-                            Console.WriteLine(de.Value.ToString(), "Cyan");
+                            Console.WriteLine(de.Value.ToString(), ConsoleColor.Cyan);
                         }
 
-                        Console.WriteLine("\n======================", "Cyan");
+                        Console.WriteLine("\n======================", ConsoleColor.Cyan);
 
                         return "\nDone.";
                     }
@@ -51,13 +51,13 @@ namespace BarrierServerProject
                             return "Сервер работает!";
                         else
                         {
-                            Color.WriteLineColor("Сервер не работает", "Red");
+                            Color.WriteLineColor("Сервер не работает", ConsoleColor.Red);
                             return "";
                         }
                     }
                 case "user add":
                     {
-                        Color.WriteLineColor("Введите логин пароль", "Yellow");
+                        Color.WriteLineColor("Введите логин пароль", ConsoleColor.Yellow);
                         string line = Console.ReadLine();
                         string[] split_data = line.Replace("\0", "").Split(new Char[] { ' ' });
                         Dbf dbf = new Dbf();
@@ -72,7 +72,7 @@ namespace BarrierServerProject
                     }
                 case "user del":
                     {
-                        Color.WriteLineColor("Введите имя пользователя которого хотите удалить...", "Yellow");
+                        Color.WriteLineColor("Введите имя пользователя которого хотите удалить...", ConsoleColor.Yellow);
 
                         Dbf dbf = new Dbf();
 
@@ -92,7 +92,7 @@ namespace BarrierServerProject
                     {
                         int hour;
 
-                        Color.WriteLineColor("Введите через какое время запусить модуль(в часах)", "Yellow");
+                        Color.WriteLineColor("Введите через какое время запусить модуль(в часах)", ConsoleColor.Yellow);
 
                         if (int.TryParse(Console.ReadLine(), out hour))
                         {
@@ -107,18 +107,18 @@ namespace BarrierServerProject
                 case "help":
                 case "command":
                     {
-                        Color.WriteLineColor("\nauthor            Выводит информацию об авторе\n", "Cyan");
-                        Color.WriteLineColor("logo              Выводит логотип\n", "Cyan");
-                        Color.WriteLineColor("list              Пользователи онлайн\n", "Cyan");
-                        Color.WriteLineColor("version           Выводит версию\n", "Cyan");
-                        Color.WriteLineColor("quit              Аварийно завершает приложение\n", "Cyan");
-                        Color.WriteLineColor("help              Выводит информацию о коммандах\n", "Cyan");
-                        Color.WriteLineColor("status            Выводит статус сервера\n", "Cyan");
-                        Color.WriteLineColor("command           Выводит информацию о коммандах\n", "Cyan");
-                        Color.WriteLineColor("clr               Очищает окно программы\n", "Cyan");
-                        Color.WriteLineColor("bs next start     Устанавливает время запуска проверки весов в часах\n", "Cyan");
-                        Color.WriteLineColor("user add          Добавляет пользователя (логин пароль)\n", "Cyan");
-                        Color.WriteLineColor("user delete       Удаляет пользователя (логин)\n", "Cyan");
+                        Color.WriteLineColor("\nauthor            Выводит информацию об авторе\n", ConsoleColor.Cyan);
+                        Color.WriteLineColor("logo              Выводит логотип\n", ConsoleColor.Cyan);
+                        Color.WriteLineColor("list              Пользователи онлайн\n", ConsoleColor.Cyan);
+                        Color.WriteLineColor("version           Выводит версию\n", ConsoleColor.Cyan);
+                        Color.WriteLineColor("quit              Аварийно завершает приложение\n", ConsoleColor.Cyan);
+                        Color.WriteLineColor("help              Выводит информацию о коммандах\n", ConsoleColor.Cyan);
+                        Color.WriteLineColor("status            Выводит статус сервера\n", ConsoleColor.Cyan);
+                        Color.WriteLineColor("command           Выводит информацию о коммандах\n", ConsoleColor.Cyan);
+                        Color.WriteLineColor("clr               Очищает окно программы\n", ConsoleColor.Cyan);
+                        Color.WriteLineColor("bs next start     Устанавливает время запуска проверки весов в часах\n", ConsoleColor.Cyan);
+                        Color.WriteLineColor("user add          Добавляет пользователя (логин пароль)\n", ConsoleColor.Cyan);
+                        Color.WriteLineColor("user delete       Удаляет пользователя (логин)\n", ConsoleColor.Cyan);
                         return "done.";
 
                     }

@@ -28,13 +28,13 @@ namespace BarrierServerProject
                 Point = new IPEndPoint(IPAddress.Any, port);
                 try { listener.Bind(Point); }
                 catch (SocketException) {
-                    Color.WriteLineColor("Порт " + port + " занят другим приложением!", "Red");
-                    Color.WriteLineColor("Освободите порт " +  port + " и перезапустите приложение: " , "Yellow");
+                    Color.WriteLineColor("Порт " + port + " занят другим приложением!", ConsoleColor.Red);
+                    Color.WriteLineColor("Освободите порт " +  port + " и перезапустите приложение: " , ConsoleColor.Yellow);
                     Thread.Sleep(2000);
                     Program.another_run();
                 }
 
-                Color.WriteLineColor("Использую порт: " + port, "Yellow");
+                Color.WriteLineColor("Использую порт: " + port, ConsoleColor.Yellow);
                 listener.Listen(10);
 
                 SocketAccepter();
@@ -55,7 +55,7 @@ namespace BarrierServerProject
                     Socket client = listener.Accept();
 
                     clients.Add(client, client.RemoteEndPoint);
-                    Color.WriteLineColor("Установлено соединение: " + client.RemoteEndPoint, "Yellow");
+                    Color.WriteLineColor("Установлено соединение: " + client.RemoteEndPoint, ConsoleColor.Yellow);
 
                     Thread thh = new Thread(delegate()
                     {
@@ -101,7 +101,7 @@ namespace BarrierServerProject
                     {
                         if (exc.ErrorCode == 10054)
                         {
-                            Color.WriteLineColor("Клиент отключился: " + Server.clients[r_client], "Cyan");
+                            Color.WriteLineColor("Клиент отключился: " + Server.clients[r_client], ConsoleColor.Cyan);
 
                             if (!r_client.Connected)
                                 r_client.Disconnect(true);
@@ -110,7 +110,7 @@ namespace BarrierServerProject
 
                             if (!abort_thread(Thread.CurrentThread))
                             {
-                                Color.WriteLineColor("Поток не завершен!", "Red");
+                                Color.WriteLineColor("Поток не завершен!", ConsoleColor.Red);
                             }
 
                             break;
@@ -146,7 +146,7 @@ namespace BarrierServerProject
                 Console.WriteLine("[" + DateTime.Now.ToLongTimeString() + "] " + exc.Message);
                 return false;
             }
-            Color.WriteLineColor("Поток завершен успешно", "Green");
+            Color.WriteLineColor("Поток завершен успешно", ConsoleColor.Green);
             return true;
         }
 
