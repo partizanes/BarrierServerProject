@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -38,15 +35,10 @@ namespace LsTradeAgent
 
                 Console.CancelKeyPress += new ConsoleCancelEventHandler(AppExit);
 
-                Thread.Sleep(2000);
-
                 while (true)
-                {
-                    //Color.WriteLineColor("\nВведите комманду:", ConsoleColor.Green);
-                       
-                    //string com = Console.ReadLine().ToLower();
-
-                    //Color.WriteLineColor(Command.SwitchCommand(com), ConsoleColor.Yellow);
+                {  
+                    string com = Console.ReadLine().ToLower();
+                    Color.WriteLineColor(com, ConsoleColor.Yellow);
                 }
             }
         }

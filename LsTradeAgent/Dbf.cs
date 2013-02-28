@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.OleDb;
-using System.Linq;
-using System.Text;
 
 namespace LsTradeAgent
 {
     class Dbf
     {
         static string LsTradeDir = Config.GetParametr("LsTradeDir");
+        public static OleDbDataReader DbfDataReader = null;
 
         public static OleDbDataReader dbf_read(string str)
         {
@@ -25,35 +23,36 @@ namespace LsTradeAgent
             {
                 conn.Open();
 
-                OleDbDataReader dr = null;
+                DbfDataReader = null;
 
                 cmd.CommandText = str;
 
-                //Color.WriteLineColor("\nДелаю запрос: ", ConsoleColor.Magenta);
-                //Color.WriteLineColor("" + str, ConsoleColor.Green);
-
-                dr = cmd.ExecuteReader();
-
-                if (!dr.HasRows)
+                if (Program.Debug)
                 {
-                    return null;
+                    Color.WriteLineColor("\nДелаю запрос: ", ConsoleColor.Magenta);
+
+                    Color.WriteLineColor("" + str, ConsoleColor.Green);
                 }
 
-                return dr;
+                DbfDataReader = cmd.ExecuteReader();
+
+                if (!DbfDataReader.HasRows)
+                    return null;
+
+                return DbfDataReader;
             }
             catch (System.Exception ex)
             {
-                Console.Write(ex.Message);
+                Console.Write("1" + ex.Message);
                 isExecuting = false;
                 return null;
             }
+
             finally
             {
                 if (isExecuting && Program.Debug)
-                {
                     Color.WriteLineColor("[DEBUG] Запрос завершен успешно!", ConsoleColor.Cyan);
-                }
-            }
-        }
+            }  
+        }  
     }
 }

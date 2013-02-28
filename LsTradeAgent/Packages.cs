@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Data.OleDb;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
 
 namespace LsTradeAgent
 {
@@ -39,6 +32,16 @@ namespace LsTradeAgent
                             Color.WriteLineColor("Принято: " + msg, ConsoleColor.Green);
 
                             CheckSailOff(msg);
+
+                            Color.WriteLineColor("Пакет обработан!", ConsoleColor.Green);
+
+                            if (!Dbf.DbfDataReader.IsClosed)
+                                Dbf.DbfDataReader.Close();
+
+                            Dbf.DbfDataReader.Dispose();
+
+                            GC.Collect();
+
                             break;
                     }
                     break;
@@ -49,37 +52,31 @@ namespace LsTradeAgent
         {
             try
             {
+                OleDbDataReader dr = null;
+
                 StatusParse = true;
 
                 string[] split_data = msg.Replace("\0", "").Split(new Char[] { ';' });
 
                 string barcode = split_data[0].Replace(" ", "");
 
-                OleDbDataReader dr = Dbf.dbf_read("SELECT k_mat FROM sprmat WHERE k_grup ='" + barcode + "' AND p_time > {^" + split_data[3] + "}");
+                dr = Dbf.dbf_read("SELECT k_mat,k_op,n_mat,n_cenu FROM dvmat WHERE k_mat IN(SELECT k_mat FROM sprmat WHERE k_grup  ='" + barcode + "' AND p_time > {^" + split_data[3] + "}) AND k_op IN ('51','53', '61','62','72','93')");
 
                 if (dr == null)
                 {
-                    Color.WriteLineColor("Новых партий нет по штрихкоду " + barcode, ConsoleColor.Yellow);
+                    Color.WriteLineColor("Отсутсвуют партии расхода по баркоду: " + barcode, ConsoleColor.Yellow);
                     return;
                 }
 
                 while (dr.Read())
                 {
-                    Color.WriteLineColor("Найдены партии " + dr.GetString(0), ConsoleColor.Yellow);
-
-                    OleDbDataReader datareader = Dbf.dbf_read("SELECT n_mat FROM dvmat WHERE k_mat IN ('" + dr.GetString(0).Replace(" ", "") + "') AND k_op IN ('53', '61','62','72','93')");
-
-                    if (datareader == null)
-                    {
-                        Color.WriteLineColor("Списаний нету по партии : " + dr.GetString(0).Replace(" ", ""), ConsoleColor.DarkRed);
-                        continue;
-                    }
-
-                    while (datareader.Read())
-                    {
-                        Color.WriteLineColor("Списано по партии: " + dr.GetString(0).Replace(" ", "") + "Количество: " + datareader.GetString(0), ConsoleColor.Green);
-                    }
+                    Color.WriteLineColor("Код операции: " + dr.GetValue(1) + " Количество: " + dr.GetValue(2) + " Цена: " + dr.GetValue(3), ConsoleColor.Yellow);
                 }
+
+                if (!dr.IsClosed)
+                    dr.Close();
+
+                dr.Dispose();
             }
             catch (System.Exception ex)
             {
