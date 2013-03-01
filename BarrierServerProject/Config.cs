@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using System.Threading;
 
-namespace LsTradeAgent
+namespace BarrierServerProject
 {
     class Config
     {
         [DllImport("kernel32.dll")]
         static extern uint GetPrivateProfileString(
-        string lpAppName, string lpKeyName,  string lpDefault, StringBuilder lpReturnedString, uint nSize, string lpFileName);
+        string lpAppName, string lpKeyName, string lpDefault, StringBuilder lpReturnedString, uint nSize, string lpFileName);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -29,11 +29,11 @@ namespace LsTradeAgent
 
             if (buffer.ToString() == "null")
             {
-                Color.WriteLineColor("Не заданы параметры подключения сервера. ",  ConsoleColor.Red);
+                Color.WriteLineColor("Не заданы параметры подключения сервера. ", ConsoleColor.Red);
                 Color.WriteLineColor("Отсутствует параметр " + par, ConsoleColor.Red);
-                Color.WriteLineColor("Установите параметры и запустите приложение снова.",  ConsoleColor.Red);
+                Color.WriteLineColor("Установите параметры и запустите приложение снова.", ConsoleColor.Red);
                 Color.WriteLineColor("Завершение работы через 10 секунд.\n", ConsoleColor.Yellow);
-                Server.Sender("LsTradeAgent", 0, "LsTradeAgent:Bye! " + "Причина: Не найден параметр " + par );
+                Server.Sender("LsTradeAgent", 0, "LsTradeAgent:Bye! " + "Причина: Не найден параметр " + par);
                 Thread.Sleep(10000);
                 Environment.Exit(0);
             }

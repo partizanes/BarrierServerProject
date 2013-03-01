@@ -47,8 +47,27 @@ namespace BarrierServerProject
 
                                 break;
                         case 8:
-                                CheckSail.CheckSend = true;
+                            CheckSail.CheckSend = true;
                                 break;
+                        case 9:
+                            string[] split_data = msg.Replace("\0", "").Split(new Char[] { ';' });
+
+                            string barcode = split_data[0];
+                            string operation = split_data[1].Replace(" ", "");
+                            string count = split_data[2];
+                            string price = split_data[3];
+                            DateTime datetime = Convert.ToDateTime(split_data[4]);
+
+                            if (dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + barcode + "'," + operation + "," + count + "," + price + ",{^" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "})"))
+                            {
+                                Color.WriteLineColor("Успешно добавлена операция расхода из LsTradeAgent",ConsoleColor.Green);
+                            }
+                            else
+                            {
+                                Color.WriteLineColor("Добавление из LsTradeAgent завершилось с ошибкой", ConsoleColor.Red);
+                            }
+
+                            break;
                     }
                     break;
                 case "PrioritySale":
