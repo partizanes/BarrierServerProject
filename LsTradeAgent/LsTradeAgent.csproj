@@ -74,6 +74,7 @@
     <Compile Include="Color.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Dbf.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Packages.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

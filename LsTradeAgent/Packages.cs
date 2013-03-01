@@ -60,7 +60,7 @@ namespace LsTradeAgent
 
                 string barcode = split_data[0].Replace(" ", "");
 
-                dr = Dbf.dbf_read("SELECT k_mat,k_op,n_mat,n_cenu FROM dvmat WHERE k_mat IN(SELECT k_mat FROM sprmat WHERE k_grup  ='" + barcode + "' AND p_time > {^" + split_data[3] + "}) AND k_op IN ('51','53', '61','62','72','93')");
+                dr = Dbf.dbf_read("SELECT k_mat,k_op,n_mat,n_cenu FROM dvmat WHERE k_mat IN(SELECT k_mat FROM sprmat WHERE k_grup  ='" + barcode + "' AND p_time > {^" + split_data[3] + "}) AND k_op IN ('53', '61','62','72','93')");
 
                 if (dr == null)
                 {

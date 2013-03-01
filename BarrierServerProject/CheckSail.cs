@@ -45,7 +45,7 @@ namespace BarrierServerProject
                     string bar = dr.GetString(0).Replace(" ","");
                     object price = dr.GetValue(1);
                     object count = dr.GetValue(2);
-                    DateTime date = Convert.ToDateTime((dr.GetDateTime(3).ToString().Replace(" 0:00:00", "") + " " + dr.GetString(4).Replace(".", ":")));
+                    DateTime date = dr.GetDateTime(3);
 
                     Color.WriteLineColor("[DEBUG] " + bar + ";" + price + ";" + count + ";" + date,ConsoleColor.Gray);
 

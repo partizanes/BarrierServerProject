@@ -40,10 +40,6 @@
     <Reference Include="AxInterop.ForCasLib">
       <HintPath>..\BalanceModule\AxInterop.ForCasLib.dll</HintPath>
     </Reference>
-    <Reference Include="Interop.ForCasLib">
-      <HintPath>..\..\Barrier\BarrierServerProject\BalanceModule\Interop.ForCasLib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

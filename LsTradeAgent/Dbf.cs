@@ -43,7 +43,7 @@ namespace LsTradeAgent
             }
             catch (System.Exception ex)
             {
-                Console.Write("1" + ex.Message);
+                Console.Write("[DBF] [Исключение при попытке чтения:]" + ex.Message);
                 isExecuting = false;
                 return null;
             }
@@ -52,7 +52,7 @@ namespace LsTradeAgent
             {
                 if (isExecuting && Program.Debug)
                     Color.WriteLineColor("[DEBUG] Запрос завершен успешно!", ConsoleColor.Cyan);
-            }  
+            }
         }  
     }
 }

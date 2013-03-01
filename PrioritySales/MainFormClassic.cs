@@ -430,7 +430,7 @@ namespace PrioritySales
 
                     datetime = Convert.ToDateTime(dateTimePicker1.Text);
 
-                    Server.Sender("PrioritySale", 5, TextboxAddBar.Text + ":" + TextboxCountAdd.Text + ":" + TextboxPrice.Text + ":" + datetime.ToShortDateString() + ":" + datetime.ToLongTimeString().Replace(":", "."));
+                    Server.Sender("PrioritySale", 5, TextboxAddBar.Text + ";" + TextboxCountAdd.Text + ";" + TextboxPrice.Text + ";" + datetime);
                 }
             }); ;
             thh.Name = "Авторизация";

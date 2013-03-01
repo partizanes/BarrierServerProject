@@ -88,19 +88,17 @@ namespace BarrierServerProject
                             }
 
                         case 5:
-                            string[] sd = msg.Replace("\0", "").Replace(" ", "").Split(new Char[] { ':' });
+                            string[] sd = msg.Replace("\0", "").Split(new Char[] { ';' });
 
-                            string bar = sd[0];
-                            string count = sd[1];
-                            string price = sd[2];
+                            string bar = sd[0].Replace(" ", "");
+                            string count = sd[1].Replace(" ", "");
+                            string price = sd[2].Replace(" ", "");
 
                             DateTime datetime = new DateTime();
 
                             datetime = Convert.ToDateTime(sd[3]);
 
-                            string time = sd[4];
-
-                            if (dbf.ExecuteNonQuery("INSERT INTO balance.dbf (barcode,price,count,date,time) VALUES ('" + bar + "'," + price + "," + count + ",{^" + datetime.ToString("yyyy-MM-dd") + "},'" + time + "')"))
+                            if (dbf.ExecuteNonQuery("INSERT INTO balance.dbf (barcode,price,count,date) VALUES ('" + bar + "'," + price + "," + count + ",{^" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "})"))
                             {
                                 Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.", ConsoleColor.Green);
                                 Msg.SendUser(user.username, "PrioritySale", 2, "                Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.");
