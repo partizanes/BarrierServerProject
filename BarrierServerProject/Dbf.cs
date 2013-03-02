@@ -11,7 +11,7 @@ namespace BarrierServerProject
             OleDbConnection conn = new OleDbConnection();
             OleDbCommand cmd = new OleDbCommand();
 
-            conn.ConnectionString = "Provider=vfpoledb;Data Source=" + Environment.CurrentDirectory + "\\data\\;Collating Sequence=MACHINE;CODEPAGE=866";
+            conn.ConnectionString = "Provider=vfpoledb;Data Source=" + Environment.CurrentDirectory + "\\data\\;Collating Sequence=MACHINE;CODEPAGE=1251";
 
             cmd.Connection = conn;
 

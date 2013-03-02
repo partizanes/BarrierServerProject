@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 
 namespace BarrierServerProject
 {
@@ -33,7 +35,6 @@ namespace BarrierServerProject
                 Color.WriteLineColor("Отсутствует параметр " + par, ConsoleColor.Red);
                 Color.WriteLineColor("Установите параметры и запустите приложение снова.", ConsoleColor.Red);
                 Color.WriteLineColor("Завершение работы через 10 секунд.\n", ConsoleColor.Yellow);
-                Server.Sender("LsTradeAgent", 0, "LsTradeAgent:Bye! " + "Причина: Не найден параметр " + par);
                 Thread.Sleep(10000);
                 Environment.Exit(0);
             }
