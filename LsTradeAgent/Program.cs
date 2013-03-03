@@ -6,7 +6,7 @@ namespace LsTradeAgent
 {
     class Program
     {
-        public static Boolean Debug = Convert.ToBoolean(Config.GetParametr("Debug"));
+        public static Boolean Debug ;
 
         static void Main(string[] args)
         {
@@ -24,6 +24,11 @@ namespace LsTradeAgent
             }
             else
             {
+                if (!Boolean.TryParse(Config.GetParametr("Debug"), out Debug))
+                {
+                    MessageBox.Show("Возможно конфигурация отсутствует или сохранена в неправильной кодировке (нужно сохранить в utf8 без BOM)");
+                }
+
                 CheckDll();
             
                 Thread th = new Thread(delegate()
