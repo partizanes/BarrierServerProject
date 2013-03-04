@@ -100,8 +100,8 @@ namespace BarrierServerProject
                     while (dr.Read())
                     {
                         string bar = dr.GetString(0).Replace(" ", "");
-                        object price = dr.GetValue(1);
-                        object count = dr.GetValue(2);
+                        Int32 price = Convert.ToInt32(dr.GetValue(1));
+                        double count = dr.GetDouble(2);
                         DateTime date = dr.GetDateTime(3);
 
                         Color.WriteLineColor("[DEBUG] " + bar + ";" + price + ";" + count + ";" + date.ToString("yyyy-MM-dd,HH:mm:ss"), ConsoleColor.Gray);
@@ -144,46 +144,58 @@ namespace BarrierServerProject
 
                                 if (dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','4'," + "'Товар долго не продается!Число дней " + TotalDay + "')"))
                                 {
-                                    Color.WriteLineColor("Строка успешно добавлена",ConsoleColor.Green);
+                                    Color.WriteLineColor("Строка успешно добавлена", ConsoleColor.Green);
                                 }
                                 else
-                                    Color.WriteLineColor("Ошибка при добавлении строки!",ConsoleColor.Red)
+                                    Color.WriteLineColor("Ошибка при добавлении строки!", ConsoleColor.Red);
                             }
                         }
 
                         while (reader.Read())
                         {
-                            object counturm = reader.GetValue(0);
-                            object priceurm = reader.GetValue(1);
+                            double countukm = reader.GetDouble(0);
+                            Int32 priceukm = reader.GetInt32(1);
 
-                            if (priceurm == price && Convert.ToInt64(counturm) >= Convert.ToInt64(count))
+                            if (priceukm == price && countukm > count )
                             {
-                                Color.WriteLineColor("Товар: " + bar + " по цене: " + priceurm + " продан в количестве: " + counturm + " по цене очередности", ConsoleColor.Cyan);
+                                Color.WriteLineColor("Товар: " + bar + " по цене: " + priceukm + " продан больше чем было в очередности, количество: " + countukm + " по цене очередности", ConsoleColor.Cyan);
+                                dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','3'," + "'Продано больше чем было!')");
+                                dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + count.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
                                 continue;
                             }
 
-                            if (priceurm == price && Convert.ToInt64(counturm) < Convert.ToInt64(count))
+                            if (priceukm == price && countukm == count)
                             {
-                                Color.WriteLineColor("Товар: " + bar + " по цене: " + priceurm + " продан в количестве: " + counturm + " на текущий момент продается по правильной цене и есть остаток", ConsoleColor.Yellow);
+                                Color.WriteLineColor("Товар: " + bar + " по цене: " + priceukm + " продан в количестве: " + countukm + " по цене очередности", ConsoleColor.Cyan);
+                                dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','0'," + "'Все продано по цене очереди!')");
+                                dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + count.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
                                 continue;
                             }
 
-                            if (Convert.ToInt64(priceurm) < Convert.ToInt64(price))
+                            if (priceukm == price && countukm < count)
+                            {
+                                Color.WriteLineColor("Товар: " + bar + " по цене: " + priceukm + " продан в количестве: " + countukm + " на текущий момент продается по правильной цене и есть остаток", ConsoleColor.Yellow);
+                                dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','1'," + "'Продается по правильной цене и есть остаток!')");
+                                dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + count.ToString().Replace(",",".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
+                                continue;
+                            }
+
+                            if (priceukm < price)
                             {
                                 Color.WriteLineColor("Товар " + bar + " продается по неправильно цене! ", ConsoleColor.Red);
-                                Color.WriteLineColor("Цена на кассе: " + Convert.ToInt64(priceurm) + " Цена очередности: " + Convert.ToInt64(price), ConsoleColor.Red);
-                                Color.WriteLineColor("Проданое количество по дешевой цене: " + Convert.ToInt64(counturm), ConsoleColor.Red);
-
+                                Color.WriteLineColor("Цена на кассе: " + Convert.ToDouble(priceukm) + " Цена очередности: " + Convert.ToInt64(price), ConsoleColor.Red);
+                                Color.WriteLineColor("Проданое количество по дешевой цене: " + Convert.ToDouble(countukm), ConsoleColor.Red);
+                                dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + count.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
                                 dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','6'," + "'Товар продается дешевле цены очерёдности!')");
                                 continue;
                             }
 
-                            if (Convert.ToInt64(priceurm) > Convert.ToInt64(price))
+                            if (priceukm > price)
                             {
                                 Color.WriteLineColor("Товар " + bar + " завышение цены! ", ConsoleColor.Red);
-                                Color.WriteLineColor("Цена на кассе: " + Convert.ToInt64(priceurm) + " Цена очередности: " + Convert.ToInt64(price), ConsoleColor.Red);
-                                Color.WriteLineColor("Проданое количество по дорогой цене: " + Convert.ToInt64(counturm), ConsoleColor.Red);
-
+                                Color.WriteLineColor("Цена на кассе: " + Convert.ToInt64(priceukm) + " Цена очередности: " + Convert.ToInt64(price), ConsoleColor.Red);
+                                Color.WriteLineColor("Проданое количество по дорогой цене: " + Convert.ToInt64(countukm), ConsoleColor.Red);
+                                dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + count.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
                                 dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','5'," + "'Товар продается дороже цены очерёдности!')");
                                 continue;
                             }
@@ -191,6 +203,8 @@ namespace BarrierServerProject
 
                         if (!reader.IsClosed)
                             reader.Close();
+
+
                     }
                 }
             }
@@ -202,6 +216,8 @@ namespace BarrierServerProject
             {
 //                 if (serverConn.State != ConnectionState.Closed)
 //                     serverConn.Close();
+
+                Color.WriteLineColor("Перебор завершен.", ConsoleColor.Cyan);
             }
            
         }

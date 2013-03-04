@@ -306,7 +306,7 @@
             // 
             this.PanelAddBg.BackColor = System.Drawing.Color.DodgerBlue;
             this.PanelAddBg.Controls.Add(this.PanelAddTask);
-            this.PanelAddBg.Location = new System.Drawing.Point(640, 362);
+            this.PanelAddBg.Location = new System.Drawing.Point(71, 52);
             this.PanelAddBg.Name = "PanelAddBg";
             this.PanelAddBg.Size = new System.Drawing.Size(517, 311);
             this.PanelAddBg.TabIndex = 6;
@@ -353,6 +353,9 @@
             this.TextboxPrice.Size = new System.Drawing.Size(105, 35);
             this.TextboxPrice.TabIndex = 0;
             this.TextboxPrice.TabStop = false;
+            this.TextboxPrice.Enter += new System.EventHandler(this.TextboxPrice_Enter);
+            this.TextboxPrice.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextboxPrice_KeyDown);
+            this.TextboxPrice.Leave += new System.EventHandler(this.TextboxPrice_Leave);
             // 
             // LabelInfo
             // 

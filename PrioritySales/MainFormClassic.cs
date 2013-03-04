@@ -328,6 +328,7 @@ namespace PrioritySales
 
         private void TextboxCountAdd_Leave(object sender, EventArgs e)
         {
+            TextboxCountAdd.Text = TextboxCountAdd.Text.Replace(".", ",");
             LabelCountAdd.ForeColor = Color.DodgerBlue;
         }
 
@@ -373,10 +374,10 @@ namespace PrioritySales
 
             if (TextboxNameItem.Text.Length < 3)
                 ButtonTurn.ForeColor = Color.Red;
-            
-            int count;
 
-            if (!int.TryParse(TextboxCountAdd.Text, out count))
+            double count;
+
+            if (!double.TryParse(TextboxCountAdd.Text, out count))
                 ButtonTurn.ForeColor = Color.Red;
             else
                 ButtonTurn.ForeColor = Color.Green;
@@ -390,7 +391,7 @@ namespace PrioritySales
 
         private void ButtonTurn_Click(object sender, EventArgs e)
         {
-            int count;
+            double count;
 
             if (TextboxAddBar.Text.Length < 5)
             {
@@ -406,7 +407,7 @@ namespace PrioritySales
                 return;
             }
 
-            if (!int.TryParse(TextboxCountAdd.Text, out count))
+            if (!Double.TryParse(TextboxCountAdd.Text, out count))
             {
                     DeclineErr(true, "                      Внимание!В поле количество должно быть число!");
                     TextboxCountAdd.Focus();
@@ -516,6 +517,56 @@ namespace PrioritySales
             }
         }
 
+        private void TextboxPrice_Enter(object sender, EventArgs e)
+        {
+            LabelPrice.ForeColor = Color.Green;
+        }
+
+        private void TextboxPrice_Leave(object sender, EventArgs e)
+        {
+            LabelPrice.ForeColor = Color.DodgerBlue;
+        }
+
+        private void TextboxPrice_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                    {
+                        PanelAddHide(true);
+                        ButtonAdd.Focus();
+                        break;
+                    }
+                case Keys.Left:
+                    TextboxCountAdd.Focus();
+                    break;
+                case Keys.Right:
+                case Keys.Enter:
+                    {
+                        if (TextboxPrice.Text.Length < 3)
+                        {
+                            DeclineErr(true, "                                          Цена должна быть более 3 цифр!");
+                            LabelInfo.ForeColor = Color.Yellow;
+                            TextboxPrice.Focus();
+                            return;
+                        }
+
+                        int i;
+
+                        if (Int32.TryParse(TextboxPrice.Text,out i))
+                            ButtonTurn.Focus();
+                        else
+                        {                                                        
+                            DeclineErr(true, "                                          В поле цена могут быть только цифры!");
+                            LabelInfo.ForeColor = Color.Yellow;
+                            TextboxPrice.Focus();
+                            return;
+                        }
+                        break;
+                    }
+            }
+        }
 
         //
         // MainForm MOVE BlockStart

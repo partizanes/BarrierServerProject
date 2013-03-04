@@ -58,7 +58,7 @@ namespace BarrierServerProject
                             string price = split_data[3];
                             DateTime datetime = Convert.ToDateTime(split_data[4]);
 
-                            if (dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + barcode + "'," + operation + "," + count + "," + price + ",{^" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "})"))
+                            if (dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + barcode + "'," + operation + "," + count.ToString().Replace(",", ".") + "," + price + ",{^" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "})"))
                             {
                                 Color.WriteLineColor("Успешно добавлена операция расхода из LsTradeAgent",ConsoleColor.Green);
                             }
@@ -117,7 +117,7 @@ namespace BarrierServerProject
 
                             datetime = Convert.ToDateTime(sd[3]);
 
-                            if (dbf.ExecuteNonQuery("INSERT INTO balance.dbf (barcode,price,count,date) VALUES ('" + bar + "'," + price + "," + count + ",{^" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "})"))
+                            if (dbf.ExecuteNonQuery("INSERT INTO balance.dbf (barcode,price,count,date) VALUES ('" + bar + "'," + price + "," + count.Replace(",",".") + ",{^" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "})"))
                             {
                                 Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.", ConsoleColor.Green);
                                 Msg.SendUser(user.username, "PrioritySale", 2, "                Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.");
