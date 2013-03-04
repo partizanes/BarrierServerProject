@@ -141,10 +141,14 @@ namespace BarrierServerProject
                             if (TotalDay > 2)
                             {
                                 Color.WriteLineColor("Товар " + bar + " не продается долгое время.Число дней " + TotalDay, ConsoleColor.Red);
-                                dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','4'," + "'Товар долго не продается!Число дней "+ TotalDay+"')");
+
+                                if (dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','4'," + "'Товар долго не продается!Число дней " + TotalDay + "')"))
+                                {
+                                    Color.WriteLineColor("Строка успешно добавлена",ConsoleColor.Green);
+                                }
+                                else
+                                    Color.WriteLineColor("Ошибка при добавлении строки!",ConsoleColor.Red)
                             }
-
-
                         }
 
                         while (reader.Read())
