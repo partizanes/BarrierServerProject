@@ -30,7 +30,7 @@ namespace BarrierServerProject
 
         private static void CleanDbf(string namedbf)
         {
-            string connectionString = @"Provider=VFPOLEDB.1;Data Source=" + namedbf;
+            string connectionString = @"Provider=VFPOLEDB.1;Data Source=" + Environment.CurrentDirectory + "\\data\\";
 
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
@@ -42,9 +42,7 @@ namespace BarrierServerProject
                     {
                         connection.Open();
 
-                        string vfpScript = @"SET EXCLUSIVE ON
-                                DELETE FROM operation
-                                PACK";
+                        string vfpScript = "SET EXCLUSIVE ON\r\n                                 DELETE FROM " + namedbf + "\r\n                                PACK";
 
                         scriptCommand.CommandType = CommandType.StoredProcedure;
                         scriptCommand.CommandText = "ExecScript";
@@ -59,9 +57,15 @@ namespace BarrierServerProject
                     finally
                     {
                         if (stat)
-                            Color.WriteLineColor("Очистка и упаковка таблицы operation завершена успешно.",ConsoleColor.Green);
+                            Color.WriteLineColor("Очистка и упаковка таблицы " + namedbf + " завершена успешно.", ConsoleColor.Green);
                         else
-                            Color.WriteLineColor("Очистка и упаковка таблицы operation неудачна.", ConsoleColor.Red);
+                        {
+                            Color.WriteLineColor("Очистка и упаковка таблицы " + namedbf + " неудачна.", ConsoleColor.Red);
+
+                            Dbf dbf = new Dbf();
+
+                            dbf.ExecuteNonQuery("DELETE FROM " + namedbf);
+                        }
                     }
                 }
             }
@@ -77,7 +81,9 @@ namespace BarrierServerProject
 
                 serverConn.Open();
 
-                CleanDbf(Environment.CurrentDirectory + "\\data\\");
+                CleanDbf("operation");
+
+                CleanDbf("action");
 
                 if (File.Exists(Environment.CurrentDirectory + "\\data\\" + "balance.dbf"))
                 {
@@ -122,11 +128,23 @@ namespace BarrierServerProject
 
                         MySqlDataReader reader;
 
+                        Color.WriteLineColor("Запрос на кассовый сервер...", ConsoleColor.Cyan);
+
                         reader = cmd.ExecuteReader();
 
                         if (!reader.HasRows)
                         {
                             Color.WriteLineColor("Реализация по товару: " + bar + " не обнаружена с " + date, ConsoleColor.Yellow);
+
+                            int TotalDay = Convert.ToInt32((DateTime.Now - date).TotalSeconds)/86400;
+
+                            if (TotalDay > 2)
+                            {
+                                Color.WriteLineColor("Товар " + bar + " не продается долгое время.Число дней " + TotalDay, ConsoleColor.Red);
+                                dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','4'," + "'Товар долго не продается!Число дней "+ TotalDay+"')");
+                            }
+
+
                         }
 
                         while (reader.Read())
@@ -137,20 +155,33 @@ namespace BarrierServerProject
                             if (priceurm == price && Convert.ToInt64(counturm) >= Convert.ToInt64(count))
                             {
                                 Color.WriteLineColor("Товар: " + bar + " по цене: " + priceurm + " продан в количестве: " + counturm + " по цене очередности", ConsoleColor.Cyan);
+                                continue;
                             }
 
                             if (priceurm == price && Convert.ToInt64(counturm) < Convert.ToInt64(count))
                             {
                                 Color.WriteLineColor("Товар: " + bar + " по цене: " + priceurm + " продан в количестве: " + counturm + " на текущий момент продается по правильной цене и есть остаток", ConsoleColor.Yellow);
+                                continue;
                             }
 
-                            if (priceurm != price)
+                            if (Convert.ToInt64(priceurm) < Convert.ToInt64(price))
                             {
-                                Color.WriteLineColor("Товар " + bar + " продается по неправильной цене! ", ConsoleColor.Red);
+                                Color.WriteLineColor("Товар " + bar + " продается по неправильно цене! ", ConsoleColor.Red);
                                 Color.WriteLineColor("Цена на кассе: " + Convert.ToInt64(priceurm) + " Цена очередности: " + Convert.ToInt64(price), ConsoleColor.Red);
-                                Color.WriteLineColor("Продается количество по неверной цене: " + Convert.ToInt64(counturm), ConsoleColor.Red);
+                                Color.WriteLineColor("Проданое количество по дешевой цене: " + Convert.ToInt64(counturm), ConsoleColor.Red);
 
-                                dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','6'," + "'Товар продается по неверной цене!')");
+                                dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','6'," + "'Товар продается дешевле цены очерёдности!')");
+                                continue;
+                            }
+
+                            if (Convert.ToInt64(priceurm) > Convert.ToInt64(price))
+                            {
+                                Color.WriteLineColor("Товар " + bar + " завышение цены! ", ConsoleColor.Red);
+                                Color.WriteLineColor("Цена на кассе: " + Convert.ToInt64(priceurm) + " Цена очередности: " + Convert.ToInt64(price), ConsoleColor.Red);
+                                Color.WriteLineColor("Проданое количество по дорогой цене: " + Convert.ToInt64(counturm), ConsoleColor.Red);
+
+                                dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','5'," + "'Товар продается дороже цены очерёдности!')");
+                                continue;
                             }
                         }
 
