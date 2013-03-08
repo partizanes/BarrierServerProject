@@ -4,6 +4,8 @@ using System.Data.OleDb;
 using System.IO;
 using System.Threading;
 using MySql.Data.MySqlClient;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace BarrierServerProject
 {
@@ -80,7 +82,7 @@ namespace BarrierServerProject
             }
         }
 
-        public static void CheckInfo()
+        private static void CheckInfo()
         {
             try
             {
@@ -227,6 +229,26 @@ namespace BarrierServerProject
                 Color.WriteLineColor("Перебор завершен.", ConsoleColor.Cyan);
             }
            
+        }
+
+        private static void UpdateStateBase()
+        {
+            Packages.StatusString = GetMD5HashFromFile(Environment.CurrentDirectory + "//data/balance.dbf") + GetMD5HashFromFile(Environment.CurrentDirectory + "//data/action.dbf") + GetMD5HashFromFile(Environment.CurrentDirectory + "//data/operation.dbf");
+        }
+
+        static private string GetMD5HashFromFile(string fileName)
+        {
+            FileStream file = new FileStream(fileName, FileMode.Open);
+            MD5 md5 = new MD5CryptoServiceProvider();
+            byte[] retVal = md5.ComputeHash(file);
+            file.Close();
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < retVal.Length; i++)
+            {
+                sb.Append(retVal[i].ToString("x2"));
+            }
+            return sb.ToString();
         }
     }
 }

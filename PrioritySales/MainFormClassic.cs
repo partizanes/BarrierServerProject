@@ -26,6 +26,7 @@ namespace PrioritySales
         public int xOffset, yOffset;
         public bool isMouseDown = false;
         private Point mouseOffset;
+        private string StatusUpdate;
 
         // ForeColor for all button block start
 
@@ -664,7 +665,9 @@ namespace PrioritySales
             if (dataGridView1.Visible == false)
             {
                 dataGridView1.Visible = true;
-                dataGridView1.Rows.Add("4811702000108", "1", "2", "3", "4", "5");
+                //                             barcode   name count ost status date action
+                //dataGridView1.Rows.Add("4811702000108", "1", "2", "3", "4", "5"); StatusUpdate
+                Server.Sender("PrioritySale", 9,StatusUpdate);
             }
             else
             {

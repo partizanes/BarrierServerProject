@@ -15,6 +15,7 @@ namespace BarrierServerProject
     class Packages
     {
         static Dbf dbf = new Dbf();
+        public static string StatusString = "";
 
         public static void parse(string p_id, int com, string msg, User user,System.Net.Sockets.Socket r_client)
         {
@@ -127,6 +128,41 @@ namespace BarrierServerProject
                             {
                                 Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + count + " Отклонён!", ConsoleColor.Red);
                                 Msg.SendUser(user.username, "PrioritySale", 3, "                                                                     Отклонено!");
+                            }
+                            break;
+                        case 9:
+                            if (msg == StatusString)
+                                Color.WriteLineColor("Версия очередности у клиента " + user.username + " проверена успешно!", ConsoleColor.Green);
+                            else
+                            {
+                                Color.WriteLineColor("Версия очередности устарела у клиента " + user.username + ".Требуется добавление", ConsoleColor.Yellow);
+
+                                ArrayList myAL = new ArrayList();
+
+                                OleDbDataReader reader = dbf.ExecuteReader("SELECT balance.barcode,balance.price,balance.count,operation.count,balance.date FROM balance,operation where (balance.barcode == operation.barcode) AND (balance.date == operation.dt)");
+
+                                myAL.Add("Q0");
+
+                                while (reader.Read())
+                                {
+                                    myAL.Add(reader.GetString(0).Replace(" ","") + ";" + reader.GetValue(1) + ";" + reader.GetValue(2) + ";" + reader.GetValue(3) + ";" + reader.GetValue(4));
+                                }
+
+                                //string[] myArray = (string[])myAL.ToArray(typeof(string));
+
+                                //byte[] bytes = new byte[2048];
+
+                                //myAL.CopyTo(bytes);
+
+                                //byte[] bytes = (byte[])myAL.ToArray(typeof(byte[]));
+
+                                //Byte[] bytes = System.Text.Encoding.UTF8.GetBytes(myArray);
+  
+//                                 foreach (DictionaryEntry de in Server.clients)
+//                                 {
+//                                     if ((de.Value).ToString() == user.username )
+//                                         Server.MessageSender((Socket)de.Key, bytes);
+//                                 }
                             }
                             break;
                     }
