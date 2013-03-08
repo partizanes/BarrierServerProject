@@ -212,8 +212,6 @@ namespace BarrierServerProject
 
                         if (!reader.IsClosed)
                             reader.Close();
-
-
                     }
                 }
             }
