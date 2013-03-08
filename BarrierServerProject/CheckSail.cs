@@ -20,12 +20,21 @@ namespace BarrierServerProject
             while(!File.Exists(Environment.CurrentDirectory + "\\data\\" + "balance.dbf"))
             {
                 Color.WriteLineColor("Для проверки очередности продаж в папке программы 'data'\n должен находиться файл базы данных balance.dbf.\n\nПовторная проверка наличия файла через 10 секунд!", ConsoleColor.Red);
+
+                Dbf dbf = new Dbf();
+
+                dbf.ExecuteNonQuery("CREATE TABLE " + Environment.CurrentDirectory + "\\data\\" + "balance.dbf" + " (barcode C(13,0) NOT NULL,price N(10,0) NOT NULL,count N(10,0) NOT NULL,date T(8,0) NOT NULL)");
+
                 Thread.Sleep(10000);
             }
 
             Thread.Sleep(5000);
 
             CheckInfo();
+
+            Thread.Sleep(1800000);
+
+            StartCheck();
         }
 
         private static void CleanDbf(string namedbf)
