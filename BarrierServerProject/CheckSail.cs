@@ -23,9 +23,9 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("Для проверки очередности продаж в папке программы 'data'\n должен находиться файл базы данных balance.dbf.\n\nПовторная проверка наличия файла через 10 секунд!", ConsoleColor.Red);
 
-                Dbf dbf = new Dbf();
-
-                dbf.ExecuteNonQuery("CREATE TABLE " + Environment.CurrentDirectory + "\\data\\" + "balance.dbf" + " (barcode C(13,0) NOT NULL,price N(10,0) NOT NULL,count N(10,0) NOT NULL,date T(8,0) NOT NULL)");
+                //TODO query to create table
+                //Dbf dbf = new Dbf();
+                //dbf.ExecuteNonQuery("CREATE TABLE " + Environment.CurrentDirectory + "\\data\\" + "balance.dbf" + " (barcode C(13,0) NOT NULL,price N(10,0) NOT NULL,count N(10,0) NOT NULL,date T(8,0) NOT NULL)");
 
                 Thread.Sleep(10000);
             }
@@ -33,6 +33,10 @@ namespace BarrierServerProject
             Thread.Sleep(5000);
 
             CheckInfo();
+
+            CleanBase();
+
+            UpdateStateBase();
 
             Thread.Sleep(1800000);
 
@@ -160,6 +164,8 @@ namespace BarrierServerProject
                                 else
                                     Color.WriteLineColor("Ошибка при добавлении строки!", ConsoleColor.Red);
                             }
+
+                            dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51,0," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
                         }
 
                         while (reader.Read())
@@ -231,24 +237,44 @@ namespace BarrierServerProject
            
         }
 
-        private static void UpdateStateBase()
+        private static void CleanBase()
         {
-            Packages.StatusString = GetMD5HashFromFile(Environment.CurrentDirectory + "//data/balance.dbf") + GetMD5HashFromFile(Environment.CurrentDirectory + "//data/action.dbf") + GetMD5HashFromFile(Environment.CurrentDirectory + "//data/operation.dbf");
+            Connector con = new Connector();
+            con.ExecuteNonQuery("DELETE FROM state");
         }
 
-        static private string GetMD5HashFromFile(string fileName)
+        private static void UpdateStateBase()
         {
-            FileStream file = new FileStream(fileName, FileMode.Open);
-            MD5 md5 = new MD5CryptoServiceProvider();
-            byte[] retVal = md5.ComputeHash(file);
-            file.Close();
+            Dbf dbf = new Dbf();
 
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < retVal.Length; i++)
+            OleDbDataReader reader = dbf.ExecuteReader("SELECT balance.barcode,balance.item,balance.price,balance.count,operation.count,balance.date FROM balance,operation where (balance.barcode == operation.barcode) AND (balance.date == operation.dt)");            
+
+            Connector con = new Connector();
+
+            while (reader.Read())
             {
-                sb.Append(retVal[i].ToString("x2"));
+                string barcode = reader.GetString(0);
+                string item = reader.GetString(1);
+                Int32 price = Convert.ToInt32(reader.GetValue(2));
+                Int32 count = Convert.ToInt32(reader.GetValue(3));
+                Int32 sail = Convert.ToInt32(reader.GetValue(4));
+                Int32 status = 0;
+                Int32 flag = 0;
+                DateTime dt = reader.GetDateTime(5);
+
+                //TODO CHECK FLAG
+
+                con.ExecuteNonQuery("INSERT INTO `barrierserver`.`state`(`barcode`,`name`,`price`,`count`,`sailed`,`status`,`date`,`flag`) VALUES ( '" + barcode + "','" + item + "','" + price + "','" + count + "','" + sail + "','" + status + "','"+ dt.ToString("yyyy-MM-dd,HH:mm:ss") +"','" + flag +"')");
             }
-            return sb.ToString();
+
+            using (MD5 md5Hash = MD5.Create())
+            {
+                Random rnd = new Random();
+
+                Packages.StatusString = Packages.GetMd5Hash(md5Hash, (Packages.GetMd5Hash(md5Hash, rnd.Next(100000).ToString())));
+
+                Color.WriteLineColor("Версия базы:" + Packages.StatusString,ConsoleColor.Cyan);
+            }
         }
     }
 }

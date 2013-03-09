@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MySql.Data.MySqlClient;
+using System.Windows;
 
-namespace BarrierServerProject
+namespace PrioritySales
 {
     class Connector
     {
@@ -30,7 +31,7 @@ namespace BarrierServerProject
             }
             catch (System.Exception ex)
             {
-                Color.WriteLineColor("При запросе с базы данных произошло исключение. " + ex.Message, ConsoleColor.Red);
+                MessageBox.Show("При запросе с базы данных произошло исключение. " + ex.Message);
                 return false;
             }
 
@@ -57,7 +58,7 @@ namespace BarrierServerProject
             }
             catch (System.Exception ex)
             {
-                Color.WriteLineColor("При запросе с базы данных произошло исключение. " + ex.Message, ConsoleColor.Red);
+                MessageBox.Show("При запросе с базы данных произошло исключение. " + ex.Message);
                 return reader;
             }
 

@@ -118,7 +118,9 @@ namespace BarrierServerProject
 
                             datetime = Convert.ToDateTime(sd[3]);
 
-                            if (dbf.ExecuteNonQuery("INSERT INTO balance.dbf (barcode,price,count,date) VALUES ('" + bar + "'," + price + "," + count.Replace(",",".") + ",{^" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "})"))
+                            string item = sd[4];
+
+                            if (dbf.ExecuteNonQuery("INSERT INTO balance.dbf (barcode,price,count,date,item) VALUES ('" + bar + "'," + price + "," + count.Replace(",",".") + ",{^" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "},'"+ item +"')"))
                             {
                                 Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.", ConsoleColor.Green);
                                 //TODO this need auto update status
@@ -135,33 +137,26 @@ namespace BarrierServerProject
                                 Color.WriteLineColor("Версия очередности у клиента " + user.username + " проверена успешно!", ConsoleColor.Green);
                             else
                             {
-                                Color.WriteLineColor("Версия очередности устарела у клиента " + user.username + ".Требуется добавление", ConsoleColor.Yellow);
+                                Color.WriteLineColor("Версия очередности устарела у клиента " + user.username + ".Обновление", ConsoleColor.Yellow);
+                                Msg.SendUser(user.username, "PrioritySale", 9, Packages.StatusString);
 
-                                ArrayList myAL = new ArrayList();
-
-                                OleDbDataReader reader = dbf.ExecuteReader("SELECT balance.barcode,balance.price,balance.count,operation.count,balance.date FROM balance,operation where (balance.barcode == operation.barcode) AND (balance.date == operation.dt)");
-
-                                myAL.Add("Q0");
-
-                                while (reader.Read())
-                                {
-                                    myAL.Add(reader.GetString(0).Replace(" ","") + ";" + reader.GetValue(1) + ";" + reader.GetValue(2) + ";" + reader.GetValue(3) + ";" + reader.GetValue(4));
-                                }
-
-                                //string[] myArray = (string[])myAL.ToArray(typeof(string));
-
-                                //byte[] bytes = new byte[2048];
-
-                                //myAL.CopyTo(bytes);
-
-                                //byte[] bytes = (byte[])myAL.ToArray(typeof(byte[]));
-
-                                //Byte[] bytes = System.Text.Encoding.UTF8.GetBytes(myArray);
-  
+//                                 ArrayList myAL = new ArrayList();
+//
+//                                 OleDbDataReader reader = dbf.ExecuteReader("SELECT balance.barcode,balance.price,balance.count,operation.count,balance.date FROM balance,operation where (balance.barcode == operation.barcode) AND (balance.date == operation.dt)");
+//
+//                                 myAL.Add(UTF8Encoding.UTF8.GetBytes("Q0"));
+//
+//                                 while (reader.Read())
+//                                 {
+//                                     myAL.Add(reader.GetString(0).Replace(" ","") + ";" + reader.GetValue(1) + ";" + reader.GetValue(2) + ";" + reader.GetValue(3) + ";" + reader.GetValue(4));
+//                                 }
+//
+//                                 //string[] myArray = (string[])myAL.ToArray(typeof(string));
+//
 //                                 foreach (DictionaryEntry de in Server.clients)
 //                                 {
 //                                     if ((de.Value).ToString() == user.username )
-//                                         Server.MessageSender((Socket)de.Key, bytes);
+//                                         Server.MessageSender((Socket)de.Key, myAL.);
 //                                 }
                             }
                             break;

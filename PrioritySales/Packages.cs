@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace PrioritySales
 {
@@ -42,6 +43,49 @@ namespace PrioritySales
                             break;
                         case 3:
                             QueryStatus(false, msg);
+                            break;
+                        case 9:
+                            try
+                            {
+                                MainFormClassic.StatusUpdate = msg;
+
+                                if (mf.dataGridView1.Visible == true)
+                                {
+                                    Connector con = new Connector();
+
+                                    MySqlDataReader dr;
+
+                                    dr = con.ExecuteReader("SELECT * FROM `state`");
+
+                                    if (!dr.HasRows)
+                                    {
+                                        //TODO
+                                    }
+
+                                    (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Rows.Clear(); }));
+
+
+                                    while (dr.Read())
+                                    {
+                                        string barcode = dr.GetString(0).Replace(" ", "");
+                                        string name = dr.GetString(1).Replace("  ", "");
+                                        object price = dr.GetValue(2);
+                                        object count = dr.GetValue(3);
+                                        object sail = dr.GetValue(4);
+                                        object status = dr.GetValue(5);
+                                        string dt = dr.GetString(6);
+                                        object flag = dr.GetValue(7);
+
+                                        (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Rows.Add(barcode, name, price, count, sail, status, dt); }));
+                                    }
+                                }
+                            }
+                            catch (System.Exception ex)
+                            {
+                                //to msg to user
+                                Log.log_write(ex.Message, "EXCEPTION", "excrption");
+                                return;
+                            }
                             break;
                     }
                     break;

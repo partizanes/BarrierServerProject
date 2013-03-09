@@ -26,7 +26,7 @@ namespace PrioritySales
         public int xOffset, yOffset;
         public bool isMouseDown = false;
         private Point mouseOffset;
-        private string StatusUpdate;
+        public static string StatusUpdate;
 
         // ForeColor for all button block start
 
@@ -432,7 +432,7 @@ namespace PrioritySales
 
                     datetime = Convert.ToDateTime(dateTimePicker1.Text);
 
-                    Server.Sender("PrioritySale", 5, TextboxAddBar.Text + ";" + TextboxCountAdd.Text + ";" + TextboxPrice.Text + ";" + datetime);
+                    Server.Sender("PrioritySale", 5, TextboxAddBar.Text + ";" + TextboxCountAdd.Text + ";" + TextboxPrice.Text + ";" + datetime + ";" + TextboxNameItem.Text);
                 }
             }); ;
             thh.Name = "Авторизация";
@@ -665,14 +665,11 @@ namespace PrioritySales
             if (dataGridView1.Visible == false)
             {
                 dataGridView1.Visible = true;
-                //                             barcode   name count ost status date action
-                //dataGridView1.Rows.Add("4811702000108", "1", "2", "3", "4", "5"); StatusUpdate
                 Server.Sender("PrioritySale", 9,StatusUpdate);
             }
             else
             {
                 dataGridView1.Visible = false;
-                dataGridView1.Rows.Clear();
             }
         }
     }
