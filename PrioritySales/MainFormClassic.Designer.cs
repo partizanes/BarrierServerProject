@@ -77,6 +77,7 @@
             this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DateCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LabelVersionBd = new System.Windows.Forms.Label();
             this.PanelMainClassic.SuspendLayout();
             this.PanelBackButton.SuspendLayout();
             this.PanelButton.SuspendLayout();
@@ -263,6 +264,7 @@
             // PanelInfoBar
             // 
             this.PanelInfoBar.BackColor = System.Drawing.Color.Black;
+            this.PanelInfoBar.Controls.Add(this.LabelVersionBd);
             this.PanelInfoBar.Controls.Add(this.LabelUserName);
             this.PanelInfoBar.Location = new System.Drawing.Point(1, 1);
             this.PanelInfoBar.Name = "PanelInfoBar";
@@ -648,6 +650,19 @@
             this.DateCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.DateCol.Width = 137;
             // 
+            // LabelVersionBd
+            // 
+            this.LabelVersionBd.AutoSize = true;
+            this.LabelVersionBd.BackColor = System.Drawing.Color.Transparent;
+            this.LabelVersionBd.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVersionBd.ForeColor = System.Drawing.Color.Green;
+            this.LabelVersionBd.Location = new System.Drawing.Point(489, 6);
+            this.LabelVersionBd.Name = "LabelVersionBd";
+            this.LabelVersionBd.Size = new System.Drawing.Size(29, 19);
+            this.LabelVersionBd.TabIndex = 0;
+            this.LabelVersionBd.Text = "Бд:";
+            this.LabelVersionBd.Visible = false;
+            // 
             // MainFormClassic
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -722,6 +737,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Count;
         private System.Windows.Forms.DataGridViewTextBoxColumn Status;
         private System.Windows.Forms.DataGridViewTextBoxColumn DateCol;
+        public System.Windows.Forms.Label LabelVersionBd;
 
 
 

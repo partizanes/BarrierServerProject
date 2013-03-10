@@ -50,7 +50,11 @@ namespace PrioritySales
                                 if (!mf.dataGridView1.Visible)
                                     return;
 
-                                MainFormClassic.StatusUpdate = msg;
+                                string[] split_data = msg.Replace("\0", "").Split(new Char[] { ';' });
+
+                                MainFormClassic.StatusUpdate = split_data[0];
+
+                                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.LabelVersionBd.Text = ("Бд: " + split_data[1]); }));
 
                                 if (mf.dataGridView1.Visible == true)
                                 {

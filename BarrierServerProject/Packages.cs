@@ -143,7 +143,7 @@ namespace BarrierServerProject
                             else
                             {
                                 Color.WriteLineColor("Версия очередности устарела у клиента " + user.username + ".Обновление", ConsoleColor.Yellow);
-                                Msg.SendUser(user.username, "PrioritySale", 9, Packages.StatusString);
+                                Msg.SendUser(user.username, "PrioritySale", 9, Packages.StatusString + ";" + DateTime.Now);
                             }
                             break;
                     }

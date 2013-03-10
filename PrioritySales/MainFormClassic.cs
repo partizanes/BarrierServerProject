@@ -665,10 +665,12 @@ namespace PrioritySales
             if (dataGridView1.Visible == false)
             {
                 dataGridView1.Visible = true;
+                LabelVersionBd.Visible = true;
                 Server.Sender("PrioritySale", 9,StatusUpdate);
             }
             else
             {
+                LabelVersionBd.Visible = false;
                 dataGridView1.Visible = false;
             }
         }
