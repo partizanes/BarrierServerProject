@@ -422,6 +422,8 @@ namespace PrioritySales
                 return;
             }
 
+            ButtonTurn.Enabled = false;
+
             Thread thh = new Thread(delegate()
             {
                 Server.Connect();
@@ -438,6 +440,8 @@ namespace PrioritySales
             thh.Name = "Авторизация";
             Server.threads.Add(thh);
             thh.Start();
+
+            //TODO TIMER TO ENABLED BUTTON
         }
 
         private void TimerClearMsg_Tick(object sender, EventArgs e)
@@ -667,6 +671,9 @@ namespace PrioritySales
                 dataGridView1.Visible = true;
                 LabelVersionBd.Visible = true;
                 Server.Sender("PrioritySale", 9,StatusUpdate);
+
+                if (!Packages.mf.PanelAddBg.Visible)
+                    (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.dataGridView1.Focus(); }));
             }
             else
             {
@@ -681,6 +688,18 @@ namespace PrioritySales
                 PanelMsgBg.Visible = false;
             else
                 PanelMsgBg.Visible = true;
+        }
+
+        private void dataGridView1_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                    {
+                        ButtonList.Focus();
+                        break;
+                    }
+            }
         }
     }
 }

@@ -96,8 +96,9 @@ namespace PrioritySales
                             finally
                             {
                                 Server.Sender("PrioritySale", 8, MainFormClassic.StatusUpdate);
-                                if (!mf.PanelAddBg.Visible)
-                                    (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Focus(); }));
+
+//                                 if (!mf.ButtonList.ContainsFocus)
+//                                     (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Focus(); }));
                             }
                             break;
                     }
@@ -107,6 +108,8 @@ namespace PrioritySales
 
         public static void QueryStatus(bool a,string str)
         {
+            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.ButtonTurn.Enabled = true; }));
+
             if (a)
             {
                 (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.PanelAddBg.BackColor = Color.Green; }));

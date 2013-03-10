@@ -397,11 +397,12 @@ namespace BarrierServerProject
                 UpdateStateBase();
 
                 CheckInfoStatus = false;
+
                 Color.WriteLineColor("CheckInfoStatus " + CheckInfoStatus, ConsoleColor.Red);
 
                 foreach (System.Collections.DictionaryEntry de in Server.clients)
                 {
-                    Msg.SendUser((de.Value).ToString(), "PrioritySale", 9, Packages.StatusString);
+                    Msg.SendUser((de.Value).ToString(), "PrioritySale", 9, Packages.StatusString + ";" + DateTime.Now);
                 }
             }
         }

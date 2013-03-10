@@ -48,6 +48,7 @@
             this.ButtonUnk = new System.Windows.Forms.Button();
             this.PanelBackInfoBar = new System.Windows.Forms.Panel();
             this.PanelInfoBar = new System.Windows.Forms.Panel();
+            this.LabelVersionBd = new System.Windows.Forms.Label();
             this.LabelUserName = new System.Windows.Forms.Label();
             this.PanelBackMain = new System.Windows.Forms.Panel();
             this.PanelMainBlock = new System.Windows.Forms.Panel();
@@ -66,10 +67,9 @@
             this.TextboxCountAdd = new System.Windows.Forms.TextBox();
             this.TextboxNameItem = new System.Windows.Forms.TextBox();
             this.TextboxAddBar = new System.Windows.Forms.TextBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.TimerClearMsg = new System.Windows.Forms.Timer(this.components);
             this.PanelMsgBg = new System.Windows.Forms.Panel();
             this.PanelMsg = new System.Windows.Forms.Panel();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Barcode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NameItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -77,7 +77,7 @@
             this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DateCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.LabelVersionBd = new System.Windows.Forms.Label();
+            this.TimerClearMsg = new System.Windows.Forms.Timer(this.components);
             this.PanelMainClassic.SuspendLayout();
             this.PanelBackButton.SuspendLayout();
             this.PanelButton.SuspendLayout();
@@ -87,8 +87,8 @@
             this.PanelMainBlock.SuspendLayout();
             this.PanelAddBg.SuspendLayout();
             this.PanelAddTask.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.PanelMsgBg.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // PanelMainClassic
@@ -273,6 +273,19 @@
             this.PanelInfoBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PanelInfoBar_MouseDown);
             this.PanelInfoBar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PanelInfoBar_MouseMove);
             this.PanelInfoBar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PanelInfoBar_MouseUp);
+            // 
+            // LabelVersionBd
+            // 
+            this.LabelVersionBd.AutoSize = true;
+            this.LabelVersionBd.BackColor = System.Drawing.Color.Transparent;
+            this.LabelVersionBd.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVersionBd.ForeColor = System.Drawing.Color.Green;
+            this.LabelVersionBd.Location = new System.Drawing.Point(489, 6);
+            this.LabelVersionBd.Name = "LabelVersionBd";
+            this.LabelVersionBd.Size = new System.Drawing.Size(29, 19);
+            this.LabelVersionBd.TabIndex = 0;
+            this.LabelVersionBd.Text = "Бд:";
+            this.LabelVersionBd.Visible = false;
             // 
             // LabelUserName
             // 
@@ -500,6 +513,24 @@
             this.TextboxAddBar.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextboxAddBar_KeyPress);
             this.TextboxAddBar.Leave += new System.EventHandler(this.TextboxAddBar_Leave);
             // 
+            // PanelMsgBg
+            // 
+            this.PanelMsgBg.BackColor = System.Drawing.Color.DodgerBlue;
+            this.PanelMsgBg.Controls.Add(this.PanelMsg);
+            this.PanelMsgBg.Location = new System.Drawing.Point(3, 196);
+            this.PanelMsgBg.Name = "PanelMsgBg";
+            this.PanelMsgBg.Size = new System.Drawing.Size(650, 186);
+            this.PanelMsgBg.TabIndex = 7;
+            this.PanelMsgBg.Visible = false;
+            // 
+            // PanelMsg
+            // 
+            this.PanelMsg.BackColor = System.Drawing.Color.Black;
+            this.PanelMsg.Location = new System.Drawing.Point(2, 2);
+            this.PanelMsg.Name = "PanelMsg";
+            this.PanelMsg.Size = new System.Drawing.Size(646, 182);
+            this.PanelMsg.TabIndex = 0;
+            // 
             // dataGridView1
             // 
             this.dataGridView1.AllowUserToAddRows = false;
@@ -557,29 +588,7 @@
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.TabStop = false;
             this.dataGridView1.Visible = false;
-            // 
-            // TimerClearMsg
-            // 
-            this.TimerClearMsg.Interval = 3000;
-            this.TimerClearMsg.Tick += new System.EventHandler(this.TimerClearMsg_Tick);
-            // 
-            // PanelMsgBg
-            // 
-            this.PanelMsgBg.BackColor = System.Drawing.Color.DodgerBlue;
-            this.PanelMsgBg.Controls.Add(this.PanelMsg);
-            this.PanelMsgBg.Location = new System.Drawing.Point(3, 196);
-            this.PanelMsgBg.Name = "PanelMsgBg";
-            this.PanelMsgBg.Size = new System.Drawing.Size(650, 186);
-            this.PanelMsgBg.TabIndex = 7;
-            this.PanelMsgBg.Visible = false;
-            // 
-            // PanelMsg
-            // 
-            this.PanelMsg.BackColor = System.Drawing.Color.Black;
-            this.PanelMsg.Location = new System.Drawing.Point(2, 2);
-            this.PanelMsg.Name = "PanelMsg";
-            this.PanelMsg.Size = new System.Drawing.Size(646, 182);
-            this.PanelMsg.TabIndex = 0;
+            this.dataGridView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridView1_KeyDown);
             // 
             // Barcode
             // 
@@ -650,18 +659,10 @@
             this.DateCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.DateCol.Width = 137;
             // 
-            // LabelVersionBd
+            // TimerClearMsg
             // 
-            this.LabelVersionBd.AutoSize = true;
-            this.LabelVersionBd.BackColor = System.Drawing.Color.Transparent;
-            this.LabelVersionBd.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVersionBd.ForeColor = System.Drawing.Color.Green;
-            this.LabelVersionBd.Location = new System.Drawing.Point(489, 6);
-            this.LabelVersionBd.Name = "LabelVersionBd";
-            this.LabelVersionBd.Size = new System.Drawing.Size(29, 19);
-            this.LabelVersionBd.TabIndex = 0;
-            this.LabelVersionBd.Text = "Бд:";
-            this.LabelVersionBd.Visible = false;
+            this.TimerClearMsg.Interval = 3000;
+            this.TimerClearMsg.Tick += new System.EventHandler(this.TimerClearMsg_Tick);
             // 
             // MainFormClassic
             // 
@@ -687,8 +688,8 @@
             this.PanelAddBg.ResumeLayout(false);
             this.PanelAddTask.ResumeLayout(false);
             this.PanelAddTask.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.PanelMsgBg.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -704,7 +705,6 @@
         private System.Windows.Forms.Button ButtonExit;
         private System.Windows.Forms.Button ButtonAdd;
         private System.Windows.Forms.Button ButtonSetting;
-        private System.Windows.Forms.Button ButtonList;
         private System.Windows.Forms.Button ButtonHide;
         private System.Windows.Forms.Button ButtonMsg;
         private System.Windows.Forms.Button ButtonUnk;
@@ -738,6 +738,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Status;
         private System.Windows.Forms.DataGridViewTextBoxColumn DateCol;
         public System.Windows.Forms.Label LabelVersionBd;
+        public System.Windows.Forms.Button ButtonList;
 
 
 
