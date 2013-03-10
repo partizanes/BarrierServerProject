@@ -126,8 +126,6 @@ namespace BarrierServerProject
 
                                 Msg.SendUser(user.username, "PrioritySale", 2, "                Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.");
 
-                                //TODO this need auto update status
-
                                 CheckSail.CheckOne(bar, "0", Convert.ToDouble(count), Convert.ToInt32(price), datetime);
                             }
                             else

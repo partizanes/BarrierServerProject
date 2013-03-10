@@ -47,6 +47,9 @@ namespace PrioritySales
                         case 9:
                             try
                             {
+                                if (!mf.dataGridView1.Visible)
+                                    return;
+
                                 MainFormClassic.StatusUpdate = msg;
 
                                 if (mf.dataGridView1.Visible == true)
@@ -71,12 +74,12 @@ namespace PrioritySales
                                         string name = dr.GetString(1).Replace("  ", "");
                                         object price = dr.GetValue(2);
                                         object count = dr.GetValue(3);
-                                        object sail = dr.GetValue(4);
+                                        decimal sail = dr.GetDecimal(4);
                                         object status = dr.GetValue(5);
                                         string dt = dr.GetString(6);
                                         object flag = dr.GetValue(7);
 
-                                        (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Rows.Add(barcode, name, price, count, sail, status, dt); }));
+                                        (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Rows.Add(barcode, name, price, count, sail.ToString().Replace(",000",""), status, dt); }));
                                     }
                                 }
                             }
