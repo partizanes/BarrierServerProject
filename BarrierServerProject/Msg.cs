@@ -36,6 +36,5 @@ namespace BarrierServerProject
 
             return true;
         }
-        //TODO send to group users
     }
 }

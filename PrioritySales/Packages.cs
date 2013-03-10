@@ -86,6 +86,12 @@ namespace PrioritySales
                                 Log.log_write(ex.Message, "EXCEPTION", "excrption");
                                 return;
                             }
+                            finally
+                            {
+                                Server.Sender("PrioritySale", 8, MainFormClassic.StatusUpdate);
+                                if (!mf.PanelAddBg.Visible)
+                                    (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Focus(); }));
+                            }
                             break;
                     }
                     break;

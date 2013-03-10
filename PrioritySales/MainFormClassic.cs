@@ -672,5 +672,13 @@ namespace PrioritySales
                 dataGridView1.Visible = false;
             }
         }
+
+        private void ButtonMsg_Click(object sender, EventArgs e)
+        {
+            if (PanelMsgBg.Visible == true)
+                PanelMsgBg.Visible = false;
+            else
+                PanelMsgBg.Visible = true;
+        }
     }
 }

@@ -16,6 +16,7 @@ namespace BarrierServerProject
         private static MySqlCommand cmd;
         private static MySqlConnection serverConn;
         private static string connStr;
+        private static bool CheckInfoStatus = false;
 
         public static void StartCheck()
         {
@@ -38,9 +39,9 @@ namespace BarrierServerProject
 
             UpdateStateBase();
 
-            Thread.Sleep(1800000);
+            //Thread.Sleep(1800000);
 
-            StartCheck();
+            //StartCheck();
         }
 
         private static void CleanDbf(string namedbf)
@@ -90,6 +91,17 @@ namespace BarrierServerProject
         {
             try
             {
+                if (CheckInfoStatus)
+                {
+                    Color.WriteLineColor("На текущий момент производится добавление данных...Ожидание завершения процесса..", ConsoleColor.Cyan);
+
+                    while (CheckInfoStatus)
+                        Thread.Sleep(10000);
+                }
+
+                CheckInfoStatus = true;
+                Color.WriteLineColor("CheckInfoStatus " + CheckInfoStatus, ConsoleColor.Red);
+
                 connStr = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "pricechecker", "***REMOVED***", Config.GetParametr("BdName"));
 
                 serverConn = new MySqlConnection(connStr);
@@ -97,7 +109,6 @@ namespace BarrierServerProject
                 serverConn.Open();
 
                 CleanDbf("operation");
-
                 CleanDbf("action");
 
                 if (File.Exists(Environment.CurrentDirectory + "\\data\\" + "balance.dbf"))
@@ -229,12 +240,170 @@ namespace BarrierServerProject
             }
             finally
             {
-//                 if (serverConn.State != ConnectionState.Closed)
-//                     serverConn.Close();
+//                  if (serverConn.State != ConnectionState.Closed)
+//                      serverConn.Close();
 
+                CheckInfoStatus = false;
+                Color.WriteLineColor("CheckInfoStatus " + CheckInfoStatus, ConsoleColor.Red);
                 Color.WriteLineColor("Перебор завершен.", ConsoleColor.Cyan);
             }
            
+        }
+
+        public static void CheckOne(string bar, string operation, double count, Int32 price, DateTime date)
+        {
+            if (CheckInfoStatus)
+            {
+                Color.WriteLineColor("На текущий момент производится переформирование базы данных...Ожидание завершения процесса..", ConsoleColor.Cyan);
+
+                while(CheckInfoStatus)
+                    Thread.Sleep(10000);
+            }
+
+            CheckInfoStatus = true;
+            Color.WriteLineColor("CheckInfoStatus " + CheckInfoStatus, ConsoleColor.Red);
+
+            try
+            {
+                Dbf dbf = new Dbf();
+
+                connStr = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "pricechecker", "***REMOVED***", Config.GetParametr("BdName"));
+
+                serverConn = new MySqlConnection(connStr);
+
+                serverConn.Open();
+
+                if (File.Exists(Environment.CurrentDirectory + "\\data\\" + "balance.dbf"))
+                {
+                    //TODO DEBUG parametrs
+                    Color.WriteLineColor("[DEBUG] " + bar + ";" + price + ";" + count + ";" + date.ToString("yyyy-MM-dd,HH:mm:ss"), ConsoleColor.Gray);
+
+                    Msg.SendUser("LsTradeAgent", "DR", 0, bar + ";" + price + ";" + count + ";" + date.ToString("yyyy-MM-dd,HH:mm:ss"));
+
+
+                    //TODO CHECK TIME OPERATION EXECUTION , ABORT HANG OPERATION
+                    while (!CheckSend)
+                    {
+                        Thread.Sleep(500);
+                    }
+
+                    CheckSend = false;
+
+                    cmd = new MySqlCommand(@"SELECT SUM(IF(h.type IN (0,5), 1, -1) * i.quantity) quantity,i.price
+												FROM trm_in_pos c INNER JOIN 
+												trm_out_receipt_header h ON h.cash_id = c.cash_id INNER JOIN 
+												trm_out_receipt_item i ON i.cash_id = h.cash_id AND i.receipt_header = h.id  LEFT JOIN 
+												trm_out_receipt_item i2 ON (h.cash_id = i2.cash_id AND h.id = i2.receipt_header AND i2.link_item = i.id) INNER JOIN 
+												trm_out_receipt_footer f ON f.cash_id = h.cash_id AND f.id = h.id 
+												WHERE i2.link_item IS NULL AND i.type = 0 AND 
+												h.type IN (0,5,1,4) AND f.result IN (0) AND 1001 = c.store_id AND i.item LIKE '" + bar + "%' AND f.date >= '" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "' GROUP BY i.price", serverConn);
+
+                    cmd.CommandTimeout = 0;
+
+                    MySqlDataReader reader;
+
+                    Color.WriteLineColor("Запрос на кассовый сервер...", ConsoleColor.Cyan);
+
+                    reader = cmd.ExecuteReader();
+
+                    if (!reader.HasRows)
+                    {
+                        Color.WriteLineColor("Реализация по товару: " + bar + " не обнаружена с " + date, ConsoleColor.Yellow);
+
+                        int TotalDay = Convert.ToInt32((DateTime.Now - date).TotalSeconds) / 86400;
+
+                        if (TotalDay > 2)
+                        {
+                            Color.WriteLineColor("Товар " + bar + " не продается долгое время.Число дней " + TotalDay, ConsoleColor.Red);
+
+                            if (dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','4'," + "'Товар долго не продается!Число дней " + TotalDay + "')"))
+                            {
+                                Color.WriteLineColor("Строка успешно добавлена", ConsoleColor.Green);
+                            }
+                            else
+                                Color.WriteLineColor("Ошибка при добавлении строки!", ConsoleColor.Red);
+                        }
+
+                        dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51,0," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
+                    }
+
+                    while (reader.Read())
+                    {
+                        double countukm = reader.GetDouble(0);
+                        Int32 priceukm = reader.GetInt32(1);
+
+                        if (priceukm == price && countukm > count)
+                        {
+                            Color.WriteLineColor("Товар: " + bar + " по цене: " + priceukm + " продан больше чем было в очередности, количество: " + countukm + " по цене очередности", ConsoleColor.Cyan);
+                            dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','3'," + "'Продано больше чем было!')");
+                            dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + count.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
+                            continue;
+                        }
+
+                        if (priceukm == price && countukm == count)
+                        {
+                            Color.WriteLineColor("Товар: " + bar + " по цене: " + priceukm + " продан в количестве: " + countukm + " по цене очередности", ConsoleColor.Cyan);
+                            dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','0'," + "'Все продано по цене очереди!')");
+                            dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + count.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
+                            continue;
+                        }
+
+                        if (priceukm == price && countukm < count)
+                        {
+                            Color.WriteLineColor("Товар: " + bar + " по цене: " + priceukm + " продан в количестве: " + countukm + " на текущий момент продается по правильной цене и есть остаток", ConsoleColor.Yellow);
+                            dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','1'," + "'Продается по правильной цене и есть остаток!')");
+                            dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + count.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
+                            continue;
+                        }
+
+                        if (priceukm < price)
+                        {
+                            Color.WriteLineColor("Товар " + bar + " продается по неправильно цене! ", ConsoleColor.Red);
+                            Color.WriteLineColor("Цена на кассе: " + Convert.ToDouble(priceukm) + " Цена очередности: " + Convert.ToInt64(price), ConsoleColor.Red);
+                            Color.WriteLineColor("Проданое количество по дешевой цене: " + Convert.ToDouble(countukm), ConsoleColor.Red);
+                            dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + count.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
+                            dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','6'," + "'Товар продается дешевле цены очерёдности!')");
+                            continue;
+                        }
+
+                        if (priceukm > price)
+                        {
+                            Color.WriteLineColor("Товар " + bar + " завышение цены! ", ConsoleColor.Red);
+                            Color.WriteLineColor("Цена на кассе: " + Convert.ToInt64(priceukm) + " Цена очередности: " + Convert.ToInt64(price), ConsoleColor.Red);
+                            Color.WriteLineColor("Проданое количество по дорогой цене: " + Convert.ToInt64(countukm), ConsoleColor.Red);
+                            dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + count.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
+                            dbf.ExecuteNonQuery("INSERT INTO action.dbf (barcode,status,msg) VALUES ('" + bar + "','5'," + "'Товар продается дороже цены очерёдности!')");
+                            continue;
+                        }
+                    }
+
+                    if (!reader.IsClosed)
+                        reader.Close();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Color.WriteLineColor(ex.Message, ConsoleColor.Red);
+            }
+            finally
+            {
+//                 if (serverConn.State != ConnectionState.Closed)
+//                     serverConn.Close();
+
+                Color.WriteLineColor("Добавление завершено.", ConsoleColor.Cyan);
+
+                //TODO optimal logic not remove all data from mysql, add only one this barcode
+                CleanBase();
+                UpdateStateBase();
+
+                CheckInfoStatus = false;
+                Color.WriteLineColor("CheckInfoStatus " + CheckInfoStatus, ConsoleColor.Red);
+
+                foreach (System.Collections.DictionaryEntry de in Server.clients)
+                {
+                    Msg.SendUser((de.Value).ToString(), "PrioritySale", 9, Packages.StatusString);
+                }
+            }
         }
 
         private static void CleanBase()

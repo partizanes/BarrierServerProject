@@ -123,14 +123,21 @@ namespace BarrierServerProject
                             if (dbf.ExecuteNonQuery("INSERT INTO balance.dbf (barcode,price,count,date,item) VALUES ('" + bar + "'," + price + "," + count.Replace(",",".") + ",{^" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "},'"+ item +"')"))
                             {
                                 Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.", ConsoleColor.Green);
-                                //TODO this need auto update status
+
                                 Msg.SendUser(user.username, "PrioritySale", 2, "                Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.");
+
+                                //TODO this need auto update status
+
+                                CheckSail.CheckOne(bar, "0", Convert.ToDouble(count), Convert.ToInt32(price), datetime);
                             }
                             else
                             {
                                 Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + count + " Отклонён!", ConsoleColor.Red);
                                 Msg.SendUser(user.username, "PrioritySale", 3, "                                                                     Отклонено!");
                             }
+                            break;
+                        case 8:
+                            Color.WriteLineColor("Версия очередности обновлена у клиента " + user.username, ConsoleColor.Yellow);
                             break;
                         case 9:
                             if (msg == StatusString)
@@ -139,25 +146,6 @@ namespace BarrierServerProject
                             {
                                 Color.WriteLineColor("Версия очередности устарела у клиента " + user.username + ".Обновление", ConsoleColor.Yellow);
                                 Msg.SendUser(user.username, "PrioritySale", 9, Packages.StatusString);
-
-//                                 ArrayList myAL = new ArrayList();
-//
-//                                 OleDbDataReader reader = dbf.ExecuteReader("SELECT balance.barcode,balance.price,balance.count,operation.count,balance.date FROM balance,operation where (balance.barcode == operation.barcode) AND (balance.date == operation.dt)");
-//
-//                                 myAL.Add(UTF8Encoding.UTF8.GetBytes("Q0"));
-//
-//                                 while (reader.Read())
-//                                 {
-//                                     myAL.Add(reader.GetString(0).Replace(" ","") + ";" + reader.GetValue(1) + ";" + reader.GetValue(2) + ";" + reader.GetValue(3) + ";" + reader.GetValue(4));
-//                                 }
-//
-//                                 //string[] myArray = (string[])myAL.ToArray(typeof(string));
-//
-//                                 foreach (DictionaryEntry de in Server.clients)
-//                                 {
-//                                     if ((de.Value).ToString() == user.username )
-//                                         Server.MessageSender((Socket)de.Key, myAL.);
-//                                 }
                             }
                             break;
                     }
