@@ -28,6 +28,8 @@ namespace PrioritySales
         private Point mouseOffset;
         public static string StatusUpdate;
 
+        Tasks tasks = new Tasks();
+
         // ForeColor for all button block start
 
         private void MainFormClassic_Shown(object sender, EventArgs e)
@@ -65,14 +67,14 @@ namespace PrioritySales
             ButtonMsg.ForeColor = Color.DodgerBlue;
         }
 
-        private void ButtonUnk_Enter(object sender, EventArgs e)
+        private void ButtonTasks_Enter(object sender, EventArgs e)
         {
-            ButtonUnk.ForeColor = Color.Green;
+            ButtonTasks.ForeColor = Color.Green;
         }
 
-        private void ButtonUnk_Leave(object sender, EventArgs e)
+        private void ButtonTasks_Leave(object sender, EventArgs e)
         {
-            ButtonUnk.ForeColor = Color.DodgerBlue;
+            ButtonTasks.ForeColor = Color.DodgerBlue;
         }
 
         private void button1_Enter(object sender, EventArgs e)
@@ -596,6 +598,7 @@ namespace PrioritySales
                 Point mousePos = Control.MousePosition;
                 mousePos.Offset(mouseOffset.X - xa, mouseOffset.Y - ya);
                 Location = mousePos;
+                tasks.Location = new System.Drawing.Point((mousePos.X + this.Size.Width + 1), (mousePos.Y));
             }
         }
         private void PanelMainClassic_MouseDown(object sender, MouseEventArgs e)
@@ -772,5 +775,52 @@ namespace PrioritySales
                     break;
             }
         }
+
+        private void ButtonTasks_Click(object sender, EventArgs e)
+        {
+            if (tasks.Visible)
+            {
+                tasks.Hide();
+            }
+            else
+            {
+                tasks.Location = new System.Drawing.Point((this.Location.X + this.Size.Width) + 1, (this.Location.Y));
+                tasks.Show();
+            }
+        }
+
+        private void MainFormClassic_Activated(object sender, EventArgs e)
+        {
+        }
+
+        private void MainFormClassic_Load(object sender, EventArgs e)
+        {
+            if (tasks.Visible)
+            {
+                tasks.Activate();
+            }
+        }
+
+        private void ButtonHide_Click(object sender, EventArgs e)
+        {
+            PrioritySales.Visible = true;
+            this.Hide();
+            tasks.Hide();
+        }
+
+        private void PrioritySales_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            PrioritySales.Visible = false;
+            Packages.mf.Show();
+            tasks.Location = new System.Drawing.Point((this.Location.X + this.Size.Width) + 1, (this.Location.Y));
+            tasks.Show();
+            tasks.Refresh();
+        }
+
+        private void MainFormClassic_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            PrioritySales.Visible = false;
+        }
+
     }
 }

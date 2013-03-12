@@ -45,7 +45,7 @@
             this.ButtonList = new System.Windows.Forms.Button();
             this.ButtonHide = new System.Windows.Forms.Button();
             this.ButtonMsg = new System.Windows.Forms.Button();
-            this.ButtonUnk = new System.Windows.Forms.Button();
+            this.ButtonTasks = new System.Windows.Forms.Button();
             this.PanelBackInfoBar = new System.Windows.Forms.Panel();
             this.PanelInfoBar = new System.Windows.Forms.Panel();
             this.LabelVersionBd = new System.Windows.Forms.Label();
@@ -78,6 +78,7 @@
             this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DateCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TimerClearMsg = new System.Windows.Forms.Timer(this.components);
+            this.PrioritySales = new System.Windows.Forms.NotifyIcon(this.components);
             this.PanelMainClassic.SuspendLayout();
             this.PanelBackButton.SuspendLayout();
             this.PanelButton.SuspendLayout();
@@ -125,7 +126,7 @@
             this.PanelButton.Controls.Add(this.ButtonList);
             this.PanelButton.Controls.Add(this.ButtonHide);
             this.PanelButton.Controls.Add(this.ButtonMsg);
-            this.PanelButton.Controls.Add(this.ButtonUnk);
+            this.PanelButton.Controls.Add(this.ButtonTasks);
             this.PanelButton.Location = new System.Drawing.Point(1, 1);
             this.PanelButton.Name = "PanelButton";
             this.PanelButton.Size = new System.Drawing.Size(655, 50);
@@ -223,6 +224,7 @@
             this.ButtonHide.TabIndex = 7;
             this.ButtonHide.Text = "Свернуть";
             this.ButtonHide.UseVisualStyleBackColor = false;
+            this.ButtonHide.Click += new System.EventHandler(this.ButtonHide_Click);
             this.ButtonHide.Enter += new System.EventHandler(this.ButtonHide_Enter);
             this.ButtonHide.Leave += new System.EventHandler(this.ButtonHide_Leave);
             // 
@@ -243,19 +245,20 @@
             this.ButtonMsg.Leave += new System.EventHandler(this.ButtonMsg_Leave);
             this.ButtonMsg.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ButtonMsg_PreviewKeyDown);
             // 
-            // ButtonUnk
+            // ButtonTasks
             // 
-            this.ButtonUnk.BackColor = System.Drawing.Color.Transparent;
-            this.ButtonUnk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ButtonUnk.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.ButtonUnk.Location = new System.Drawing.Point(250, 13);
-            this.ButtonUnk.Name = "ButtonUnk";
-            this.ButtonUnk.Size = new System.Drawing.Size(75, 23);
-            this.ButtonUnk.TabIndex = 4;
-            this.ButtonUnk.Text = "Unk";
-            this.ButtonUnk.UseVisualStyleBackColor = false;
-            this.ButtonUnk.Enter += new System.EventHandler(this.ButtonUnk_Enter);
-            this.ButtonUnk.Leave += new System.EventHandler(this.ButtonUnk_Leave);
+            this.ButtonTasks.BackColor = System.Drawing.Color.Transparent;
+            this.ButtonTasks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ButtonTasks.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.ButtonTasks.Location = new System.Drawing.Point(250, 13);
+            this.ButtonTasks.Name = "ButtonTasks";
+            this.ButtonTasks.Size = new System.Drawing.Size(75, 23);
+            this.ButtonTasks.TabIndex = 4;
+            this.ButtonTasks.Text = "Задачи";
+            this.ButtonTasks.UseVisualStyleBackColor = false;
+            this.ButtonTasks.Click += new System.EventHandler(this.ButtonTasks_Click);
+            this.ButtonTasks.Enter += new System.EventHandler(this.ButtonTasks_Enter);
+            this.ButtonTasks.Leave += new System.EventHandler(this.ButtonTasks_Leave);
             // 
             // PanelBackInfoBar
             // 
@@ -670,6 +673,12 @@
             this.TimerClearMsg.Interval = 3000;
             this.TimerClearMsg.Tick += new System.EventHandler(this.TimerClearMsg_Tick);
             // 
+            // PrioritySales
+            // 
+            this.PrioritySales.Icon = ((System.Drawing.Icon)(resources.GetObject("PrioritySales.Icon")));
+            this.PrioritySales.Text = "Двойной клик для активации приложения.";
+            this.PrioritySales.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PrioritySales_MouseDoubleClick);
+            // 
             // MainFormClassic
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -682,6 +691,10 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainFormClassic";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.TopMost = true;
+            this.Activated += new System.EventHandler(this.MainFormClassic_Activated);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainFormClassic_FormClosed);
+            this.Load += new System.EventHandler(this.MainFormClassic_Load);
             this.Shown += new System.EventHandler(this.MainFormClassic_Shown);
             this.PanelMainClassic.ResumeLayout(false);
             this.PanelBackButton.ResumeLayout(false);
@@ -713,7 +726,7 @@
         private System.Windows.Forms.Button ButtonSetting;
         private System.Windows.Forms.Button ButtonHide;
         private System.Windows.Forms.Button ButtonMsg;
-        private System.Windows.Forms.Button ButtonUnk;
+        private System.Windows.Forms.Button ButtonTasks;
         private System.Windows.Forms.Panel PanelInfoBar;
         public System.Windows.Forms.Label LabelUserName;
         private System.Windows.Forms.Button ButtonUnk2;
@@ -745,6 +758,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn DateCol;
         public System.Windows.Forms.Label LabelVersionBd;
         public System.Windows.Forms.Button ButtonList;
+        private System.Windows.Forms.NotifyIcon PrioritySales;
 
 
 

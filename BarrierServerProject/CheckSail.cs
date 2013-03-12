@@ -97,7 +97,7 @@ namespace BarrierServerProject
                 }
 
                 CheckInfoStatus = true;
-                Color.WriteLineColor("CheckInfoStatus " + CheckInfoStatus, ConsoleColor.Red);
+                Color.WriteLineColor("CheckInfoStatus: Проиходит обновление бд ,таблицы заблокированы.", ConsoleColor.Red);
 
                 connStr = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "pricechecker", "***REMOVED***", Config.GetParametr("BdName"));
 
@@ -129,9 +129,17 @@ namespace BarrierServerProject
 
                         Msg.SendUser("LsTradeAgent", "DR", 0, bar + ";" + price + ";" + count + ";" + date.ToString("yyyy-MM-dd,HH:mm:ss"));
 
+                        DateTime datetime = DateTime.Now;
+
                         while (!CheckSend)
                         {
                             Thread.Sleep(500);
+
+                            if ((DateTime.Now - datetime).TotalSeconds > 60)
+                            {
+                                CheckSend = true;
+                                Color.WriteLineColor("LsTradeAgent не ответил вовремя.Операция отменена.", ConsoleColor.Red);
+                            }
                         }
 
                         CheckSend = false;
@@ -179,7 +187,7 @@ namespace BarrierServerProject
 //                      serverConn.Close();
 
                 CheckInfoStatus = false;
-                Color.WriteLineColor("CheckInfoStatus " + CheckInfoStatus, ConsoleColor.Red);
+                Color.WriteLineColor("CheckInfoStatus: Обновление завершено ,таблицы разблокированы.", ConsoleColor.Green);
                 Color.WriteLineColor("Перебор завершен.", ConsoleColor.Cyan);
             }
            
@@ -213,11 +221,18 @@ namespace BarrierServerProject
 
                     Msg.SendUser("LsTradeAgent", "DR", 0, bar + ";" + price + ";" + count + ";" + date.ToString("yyyy-MM-dd,HH:mm:ss"));
 
+                    DateTime datetime = DateTime.Now;
 
                     //TODO CHECK TIME OPERATION EXECUTION , ABORT HANG OPERATION
                     while (!CheckSend)
                     {
                         Thread.Sleep(500);
+
+                        if ((DateTime.Now - datetime).TotalSeconds > 60)
+                        {
+                            CheckSend = true;
+                            Color.WriteLineColor("LsTradeAgent не ответил вовремя.Операция отменена.", ConsoleColor.Red);
+                        }
                     }
 
                     CheckSend = false;
