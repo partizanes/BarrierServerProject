@@ -252,9 +252,7 @@ namespace PrioritySales
 
         private void getname()
         {
-            Mysql mysql = new Mysql();
-
-            MySql.Data.MySqlClient.MySqlDataReader dr = mysql.ExecuteReader("SELECT a.name, b.price \n" +
+            MySql.Data.MySqlClient.MySqlDataReader dr = Mysql.ExecuteReader("SELECT a.name, b.price \n" +
                 "FROM trm_in_var C \n" +
                 "LEFT JOIN trm_in_items A ON A.id=C.item \n" +
                 "LEFT JOIN trm_in_pricelist_items B ON B.item=c.item \n" +
@@ -269,7 +267,7 @@ namespace PrioritySales
 
             if (!dr.HasRows)
             {
-                DeclineErr(true, "                                             Штрихкод не найден в базе!");
+                DeclineErr(true, "                                                Штрихкод не найден в базе!");
                 TextboxAddBar.Text = "";
                 TextboxCountAdd.Text = "";
                 TextboxNameItem.Text = "";

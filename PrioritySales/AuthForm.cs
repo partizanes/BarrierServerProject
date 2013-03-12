@@ -41,6 +41,7 @@ namespace PrioritySales
 
             try
             {
+                Mysql.FirstRun();
                 log_level = int.Parse(Config.GetParametr("log_level"));
             }
             catch (FormatException)

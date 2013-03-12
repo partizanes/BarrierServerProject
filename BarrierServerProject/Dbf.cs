@@ -6,7 +6,7 @@ namespace BarrierServerProject
 {
     class Dbf
     {
-        public Boolean ExecuteNonQuery(string str)
+        public static Boolean ExecuteNonQuery(string str)
         {
             OleDbConnection conn = new OleDbConnection();
             OleDbCommand cmd = new OleDbCommand();
@@ -38,7 +38,7 @@ namespace BarrierServerProject
             }
         }
 
-        public OleDbDataReader ExecuteReader(string str)
+        public static OleDbDataReader ExecuteReader(string str)
         {
             OleDbConnection conn = new OleDbConnection();
             OleDbCommand cmd = new OleDbCommand();

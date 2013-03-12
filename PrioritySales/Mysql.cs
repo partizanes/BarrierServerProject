@@ -13,13 +13,13 @@ namespace PrioritySales
 {
     class Mysql
     {
-        private MySqlCommand cmd;
-        private MySqlConnection serverConn;
-        private string connStr;
-        private IPAddress ip = IPAddress.Parse(Config.GetParametr("IpCashServer"));
-        private string BdName = (Config.GetParametr("BdName"));
+        private static MySqlCommand cmd;
+        private static MySqlConnection serverConn;
+        private static string connStr;
+        private static IPAddress ip = IPAddress.Parse(Config.GetParametr("IpCashServer"));
+        private static string BdName = (Config.GetParametr("BdName"));
 
-        public Boolean ExecuteNonQuery(string str)
+        public static Boolean ExecuteNonQuery(string str)
         {
             if (ip.ToString().Length == 0 || BdName.Length == 0)
             {
@@ -92,7 +92,7 @@ namespace PrioritySales
             }
         }
 
-        public MySqlDataReader ExecuteReader(string str)
+        public static MySqlDataReader ExecuteReader(string str)
         {
             MySqlDataReader reader = null;
             //TODO read info about connect from config
@@ -159,6 +159,25 @@ namespace PrioritySales
             {
                 Log.log_write(ex.Message, "Exception", "Exception");
                 return null;
+            }
+        }
+
+        public static void FirstRun()
+        {
+            try
+            {
+                connStr = string.Format("server={0};uid={1};pwd={2};database={3};", ip, "pricechecker", "***REMOVED***", BdName);
+
+                serverConn = new MySqlConnection(connStr);
+
+                serverConn.Open();
+            }
+            catch {}
+
+            finally
+            {
+                    if (serverConn.State != ConnectionState.Closed && serverConn != null)
+                    serverConn.Close();
             }
         }
     }

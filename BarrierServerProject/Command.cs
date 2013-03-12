@@ -60,7 +60,7 @@ namespace BarrierServerProject
                         Color.WriteLineColor("Введите логин пароль", ConsoleColor.Yellow);
                         string line = Console.ReadLine();
                         string[] split_data = line.Replace("\0", "").Split(new Char[] { ' ' });
-                        Dbf dbf = new Dbf();
+
                         using (MD5 md5Hash = MD5.Create())
                         {
                             string hash = Packages.GetMd5Hash(md5Hash, (Packages.GetMd5Hash(md5Hash, "1?234%5aZ!") + Packages.GetMd5Hash(md5Hash, split_data[1])));
@@ -74,8 +74,6 @@ namespace BarrierServerProject
                 case "user del":
                     {
                         Color.WriteLineColor("Введите имя пользователя которого хотите удалить...", ConsoleColor.Yellow);
-
-                        Dbf dbf = new Dbf();
 
                         string line = Console.ReadLine();
 

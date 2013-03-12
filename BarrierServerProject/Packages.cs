@@ -15,7 +15,6 @@ namespace BarrierServerProject
 {
     class Packages
     {
-        static Dbf dbf = new Dbf();
         public static string StatusString = "";
 
         public static void parse(string p_id, int com, string msg, User user,System.Net.Sockets.Socket r_client)
@@ -60,7 +59,7 @@ namespace BarrierServerProject
                             string price = split_data[3];
                             DateTime datetime = Convert.ToDateTime(split_data[4]);
 
-                            if (dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + barcode + "'," + operation + "," + count.ToString().Replace(",", ".") + "," + price + ",{^" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "})"))
+                            if (Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + barcode + "'," + operation + "," + count.ToString().Replace(",", ".") + "," + price + ",{^" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "})"))
                             {
                                 Color.WriteLineColor("Успешно добавлена операция расхода из LsTradeAgent",ConsoleColor.Green);
                             }
@@ -121,7 +120,7 @@ namespace BarrierServerProject
 
                             string item = sd[4];
 
-                            if (dbf.ExecuteNonQuery("INSERT INTO balance.dbf (barcode,price,count,date,item) VALUES ('" + bar + "'," + price + "," + count.Replace(",",".") + ",{^" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "},'"+ item +"')"))
+                            if (Dbf.ExecuteNonQuery("INSERT INTO balance.dbf (barcode,price,count,date,item) VALUES ('" + bar + "'," + price + "," + count.Replace(",",".") + ",{^" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "},'"+ item +"')"))
                             {
                                 Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.", ConsoleColor.Green);
 
