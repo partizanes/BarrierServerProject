@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
 [assembly: AssemblyTitle("")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Модуль-клиент BarrierServer")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("by Part!zanes")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("Copyright © partizanes 2013")]
+[assembly: AssemblyCopyright("Copyright © partizanes 2012-2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // Можно задать все значения или принять номер построения и номер редакции по умолчанию, 
 // используя "*", как показано ниже:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.0.4.9")]
+[assembly: AssemblyFileVersion("1.0.4.9")]

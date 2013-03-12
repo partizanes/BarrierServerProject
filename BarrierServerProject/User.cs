@@ -5,7 +5,7 @@ namespace BarrierServerProject
     public class User
     {
        private string m_username;
-       private int m_userid;            //0 - from users 1 - for module
+       private int m_userid;
        private IPAddress m_ipaddress;
        private int m_port;
 

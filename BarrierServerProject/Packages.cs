@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Data.OleDb;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace BarrierServerProject
 {
@@ -80,12 +81,12 @@ namespace BarrierServerProject
                         case 0:
                             string[] split_data = msg.Replace("\0", "").Replace(" ", "").Split(new Char[] { ':' });
 
-                            OleDbDataReader dr;
-
-                            dr = dbf.ExecuteReader("SELECT name,hash FROM users.dbf WHERE name = '" + split_data[0] + "' AND hash = '" + split_data[1] + "'");
+                            MySqlDataReader dr = Connector.ExecuteReader("SELECT username,hash FROM users WHERE username = '" + split_data[0] + "' AND hash = '" + split_data[1] + "'");
 
                             if (dr == null)
+                            {
                                 Log.log_write("Запрос вернул null", "Exception", "Exception");
+                            }
 
                             if (dr.Read())
                             {
@@ -93,12 +94,13 @@ namespace BarrierServerProject
                                 Color.WriteLineColor(split_data[0] + " Добавлен!", ConsoleColor.Cyan);
                                 Msg.SendUser(split_data[0], "PrioritySale", 1, split_data[0]);
                                 user.username = split_data[0];
+                                Connector.ExecuteNonQuery("UPDATE `barrierserver`.`users` SET `status`='1',`ip`='" + IPAddress.Parse(((IPEndPoint)r_client.RemoteEndPoint).Address.ToString()) + "' WHERE `username`='" + split_data[0] + "'");
                             }
                             else
                             {
                                 Server.clients[r_client] = split_data[0];
                                 Msg.SendUser(split_data[0], "PrioritySale", 0, "Идентификация не пройдена.");
-                                Color.WriteLineColor(split_data[0] +" авторизация неудачна", ConsoleColor.Red);
+                                Color.WriteLineColor(split_data[0] + " авторизация неудачна", ConsoleColor.Red);
                             }
 
                             using (MD5 md5Hash = MD5.Create())
@@ -106,7 +108,6 @@ namespace BarrierServerProject
                                 Color.WriteLineColor(split_data[0] + " " + split_data[1], ConsoleColor.Red);
                                 break;
                             }
-
                         case 5:
                             string[] sd = msg.Replace("\0", "").Split(new Char[] { ';' });
 
@@ -178,6 +179,7 @@ namespace BarrierServerProject
                     {
                         case 0000:
                             Color.WriteLineColor(Server.clients[r_client] + ": Завершение сеанса.", ConsoleColor.Red);
+                            Connector.ExecuteNonQuery("UPDATE `barrierserver`.`users` SET `status`='0' WHERE `username`='" + user.username + "'");
                             Thread.Sleep(3000);
                             r_client.Disconnect(false);
                             r_client.Close();

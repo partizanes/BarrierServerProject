@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>app.ico</ApplicationIcon>
+    <ApplicationIcon>new_barrier_logo.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -131,6 +131,7 @@
     <None Include="Resources\SettingForm.png" />
     <None Include="Resources\f55.png" />
     <Content Include="app.ico" />
+    <Content Include="new_barrier_logo.ico" />
     <Content Include="Resources\form3.png" />
   </ItemGroup>
   <ItemGroup>

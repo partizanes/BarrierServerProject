@@ -409,8 +409,7 @@ namespace BarrierServerProject
 
         private static void CleanBase()
         {
-            Connector con = new Connector();
-            con.ExecuteNonQuery("DELETE FROM state");
+            Connector.ExecuteNonQuery("DELETE FROM state");
         }
 
         private static void UpdateStateBase()
@@ -418,8 +417,6 @@ namespace BarrierServerProject
             Dbf dbf = new Dbf();
 
             OleDbDataReader reader = dbf.ExecuteReader("SELECT balance.barcode,balance.item,balance.price,balance.count,operation.count,balance.date FROM balance,operation where (balance.barcode == operation.barcode) AND (balance.date == operation.dt)");            
-
-            Connector con = new Connector();
 
             while (reader.Read())
             {
@@ -434,7 +431,7 @@ namespace BarrierServerProject
 
                 //TODO CHECK FLAG
 
-                con.ExecuteNonQuery("INSERT INTO `barrierserver`.`state`(`barcode`,`name`,`price`,`count`,`sailed`,`status`,`date`,`flag`) VALUES ( '" + barcode + "','" + item + "','" + price + "','" + count + "','" + sail.ToString().Replace(",",".") + "','" + status + "','"+ dt.ToString("yyyy-MM-dd,HH:mm:ss") +"','" + flag +"')");
+                Connector.ExecuteNonQuery("INSERT INTO `barrierserver`.`state`(`barcode`,`name`,`price`,`count`,`sailed`,`status`,`date`,`flag`) VALUES ( '" + barcode + "','" + item + "','" + price + "','" + count + "','" + sail.ToString().Replace(",", ".") + "','" + status + "','" + dt.ToString("yyyy-MM-dd,HH:mm:ss") + "','" + flag + "')");
             }
 
             using (MD5 md5Hash = MD5.Create())

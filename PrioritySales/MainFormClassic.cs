@@ -697,8 +697,81 @@ namespace PrioritySales
                 case Keys.Escape:
                     {
                         ButtonList.Focus();
+                        dataGridView1.Visible = false;
                         break;
                     }
+                case Keys.Up:
+                    {
+                        if (dataGridView1.Rows.GetFirstRow(DataGridViewElementStates.Selected) == 0)
+                            ButtonList.Focus();
+                        break;
+                    }
+            }
+        }
+
+        private void ButtonAdd_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Down:
+                    ButtonAdd_Click(sender, e);
+                    break;
+            }
+        }
+
+        private void ButtonAdd_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Down:
+                    e.IsInputKey = true;
+                    break;
+            }
+        }
+
+        private void ButtonList_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Down:
+                    e.IsInputKey = true;
+                    break;
+            }
+        }
+
+        private void ButtonList_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (dataGridView1.Visible)
+            {
+                dataGridView1.Focus();
+                return;
+            }
+
+            switch (e.KeyCode)
+            {
+                case Keys.Down:
+                    ButtonList_Click(sender, e);
+                    break;
+            }
+        }
+
+        private void ButtonMsg_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Down:
+                    e.IsInputKey = true;
+                    break;
+            }
+        }
+
+        private void ButtonMsg_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Down:
+                    ButtonMsg_Click(sender, e);
+                    break;
             }
         }
     }

@@ -8,11 +8,11 @@ namespace BarrierServerProject
 {
     class Connector
     {
-        private MySqlCommand cmd;
-        private MySqlConnection serverConn;
-        private string connStr;
+        private static MySqlCommand cmd;
+        private static MySqlConnection serverConn;
+        private static string connStr;
 
-        public Boolean ExecuteNonQuery(string str)
+        public static Boolean ExecuteNonQuery(string str)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace BarrierServerProject
             return true;
         }
 
-        public MySqlDataReader ExecuteReader(string str)
+        public static  MySqlDataReader ExecuteReader(string str)
         {
             MySqlDataReader reader = null;
 

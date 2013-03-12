@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
 [assembly: AssemblyTitle("LsTradeAgent")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Модуль связи BarrierServer с LsTrade")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("LsTradeAgent")]

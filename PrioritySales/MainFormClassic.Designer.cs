@@ -177,7 +177,9 @@
             this.ButtonAdd.UseVisualStyleBackColor = false;
             this.ButtonAdd.Click += new System.EventHandler(this.ButtonAdd_Click);
             this.ButtonAdd.Enter += new System.EventHandler(this.ButtonAdd_Enter);
+            this.ButtonAdd.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ButtonAdd_KeyDown);
             this.ButtonAdd.Leave += new System.EventHandler(this.ButtonAdd_Leave);
+            this.ButtonAdd.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ButtonAdd_PreviewKeyDown);
             // 
             // ButtonSetting
             // 
@@ -206,7 +208,9 @@
             this.ButtonList.UseVisualStyleBackColor = false;
             this.ButtonList.Click += new System.EventHandler(this.ButtonList_Click);
             this.ButtonList.Enter += new System.EventHandler(this.ButtonList_Enter);
+            this.ButtonList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ButtonList_KeyDown);
             this.ButtonList.Leave += new System.EventHandler(this.ButtonList_Leave);
+            this.ButtonList.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ButtonList_PreviewKeyDown);
             // 
             // ButtonHide
             // 
@@ -235,7 +239,9 @@
             this.ButtonMsg.UseVisualStyleBackColor = false;
             this.ButtonMsg.Click += new System.EventHandler(this.ButtonMsg_Click);
             this.ButtonMsg.Enter += new System.EventHandler(this.ButtonMsg_Enter);
+            this.ButtonMsg.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ButtonMsg_KeyDown);
             this.ButtonMsg.Leave += new System.EventHandler(this.ButtonMsg_Leave);
+            this.ButtonMsg.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ButtonMsg_PreviewKeyDown);
             // 
             // ButtonUnk
             // 

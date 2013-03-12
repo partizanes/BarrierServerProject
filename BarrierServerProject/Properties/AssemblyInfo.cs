@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
 [assembly: AssemblyTitle("")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Сервер сбора и обработки информации")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("by Part!zanes")]
 [assembly: AssemblyProduct("")]
