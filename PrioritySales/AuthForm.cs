@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Security.Cryptography;
+using System.IO;
 
 namespace PrioritySales
 {
@@ -24,14 +25,56 @@ namespace PrioritySales
 
         public static void HideThis()
         {
-            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).Hide(); }));
+            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).Hide(); }));
         }
 
         public void check_dll()
         {
             while (!System.IO.File.Exists(Environment.CurrentDirectory + "\\" + "Serialization.dll"))
             {
-                MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "В папке с программой отсутствует нужная для работы база данных пользователей Serialization.dll \n Скопируйте в папку с программой базу данных пользователей и нажмите ок!");
+                MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "В папке с программой отсутствует нужная для работы библиотека Serialization.dll \n Скопируйте в папку с программой библиотеку и нажмите ок!");
+            }
+
+            if(!File.Exists(Environment.CurrentDirectory + "\\" + "config.ini"))
+            {
+                try
+                {
+                    Encoding outputEnc = new UTF8Encoding(false);
+
+                    string[] createText = { @"[SETTINGS]",
+                                              ";Это файл конфигурации не изменяйте параметры ,если вы не понимаете что делаете!",
+                                              "",
+                                              ";Расположение сервера авторизации (barrier server)",
+                                              "IpAuthServer=127.0.0.1",
+                                              "",
+                                              ";Порт сервера авторизации (по умолчанию 1991)",
+                                              "PortAuthServer=1991",
+                                              "",
+                                              "; расположение кассового сервера (ukm server)",
+                                              "IpCashServer=192.168.1.100",
+                                              "",
+                                              ";Порт кассового сервера (по умолчанию 7000)",
+                                              "PortCashServer=7000",
+                                              "",
+                                              ";Сохранять последнее имя пользователя",
+                                              "SaveLastLogin=true",
+                                              "",
+                                              ";Последнее имя пользователя",
+                                              "LastLogin=partizanes",
+                                              "",
+                                              ";Уровень записи в лог",
+                                              "log_level=3",
+                                              "",
+                                              ";Название база данных ukm на кассовом севрере",
+                                              "BdName=ukmserver"
+                                          };
+
+                    File.WriteAllLines(Environment.CurrentDirectory + "\\" + "config.ini", createText, outputEnc);
+                }
+                catch (System.Exception ex)
+                {
+                    Log.log_write(ex.Message,"EXCEPTION","exception");
+                }
             }
         }
 
@@ -39,8 +82,11 @@ namespace PrioritySales
         {
             InitializeComponent();
 
+            check_dll();
+
             try
             {
+
                 Mysql.FirstRun();
                 log_level = int.Parse(Config.GetParametr("log_level"));
             }
@@ -76,7 +122,7 @@ namespace PrioritySales
                 if (Config.GetParametr("IpAuthServer") == "" || Config.GetParametr("PortAuthServer") == "")
                 {
                     MessageBox.Show("Не настроены параметры подлючения.Для настройки подключения нажмите значок 'н' в верхем правом углу формы авторизации двойным нажатием мыши или обратитесь к администратору.");
-                        return;
+                    return;
                 }
 
                 if (TextboxLogin.Text.Length < 3 || textboxPass.Text.Length < 1)
@@ -106,7 +152,7 @@ namespace PrioritySales
 
                         using (MD5 md5Hash = MD5.Create())
                         {
-                            hash = GetMd5Hash(md5Hash,(GetMd5Hash(md5Hash, "1?234%5aZ!") + GetMd5Hash(md5Hash, textboxPass.Text)));
+                            hash = GetMd5Hash(md5Hash, (GetMd5Hash(md5Hash, "1?234%5aZ!") + GetMd5Hash(md5Hash, textboxPass.Text)));
                         }
 
                         if (Server.server.Connected)
@@ -114,7 +160,7 @@ namespace PrioritySales
                             Server.Sender("PrioritySale", 0, TextboxLogin.Text + ":" + hash);
                         }
                         else
-                            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).buttonCancel_Click(); }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).buttonCancel_Click(); }));
                     }); ;
                     thh.Name = "Авторизация";
                     Server.threads.Add(thh);
@@ -123,7 +169,10 @@ namespace PrioritySales
                 }
             }
             else
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).buttonCancel_Click(); }));
+            {
+                try { (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).buttonCancel_Click(); })); }
+                catch { }
+            }
         }
 
         public static string GetMd5Hash(MD5 md5Hash, string input)
@@ -407,6 +456,11 @@ namespace PrioritySales
         {
             TaskbarIcon.Visible = false;
             Process.GetCurrentProcess().Kill();
+        }
+
+        private void AuthForm_Load(object sender, EventArgs e)
+        {
+            Mysql.connecting.Hide();
         }
 
     }

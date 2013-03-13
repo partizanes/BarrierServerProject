@@ -250,6 +250,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.TransparencyKey = System.Drawing.Color.Navy;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AuthForm_FormClosed);
+            this.Load += new System.EventHandler(this.AuthForm_Load);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AuthForm_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.AuthForm_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.AuthForm_MouseUp);

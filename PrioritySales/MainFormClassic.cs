@@ -674,7 +674,7 @@ namespace PrioritySales
                 Server.Sender("PrioritySale", 9,StatusUpdate);
 
                 if (!Packages.mf.PanelAddBg.Visible)
-                    (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.dataGridView1.Focus(); }));
+                    (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.dataGridView1.Focus(); }));
             }
             else
             {
@@ -699,6 +699,7 @@ namespace PrioritySales
                     {
                         ButtonList.Focus();
                         dataGridView1.Visible = false;
+                        LabelVersionBd.Visible = false;
                         break;
                     }
                 case Keys.Up:
@@ -817,10 +818,9 @@ namespace PrioritySales
             tasks.Refresh();
         }
 
-        private void MainFormClassic_FormClosed(object sender, FormClosedEventArgs e)
+        private void MainFormClassic_FormClosing(object sender, FormClosingEventArgs e)
         {
-            PrioritySales.Visible = false;
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
-
     }
 }

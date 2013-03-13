@@ -13,6 +13,7 @@ namespace PrioritySales
 {
     class Mysql
     {
+        public static Connecting connecting = new Connecting();
         private static MySqlCommand cmd;
         private static MySqlConnection serverConn;
         private static string connStr;
@@ -33,13 +34,13 @@ namespace PrioritySales
 
             try
             {
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.LabelInfo.Text = "                                                              Подключаюсь..."; }));
+                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.LabelInfo.Text = "                                                              Подключаюсь..."; }));
 
                 Application.DoEvents();
 
                 serverConn.Open();
 
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.LabelInfo.Text = ""; }));
+                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.LabelInfo.Text = ""; }));
 
                 cmd = new MySqlCommand(str, serverConn);
 
@@ -109,13 +110,13 @@ namespace PrioritySales
 
             try
             {
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.LabelInfo.Text = "                                                              Подключаюсь..."; }));
+                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.LabelInfo.Text = "                                                              Подключаюсь..."; }));
 
                 Application.DoEvents();
 
                 serverConn.Open();
 
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.LabelInfo.Text = ""; }));
+                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.LabelInfo.Text = ""; }));
 
                 cmd = new MySqlCommand(str, serverConn);
 
@@ -170,9 +171,13 @@ namespace PrioritySales
 
                 serverConn = new MySqlConnection(connStr);
 
+                connecting.Show();
+
+                Application.DoEvents();
+
                 serverConn.Open();
             }
-            catch {}
+            catch { }
 
             finally
             {

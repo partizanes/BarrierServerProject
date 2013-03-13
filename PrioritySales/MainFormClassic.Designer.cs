@@ -693,7 +693,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.TopMost = true;
             this.Activated += new System.EventHandler(this.MainFormClassic_Activated);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainFormClassic_FormClosed);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormClassic_FormClosing);
             this.Load += new System.EventHandler(this.MainFormClassic_Load);
             this.Shown += new System.EventHandler(this.MainFormClassic_Shown);
             this.PanelMainClassic.ResumeLayout(false);

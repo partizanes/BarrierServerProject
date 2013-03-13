@@ -71,6 +71,12 @@
     <Compile Include="Config.cs" />
     <Compile Include="Connector.cs" />
     <Compile Include="Debug.cs" />
+    <Compile Include="Connecting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Connecting.Designer.cs">
+      <DependentUpon>Connecting.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainFormClassic.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -101,6 +107,9 @@
     <Compile Include="Tasks.Designer.cs">
       <DependentUpon>Tasks.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Connecting.resx">
+      <DependentUpon>Connecting.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainFormClassic.resx">
       <DependentUpon>MainFormClassic.cs</DependentUpon>
     </EmbeddedResource>

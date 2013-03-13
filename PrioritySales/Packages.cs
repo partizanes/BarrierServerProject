@@ -25,17 +25,17 @@ namespace PrioritySales
                     switch (com)
                     {
                         case 0:
-                            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).textboxPass.Text = ""; }));
-                            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).textboxPass.Focus(); }));
-                            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).LabelMsg.Text = "            Данные неверны!"; }));
-                            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).LabelMsg.Update(); }));
-                            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).Refresh(); }));
-                            (Application.OpenForms[0] as AuthForm).buttonLogin.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).buttonLogin.PerformClick(); }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).textboxPass.Text = ""; }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).textboxPass.Focus(); }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).LabelMsg.Text = "            Данные неверны!"; }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).LabelMsg.Update(); }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).Refresh(); }));
+                            (Application.OpenForms[1] as AuthForm).buttonLogin.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).buttonLogin.PerformClick(); }));
                             break;
                         case 1:
-                            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as AuthForm).Hide(); }));
-                            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.Show(); }));
-                            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.LabelUserName.Text += msg; }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).Hide(); }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.Show(); }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.LabelUserName.Text += msg; }));
 
                             break;
                         case 2:
@@ -54,7 +54,7 @@ namespace PrioritySales
 
                                 MainFormClassic.StatusUpdate = split_data[0];
 
-                                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.LabelVersionBd.Text = ("Бд: " + split_data[1]); }));
+                                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.LabelVersionBd.Text = ("Бд: " + split_data[1]); }));
 
                                 if (mf.dataGridView1.Visible == true)
                                 {
@@ -69,7 +69,7 @@ namespace PrioritySales
                                         //TODO
                                     }
 
-                                    (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Rows.Clear(); }));
+                                    (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Rows.Clear(); }));
 
 
                                     while (dr.Read())
@@ -83,7 +83,7 @@ namespace PrioritySales
                                         string dt = dr.GetString(6);
                                         object flag = dr.GetValue(7);
 
-                                        (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Rows.Add(barcode, name, price, count, sail.ToString().Replace(",000",""), status, dt); }));
+                                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Rows.Add(barcode, name, price, count, sail.ToString().Replace(",000",""), status, dt); }));
                                     }
                                 }
                             }
@@ -98,7 +98,7 @@ namespace PrioritySales
                                 Server.Sender("PrioritySale", 8, MainFormClassic.StatusUpdate);
 
 //                                 if (!mf.ButtonList.ContainsFocus)
-//                                     (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Focus(); }));
+//                                     (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Focus(); }));
                             }
                             break;
                     }
@@ -108,29 +108,29 @@ namespace PrioritySales
 
         public static void QueryStatus(bool a,string str)
         {
-            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.ButtonTurn.Enabled = true; }));
+            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.ButtonTurn.Enabled = true; }));
 
             if (a)
             {
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.PanelAddBg.BackColor = Color.Green; }));
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.LabelInfo.ForeColor = Color.Green; }));
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.TextboxNameItem.Text = ""; }));
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.TextboxAddBar.Text = ""; }));
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.TextboxCountAdd.Text = ""; }));
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.TextboxPrice.Text = ""; }));
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.LabelInfo.Text = str; }));
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.TimerClearMsg.Enabled = true; ; }));
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.TextboxAddBar.Focus(); }));
+                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.PanelAddBg.BackColor = Color.Green; }));
+                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.LabelInfo.ForeColor = Color.Green; }));
+                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.TextboxNameItem.Text = ""; }));
+                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.TextboxAddBar.Text = ""; }));
+                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.TextboxCountAdd.Text = ""; }));
+                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.TextboxPrice.Text = ""; }));
+                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.LabelInfo.Text = str; }));
+                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.TimerClearMsg.Enabled = true; ; }));
+                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.TextboxAddBar.Focus(); }));
             }
             else
             {
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.PanelAddBg.BackColor = Color.Red; }));
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.LabelInfo.ForeColor = Color.Red; }));
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.LabelInfo.Text = str; }));
-                (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.TimerClearMsg.Enabled = true; ; }));
+                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.PanelAddBg.BackColor = Color.Red; }));
+                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.LabelInfo.ForeColor = Color.Red; }));
+                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.LabelInfo.Text = str; }));
+                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.TimerClearMsg.Enabled = true; ; }));
             }
 
-            (Application.OpenForms[0] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.Refresh(); }));
+            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.Refresh(); }));
         }
     }
 }
