@@ -3,10 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using System.Collections;
 
 namespace PrioritySales
 {
@@ -70,6 +68,7 @@ namespace PrioritySales
             {
                 Thread.CurrentThread.Abort();
             }
+
             catch (ThreadAbortException)
             {
                 threads.Remove(Thread.CurrentThread);
@@ -115,14 +114,6 @@ namespace PrioritySales
 
                         if (bytes.Length != 0)
                         {
-                            if (Convert.ToString(bytes[0]) == "Q" && Convert.ToString(bytes[1]) == "0")
-                            {
-                                ArrayList myAL = new ArrayList();
-
-                                foreach (string str in myAL)
-                                    MessageBox.Show("   {0}", str);
-                            }
-
                             //Принимаемый пакет разбор структуры
 
                             MSG packet = new MSG("0", 0, "null");
