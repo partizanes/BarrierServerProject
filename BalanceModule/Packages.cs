@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace BalanceModule
 {
@@ -15,7 +7,7 @@ namespace BalanceModule
         public static void parse(string p_id, int com, string msg)
         {
             switch (p_id)
-            {  
+            {
                 case "BS":
                     (Application.OpenForms[0] as Form1).listBox1.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[0] as Form1).listBox1.Items.Add(msg); }));
                     break;

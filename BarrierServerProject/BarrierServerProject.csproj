@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CheckSail.cs" />
+    <Compile Include="CheckTasks.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="Config.cs" />

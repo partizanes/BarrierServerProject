@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 
 namespace BalanceModule
 {
@@ -11,7 +7,7 @@ namespace BalanceModule
         public static void th_abort()
         {
             try { Thread.CurrentThread.Abort(); }
-            
+
             catch
             {
                 Thread.ResetAbort();
