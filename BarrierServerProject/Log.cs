@@ -29,6 +29,11 @@ namespace BarrierServerProject
                 log_write(ex.Message, "Exception", "Exception");
             }
         }
+
+        public static void ExcWrite(string text)
+        {
+            log_write(text, "EXCEPTION", "exception");
+        }
     }
 }
 
