@@ -28,7 +28,7 @@ namespace BarrierServerProject
             catch (System.Exception ex)
             {
                 Color.WriteLineColor(ex.Message, ConsoleColor.Red);
-                Log.log_write(ex.Message, "Exception", "Exception");
+                Log.ExcWrite("[DBF] [ExecuteNonQuery]" + ex.Message);
                 return false;
             }
             finally
@@ -62,7 +62,7 @@ namespace BarrierServerProject
             catch (System.Exception ex)
             {
                 Color.WriteLineColor(ex.Message, ConsoleColor.Red);
-                Log.log_write(ex.Message, "Exception", "Exception");
+                Log.ExcWrite("[DBF] [ExecuteReader]" + ex.Message);
                 return null;
             }
         }

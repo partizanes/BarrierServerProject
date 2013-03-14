@@ -65,7 +65,7 @@ namespace BarrierServerProject
                         {
                             string hash = Packages.GetMd5Hash(md5Hash, (Packages.GetMd5Hash(md5Hash, "1?234%5aZ!") + Packages.GetMd5Hash(md5Hash, split_data[1])));
 
-                            if (Connector.ExecuteNonQuery("INSERT INTO `barrierserver`.`users`(`id`,`username`,`hash`,`group`,`status`,`ip`,`tasks_count`) VALUES ( NULL,'"+split_data[0]+"','"+hash+"','1','0',NULL,0)"))
+                            if (Packages.connector.ExecuteNonQuery("INSERT INTO `barrierserver`.`users`(`id`,`username`,`hash`,`group`,`status`,`ip`,`tasks_count`) VALUES ( NULL,'" + split_data[0] + "','" + hash + "','1','0',NULL,0)"))
                                 return "Успешно!";
                             else
                                 return "Ошибка!";
@@ -77,7 +77,7 @@ namespace BarrierServerProject
 
                         string line = Console.ReadLine();
 
-                        if (Connector.ExecuteNonQuery("DELETE FROM users WHERE username ='" + line + "'"))
+                        if (Packages.connector.ExecuteNonQuery("DELETE FROM users WHERE username ='" + line + "'"))
                             return "Успешно!";
                         else
                             return "Ошибка!";

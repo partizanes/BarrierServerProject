@@ -78,7 +78,8 @@
             this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DateCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TimerClearMsg = new System.Windows.Forms.Timer(this.components);
-            this.PrioritySales = new System.Windows.Forms.NotifyIcon(this.components);
+            this.PrioritySalesIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.TimerIconChange = new System.Windows.Forms.Timer(this.components);
             this.PanelMainClassic.SuspendLayout();
             this.PanelBackButton.SuspendLayout();
             this.PanelButton.SuspendLayout();
@@ -673,11 +674,16 @@
             this.TimerClearMsg.Interval = 3000;
             this.TimerClearMsg.Tick += new System.EventHandler(this.TimerClearMsg_Tick);
             // 
-            // PrioritySales
+            // PrioritySalesIcon
             // 
-            this.PrioritySales.Icon = ((System.Drawing.Icon)(resources.GetObject("PrioritySales.Icon")));
-            this.PrioritySales.Text = "Двойной клик для активации приложения.";
-            this.PrioritySales.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PrioritySales_MouseDoubleClick);
+            this.PrioritySalesIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("PrioritySalesIcon.Icon")));
+            this.PrioritySalesIcon.Text = "Двойной клик для активации приложения.";
+            this.PrioritySalesIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PrioritySales_MouseDoubleClick);
+            // 
+            // TimerIconChange
+            // 
+            this.TimerIconChange.Interval = 1000;
+            this.TimerIconChange.Tick += new System.EventHandler(this.TimerIconChange_Tick);
             // 
             // MainFormClassic
             // 
@@ -758,7 +764,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn DateCol;
         public System.Windows.Forms.Label LabelVersionBd;
         public System.Windows.Forms.Button ButtonList;
-        private System.Windows.Forms.NotifyIcon PrioritySales;
+        public System.Windows.Forms.NotifyIcon PrioritySalesIcon;
+        public System.Windows.Forms.Timer TimerIconChange;
 
 
 

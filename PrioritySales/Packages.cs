@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Drawing;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 
 namespace PrioritySales
 {
     class Packages
     {
         public static MainFormClassic mf = new MainFormClassic();
+        public static Connector connector = new Connector();
 
         public static void parse(string p_id, int com, string msg)
         {
@@ -35,7 +29,7 @@ namespace PrioritySales
                         case 1:
                             (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).Hide(); }));
                             (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.Show(); }));
-                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.LabelUserName.Text += msg; }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.LabelUserName.Text = "Пользователь:  " + msg; }));
 
                             break;
                         case 2:
@@ -43,6 +37,10 @@ namespace PrioritySales
                             break;
                         case 3:
                             QueryStatus(false, msg);
+                            break;
+                        case 8:
+                            MainFormClassic.tasks.UpdateDataGrid();
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.TimerIconChange.Enabled = true; }));
                             break;
                         case 9:
                             try
@@ -58,44 +56,54 @@ namespace PrioritySales
 
                                 if (mf.dataGridView1.Visible == true)
                                 {
-                                    Connector con = new Connector();
-
-                                    MySqlDataReader dr;
-
-                                    dr = con.ExecuteReader("SELECT * FROM `state`");
-
-                                    if (!dr.HasRows)
+                                    using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", "barrierserver")))
                                     {
-                                        //TODO
-                                    }
+                                        conn.Open();
 
-                                    (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Rows.Clear(); }));
+                                        MySqlCommand cmd = new MySqlCommand("SELECT * FROM `state`", conn);
+
+                                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                                        {
+                                            if (!dr.HasRows)
+                                            {
+                                                //TODO
+                                            }
+
+                                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Rows.Clear(); }));
 
 
-                                    while (dr.Read())
-                                    {
-                                        string barcode = dr.GetString(0).Replace(" ", "");
-                                        string name = dr.GetString(1).Replace("  ", "");
-                                        object price = dr.GetValue(2);
-                                        object count = dr.GetValue(3);
-                                        decimal sail = dr.GetDecimal(4);
-                                        object status = dr.GetValue(5);
-                                        string dt = dr.GetString(6);
-                                        object flag = dr.GetValue(7);
+                                            while (dr.Read())
+                                            {
+                                                string barcode = dr.GetString(0).Replace(" ", "");
+                                                string name = dr.GetString(1).Replace("  ", "");
+                                                object price = dr.GetValue(2);
+                                                object count = dr.GetValue(3);
+                                                object sail = dr.GetValue(4);
+                                                object status = dr.GetValue(5);
+                                                string dt = dr.GetString(6);
+                                                object flag = dr.GetValue(7);
 
-                                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Rows.Add(barcode, name, price, count, sail.ToString().Replace(",000",""), status, dt); }));
+                                                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Rows.Add(barcode, name, price, count.ToString().Replace(",000", ""), sail.ToString().Replace(",000", ""), status, dt); }));
+                                            }
+
+                                            if (!dr.IsClosed)
+                                                dr.Close();
+                                        }
                                     }
                                 }
                             }
                             catch (System.Exception ex)
                             {
                                 //to msg to user
-                                Log.log_write(ex.Message, "EXCEPTION", "excrption");
+                                Log.log_write(ex.Message, "EXCEPTION", "exception");
+                                Console.WriteLine("Блок parse: " + ex.Message);
                                 return;
                             }
                             finally
                             {
                                 Server.Sender("PrioritySale", 8, MainFormClassic.StatusUpdate);
+
+                                GC.Collect();
 
 //                                 if (!mf.ButtonList.ContainsFocus)
 //                                     (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Focus(); }));

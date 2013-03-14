@@ -1,11 +1,10 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
-using System.Threading;
-using MySql.Data.MySqlClient;
 using System.Security.Cryptography;
-using System.Text;
+using System.Threading;
 
 namespace BarrierServerProject
 {
@@ -13,9 +12,6 @@ namespace BarrierServerProject
     {
         public static bool CheckSend = false;
 
-        private static MySqlCommand cmd;
-        private static MySqlConnection serverConn;
-        private static string connStr;
         private static bool CheckInfoStatus = false;
 
         public static void StartCheck()
@@ -23,9 +19,6 @@ namespace BarrierServerProject
             while(!File.Exists(Environment.CurrentDirectory + "\\data\\" + "balance.dbf"))
             {
                 Color.WriteLineColor("Для проверки очередности продаж в папке программы 'data'\n должен находиться файл базы данных balance.dbf.\n\nПовторная проверка наличия файла через 10 секунд!", ConsoleColor.Red);
-
-                //TODO query to create table
-                //dbf.ExecuteNonQuery("CREATE TABLE " + Environment.CurrentDirectory + "\\data\\" + "balance.dbf" + " (barcode C(13,0) NOT NULL,price N(10,0) NOT NULL,count N(10,0) NOT NULL,date T(8,0) NOT NULL)");
 
                 Thread.Sleep(10000);
             }
@@ -37,10 +30,6 @@ namespace BarrierServerProject
             CleanBase();
 
             UpdateStateBase();
-
-            //Thread.Sleep(1800000);
-
-            //StartCheck();
         }
 
         private static void CleanDbf(string namedbf)
@@ -97,16 +86,12 @@ namespace BarrierServerProject
                 }
 
                 CheckInfoStatus = true;
+
                 Color.WriteLineColor("CheckInfoStatus: Проиходит обновление бд ,таблицы заблокированы.", ConsoleColor.Red);
 
-                connStr = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "pricechecker", "***REMOVED***", Config.GetParametr("BdName"));
-
-                serverConn = new MySqlConnection(connStr);
-
-                serverConn.Open();
-
                 CleanDbf("operation");
-                Connector.ExecuteNonQuery("DELETE FROM tasks");
+
+                Packages.connector.ExecuteNonQuery("DELETE FROM tasks");
 
                 if (File.Exists(Environment.CurrentDirectory + "\\data\\" + "balance.dbf"))
                 {
@@ -144,36 +129,9 @@ namespace BarrierServerProject
 
                         CheckSend = false;
 
-                        cmd = new MySqlCommand(@"SELECT SUM(IF(h.type IN (0,5), 1, -1) * i.quantity) quantity,i.price
-												FROM trm_in_pos c INNER JOIN 
-												trm_out_receipt_header h ON h.cash_id = c.cash_id INNER JOIN 
-												trm_out_receipt_item i ON i.cash_id = h.cash_id AND i.receipt_header = h.id  LEFT JOIN 
-												trm_out_receipt_item i2 ON (h.cash_id = i2.cash_id AND h.id = i2.receipt_header AND i2.link_item = i.id) INNER JOIN 
-												trm_out_receipt_footer f ON f.cash_id = h.cash_id AND f.id = h.id 
-												WHERE i2.link_item IS NULL AND i.type = 0 AND 
-												h.type IN (0,5,1,4) AND f.result IN (0) AND 1001 = c.store_id AND i.item LIKE '" + bar + "%' AND f.date >= '" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "' GROUP BY i.price", serverConn);
-
-                        cmd.CommandTimeout = 0;
-
-                        MySqlDataReader reader;
-
                         Color.WriteLineColor("Запрос на кассовый сервер...", ConsoleColor.Cyan);
 
-                        reader = cmd.ExecuteReader();
-
-                        if (!reader.HasRows)
-                        {
-                            NoSales(bar, price, date);
-                        }
-
-                        while (reader.Read())
-                        {
-                            if (TermsCheck(bar, price, count, reader.GetInt32(1), reader.GetDouble(0), date))
-                                continue;
-                        }
-
-                        if (!reader.IsClosed)
-                            reader.Close();
+                        GetSail(bar, date, price, count);
                     }
                 }
             }
@@ -183,14 +141,49 @@ namespace BarrierServerProject
             }
             finally
             {
-//                  if (serverConn.State != ConnectionState.Closed)
-//                      serverConn.Close();
-
                 CheckInfoStatus = false;
                 Color.WriteLineColor("CheckInfoStatus: Обновление завершено ,таблицы разблокированы.", ConsoleColor.Green);
                 Color.WriteLineColor("Перебор завершен.", ConsoleColor.Cyan);
             }
            
+        }
+
+        private static void GetSail(string bar, DateTime date, int price, double count)
+        {
+            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BdName"))))
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand(@"SELECT SUM(IF(h.type IN (0,5), 1, -1) * i.quantity) quantity,i.price
+												FROM trm_in_pos c INNER JOIN 
+												trm_out_receipt_header h ON h.cash_id = c.cash_id INNER JOIN 
+												trm_out_receipt_item i ON i.cash_id = h.cash_id AND i.receipt_header = h.id  LEFT JOIN 
+												trm_out_receipt_item i2 ON (h.cash_id = i2.cash_id AND h.id = i2.receipt_header AND i2.link_item = i.id) INNER JOIN 
+												trm_out_receipt_footer f ON f.cash_id = h.cash_id AND f.id = h.id 
+												WHERE i2.link_item IS NULL AND i.type = 0 AND 
+												h.type IN (0,5,1,4) AND f.result IN (0) AND 1001 = c.store_id AND i.item LIKE '" + bar + "%' AND f.date >= '" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "' GROUP BY i.price", conn);
+                cmd.CommandTimeout = 0;
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr == null)
+                        return;
+
+                    if (!dr.HasRows)
+                    {
+                        NoSales(bar, price, date);
+                    }
+
+                    while (dr.Read())
+                    {
+                        if (TermsCheck(bar, price, count, dr.GetInt32(1), dr.GetDouble(0), date))
+                            continue;
+                    }
+
+                    if (!dr.IsClosed)
+                        dr.Close();
+                }
+            }
         }
 
         public static void CheckOne(string bar, string operation, double count, Int32 price, DateTime date)
@@ -208,12 +201,6 @@ namespace BarrierServerProject
 
             try
             {
-                connStr = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "pricechecker", "***REMOVED***", Config.GetParametr("BdName"));
-
-                serverConn = new MySqlConnection(connStr);
-
-                serverConn.Open();
-
                 if (File.Exists(Environment.CurrentDirectory + "\\data\\" + "balance.dbf"))
                 {
                     //TODO DEBUG parametrs
@@ -237,36 +224,9 @@ namespace BarrierServerProject
 
                     CheckSend = false;
 
-                    cmd = new MySqlCommand(@"SELECT SUM(IF(h.type IN (0,5), 1, -1) * i.quantity) quantity,i.price
-												FROM trm_in_pos c INNER JOIN 
-												trm_out_receipt_header h ON h.cash_id = c.cash_id INNER JOIN 
-												trm_out_receipt_item i ON i.cash_id = h.cash_id AND i.receipt_header = h.id  LEFT JOIN 
-												trm_out_receipt_item i2 ON (h.cash_id = i2.cash_id AND h.id = i2.receipt_header AND i2.link_item = i.id) INNER JOIN 
-												trm_out_receipt_footer f ON f.cash_id = h.cash_id AND f.id = h.id 
-												WHERE i2.link_item IS NULL AND i.type = 0 AND 
-												h.type IN (0,5,1,4) AND f.result IN (0) AND 1001 = c.store_id AND i.item LIKE '" + bar + "%' AND f.date >= '" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "' GROUP BY i.price", serverConn);
-
-                    cmd.CommandTimeout = 0;
-
-                    MySqlDataReader reader;
-
                     Color.WriteLineColor("Запрос на кассовый сервер...", ConsoleColor.Cyan);
 
-                    reader = cmd.ExecuteReader();
-
-                    if (!reader.HasRows)
-                    {
-                        NoSales(bar, price, date);
-                    }
-
-                    while (reader.Read())
-                    {
-                        if (TermsCheck(bar, price, count, reader.GetInt32(1), reader.GetDouble(0), date))
-                            continue;
-                    }
-
-                    if (!reader.IsClosed)
-                        reader.Close();
+                    GetSail(bar, date, price, count);
                 }
             }
             catch (System.Exception ex)
@@ -275,9 +235,6 @@ namespace BarrierServerProject
             }
             finally
             {
-//                 if (serverConn.State != ConnectionState.Closed)
-//                     serverConn.Close();
-
                 Color.WriteLineColor("Добавление завершено.", ConsoleColor.Cyan);
 
                 //TODO optimal logic not remove all data from mysql, add only one this barcode
@@ -305,7 +262,7 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("Товар " + bar + " не продается долгое время.Число дней " + TotalDay, ConsoleColor.Red);
 
-                Connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`) VALUES ( NULL," + bar + ",'1','Товар долго не продается.Число дней: " + TotalDay + "','0','1')");
+                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`) VALUES ( NULL," + bar + ",'1','Товар долго не продается.Число дней: " + TotalDay + "','0','1')");
             }
 
             Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51,0," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
@@ -317,7 +274,7 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("Товар: " + bar + " по цене: " + priceukm + " продан больше чем было в очередности, количество: " + countukm + " по цене очередности", ConsoleColor.Cyan);
 
-                Connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`) VALUES ( NULL," + bar + ",'2','Продано больше чем было в очередности,необходима прогрузка цены на кассу','0','3')");
+                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`) VALUES ( NULL," + bar + ",'2','Продано больше чем было в очередности,необходима прогрузка цены на кассу','0','3')");
 
                 Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + countukm.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
                 return true;
@@ -327,7 +284,7 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("Товар: " + bar + " по цене: " + priceukm + " продан в количестве: " + countukm + " по цене очередности", ConsoleColor.Cyan);
 
-                Connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`) VALUES ( NULL," + bar + ",'1','Все продано по цене очереди,необходимо прогрузить новую цену на кассу','0','2')");
+                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`) VALUES ( NULL," + bar + ",'1','Все продано по цене очереди,необходимо прогрузить новую цену на кассу','0','2')");
 
                 Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + countukm.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
                 return true;
@@ -337,7 +294,7 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("Товар: " + bar + " по цене: " + priceukm + " продан в количестве: " + countukm + " на текущий момент продается по правильной цене и есть остаток", ConsoleColor.Yellow);
 
-                Connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`) VALUES ( NULL," + bar + ",'1','Продается по правильной цене и есть остаток!','0','9')");
+                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`) VALUES ( NULL," + bar + ",'1','Продается по правильной цене и есть остаток!','0','9')");
 
                 Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + countukm.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
                 return true;
@@ -346,12 +303,12 @@ namespace BarrierServerProject
             if (priceukm < price)
             {
                 Color.WriteLineColor("Товар " + bar + " продается по неправильно цене! ", ConsoleColor.Red);
-                Color.WriteLineColor("Цена на кассе: " + Convert.ToDouble(priceukm) + " Цена очередности: " + Convert.ToInt64(price), ConsoleColor.Red);
-                Color.WriteLineColor("Проданое количество по дешевой цене: " + Convert.ToDouble(countukm), ConsoleColor.Red);
+                Color.WriteLineColor("Цена на кассе: " + priceukm + " Цена очередности: " + price, ConsoleColor.Red);
+                Color.WriteLineColor("Проданое количество по дешевой цене: " + countukm, ConsoleColor.Red);
 
                 Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + countukm.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
 
-                Connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`) VALUES ( NULL," + bar + ",'1','Товар продается дешевле цены очерёдности!','0','4')");
+                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`) VALUES ( NULL," + bar + ",'1','Товар продается дешевле цены очерёдности!','0','4')");
 
                 return true;
             }
@@ -359,42 +316,44 @@ namespace BarrierServerProject
             if (priceukm > price)
             {
                 Color.WriteLineColor("Товар " + bar + " завышение цены! ", ConsoleColor.Red);
-                Color.WriteLineColor("Цена на кассе: " + Convert.ToInt64(priceukm) + " Цена очередности: " + Convert.ToInt64(price), ConsoleColor.Red);
-                Color.WriteLineColor("Проданое количество по дорогой цене: " + Convert.ToInt64(countukm), ConsoleColor.Red);
+                Color.WriteLineColor("Цена на кассе: " + priceukm + " Цена очередности: " + price , ConsoleColor.Red);
+                Color.WriteLineColor("Проданое количество по дорогой цене: " + countukm, ConsoleColor.Red);
 
                 Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + countukm.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
 
-                Connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`) VALUES ( NULL," + bar + ",'1','Товар продается дороже цены очерёдности!','0','5')");
+                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`) VALUES ( NULL," + bar + ",'1','Товар продается дороже цены очерёдности!','0','5')");
                 return true;
             }
 
             return false;
         }
 
-
         private static void CleanBase()
         {
-            Connector.ExecuteNonQuery("DELETE FROM state");
+            Packages.connector.ExecuteNonQuery("DELETE FROM state");
         }
 
         private static void UpdateStateBase()
         {
-            OleDbDataReader reader = Dbf.ExecuteReader("SELECT balance.barcode,balance.item,balance.price,balance.count,operation.count,balance.date FROM balance,operation where (balance.barcode == operation.barcode) AND (balance.date == operation.dt)");            
+            OleDbDataReader reader = Dbf.ExecuteReader("SELECT balance.barcode,balance.item,balance.price,balance.count,operation.count,balance.date FROM balance,operation where (balance.barcode == operation.barcode) AND (balance.date == operation.dt)");
+
+            if (reader == null)
+                return;
 
             while (reader.Read())
             {
                 string barcode = reader.GetString(0);
                 string item = reader.GetString(1);
                 Int32 price = Convert.ToInt32(reader.GetValue(2));
-                Int32 count = Convert.ToInt32(reader.GetValue(3));
-                decimal sail = reader.GetDecimal(4);
+                double count = Convert.ToDouble(reader.GetValue(3));
+                double sail = Convert.ToDouble(reader.GetValue(4));
                 Int32 status = 0;
                 Int32 flag = 0;
                 DateTime dt = reader.GetDateTime(5);
 
                 //TODO CHECK FLAG
 
-                Connector.ExecuteNonQuery("INSERT INTO `barrierserver`.`state`(`barcode`,`name`,`price`,`count`,`sailed`,`status`,`date`,`flag`) VALUES ( '" + barcode + "','" + item + "','" + price + "','" + count + "','" + sail.ToString().Replace(",", ".") + "','" + status + "','" + dt.ToString("yyyy-MM-dd,HH:mm:ss") + "','" + flag + "')");
+                Packages.connector.ExecuteNonQuery("INSERT INTO `barrierserver`.`state`(`barcode`,`name`,`price`,`count`,`sailed`,`status`,`date`,`flag`) VALUES ( '" + barcode + "','" + item + "','" + price + "','" + count.ToString().Replace(",", ".") + "','" + sail.ToString().Replace(",", ".") + "','" + status + "','" + dt.ToString("yyyy-MM-dd,HH:mm:ss") + "','" + flag + "')");
             }
 
             using (MD5 md5Hash = MD5.Create())

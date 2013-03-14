@@ -90,8 +90,12 @@
     <Compile Include="AuthForm.Designer.cs">
       <DependentUpon>AuthForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Mysql.cs" />
     <Compile Include="Packages.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SettingForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,15 +124,10 @@
       <DependentUpon>SettingForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="Tasks.resx">
       <DependentUpon>Tasks.cs</DependentUpon>
     </EmbeddedResource>
@@ -143,14 +142,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\f551.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="Resources\form33.png" />
+    <None Include="Resources\form31.png" />
+    <None Include="Resources\mail.ico" />
     <None Include="Resources\SettingForm.png" />
-    <None Include="Resources\f55.png" />
-    <Content Include="app.ico" />
+    <None Include="ico\checkbox.ico" />
+    <None Include="ico\mail.ico" />
     <Content Include="new_barrier_logo.ico" />
-    <Content Include="Resources\form3.png" />
+    <None Include="Resources\checkbox.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Serialization\Serialization.csproj">

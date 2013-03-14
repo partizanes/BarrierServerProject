@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Drawing;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -20,6 +15,7 @@ namespace PrioritySales
             dateTimePicker1.CustomFormat = "dd-MM-yyyy HH:mm:ss";
         }
 
+        public static bool _forBlinking = true;
         private bool nonNumberEntered = false;
         private int pricelistId = 1;
 
@@ -28,7 +24,7 @@ namespace PrioritySales
         private Point mouseOffset;
         public static string StatusUpdate;
 
-        Tasks tasks = new Tasks();
+        public static Tasks tasks = new Tasks();
 
         // ForeColor for all button block start
 
@@ -254,39 +250,49 @@ namespace PrioritySales
 
         private void getname()
         {
-            MySql.Data.MySqlClient.MySqlDataReader dr = Mysql.ExecuteReader("SELECT a.name, b.price \n" +
+            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", Config.GetParametr("BdName"))))
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand(@"SELECT a.name, b.price \n" +
                 "FROM trm_in_var C \n" +
                 "LEFT JOIN trm_in_items A ON A.id=C.item \n" +
                 "LEFT JOIN trm_in_pricelist_items B ON B.item=c.item \n" +
                 "WHERE a.id='" + TextboxAddBar.Text + "'\n" +
-                " AND (b.pricelist_id=" + pricelistId + ")");
+                " AND (b.pricelist_id=" + pricelistId + ")", conn);
 
-            if (dr == null)
-            {
-                DeclineErr(true, "                             Запрос ничего не вернул,повторите попытку!");
-                return;
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr == null)
+                    {
+                        DeclineErr(true, "                             Запрос ничего не вернул,повторите попытку!");
+                        return;
+                    }
+
+                    if (!dr.HasRows)
+                    {
+                        DeclineErr(true, "                                                Штрихкод не найден в базе!");
+                        TextboxAddBar.Text = "";
+                        TextboxCountAdd.Text = "";
+                        TextboxNameItem.Text = "";
+                        TextboxPrice.Text = "";
+                        TextboxAddBar.Focus();
+                        return;
+                    }
+
+                    if (dr.Read())
+                    {
+                        TextboxNameItem.Text = dr.GetString(0);
+                        string[] split_data = dr.GetString(1).Split(new Char[] { ',' });
+                        TextboxPrice.Text = Convert.ToInt32(split_data[0]).ToString();
+                    }
+
+                    if (!dr.IsClosed)
+                        dr.Close();
+
+                    TextboxCountAdd.Focus();
+                }
             }
-
-            if (!dr.HasRows)
-            {
-                DeclineErr(true, "                                                Штрихкод не найден в базе!");
-                TextboxAddBar.Text = "";
-                TextboxCountAdd.Text = "";
-                TextboxNameItem.Text = "";
-                TextboxPrice.Text = "";
-                TextboxAddBar.Focus();
-                return;
-            }
-
-            if (dr.Read())
-            {
-                TextboxNameItem.Text = dr.GetString(0);
-                string[] split_data = dr.GetString(1).Split(new Char[] { ',' });
-                TextboxPrice.Text = Convert.ToInt32(split_data[0]).ToString();
-            }
-
-
-            TextboxCountAdd.Focus();
         }
 
         private void dateTimePicker1_Enter(object sender, EventArgs e)
@@ -787,6 +793,7 @@ namespace PrioritySales
             {
                 tasks.Location = new System.Drawing.Point((this.Location.X + this.Size.Width) + 1, (this.Location.Y));
                 tasks.Show();
+                tasks.UpdateDataGrid();
             }
         }
 
@@ -804,23 +811,41 @@ namespace PrioritySales
 
         private void ButtonHide_Click(object sender, EventArgs e)
         {
-            PrioritySales.Visible = true;
+            PrioritySalesIcon.Visible = true;
             this.Hide();
             tasks.Hide();
         }
 
         private void PrioritySales_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            PrioritySales.Visible = false;
+            PrioritySalesIcon.Visible = false;
             Packages.mf.Show();
             tasks.Location = new System.Drawing.Point((this.Location.X + this.Size.Width) + 1, (this.Location.Y));
             tasks.Show();
             tasks.Refresh();
+
+            tasks.UpdateDataGrid();
+
+            TimerIconChange.Enabled = false;
+
+            var icon1 = Properties.Resources.logo;
+
+            PrioritySalesIcon.Icon = icon1;
         }
 
         private void MainFormClassic_FormClosing(object sender, FormClosingEventArgs e)
         {
             System.Diagnostics.Process.GetCurrentProcess().Kill();
+        }
+
+        private void TimerIconChange_Tick(object sender, EventArgs e)
+        {
+            var icon1 = Properties.Resources.logo;
+            var icon2 = Properties.Resources.logo2;
+
+            _forBlinking = !_forBlinking;
+
+            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.PrioritySalesIcon.Icon = _forBlinking ? icon1 : icon2; }));
         }
     }
 }

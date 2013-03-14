@@ -1,27 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Net.Sockets;
+using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using System.Security.Cryptography;
-using System.IO;
 
 namespace PrioritySales
 {
     public partial class AuthForm : Form
     {
         public static int log_level = 3;
-
-        public const string ver = "0.65 alfa";
+        public const string ver = "0.87 alfa";
         public int xOffset, yOffset;
         public bool isMouseDown = false;
         private Point mouseOffset;
+        public static Connecting connecting = new Connecting();
 
         public static void HideThis()
         {
@@ -84,16 +79,13 @@ namespace PrioritySales
 
             check_dll();
 
-            try
-            {
+            connecting.Show();
 
-                Mysql.FirstRun();
-                log_level = int.Parse(Config.GetParametr("log_level"));
-            }
-            catch (FormatException)
-            {
-                Config.Set("SETTINGS", "log_level", "3");
-            }
+            Application.DoEvents();
+
+            Packages.connector.ExecuteNonQuery("SHOW DATABASES", "barrierserver");
+            try { log_level = int.Parse(Config.GetParametr("log_level")); }
+            catch (FormatException){ Config.Set("SETTINGS", "log_level", "3"); }
 
             LabelVersion.Text = ver;
 
@@ -460,7 +452,7 @@ namespace PrioritySales
 
         private void AuthForm_Load(object sender, EventArgs e)
         {
-            Mysql.connecting.Hide();
+            connecting.Hide();
         }
 
     }

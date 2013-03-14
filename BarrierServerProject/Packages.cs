@@ -16,6 +16,7 @@ namespace BarrierServerProject
     class Packages
     {
         public static string StatusString = "";
+        public static Connector connector = new Connector();
 
         public static void parse(string p_id, int com, string msg, User user,System.Net.Sockets.Socket r_client)
         {
@@ -60,13 +61,9 @@ namespace BarrierServerProject
                             DateTime datetime = Convert.ToDateTime(split_data[4]);
 
                             if (Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + barcode + "'," + operation + "," + count.ToString().Replace(",", ".") + "," + price + ",{^" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "})"))
-                            {
                                 Color.WriteLineColor("Успешно добавлена операция расхода из LsTradeAgent",ConsoleColor.Green);
-                            }
                             else
-                            {
                                 Color.WriteLineColor("Добавление из LsTradeAgent завершилось с ошибкой", ConsoleColor.Red);
-                            }
 
                             break;
                     }
@@ -80,32 +77,42 @@ namespace BarrierServerProject
                         case 0:
                             string[] split_data = msg.Replace("\0", "").Replace(" ", "").Split(new Char[] { ':' });
 
-                            MySqlDataReader dr = Connector.ExecuteReader("SELECT username,hash FROM users WHERE username = '" + split_data[0] + "' AND hash = '" + split_data[1] + "'");
+                            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", "barrierserver")))
+                            {
+                                conn.Open();
 
-                            if (dr == null)
-                            {
-                                Log.log_write("Запрос вернул null", "Exception", "Exception");
-                            }
+                                MySqlCommand cmd = new MySqlCommand("SELECT username,hash FROM users WHERE username = '" + split_data[0] + "' AND hash = '" + split_data[1] + "'", conn);
 
-                            if (dr.Read())
-                            {
-                                Server.clients[r_client] = split_data[0];
-                                Color.WriteLineColor(split_data[0] + " Добавлен!", ConsoleColor.Cyan);
-                                Msg.SendUser(split_data[0], "PrioritySale", 1, split_data[0]);
-                                user.username = split_data[0];
-                                Connector.ExecuteNonQuery("UPDATE `barrierserver`.`users` SET `status`='1',`ip`='" + IPAddress.Parse(((IPEndPoint)r_client.RemoteEndPoint).Address.ToString()) + "' WHERE `username`='" + split_data[0] + "'");
-                            }
-                            else
-                            {
-                                Server.clients[r_client] = split_data[0];
-                                Msg.SendUser(split_data[0], "PrioritySale", 0, "Идентификация не пройдена.");
-                                Color.WriteLineColor(split_data[0] + " авторизация неудачна", ConsoleColor.Red);
-                            }
+                                using (MySqlDataReader dr = cmd.ExecuteReader())
+                                {
+                                    if (dr == null)
+                                    {
+                                        Log.log_write("Запрос вернул null", "Exception", "Exception");
+                                        Log.ExcWrite("[AUTH] Запрос вернул null");
+                                    }
 
-                            using (MD5 md5Hash = MD5.Create())
-                            {
-                                Color.WriteLineColor(split_data[0] + " " + split_data[1], ConsoleColor.Red);
-                                break;
+                                    if (dr.Read())
+                                    {
+                                        Server.clients[r_client] = split_data[0];
+                                        Color.WriteLineColor(split_data[0] + " Добавлен!", ConsoleColor.Cyan);
+                                        Msg.SendUser(split_data[0], "PrioritySale", 1, split_data[0]);
+                                        user.username = split_data[0];
+                                        Packages.connector.ExecuteNonQuery("UPDATE `barrierserver`.`users` SET `status`='1',`ip`='" + IPAddress.Parse(((IPEndPoint)r_client.RemoteEndPoint).Address.ToString()) + "' WHERE `username`='" + split_data[0] + "'");
+                                    }
+                                    else
+                                    {
+                                        Server.clients[r_client] = split_data[0];
+                                        Msg.SendUser(split_data[0], "PrioritySale", 0, "Идентификация не пройдена.");
+                                        Color.WriteLineColor(split_data[0] + " авторизация неудачна", ConsoleColor.Red);
+                                    }
+
+                                    using (MD5 md5Hash = MD5.Create())
+                                    {
+                                        Color.WriteLineColor(split_data[0] + " " + split_data[1], ConsoleColor.Red);
+                                        break;
+                                    }
+
+                                }
                             }
                         case 5:
                             string[] sd = msg.Replace("\0", "").Split(new Char[] { ';' });
@@ -126,7 +133,7 @@ namespace BarrierServerProject
 
                                 Msg.SendUser(user.username, "PrioritySale", 2, "                Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.");
 
-                                CheckSail.CheckOne(bar, "0", Convert.ToDouble(count), Convert.ToInt32(price), datetime);
+                                CheckSail.CheckOne(bar, "0", double.Parse(count), Convert.ToInt32(price), datetime);
                             }
                             else
                             {
@@ -178,7 +185,7 @@ namespace BarrierServerProject
                     {
                         case 0000:
                             Color.WriteLineColor(Server.clients[r_client] + ": Завершение сеанса.", ConsoleColor.Red);
-                            Connector.ExecuteNonQuery("UPDATE `barrierserver`.`users` SET `status`='0' WHERE `username`='" + user.username + "'");
+                            Packages.connector.ExecuteNonQuery("UPDATE `barrierserver`.`users` SET `status`='0' WHERE `username`='" + user.username + "'");
                             Thread.Sleep(3000);
                             r_client.Disconnect(false);
                             r_client.Close();
