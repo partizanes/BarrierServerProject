@@ -1,5 +1,0 @@
-﻿BarrierServer
-BarrierServerR
-
-PrioritySail
-PrioritySailR
