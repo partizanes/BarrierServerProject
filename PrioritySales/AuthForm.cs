@@ -25,18 +25,17 @@ namespace PrioritySales
 
         public void check_dll()
         {
-
-            //TODO Проверка на наличие установленного коннектора mysql
-            if(Environment.Is64BitOperatingSystem)
-                while (!System.IO.File.Exists(System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\MySQL\\MySQL Connector Net 6.6.5\\Assemblies\\v4.0\\MySql.Data.dll"))
-                {
-                    MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "Внимание на компьютере не найден MySQL Connector Net,установите и нажмите ок.");
-                }
-            else
-                while (!System.IO.File.Exists(System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + "\\MySQL\\MySQL Connector Net 6.6.5\\Assemblies\\v4.0\\MySql.Data.dll"))
-                {
-                    MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "Внимание на компьютере не найден MySQL Connector Net,установите и нажмите ок.");
-                }
+            //TODO ONLY SUPPORT VERSION CONNECTOR 6.6.5
+//             if(Environment.Is64BitOperatingSystem)
+//                 while (!System.IO.File.Exists(System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\MySQL\\MySQL Connector Net 6.6.5\\Assemblies\\v4.0\\MySql.Data.dll"))
+//                 {
+//                     MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "Внимание на компьютере не найден MySQL Connector Net,установите и нажмите ок.");
+//                 }
+//             else
+//                 while (!System.IO.File.Exists(System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + "\\MySQL\\MySQL Connector Net 6.6.5\\Assemblies\\v4.0\\MySql.Data.dll"))
+//                 {
+//                     MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "Внимание на компьютере не найден MySQL Connector Net,установите и нажмите ок.");
+//                 }
 
 
             while (!System.IO.File.Exists(Environment.CurrentDirectory + "\\" + "Serialization.dll"))
