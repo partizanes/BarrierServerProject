@@ -61,7 +61,7 @@
             // login_panel
             // 
             this.login_panel.BackColor = System.Drawing.Color.Transparent;
-            this.login_panel.BackgroundImage = global::PrioritySales.Properties.Resources.form33;
+            this.login_panel.BackgroundImage = global::PrioritySales.Properties.Resources.AuthForm;
             this.login_panel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.login_panel.Controls.Add(this.LabelVersion);
             this.login_panel.Controls.Add(this.LabelSetting);

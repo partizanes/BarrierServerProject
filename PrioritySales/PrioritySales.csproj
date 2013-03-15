@@ -133,6 +133,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\AuthForm.png" />
     <None Include="Resources\form33.png" />
     <None Include="Resources\form31.png" />
     <None Include="Resources\mail.ico" />
