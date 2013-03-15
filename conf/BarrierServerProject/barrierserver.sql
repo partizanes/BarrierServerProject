@@ -1,9 +1,8 @@
-/*
+﻿/*
 SQLyog Ultimate v8.62 
 MySQL - 5.5.18 : Database - barrierserver
 *********************************************************************
-*/
-
+*/
 /*!40101 SET NAMES utf8 */;
 
 /*!40101 SET SQL_MODE=''*/;
@@ -47,7 +46,7 @@ CREATE TABLE `tasks` (
   `user_id` tinyint(4) NOT NULL,
   `priority` tinyint(4) NOT NULL,
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=300 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 /*Data for the table `tasks` */
 

@@ -697,6 +697,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainFormClassic";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "PrioritySales";
             this.TopMost = true;
             this.Activated += new System.EventHandler(this.MainFormClassic_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormClassic_FormClosing);

@@ -9,6 +9,9 @@ namespace PrioritySales
     {
         public static MainFormClassic mf = new MainFormClassic();
         public static Connector connector = new Connector();
+        public static CareForm careform = new CareForm();
+        private static int Zx = SystemInformation.PrimaryMonitorSize.Width - (SystemInformation.PrimaryMonitorSize.Width/6);
+        private static int Zy = SystemInformation.PrimaryMonitorSize.Height - (SystemInformation.PrimaryMonitorSize.Height/15);
 
         public static void parse(string p_id, int com, string msg)
         {
@@ -38,9 +41,18 @@ namespace PrioritySales
                         case 3:
                             QueryStatus(false, msg);
                             break;
+                        case 7:
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.PrioritySalesIcon.Icon = Properties.Resources.logo; }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.TimerIconChange.Enabled = false; }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { careform.LabelCareForm.Visible = false; }));
+                            break;
                         case 8:
                             MainFormClassic.tasks.UpdateDataGrid();
                             (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.TimerIconChange.Enabled = true; }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { careform.LabelCareForm.Visible = true; }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { careform.Location = new System.Drawing.Point(Zx, Zy); }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { Application.DoEvents(); }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { careform.Show(); }));
                             break;
                         case 9:
                             try
@@ -98,7 +110,8 @@ namespace PrioritySales
                             }
                             finally
                             {
-                                Server.Sender("PrioritySale", 8, MainFormClassic.StatusUpdate);
+                                if(Server.server.Connected)
+                                    Server.Sender("PrioritySale", 8, MainFormClassic.StatusUpdate);
 
                                 GC.Collect();
 

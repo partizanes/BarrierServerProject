@@ -46,7 +46,9 @@ namespace BarrierServerProject
                     }
 
                     if (i > 0)
-                        SendNotice(group);
+                        SendNotice(group,8);
+                    else
+                        SendNotice(group, 7);
                 }
             }
             catch (System.Exception ex)
@@ -56,7 +58,7 @@ namespace BarrierServerProject
             }
         }
 
-        private static void SendNotice(string group)
+        private static void SendNotice(string group,int i)
         {
             try
             {
@@ -78,7 +80,7 @@ namespace BarrierServerProject
 
                         while (usersonline.Read())
                         {
-                            Msg.SendUser(usersonline.GetString(0), "PrioritySale", 8, "");
+                            Msg.SendUser(usersonline.GetString(0), "PrioritySale", i, "");
 
                             if (group == "1")
                                 Color.WriteLineColor("Отправка уведомления пользователю " + usersonline.GetString(0) + " о наличии новых заданий.", ConsoleColor.DarkGray);

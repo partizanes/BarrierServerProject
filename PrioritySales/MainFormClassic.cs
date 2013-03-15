@@ -254,12 +254,12 @@ namespace PrioritySales
             {
                 conn.Open();
 
-                MySqlCommand cmd = new MySqlCommand(@"SELECT a.name, b.price \n" +
-                "FROM trm_in_var C \n" +
-                "LEFT JOIN trm_in_items A ON A.id=C.item \n" +
-                "LEFT JOIN trm_in_pricelist_items B ON B.item=c.item \n" +
-                "WHERE a.id='" + TextboxAddBar.Text + "'\n" +
-                " AND (b.pricelist_id=" + pricelistId + ")", conn);
+                MySqlCommand cmd = new MySqlCommand(@"SELECT a.name, b.price
+                FROM trm_in_var C
+                LEFT JOIN trm_in_items A ON A.id=C.item
+                LEFT JOIN trm_in_pricelist_items B ON B.item=c.item
+                WHERE a.id='" + TextboxAddBar.Text + 
+                "' AND (b.pricelist_id=" + pricelistId + ")", conn);
 
                 using (MySqlDataReader dr = cmd.ExecuteReader())
                 {
@@ -808,12 +808,22 @@ namespace PrioritySales
 
         private void ButtonHide_Click(object sender, EventArgs e)
         {
+            UpdateOrderHide();
+        }
+
+        public void UpdateOrderHide()
+        {
             PrioritySalesIcon.Visible = true;
             this.Hide();
             tasks.Hide();
         }
 
         private void PrioritySales_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            UpdateOrderShow();
+        }
+
+        public void UpdateOrderShow()
         {
             PrioritySalesIcon.Visible = false;
             Packages.mf.Show();
