@@ -136,7 +136,6 @@
     <None Include="Resources\form33.png" />
     <None Include="Resources\form31.png" />
     <None Include="Resources\mail.ico" />
-    <None Include="Resources\SettingForm.png" />
     <None Include="ico\checkbox.ico" />
     <None Include="ico\mail.ico" />
     <Content Include="new_barrier_logo.ico" />
