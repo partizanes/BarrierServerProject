@@ -439,9 +439,15 @@ namespace PrioritySales
 
         private void LabelSetting_DoubleClick(object sender, EventArgs e)
         {
-            this.Hide();
-            SettingForm sf = new SettingForm();
-            sf.Show();
+            string path = Environment.CurrentDirectory + "\\config.ini";
+
+            if (File.Exists(path))
+                Process.Start(path);
+            else
+            {
+                check_dll();
+                Process.Start(path);
+            }
         }
 
         private void AuthForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -454,6 +460,5 @@ namespace PrioritySales
         {
             connecting.Hide();
         }
-
     }
 }

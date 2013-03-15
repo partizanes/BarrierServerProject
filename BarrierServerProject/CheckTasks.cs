@@ -13,65 +13,90 @@ namespace BarrierServerProject
             TasksCheck("1");
 
             TasksCheck("2");
-            //10 min
 
             GC.Collect();
             
-            System.Threading.Thread.Sleep(/*600*/5000);
+            //10 min 600000
+            System.Threading.Thread.Sleep(5000);
 
             StartCheck();
         }
         private static void TasksCheck(string group)
         {
-            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", "barrierserver")))
+            try
             {
-                conn.Open();
-
-                MySqlCommand cmd = new MySqlCommand("SELECT COUNT(id) FROM tasks WHERE `group` = " + group + " AND `user_id` = 0", conn);
-
-                int i = 0;
-
-                using (MySqlDataReader dr = cmd.ExecuteReader())
+                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", "barrierserver")))
                 {
-                    if (dr == null)
-                        return;
+                    conn.Open();
 
-                    if (dr.Read())
-                        i = dr.GetInt32(0);
+                    MySqlCommand cmd = new MySqlCommand("SELECT COUNT(id) FROM tasks WHERE `group` = " + group + " AND `user_id` = 0", conn);
 
-                    if (!dr.IsClosed)
-                        dr.Close();
+                    int i = 0;
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr == null)
+                            return;
+
+                        if (dr.Read())
+                            i = dr.GetInt32(0);
+
+                        if (!dr.IsClosed)
+                            dr.Close();
+                    }
+
+                    if (i > 0)
+                        SendNotice(group);
                 }
-
-                if (i > 0)
-                    SendNotice(group);
+            }
+            catch (System.Exception ex)
+            {
+                Color.WriteLineColor("[TasksCheck] " + ex.Message, ConsoleColor.Red);
+                Log.ExcWrite("[TasksCheck] " + ex.Message);
             }
         }
 
         private static void SendNotice(string group)
         {
-            using (MySqlConnection conn2 = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", "barrierserver")))
+            try
             {
-                conn2.Open();
-
-                MySqlCommand cmd2 = new MySqlCommand("SELECT username FROM `users` WHERE `status` = 1 AND `group` = " + group, conn2);
-
-                using (MySqlDataReader usersonline = cmd2.ExecuteReader())
+                using (MySqlConnection conn2 = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", "barrierserver")))
                 {
-                    if (!usersonline.HasRows)
-                        Color.WriteLineColor("Пользователи онлайн не обнаружены..", ConsoleColor.DarkGray);  //TODO Send to administrator msg and tasks ;
+                    conn2.Open();
 
-                    while (usersonline.Read())
-                    {
-                        Msg.SendUser(usersonline.GetString(0), "PrioritySale", 8, "");
-                        Color.WriteLineColor("Отправка уведомления пользователю " + usersonline.GetString(0) + " о наличии новых заданий.",ConsoleColor.DarkGray);
-                    }
+                    MySqlCommand cmd2 = new MySqlCommand("SELECT username FROM `users` WHERE `status` = 1 AND `group` = " + group, conn2);
 
-                    if (!usersonline.IsClosed)
+                    using (MySqlDataReader usersonline = cmd2.ExecuteReader())
                     {
-                        usersonline.Close();
+                        if (!usersonline.HasRows)
+                        {
+                            if (group == "1")
+                                Color.WriteLineColor("Пользователи онлайн не обнаружены..", ConsoleColor.DarkGray);  //TODO Send to administrator msg and tasks ;
+                            else
+                                Color.WriteLineColor("Администраторы онлайн не обнаружены..", ConsoleColor.DarkGray);
+                        }
+
+                        while (usersonline.Read())
+                        {
+                            Msg.SendUser(usersonline.GetString(0), "PrioritySale", 8, "");
+
+                            if (group == "1")
+                                Color.WriteLineColor("Отправка уведомления пользователю " + usersonline.GetString(0) + " о наличии новых заданий.", ConsoleColor.DarkGray);
+                            else
+                                Color.WriteLineColor("Отправка уведомления администратору " + usersonline.GetString(0) + " о наличии новых заданий.", ConsoleColor.DarkGray);
+                        }
+
+                        if (!usersonline.IsClosed)
+                        {
+                            usersonline.Close();
+                        }
                     }
                 }
+            }
+            catch (System.Exception ex)
+            {
+                Color.WriteLineColor("[SendNotice] " + ex.Message, ConsoleColor.Red);
+                Log.ExcWrite("[SendNotice] " + ex.Message);
             }
         }
     }

@@ -98,17 +98,19 @@ namespace BarrierServerProject
                                         Msg.SendUser(split_data[0], "PrioritySale", 1, split_data[0]);
                                         user.username = split_data[0];
                                         Packages.connector.ExecuteNonQuery("UPDATE `barrierserver`.`users` SET `status`='1',`ip`='" + IPAddress.Parse(((IPEndPoint)r_client.RemoteEndPoint).Address.ToString()) + "' WHERE `username`='" + split_data[0] + "'");
+                                        Log.log_write(split_data[0], "[AUTH_S]", "AUTHLOG");
                                     }
                                     else
                                     {
                                         Server.clients[r_client] = split_data[0];
                                         Msg.SendUser(split_data[0], "PrioritySale", 0, "Идентификация не пройдена.");
                                         Color.WriteLineColor(split_data[0] + " авторизация неудачна", ConsoleColor.Red);
+                                        Log.log_write(split_data[0], "[AUTH_F]", "AUTHLOG");
                                     }
 
                                     using (MD5 md5Hash = MD5.Create())
                                     {
-                                        Color.WriteLineColor(split_data[0] + " " + split_data[1], ConsoleColor.Red);
+                                        Color.WriteLineColor(split_data[0] + " " + split_data[1], ConsoleColor.DarkGray);
                                         break;
                                     }
 
@@ -149,7 +151,7 @@ namespace BarrierServerProject
                                 Color.WriteLineColor("Версия очередности у клиента " + user.username + " проверена успешно!", ConsoleColor.Green);
                             else
                             {
-                                Color.WriteLineColor("Версия очередности устарела у клиента " + user.username + ".Обновление", ConsoleColor.Yellow);
+                                Color.WriteLineColor("Версия очередности устарела у клиента " + user.username + ".", ConsoleColor.DarkYellow);
                                 Msg.SendUser(user.username, "PrioritySale", 9, Packages.StatusString + ";" + DateTime.Now);
                             }
                             break;
