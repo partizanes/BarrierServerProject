@@ -110,27 +110,6 @@ namespace BarrierServerProject
                         double count = dr.GetDouble(2);
                         DateTime date = dr.GetDateTime(3);
 
-                        Color.WriteLineColor("[DEBUG] " + bar + ";" + price + ";" + count + ";" + date.ToString("yyyy-MM-dd,HH:mm:ss"), ConsoleColor.Gray);
-
-                        Msg.SendUser("LsTradeAgent", "DR", 0, bar + ";" + price + ";" + count + ";" + date.ToString("yyyy-MM-dd,HH:mm:ss"));
-
-                        DateTime datetime = DateTime.Now;
-
-                        while (!CheckSend)
-                        {
-                            Thread.Sleep(500);
-
-                            if ((DateTime.Now - datetime).TotalSeconds > 60)
-                            {
-                                CheckSend = true;
-                                Color.WriteLineColor("LsTradeAgent не ответил вовремя.Операция отменена.", ConsoleColor.Red);
-                            }
-                        }
-
-                        CheckSend = false;
-
-                        Color.WriteLineColor("Запрос на кассовый сервер...", ConsoleColor.Cyan);
-
                         GetSail(bar, date, price, count);
                     }
                 }
@@ -150,6 +129,27 @@ namespace BarrierServerProject
 
         private static void GetSail(string bar, DateTime date, int price, double count)
         {
+            Color.WriteLineColor("[DEBUG] " + bar + ";" + price + ";" + count + ";" + date.ToString("yyyy-MM-dd,HH:mm:ss"), ConsoleColor.Gray);
+
+            Msg.SendUser("LsTradeAgent", "DR", 0, bar + ";" + price + ";" + count + ";" + date.ToString("yyyy-MM-dd,HH:mm:ss"));
+
+            DateTime datetime = DateTime.Now;
+
+            while (!CheckSend)
+            {
+                Thread.Sleep(500);
+
+                if ((DateTime.Now - datetime).TotalSeconds > 60)
+                {
+                    CheckSend = true;
+                    Color.WriteLineColor("LsTradeAgent не ответил вовремя.Операция отменена.", ConsoleColor.Red);
+                }
+            }
+
+            CheckSend = false;
+
+            Color.WriteLineColor("Запрос на кассовый сервер...", ConsoleColor.Cyan);
+
             using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BdName"))))
             {
                 conn.Open();
@@ -204,27 +204,6 @@ namespace BarrierServerProject
                 if (File.Exists(Environment.CurrentDirectory + "\\data\\" + "balance.dbf"))
                 {
                     //TODO DEBUG parametrs
-                    Color.WriteLineColor("[DEBUG] " + bar + ";" + price + ";" + count + ";" + date.ToString("yyyy-MM-dd,HH:mm:ss"), ConsoleColor.Gray);
-
-                    Msg.SendUser("LsTradeAgent", "DR", 0, bar + ";" + price + ";" + count + ";" + date.ToString("yyyy-MM-dd,HH:mm:ss"));
-
-                    DateTime datetime = DateTime.Now;
-
-                    //TODO CHECK TIME OPERATION EXECUTION , ABORT HANG OPERATION
-                    while (!CheckSend)
-                    {
-                        Thread.Sleep(500);
-
-                        if ((DateTime.Now - datetime).TotalSeconds > 60)
-                        {
-                            CheckSend = true;
-                            Color.WriteLineColor("LsTradeAgent не ответил вовремя.Операция отменена.", ConsoleColor.Red);
-                        }
-                    }
-
-                    CheckSend = false;
-
-                    Color.WriteLineColor("Запрос на кассовый сервер...", ConsoleColor.Cyan);
 
                     GetSail(bar, date, price, count);
                 }

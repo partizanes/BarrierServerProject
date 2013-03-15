@@ -287,9 +287,6 @@ namespace PrioritySales
                         TextboxPrice.Text = Convert.ToInt32(split_data[0]).ToString();
                     }
 
-                    if (!dr.IsClosed)
-                        dr.Close();
-
                     TextboxCountAdd.Focus();
                 }
             }

@@ -7,7 +7,8 @@ namespace BalanceModule
 {
     class Config
     {    
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         static extern uint GetPrivateProfileString(
         string lpAppName,
         string lpKeyName,

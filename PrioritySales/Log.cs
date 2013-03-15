@@ -18,8 +18,6 @@ namespace PrioritySales
                 StreamWriter sw = new StreamWriter(fileName, true, System.Text.Encoding.UTF8);
                 sw.WriteLine("[" + EntryDate + "][" + EntryTime + "][" + reason + "]" + " " + str);
                 sw.Close();
-                //check this
-                sw.Dispose();
             }
             catch { }
         }
@@ -35,8 +33,6 @@ namespace PrioritySales
                 StreamWriter sw = new StreamWriter(fileName, true, System.Text.Encoding.UTF8);
                 sw.Write(articul + " ");
                 sw.Close();
-                //check this
-                sw.Dispose();
             }
             catch { }
         }

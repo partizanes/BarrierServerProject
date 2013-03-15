@@ -5,6 +5,7 @@ using System.Windows;
 
 namespace PrioritySales
 {
+
     class Connector
     {
         private MySqlCommand cmd;

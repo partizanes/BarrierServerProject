@@ -39,8 +39,6 @@ namespace BalanceModule
                 StreamWriter sw = new StreamWriter(fileName, true, System.Text.Encoding.UTF8);
                 sw.Write(articul + " ");
                 sw.Close();
-                //check this
-                sw.Dispose();
             }
             catch (System.Exception ex)
             {

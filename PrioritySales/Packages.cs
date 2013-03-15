@@ -85,9 +85,6 @@ namespace PrioritySales
 
                                                 (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Rows.Add(barcode, name, price, count.ToString().Replace(",000", ""), sail.ToString().Replace(",000", ""), status, dt); }));
                                             }
-
-                                            if (!dr.IsClosed)
-                                                dr.Close();
                                         }
                                     }
                                 }
