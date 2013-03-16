@@ -25,18 +25,25 @@ namespace PrioritySales
 
         public void check_dll()
         {
-            //TODO ONLY SUPPORT VERSION CONNECTOR 6.6.5
-//             if(Environment.Is64BitOperatingSystem)
-//                 while (!System.IO.File.Exists(System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\MySQL\\MySQL Connector Net 6.6.5\\Assemblies\\v4.0\\MySql.Data.dll"))
-//                 {
-//                     MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "Внимание на компьютере не найден MySQL Connector Net,установите и нажмите ок.");
-//                 }
-//             else
-//                 while (!System.IO.File.Exists(System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + "\\MySQL\\MySQL Connector Net 6.6.5\\Assemblies\\v4.0\\MySql.Data.dll"))
-//                 {
-//                     MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "Внимание на компьютере не найден MySQL Connector Net,установите и нажмите ок.");
-//                 }
+            if(Boolean.Parse(Config.GetParametr("ConnectorCheck")))
+            {
+                if(Environment.Is64BitOperatingSystem)
+                    while (!System.IO.File.Exists(System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\MySQL\\MySQL Connector Net " + Config.GetParametr("ConnectorVersion") + "\\Assemblies\\v4.0\\MySql.Data.dll"))
+                    {
+                        MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "Внимание на компьютере не найден MySQL Connector Net,установите и нажмите ок.Отключить проверку коннектора возможно в файле конфигурации");
 
+                        if (!Boolean.Parse(Config.GetParametr("ConnectorCheck")))
+                            return;
+                    }
+                else
+                    while (!System.IO.File.Exists(System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + "\\MySQL\\MySQL Connector Net " + Config.GetParametr("ConnectorVersion") + "\\Assemblies\\v4.0\\MySql.Data.dll"))
+                    {
+                        MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "Внимание на компьютере не найден MySQL Connector Net,установите и нажмите ок.Отключить проверку коннектора возможно в файле конфигурации");
+
+                        if (!Boolean.Parse(Config.GetParametr("ConnectorCheck")))
+                            return;
+                    }
+            }
 
             while (!System.IO.File.Exists(Environment.CurrentDirectory + "\\" + "Serialization.dll"))
             {
@@ -74,7 +81,13 @@ namespace PrioritySales
                                               "log_level=3",
                                               "",
                                               ";Название база данных ukm на кассовом севрере",
-                                              "BdName=ukmserver"
+                                              "BdName=ukmserver",
+                                              "",
+                                              ";Проверка наличия установленного Mysql connector",
+                                              "ConnectorCheck=true",
+                                              "",
+                                              ";Версия Mysql Connector",
+                                              "ConnectorVersion=6.6.5"
                                           };
 
                     File.WriteAllLines(Environment.CurrentDirectory + "\\" + "config.ini", createText, outputEnc);

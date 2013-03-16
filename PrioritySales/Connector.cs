@@ -30,7 +30,7 @@ namespace PrioritySales
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show("При запросе с базы данных произошло исключение. " + ex.Message);
+                MessageBox.Show("При запросе произошло исключение. " + ex.Message);
                 return false;
             }
             finally
