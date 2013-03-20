@@ -18,7 +18,6 @@ namespace PrioritySales
             }
             else
             {
-                //TODO check dll in directory;
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new AuthForm());

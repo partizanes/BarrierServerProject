@@ -444,7 +444,19 @@ namespace PrioritySales
             Server.threads.Add(thh);
             thh.Start();
 
-            //TODO TIMER TO ENABLED BUTTON
+            //TIMER TO ENABLED BUTTON
+            int i = 0;
+
+            Application.DoEvents();
+
+            while (ButtonTurn.Enabled == false)
+            {
+                i++;
+                Thread.Sleep(1000);
+
+                if (i > 30)
+                    ButtonTurn.Enabled = true;
+            }
         }
 
         private void TimerClearMsg_Tick(object sender, EventArgs e)
@@ -670,19 +682,19 @@ namespace PrioritySales
 
         private void ButtonList_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.Visible == false)
+            if (dataGridViewMainForm.Visible == false)
             {
-                dataGridView1.Visible = true;
+                dataGridViewMainForm.Visible = true;
                 LabelVersionBd.Visible = true;
                 Server.Sender("PrioritySale", 9,StatusUpdate);
 
                 if (!Packages.mf.PanelAddBg.Visible)
-                    (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.dataGridView1.Focus(); }));
+                    (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.dataGridViewMainForm.Focus(); }));
             }
             else
             {
                 LabelVersionBd.Visible = false;
-                dataGridView1.Visible = false;
+                dataGridViewMainForm.Visible = false;
             }
         }
 
@@ -701,13 +713,13 @@ namespace PrioritySales
                 case Keys.Escape:
                     {
                         ButtonList.Focus();
-                        dataGridView1.Visible = false;
+                        dataGridViewMainForm.Visible = false;
                         LabelVersionBd.Visible = false;
                         break;
                     }
                 case Keys.Up:
                     {
-                        if (dataGridView1.Rows.GetFirstRow(DataGridViewElementStates.Selected) == 0)
+                        if (dataGridViewMainForm.Rows.GetFirstRow(DataGridViewElementStates.Selected) == 0)
                             ButtonList.Focus();
                         break;
                     }
@@ -746,9 +758,9 @@ namespace PrioritySales
 
         private void ButtonList_KeyDown(object sender, KeyEventArgs e)
         {
-            if (dataGridView1.Visible)
+            if (dataGridViewMainForm.Visible)
             {
-                dataGridView1.Focus();
+                dataGridViewMainForm.Focus();
                 return;
             }
 

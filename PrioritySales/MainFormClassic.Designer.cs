@@ -69,7 +69,7 @@
             this.TextboxAddBar = new System.Windows.Forms.TextBox();
             this.PanelMsgBg = new System.Windows.Forms.Panel();
             this.PanelMsg = new System.Windows.Forms.Panel();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridViewMainForm = new System.Windows.Forms.DataGridView();
             this.Barcode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NameItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -90,7 +90,7 @@
             this.PanelAddBg.SuspendLayout();
             this.PanelAddTask.SuspendLayout();
             this.PanelMsgBg.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMainForm)).BeginInit();
             this.SuspendLayout();
             // 
             // PanelMainClassic
@@ -327,7 +327,7 @@
             this.PanelMainBlock.BackColor = System.Drawing.Color.Black;
             this.PanelMainBlock.Controls.Add(this.PanelAddBg);
             this.PanelMainBlock.Controls.Add(this.PanelMsgBg);
-            this.PanelMainBlock.Controls.Add(this.dataGridView1);
+            this.PanelMainBlock.Controls.Add(this.dataGridViewMainForm);
             this.PanelMainBlock.Location = new System.Drawing.Point(1, 1);
             this.PanelMainBlock.Name = "PanelMainBlock";
             this.PanelMainBlock.Size = new System.Drawing.Size(656, 388);
@@ -541,14 +541,14 @@
             this.PanelMsg.Size = new System.Drawing.Size(646, 182);
             this.PanelMsg.TabIndex = 0;
             // 
-            // dataGridView1
+            // dataGridViewMainForm
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AllowUserToResizeColumns = false;
-            this.dataGridView1.AllowUserToResizeRows = false;
-            this.dataGridView1.BackgroundColor = System.Drawing.Color.Black;
-            this.dataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.dataGridViewMainForm.AllowUserToAddRows = false;
+            this.dataGridViewMainForm.AllowUserToDeleteRows = false;
+            this.dataGridViewMainForm.AllowUserToResizeColumns = false;
+            this.dataGridViewMainForm.AllowUserToResizeRows = false;
+            this.dataGridViewMainForm.BackgroundColor = System.Drawing.Color.Black;
+            this.dataGridViewMainForm.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.Black;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -556,9 +556,9 @@
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Black;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Green;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewMainForm.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridViewMainForm.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewMainForm.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Barcode,
             this.NameItem,
             this.Price,
@@ -575,13 +575,13 @@
             dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Black;
             dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle4;
-            this.dataGridView1.EnableHeadersVisualStyles = false;
-            this.dataGridView1.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.dataGridView1.Location = new System.Drawing.Point(2, 1);
-            this.dataGridView1.MultiSelect = false;
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
+            this.dataGridViewMainForm.DefaultCellStyle = dataGridViewCellStyle4;
+            this.dataGridViewMainForm.EnableHeadersVisualStyles = false;
+            this.dataGridViewMainForm.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.dataGridViewMainForm.Location = new System.Drawing.Point(2, 1);
+            this.dataGridViewMainForm.MultiSelect = false;
+            this.dataGridViewMainForm.Name = "dataGridViewMainForm";
+            this.dataGridViewMainForm.ReadOnly = true;
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle5.BackColor = System.Drawing.Color.Black;
             dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -589,16 +589,16 @@
             dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.Black;
             dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Green;
             dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle5;
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(653, 386);
-            this.dataGridView1.TabIndex = 0;
-            this.dataGridView1.TabStop = false;
-            this.dataGridView1.Visible = false;
-            this.dataGridView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridView1_KeyDown);
+            this.dataGridViewMainForm.RowHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            this.dataGridViewMainForm.RowHeadersVisible = false;
+            this.dataGridViewMainForm.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridViewMainForm.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridViewMainForm.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewMainForm.Size = new System.Drawing.Size(653, 386);
+            this.dataGridViewMainForm.TabIndex = 0;
+            this.dataGridViewMainForm.TabStop = false;
+            this.dataGridViewMainForm.Visible = false;
+            this.dataGridViewMainForm.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridView1_KeyDown);
             // 
             // Barcode
             // 
@@ -715,7 +715,7 @@
             this.PanelAddTask.ResumeLayout(false);
             this.PanelAddTask.PerformLayout();
             this.PanelMsgBg.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMainForm)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -753,7 +753,7 @@
         public System.Windows.Forms.TextBox TextboxCountAdd;
         public System.Windows.Forms.TextBox TextboxAddBar;
         public System.Windows.Forms.TextBox TextboxPrice;
-        public System.Windows.Forms.DataGridView dataGridView1;
+        public System.Windows.Forms.DataGridView dataGridViewMainForm;
         public System.Windows.Forms.Panel PanelMsgBg;
         private System.Windows.Forms.Panel PanelMsg;
         private System.Windows.Forms.DataGridViewTextBoxColumn Barcode;

@@ -57,7 +57,7 @@ namespace PrioritySales
                         case 9:
                             try
                             {
-                                if (!mf.dataGridView1.Visible)
+                                if (!mf.dataGridViewMainForm.Visible)
                                     return;
 
                                 string[] split_data = msg.Replace("\0", "").Split(new Char[] { ';' });
@@ -66,7 +66,7 @@ namespace PrioritySales
 
                                 (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.LabelVersionBd.Text = ("Бд: " + split_data[1]); }));
 
-                                if (mf.dataGridView1.Visible == true)
+                                if (mf.dataGridViewMainForm.Visible == true)
                                 {
                                     using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", "barrierserver")))
                                     {
@@ -76,12 +76,15 @@ namespace PrioritySales
 
                                         using (MySqlDataReader dr = cmd.ExecuteReader())
                                         {
+                                            if (dr == null)
+                                                return;
+
                                             if (!dr.HasRows)
                                             {
                                                 //TODO
                                             }
 
-                                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Rows.Clear(); }));
+                                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridViewMainForm.Rows.Clear(); }));
 
 
                                             while (dr.Read())
@@ -95,7 +98,7 @@ namespace PrioritySales
                                                 string dt = dr.GetString(6);
                                                 object flag = dr.GetValue(7);
 
-                                                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridView1.Rows.Add(barcode, name, price, count.ToString().Replace(",000", ""), sail.ToString().Replace(",000", ""), status, dt); }));
+                                                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridViewMainForm.Rows.Add(barcode, name, price, count.ToString().Replace(",000", ""), sail.ToString().Replace(",000", ""), status, dt); }));
                                             }
                                         }
                                     }
