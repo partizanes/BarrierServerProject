@@ -13,8 +13,9 @@ namespace BarrierServerProject
         static IntPtr ConsoleHandle = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
 
         private const int SW_MINIMIZE = 6;
-
         private const int SW_MAXIMIZE = 3;
+
+        public static bool debug = Boolean.Parse(Config.GetParametr("Debug"));
 
         [System.Runtime.InteropServices.DllImport("Kernel32")]
         private static extern bool SetConsoleCtrlHandler(EventHandler handler, bool add);

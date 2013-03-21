@@ -34,6 +34,12 @@ namespace BarrierServerProject
         {
             log_write(text, "EXCEPTION", "exception");
         }
+
+        public static void LogWriteDebug(string text, string reason)
+        {
+            if (Program.debug)
+                log_write(text, "DEBUG", "debug");
+        }
     }
 }
 
