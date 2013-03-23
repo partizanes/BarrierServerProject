@@ -77,9 +77,25 @@ namespace BarrierServerProject
                         case 0:
                             string[] split_data = msg.Replace("\0", "").Replace(" ", "").Split(new Char[] { ':' });
 
-                            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", "barrierserver")))
+                            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=5;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", "barrierserver")))
                             {
-                                conn.Open();
+                                try { conn.Open(); }
+                                catch (MySqlException ex)
+                                {
+                                    Log.LogWriteDebug("[USERAUTH] [" + ex.Number + "] [" + ex.Message + "]");
+
+                                    switch (ex.Number)
+                                    {
+                                        case 1042:
+                                            Server.clients[r_client] = split_data[0];
+                                            Msg.SendUser(split_data[0], "PrioritySale", 4, "         Mysql недоступен");
+                                            break;
+                                        default:
+                                            Server.clients[r_client] = split_data[0];
+                                            Msg.SendUser(split_data[0], "PrioritySale", 4, "         Код: " + ex.Number);
+                                            break;
+                                    }
+                                }
 
                                 MySqlCommand cmd = new MySqlCommand("SELECT username,hash FROM users WHERE username = '" + split_data[0] + "' AND hash = '" + split_data[1] + "'", conn);
 

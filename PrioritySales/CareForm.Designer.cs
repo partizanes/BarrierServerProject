@@ -41,9 +41,12 @@
             this.panel1.Controls.Add(this.LabelCareForm);
             this.panel1.Location = new System.Drawing.Point(1, 1);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(209, 34);
+            this.panel1.Size = new System.Drawing.Size(210, 36);
             this.panel1.TabIndex = 0;
             this.panel1.DoubleClick += new System.EventHandler(this.panel1_DoubleClick);
+            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
+            this.panel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseUp);
             // 
             // LabelCareForm
             // 
@@ -55,6 +58,9 @@
             this.LabelCareForm.TabIndex = 0;
             this.LabelCareForm.Text = "<Необработанные задачи>";
             this.LabelCareForm.DoubleClick += new System.EventHandler(this.LabelCareForm_DoubleClick);
+            this.LabelCareForm.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LabelCareForm_MouseDown);
+            this.LabelCareForm.MouseMove += new System.Windows.Forms.MouseEventHandler(this.LabelCareForm_MouseMove);
+            this.LabelCareForm.MouseUp += new System.Windows.Forms.MouseEventHandler(this.LabelCareForm_MouseUp);
             // 
             // TimerChangeColor
             // 
@@ -80,6 +86,9 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "CareForm";
             this.TopMost = true;
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.CareForm_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.CareForm_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.CareForm_MouseUp);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);

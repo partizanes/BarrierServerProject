@@ -10,8 +10,8 @@ namespace PrioritySales
         public static MainFormClassic mf = new MainFormClassic();
         public static Connector connector = new Connector();
         public static CareForm careform = new CareForm();
-        private static int Zx = SystemInformation.PrimaryMonitorSize.Width - (SystemInformation.PrimaryMonitorSize.Width/6);
-        private static int Zy = SystemInformation.PrimaryMonitorSize.Height - (SystemInformation.PrimaryMonitorSize.Height/15);
+        public static int Zx = SystemInformation.PrimaryMonitorSize.Width - (SystemInformation.PrimaryMonitorSize.Width/6);
+        public static int Zy = SystemInformation.PrimaryMonitorSize.Height - (SystemInformation.PrimaryMonitorSize.Height / 15);
 
         public static void parse(string p_id, int com, string msg)
         {
@@ -40,6 +40,12 @@ namespace PrioritySales
                             break;
                         case 3:
                             QueryStatus(false, msg);
+                            break;
+                        case 4:
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).textboxPass.Text = ""; }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).textboxPass.Focus(); }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).LabelMsg.Text = msg; }));
+                            (Application.OpenForms[1] as AuthForm).buttonLogin.Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).buttonLogin.PerformClick(); }));
                             break;
                         case 7:
                             (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.PrioritySalesIcon.Icon = Properties.Resources.logo; }));

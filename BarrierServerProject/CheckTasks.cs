@@ -46,7 +46,7 @@ namespace BarrierServerProject
                     }
 
                     if (i > 0)
-                        SendNotice(group,8);
+                        SendNotice(group, 8);
                     else
                         SendNotice(group, 7);
                 }
@@ -82,10 +82,20 @@ namespace BarrierServerProject
                         {
                             Msg.SendUser(usersonline.GetString(0), "PrioritySale", i, "");
 
-                            if (group == "1")
-                                Color.WriteLineColor("Отправка уведомления пользователю " + usersonline.GetString(0) + " о наличии новых заданий.", ConsoleColor.DarkGray);
+                            if (i == 7)
+                            {
+                                if (group == "1")
+                                    Color.WriteLineColor("Отправка уведомления пользователю " + usersonline.GetString(0) + " задания не найдены. ", ConsoleColor.DarkGray);
+                                else
+                                    Color.WriteLineColor("Отправка уведомления администратору " + usersonline.GetString(0) + " задания не найдены. ", ConsoleColor.DarkGray);
+                            }
                             else
-                                Color.WriteLineColor("Отправка уведомления администратору " + usersonline.GetString(0) + " о наличии новых заданий.", ConsoleColor.DarkGray);
+                            {
+                                if (group == "1")
+                                    Color.WriteLineColor("Отправка уведомления пользователю " + usersonline.GetString(0) + " о наличии новых заданий.", ConsoleColor.DarkGray);
+                                else
+                                    Color.WriteLineColor("Отправка уведомления администратору " + usersonline.GetString(0) + " о наличии новых заданий.", ConsoleColor.DarkGray);
+                            }
                         }
 
                         if (!usersonline.IsClosed)

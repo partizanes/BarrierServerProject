@@ -188,7 +188,13 @@ namespace PrioritySales
             }
             else
             {
-                try { (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).buttonCancel_Click(); })); }
+                try
+                {
+                    (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).buttonCancel_Click(); }));
+
+                    if ((Application.OpenForms[1] as AuthForm).LabelMsg.Text == "                Соединение...")
+                        (Application.OpenForms[1] as AuthForm).LabelMsg.Text = "";
+                }
                 catch { }
             }
         }
@@ -274,8 +280,6 @@ namespace PrioritySales
             LabelMsg.Text = "";
         }
 
-        //start блок перетаскивание формы
-        //-////////////////////////////////////////////////////////////////
         private void pass_textbox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
@@ -316,6 +320,11 @@ namespace PrioritySales
                 Application.Exit();
             }
         }
+
+
+        //start блок перетаскивание формы
+        //-////////////////////////////////////////////////////////////////
+
         private void AuthForm_MouseDown(object sender, MouseEventArgs e)
         {
             form_MouseDown(e);
