@@ -554,7 +554,7 @@
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Green;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.DodgerBlue;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewMainForm.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewMainForm.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -573,7 +573,7 @@
             dataGridViewCellStyle4.Format = "N0";
             dataGridViewCellStyle4.NullValue = null;
             dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewMainForm.DefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewMainForm.EnableHeadersVisualStyles = false;
@@ -598,6 +598,9 @@
             this.dataGridViewMainForm.TabIndex = 0;
             this.dataGridViewMainForm.TabStop = false;
             this.dataGridViewMainForm.Visible = false;
+            this.dataGridViewMainForm.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMainForm_CellEnter);
+            this.dataGridViewMainForm.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMainForm_CellLeave);
+            this.dataGridViewMainForm.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridViewMainForm_RowsAdded);
             this.dataGridViewMainForm.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridView1_KeyDown);
             // 
             // Barcode

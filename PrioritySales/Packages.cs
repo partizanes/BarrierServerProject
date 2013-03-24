@@ -102,7 +102,6 @@ namespace PrioritySales
                                                 object sail = dr.GetValue(4);
                                                 object status = dr.GetValue(5);
                                                 string dt = dr.GetString(6);
-                                                object flag = dr.GetValue(7);
 
                                                 (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridViewMainForm.Rows.Add(barcode, name, price, count.ToString().Replace(",000", ""), sail.ToString().Replace(",000", ""), status, dt); }));
                                             }

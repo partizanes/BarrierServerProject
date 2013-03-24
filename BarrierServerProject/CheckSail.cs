@@ -327,12 +327,27 @@ namespace BarrierServerProject
                 double count = Convert.ToDouble(reader.GetValue(3));
                 double sail = Convert.ToDouble(reader.GetValue(4));
                 Int32 status = 0;
-                Int32 flag = 0;
+
                 DateTime dt = reader.GetDateTime(5);
 
-                //TODO CHECK FLAG
+                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", "BarrierServer")))
+                {
+                    conn.Open();
 
-                Packages.connector.ExecuteNonQuery("INSERT INTO `barrierserver`.`state`(`barcode`,`name`,`price`,`count`,`sailed`,`status`,`date`,`flag`) VALUES ( '" + barcode + "','" + item + "','" + price + "','" + count.ToString().Replace(",", ".") + "','" + sail.ToString().Replace(",", ".") + "','" + status + "','" + dt.ToString("yyyy-MM-dd,HH:mm:ss") + "','" + flag + "')");
+                    MySqlCommand cmd = new MySqlCommand("SELECT MAX(priority) FROM tasks WHERE `barcode` = '" + barcode + "' AND `date` = '" + dt.ToString("yyyy-MM-dd,HH:mm:ss") + "'", conn);
+                    cmd.CommandTimeout = 0;
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            if (!dr.IsDBNull(0))
+                                status = Convert.ToInt32(dr.GetValue(0));
+                        }
+                    }
+                }
+
+                Packages.connector.ExecuteNonQuery("INSERT INTO `barrierserver`.`state`(`barcode`,`name`,`price`,`count`,`sailed`,`status`,`date`) VALUES ( '" + barcode + "','" + item + "','" + price + "','" + count.ToString().Replace(",", ".") + "','" + sail.ToString().Replace(",", ".") + "'," + status + ",'" + dt.ToString("yyyy-MM-dd,HH:mm:ss") + "')");
             }
 
             using (MD5 md5Hash = MD5.Create())

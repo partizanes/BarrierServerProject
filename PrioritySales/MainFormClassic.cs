@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿
+using MySql.Data.MySqlClient;
 using System;
 using System.Drawing;
 using System.Threading;
@@ -865,6 +866,69 @@ namespace PrioritySales
             _forBlinking = !_forBlinking;
 
             (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.PrioritySalesIcon.Icon = _forBlinking ? icon1 : icon2; }));
+        }
+
+        private void dataGridViewMainForm_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            switch (Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].Cells[5].Value.ToString())
+            {
+                case "0":
+                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.DodgerBlue;
+                    break;
+                case "1":
+                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.OrangeRed;
+                    break;
+                case "2":
+                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.OrangeRed;
+                    break;
+                case "3":
+                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.Red;
+                    break;
+                case "4":
+                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.DarkBlue;
+                    break;
+                case "5":
+                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.IndianRed;
+                    break;
+                case "9":
+                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.DodgerBlue;
+                    break;
+            }
+        }
+
+        private void dataGridViewMainForm_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+
+            switch (Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].Cells[5].Value.ToString())
+            {
+                case "0":
+                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.DodgerBlue;
+                    break;
+                case "1":
+                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.OrangeRed;
+                    break;
+                case "2":
+                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.OrangeRed;
+                    break;
+                case "3":
+                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.Red;
+                    break;
+                case "4":
+                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.DarkBlue;
+                    break;
+                case "5":
+                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.IndianRed;
+                    break;
+                case "9":
+                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.DodgerBlue;
+                    break;
+            }
+        }
+
+        private void dataGridViewMainForm_CellLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
         }
     }
 }
