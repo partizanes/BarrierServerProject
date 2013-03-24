@@ -32,9 +32,9 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFormClassic));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFormClassic));
             this.PanelMainClassic = new System.Windows.Forms.Panel();
             this.PanelBackButton = new System.Windows.Forms.Panel();
             this.PanelButton = new System.Windows.Forms.Panel();
@@ -70,16 +70,17 @@
             this.PanelMsgBg = new System.Windows.Forms.Panel();
             this.PanelMsg = new System.Windows.Forms.Panel();
             this.dataGridViewMainForm = new System.Windows.Forms.DataGridView();
+            this.TimerClearMsg = new System.Windows.Forms.Timer(this.components);
+            this.PrioritySalesIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.TimerIconChange = new System.Windows.Forms.Timer(this.components);
             this.Barcode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NameItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PriceSail = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CountStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DateCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TimerClearMsg = new System.Windows.Forms.Timer(this.components);
-            this.PrioritySalesIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.TimerIconChange = new System.Windows.Forms.Timer(this.components);
             this.PanelMainClassic.SuspendLayout();
             this.PanelBackButton.SuspendLayout();
             this.PanelButton.SuspendLayout();
@@ -562,6 +563,7 @@
             this.Barcode,
             this.NameItem,
             this.Price,
+            this.PriceSail,
             this.CountStart,
             this.Count,
             this.Status,
@@ -603,6 +605,22 @@
             this.dataGridViewMainForm.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridViewMainForm_RowsAdded);
             this.dataGridViewMainForm.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridView1_KeyDown);
             // 
+            // TimerClearMsg
+            // 
+            this.TimerClearMsg.Interval = 3000;
+            this.TimerClearMsg.Tick += new System.EventHandler(this.TimerClearMsg_Tick);
+            // 
+            // PrioritySalesIcon
+            // 
+            this.PrioritySalesIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("PrioritySalesIcon.Icon")));
+            this.PrioritySalesIcon.Text = "Двойной клик для активации приложения.";
+            this.PrioritySalesIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PrioritySales_MouseDoubleClick);
+            // 
+            // TimerIconChange
+            // 
+            this.TimerIconChange.Interval = 1000;
+            this.TimerIconChange.Tick += new System.EventHandler(this.TimerIconChange_Tick);
+            // 
             // Barcode
             // 
             this.Barcode.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
@@ -636,6 +654,15 @@
             this.Price.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Price.Width = 55;
             // 
+            // PriceSail
+            // 
+            this.PriceSail.Frozen = true;
+            this.PriceSail.HeaderText = "ЦП";
+            this.PriceSail.Name = "PriceSail";
+            this.PriceSail.ReadOnly = true;
+            this.PriceSail.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.PriceSail.Width = 55;
+            // 
             // CountStart
             // 
             this.CountStart.Frozen = true;
@@ -661,7 +688,7 @@
             this.Status.Name = "Status";
             this.Status.ReadOnly = true;
             this.Status.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Status.Width = 55;
+            this.Status.Width = 50;
             // 
             // DateCol
             // 
@@ -670,23 +697,7 @@
             this.DateCol.Name = "DateCol";
             this.DateCol.ReadOnly = true;
             this.DateCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.DateCol.Width = 137;
-            // 
-            // TimerClearMsg
-            // 
-            this.TimerClearMsg.Interval = 3000;
-            this.TimerClearMsg.Tick += new System.EventHandler(this.TimerClearMsg_Tick);
-            // 
-            // PrioritySalesIcon
-            // 
-            this.PrioritySalesIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("PrioritySalesIcon.Icon")));
-            this.PrioritySalesIcon.Text = "Двойной клик для активации приложения.";
-            this.PrioritySalesIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PrioritySales_MouseDoubleClick);
-            // 
-            // TimerIconChange
-            // 
-            this.TimerIconChange.Interval = 1000;
-            this.TimerIconChange.Tick += new System.EventHandler(this.TimerIconChange_Tick);
+            this.DateCol.Width = 86;
             // 
             // MainFormClassic
             // 
@@ -759,17 +770,18 @@
         public System.Windows.Forms.DataGridView dataGridViewMainForm;
         public System.Windows.Forms.Panel PanelMsgBg;
         private System.Windows.Forms.Panel PanelMsg;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Barcode;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NameItem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Price;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CountStart;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Count;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Status;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DateCol;
         public System.Windows.Forms.Label LabelVersionBd;
         public System.Windows.Forms.Button ButtonList;
         public System.Windows.Forms.NotifyIcon PrioritySalesIcon;
         public System.Windows.Forms.Timer TimerIconChange;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Barcode;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NameItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Price;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PriceSail;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CountStart;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Count;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Status;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DateCol;
 
 
 

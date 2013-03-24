@@ -98,12 +98,13 @@ namespace PrioritySales
                                                 string barcode = dr.GetString(0).Replace(" ", "");
                                                 string name = dr.GetString(1).Replace("  ", "");
                                                 object price = dr.GetValue(2);
-                                                object count = dr.GetValue(3);
-                                                object sail = dr.GetValue(4);
-                                                object status = dr.GetValue(5);
-                                                string dt = dr.GetString(6);
+                                                object pricesail = dr.GetValue(3);
+                                                object count = dr.GetValue(4);
+                                                object sail = dr.GetValue(5);
+                                                object status = dr.GetValue(6);
+                                                string dt = dr.GetString(7);
 
-                                                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridViewMainForm.Rows.Add(barcode, name, price, count.ToString().Replace(",000", ""), sail.ToString().Replace(",000", ""), status, dt); }));
+                                                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.dataGridViewMainForm.Rows.Add(barcode, name, price, pricesail, count.ToString().Replace(",000", ""), sail.ToString().Replace(",000", ""), status, dt); }));
                                             }
                                         }
                                     }

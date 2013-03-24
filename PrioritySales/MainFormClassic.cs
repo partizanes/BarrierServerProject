@@ -446,18 +446,18 @@ namespace PrioritySales
             thh.Start();
 
             //TIMER TO ENABLED BUTTON
-            int i = 0;
-
-            Application.DoEvents();
-
-            while (ButtonTurn.Enabled == false)
-            {
-                i++;
-                Thread.Sleep(1000);
-
-                if (i > 30)
-                    ButtonTurn.Enabled = true;
-            }
+//             int i = 0;
+// 
+//             Application.DoEvents();
+// 
+//             while (ButtonTurn.Enabled == false)
+//             {
+//                 i++;
+//                 Thread.Sleep(1000);
+// 
+//                 if (i > 30)
+//                     ButtonTurn.Enabled = true;
+//             }
         }
 
         private void TimerClearMsg_Tick(object sender, EventArgs e)
@@ -870,28 +870,25 @@ namespace PrioritySales
 
         private void dataGridViewMainForm_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
-            switch (Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].Cells[5].Value.ToString())
+            switch (Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].Cells[6].Value.ToString())
             {
                 case "0":
                     Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.DodgerBlue;
                     break;
                 case "1":
-                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.OrangeRed;
+                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.LightYellow;
                     break;
                 case "2":
-                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.OrangeRed;
+                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.Orange;
                     break;
                 case "3":
-                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.Red;
+                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.OrangeRed;
                     break;
                 case "4":
-                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.DarkBlue;
+                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.Red;
                     break;
                 case "5":
-                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.IndianRed;
-                    break;
-                case "9":
-                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.DodgerBlue;
+                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.DarkRed;
                     break;
             }
         }
@@ -900,28 +897,25 @@ namespace PrioritySales
         {
             Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 
-            switch (Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].Cells[5].Value.ToString())
+            switch (Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].Cells[6].Value.ToString())
             {
                 case "0":
                     Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.DodgerBlue;
                     break;
                 case "1":
-                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.OrangeRed;
+                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.LightYellow;
                     break;
                 case "2":
-                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.OrangeRed;
+                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.Orange;
                     break;
                 case "3":
-                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.Red;
+                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.OrangeRed;
                     break;
                 case "4":
-                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.DarkBlue;
+                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.Red;
                     break;
                 case "5":
-                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.IndianRed;
-                    break;
-                case "9":
-                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.DodgerBlue;
+                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.DarkRed;
                     break;
             }
         }

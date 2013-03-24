@@ -241,10 +241,10 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("Товар " + bar + " не продается долгое время.Число дней " + TotalDay, ConsoleColor.Red);
 
-                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`,`date`) VALUES ( NULL," + bar + ",'1','Товар долго не продается.Число дней: " + TotalDay + "','0','1','" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "')");
+                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`sailprice`,`group`,`text`,`user_id`,`priority`,`date`) VALUES ( NULL," + bar + ",'0','1','Товар долго не продается.Число дней: " + TotalDay + "','0','1','" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "')");
             }
 
-            Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51,0," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
+            Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51,0,0,{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
         }
 
         private static bool TermsCheck(string bar, int price, double count, int priceukm, double countukm,DateTime date)
@@ -253,9 +253,9 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("Товар: " + bar + " по цене: " + priceukm + " продан больше чем было в очередности, количество: " + countukm + " по цене очередности", ConsoleColor.Cyan);
 
-                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`) VALUES ( NULL," + bar + ",'2','Продано больше чем было в очередности,необходима прогрузка цены на кассу','0','3')");
+                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`sailprice`,`group`,`text`,`user_id`,`priority`,`date`) VALUES ( NULL," + bar + ",'" + priceukm + "','2','Продано больше чем было в очередности,необходима прогрузка цены на кассу','0','3','" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "')");
 
-                Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + countukm.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
+                Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + countukm.ToString().Replace(",", ".") + "," + priceukm + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
                 return true;
             }
 
@@ -263,9 +263,9 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("Товар: " + bar + " по цене: " + priceukm + " продан в количестве: " + countukm + " по цене очередности", ConsoleColor.Cyan);
 
-                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`) VALUES ( NULL," + bar + ",'1','Все продано по цене очереди,необходимо прогрузить новую цену на кассу','0','2')");
+                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`sailprice`,`group`,`text`,`user_id`,`priority`,`date`) VALUES ( NULL," + bar + ",'" + priceukm + "','1','Все продано по цене очереди,необходимо прогрузить новую цену на кассу','0','2','" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "')");
 
-                Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + countukm.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
+                Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + countukm.ToString().Replace(",", ".") + "," + priceukm + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
                 return true;
             }
 
@@ -273,9 +273,9 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("Товар: " + bar + " по цене: " + priceukm + " продан в количестве: " + countukm + " на текущий момент продается по правильной цене и есть остаток", ConsoleColor.Yellow);
 
-                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`) VALUES ( NULL," + bar + ",'1','Продается по правильной цене и есть остаток!','0','9')");
+                //Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`,`date`) VALUES ( NULL," + bar + ",'1','Продается по правильной цене и есть остаток!','0','9','" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "')");
 
-                Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + countukm.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
+                Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + countukm.ToString().Replace(",", ".") + "," + priceukm + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
                 return true;
             }
 
@@ -285,9 +285,9 @@ namespace BarrierServerProject
                 Color.WriteLineColor("Цена на кассе: " + priceukm + " Цена очередности: " + price, ConsoleColor.Red);
                 Color.WriteLineColor("Проданое количество по дешевой цене: " + countukm, ConsoleColor.Red);
 
-                Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + countukm.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
+                Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + countukm.ToString().Replace(",", ".") + "," + priceukm + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
 
-                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`,`date`) VALUES ( NULL," + bar + ",'1','Товар продается дешевле цены очерёдности!','0','4','" + date.ToString("yyyy-MM-dd,HH:mm:ss") + ")");
+                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`sailprice`,`group`,`text`,`user_id`,`priority`,`date`) VALUES ( NULL," + bar + ",'"+ priceukm +"','1','Товар продается дешевле цены очерёдности!','0','4','" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "')");
 
                 return true;
             }
@@ -298,9 +298,9 @@ namespace BarrierServerProject
                 Color.WriteLineColor("Цена на кассе: " + priceukm + " Цена очередности: " + price , ConsoleColor.Red);
                 Color.WriteLineColor("Проданое количество по дорогой цене: " + countukm, ConsoleColor.Red);
 
-                Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + countukm.ToString().Replace(",", ".") + "," + price + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
+                Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51," + countukm.ToString().Replace(",", ".") + "," + priceukm + ",{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
 
-                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`group`,`text`,`user_id`,`priority`,`date`) VALUES ( NULL," + bar + ",'1','Товар продается дороже цены очерёдности!','0','5','" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "')");
+                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`sailprice`,`group`,`text`,`user_id`,`priority`,`date`) VALUES ( NULL," + bar + ",'" + priceukm + "','1','Товар продается дороже цены очерёдности!','0','5','" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "')");
                 return true;
             }
 
@@ -314,7 +314,7 @@ namespace BarrierServerProject
 
         private static void UpdateStateBase()
         {
-            OleDbDataReader reader = Dbf.ExecuteReader("SELECT balance.barcode,balance.item,balance.price,balance.count,operation.count,balance.date FROM balance,operation where (balance.barcode == operation.barcode) AND (balance.date == operation.dt)");
+            OleDbDataReader reader = Dbf.ExecuteReader("SELECT balance.barcode,balance.item,balance.price,balance.count,operation.count,operation.price,balance.date FROM balance,operation where (balance.barcode == operation.barcode) AND (balance.date == operation.dt)");
 
             if (reader == null)
                 return;
@@ -326,15 +326,16 @@ namespace BarrierServerProject
                 Int32 price = Convert.ToInt32(reader.GetValue(2));
                 double count = Convert.ToDouble(reader.GetValue(3));
                 double sail = Convert.ToDouble(reader.GetValue(4));
+                double pricesail = Convert.ToDouble(reader.GetValue(5));
                 Int32 status = 0;
 
-                DateTime dt = reader.GetDateTime(5);
+                DateTime dt = reader.GetDateTime(6);
 
                 using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", "BarrierServer")))
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand("SELECT MAX(priority) FROM tasks WHERE `barcode` = '" + barcode + "' AND `date` = '" + dt.ToString("yyyy-MM-dd,HH:mm:ss") + "'", conn);
+                    MySqlCommand cmd = new MySqlCommand("SELECT priority FROM tasks WHERE `barcode` = '" + barcode + "' AND `sailprice` = " + pricesail + " AND `date` = '" + dt.ToString("yyyy-MM-dd,HH:mm:ss") + "'", conn);
                     cmd.CommandTimeout = 0;
 
                     using (MySqlDataReader dr = cmd.ExecuteReader())
@@ -347,7 +348,7 @@ namespace BarrierServerProject
                     }
                 }
 
-                Packages.connector.ExecuteNonQuery("INSERT INTO `barrierserver`.`state`(`barcode`,`name`,`price`,`count`,`sailed`,`status`,`date`) VALUES ( '" + barcode + "','" + item + "','" + price + "','" + count.ToString().Replace(",", ".") + "','" + sail.ToString().Replace(",", ".") + "'," + status + ",'" + dt.ToString("yyyy-MM-dd,HH:mm:ss") + "')");
+                Packages.connector.ExecuteNonQuery("INSERT INTO `barrierserver`.`state`(`barcode`,`name`,`price`,`sailprice`,`count`,`sailed`,`status`,`date`) VALUES ( '" + barcode + "','" + item + "','" + price + "','" + pricesail + "','" + count.ToString().Replace(",", ".") + "','" + sail.ToString().Replace(",", ".") + "'," + status + ",'" + dt.ToString("yyyy-MM-dd,HH:mm:ss") + "')");
             }
 
             using (MD5 md5Hash = MD5.Create())
