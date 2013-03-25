@@ -32,9 +32,9 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFormClassic));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFormClassic));
             this.PanelMainClassic = new System.Windows.Forms.Panel();
             this.PanelBackButton = new System.Windows.Forms.Panel();
             this.PanelButton = new System.Windows.Forms.Panel();
@@ -70,9 +70,6 @@
             this.PanelMsgBg = new System.Windows.Forms.Panel();
             this.PanelMsg = new System.Windows.Forms.Panel();
             this.dataGridViewMainForm = new System.Windows.Forms.DataGridView();
-            this.TimerClearMsg = new System.Windows.Forms.Timer(this.components);
-            this.PrioritySalesIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.TimerIconChange = new System.Windows.Forms.Timer(this.components);
             this.Barcode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NameItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -81,6 +78,9 @@
             this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DateCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TimerClearMsg = new System.Windows.Forms.Timer(this.components);
+            this.PrioritySalesIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.TimerIconChange = new System.Windows.Forms.Timer(this.components);
             this.PanelMainClassic.SuspendLayout();
             this.PanelBackButton.SuspendLayout();
             this.PanelButton.SuspendLayout();
@@ -260,7 +260,9 @@
             this.ButtonTasks.UseVisualStyleBackColor = false;
             this.ButtonTasks.Click += new System.EventHandler(this.ButtonTasks_Click);
             this.ButtonTasks.Enter += new System.EventHandler(this.ButtonTasks_Enter);
+            this.ButtonTasks.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ButtonTasks_KeyDown);
             this.ButtonTasks.Leave += new System.EventHandler(this.ButtonTasks_Leave);
+            this.ButtonTasks.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ButtonTasks_PreviewKeyDown);
             // 
             // PanelBackInfoBar
             // 
@@ -603,23 +605,8 @@
             this.dataGridViewMainForm.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMainForm_CellEnter);
             this.dataGridViewMainForm.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMainForm_CellLeave);
             this.dataGridViewMainForm.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridViewMainForm_RowsAdded);
+            this.dataGridViewMainForm.Enter += new System.EventHandler(this.dataGridViewMainForm_Enter);
             this.dataGridViewMainForm.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridView1_KeyDown);
-            // 
-            // TimerClearMsg
-            // 
-            this.TimerClearMsg.Interval = 3000;
-            this.TimerClearMsg.Tick += new System.EventHandler(this.TimerClearMsg_Tick);
-            // 
-            // PrioritySalesIcon
-            // 
-            this.PrioritySalesIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("PrioritySalesIcon.Icon")));
-            this.PrioritySalesIcon.Text = "Двойной клик для активации приложения.";
-            this.PrioritySalesIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PrioritySales_MouseDoubleClick);
-            // 
-            // TimerIconChange
-            // 
-            this.TimerIconChange.Interval = 1000;
-            this.TimerIconChange.Tick += new System.EventHandler(this.TimerIconChange_Tick);
             // 
             // Barcode
             // 
@@ -699,6 +686,22 @@
             this.DateCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.DateCol.Width = 86;
             // 
+            // TimerClearMsg
+            // 
+            this.TimerClearMsg.Interval = 3000;
+            this.TimerClearMsg.Tick += new System.EventHandler(this.TimerClearMsg_Tick);
+            // 
+            // PrioritySalesIcon
+            // 
+            this.PrioritySalesIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("PrioritySalesIcon.Icon")));
+            this.PrioritySalesIcon.Text = "Двойной клик для активации приложения.";
+            this.PrioritySalesIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PrioritySales_MouseDoubleClick);
+            // 
+            // TimerIconChange
+            // 
+            this.TimerIconChange.Interval = 1000;
+            this.TimerIconChange.Tick += new System.EventHandler(this.TimerIconChange_Tick);
+            // 
             // MainFormClassic
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -713,7 +716,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PrioritySales";
             this.TopMost = true;
-            this.Activated += new System.EventHandler(this.MainFormClassic_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormClassic_FormClosing);
             this.Load += new System.EventHandler(this.MainFormClassic_Load);
             this.Shown += new System.EventHandler(this.MainFormClassic_Shown);
@@ -747,7 +749,6 @@
         private System.Windows.Forms.Button ButtonSetting;
         private System.Windows.Forms.Button ButtonHide;
         private System.Windows.Forms.Button ButtonMsg;
-        private System.Windows.Forms.Button ButtonTasks;
         private System.Windows.Forms.Panel PanelInfoBar;
         public System.Windows.Forms.Label LabelUserName;
         private System.Windows.Forms.Button ButtonUnk2;
@@ -782,6 +783,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Count;
         private System.Windows.Forms.DataGridViewTextBoxColumn Status;
         private System.Windows.Forms.DataGridViewTextBoxColumn DateCol;
+        public System.Windows.Forms.Button ButtonTasks;
 
 
 

@@ -78,7 +78,7 @@ namespace PrioritySales
                                     {
                                         conn.Open();
 
-                                        MySqlCommand cmd = new MySqlCommand("SELECT * FROM `state`", conn);
+                                        MySqlCommand cmd = new MySqlCommand("state`", conn);
 
                                         using (MySqlDataReader dr = cmd.ExecuteReader())
                                         {

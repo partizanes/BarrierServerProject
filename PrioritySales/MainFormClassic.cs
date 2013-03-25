@@ -793,24 +793,6 @@ namespace PrioritySales
             }
         }
 
-        private void ButtonTasks_Click(object sender, EventArgs e)
-        {
-            if (tasks.Visible)
-            {
-                tasks.Hide();
-            }
-            else
-            {
-                tasks.Location = new System.Drawing.Point((this.Location.X + this.Size.Width) + 1, (this.Location.Y));
-                tasks.Show();
-                tasks.UpdateDataGrid();
-            }
-        }
-
-        private void MainFormClassic_Activated(object sender, EventArgs e)
-        {
-        }
-
         private void MainFormClassic_Load(object sender, EventArgs e)
         {
             if (tasks.Visible)
@@ -876,7 +858,7 @@ namespace PrioritySales
                     Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.DodgerBlue;
                     break;
                 case "1":
-                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.LightYellow;
+                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.Olive;
                     break;
                 case "2":
                     Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.Orange;
@@ -903,7 +885,7 @@ namespace PrioritySales
                     Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.DodgerBlue;
                     break;
                 case "1":
-                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.LightYellow;
+                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.Olive;
                     break;
                 case "2":
                     Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.Orange;
@@ -923,6 +905,56 @@ namespace PrioritySales
         private void dataGridViewMainForm_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
             Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+        }
+
+        private void ButtonTasks_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Down:
+                    {
+                        if (tasks.Visible)
+                            tasks.DataGridViewTasks.Focus();
+                        else
+                        {
+                            ButtonTasks_Click(sender, e);
+                        }
+                        break;
+                    }
+            }
+        }
+
+        private void ButtonTasks_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Down:
+                    e.IsInputKey = true;
+                    break;
+            }
+        }
+
+        private void ButtonTasks_Click(object sender, EventArgs e)
+        {
+            if (tasks.Visible)
+            {
+                tasks.Hide();
+            }
+            else
+            {
+                tasks.Location = new System.Drawing.Point((this.Location.X + this.Size.Width) + 1, (this.Location.Y));
+                tasks.Show();
+                tasks.UpdateDataGrid();
+                tasks.DataGridViewTasks.Focus();
+            }
+        }
+
+        private void dataGridViewMainForm_Enter(object sender, EventArgs e)
+        {
+            Thread.Sleep(100);
+
+            if (dataGridViewMainForm.Rows.Count == 0)
+                Packages.mf.ButtonList.Focus();
         }
     }
 }

@@ -18,7 +18,11 @@ namespace PrioritySales
                 case Keys.Escape:
                     this.Hide();
                     Packages.mf.Activate();
-                    break;   
+                    break;
+                case Keys.Up:
+                        if (DataGridViewTasks.Rows.GetFirstRow(DataGridViewElementStates.Selected) == 0)
+                            Packages.mf.ButtonTasks.Focus();
+                        break;
             }
         }
 
@@ -39,6 +43,8 @@ namespace PrioritySales
 
         public void UpdateDataGrid()
         {
+            Boolean foc = MainFormClassic.tasks.DataGridViewTasks.Focused;
+
             using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", "barrierserver")))
             {
                 (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewTasks.Rows.Clear(); }));
@@ -56,6 +62,9 @@ namespace PrioritySales
                 if (!dr.IsClosed)
                     dr.Close();
                 }
+
+                if (foc)
+                    MainFormClassic.tasks.DataGridViewTasks.Focus();
             }
         }
     }
