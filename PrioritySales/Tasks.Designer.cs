@@ -100,6 +100,7 @@
             this.DataGridViewTasks.TabIndex = 1;
             this.DataGridViewTasks.TabStop = false;
             this.DataGridViewTasks.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTasks_KeyDown);
+            this.DataGridViewTasks.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.DataGridViewTasks_MouseDoubleClick);
             // 
             // id
             // 

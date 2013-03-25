@@ -23,6 +23,10 @@ namespace PrioritySales
                         if (DataGridViewTasks.Rows.GetFirstRow(DataGridViewElementStates.Selected) == 0)
                             Packages.mf.ButtonTasks.Focus();
                         break;
+                case Keys.ControlKey:
+                        string s = DataGridViewTasks.Rows[DataGridViewTasks.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
+                    ShowInfo(s);
+                        break;
             }
         }
 
@@ -50,14 +54,14 @@ namespace PrioritySales
                 (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewTasks.Rows.Clear(); }));
 
                 conn.Open();
-                //TODO не показывать 9 статусы в задачах или не добавлять!!
-                MySqlCommand cmd = new MySqlCommand("SELECT id,text FROM tasks WHERE `group` = (SELECT `group` FROM users WHERE `username` = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ","") + "') AND `user_id` = 0 ORDER BY priority DESC", conn);
+
+                MySqlCommand cmd = new MySqlCommand("SELECT id, text, barcode FROM tasks WHERE `group` = (SELECT `group` FROM users WHERE `username` = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ","") + "') AND `user_id` = 0 ORDER BY priority DESC", conn);
 
                 using (MySqlDataReader dr = cmd.ExecuteReader())
                 {
 
                     while (dr.Read())
-                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewTasks.Rows.Add(dr.GetString(0), dr.GetString(1)); }));
+                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewTasks.Rows.Add(dr.GetString(0),dr.GetString(2) +" "+ dr.GetString(1)); }));
 
                 if (!dr.IsClosed)
                     dr.Close();
@@ -66,6 +70,22 @@ namespace PrioritySales
                 if (foc)
                     MainFormClassic.tasks.DataGridViewTasks.Focus();
             }
+        }
+
+        private void DataGridViewTasks_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            string s = DataGridViewTasks.Rows[DataGridViewTasks.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
+            ShowInfo(s);
+        }
+
+        private void ShowInfo(string s)
+        {
+
+        }
+
+        private void GetInfo(string s)
+        {
+            //TODO get information;
         }
     }
 }

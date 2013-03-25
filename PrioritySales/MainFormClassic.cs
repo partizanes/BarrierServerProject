@@ -615,6 +615,8 @@ namespace PrioritySales
                 mousePos.Offset(mouseOffset.X - xa, mouseOffset.Y - ya);
                 Location = mousePos;
                 tasks.Location = new System.Drawing.Point((mousePos.X + this.Size.Width + 1), (mousePos.Y));
+
+                // Location = new System.Drawing.Point((Packages.mf.Location.X + 40), (Packages.mf.Location.Y + 90));
             }
         }
         private void PanelMainClassic_MouseDown(object sender, MouseEventArgs e)

@@ -83,12 +83,6 @@
     <Compile Include="Connecting.Designer.cs">
       <DependentUpon>Connecting.cs</DependentUpon>
     </Compile>
-    <Compile Include="InfoForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="InfoForm.Designer.cs">
-      <DependentUpon>InfoForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="MainFormClassic.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,9 +116,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Connecting.resx">
       <DependentUpon>Connecting.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="InfoForm.resx">
-      <DependentUpon>InfoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainFormClassic.resx">
       <DependentUpon>MainFormClassic.cs</DependentUpon>

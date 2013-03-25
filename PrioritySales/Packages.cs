@@ -59,6 +59,7 @@ namespace PrioritySales
                             (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { careform.Location = new System.Drawing.Point(Zx, Zy); }));
                             (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { Application.DoEvents(); }));
                             (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { careform.Show(); }));
+                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { mf.Focus(); }));
                             break;
                         case 9:
                             try
@@ -78,7 +79,7 @@ namespace PrioritySales
                                     {
                                         conn.Open();
 
-                                        MySqlCommand cmd = new MySqlCommand("state`", conn);
+                                        MySqlCommand cmd = new MySqlCommand("SELECT * FROM `state`", conn);
 
                                         using (MySqlDataReader dr = cmd.ExecuteReader())
                                         {

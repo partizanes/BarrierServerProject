@@ -77,7 +77,7 @@ namespace BarrierServerProject
                         case 0:
                             string[] split_data = msg.Replace("\0", "").Replace(" ", "").Split(new Char[] { ':' });
 
-                            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=5;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", "barrierserver")))
+                            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=15;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", "barrierserver")))
                             {
                                 try { conn.Open(); }
                                 catch (MySqlException ex)
