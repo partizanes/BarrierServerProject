@@ -111,6 +111,12 @@
     <Compile Include="Tasks.Designer.cs">
       <DependentUpon>Tasks.cs</DependentUpon>
     </Compile>
+    <Compile Include="InfoControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="InfoControl.Designer.cs">
+      <DependentUpon>InfoControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="CareForm.resx">
       <DependentUpon>CareForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -130,6 +136,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tasks.resx">
       <DependentUpon>Tasks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InfoControl.resx">
+      <DependentUpon>InfoControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

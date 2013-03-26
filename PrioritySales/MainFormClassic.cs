@@ -26,7 +26,7 @@ namespace PrioritySales
         public static string StatusUpdate;
 
         public static Tasks tasks = new Tasks();
-
+        public static InfoControl infocontrol = new InfoControl();
         // ForeColor for all button block start
 
         private void MainFormClassic_Shown(object sender, EventArgs e)
@@ -74,7 +74,7 @@ namespace PrioritySales
             ButtonTasks.ForeColor = Color.DodgerBlue;
         }
 
-        private void button1_Enter(object sender, EventArgs e)
+        private void ButtonUnk2_Enter(object sender, EventArgs e)
         {
             ButtonUnk2.ForeColor = Color.Green;
         }
