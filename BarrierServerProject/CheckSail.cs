@@ -241,7 +241,7 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("Товар " + bar + " не продается долгое время.Число дней " + TotalDay, ConsoleColor.Red);
 
-                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`sailprice`,`group`,`text`,`user_id`,`priority`,`date`) VALUES ( NULL," + bar + ",'0','1','Долго не продается.Число дней: " + TotalDay + "','0','1','" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "')");
+                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`id`,`barcode`,`sailprice`,`group`,`text`,`user_id`,`priority`,`date`) VALUES ( NULL," + bar + ",'0','1','долго не продается.Число дней: " + TotalDay + "','0','1','" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "')");
             }
 
             Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + bar + "',51,0,0,{^" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "})");
@@ -309,7 +309,7 @@ namespace BarrierServerProject
 
         private static void CleanBase()
         {
-            Packages.connector.ExecuteNonQuery("DELETE FROM state");
+            Packages.connector.ExecuteNonQuery("DELETE FROM state;DELETE FROM sendprice");
         }
 
         private static void UpdateStateBase()
@@ -349,6 +349,32 @@ namespace BarrierServerProject
                 }
 
                 Packages.connector.ExecuteNonQuery("INSERT INTO `barrierserver`.`state`(`barcode`,`name`,`price`,`sailprice`,`count`,`sailed`,`status`,`date`) VALUES ( '" + barcode + "','" + item + "','" + price + "','" + pricesail + "','" + count.ToString().Replace(",", ".") + "','" + sail.ToString().Replace(",", ".") + "'," + status + ",'" + dt.ToString("yyyy-MM-dd,HH:mm:ss") + "')");
+            }
+
+            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", "BarrierServer")))
+            {
+                Color.WriteLineColor("Запрос отправки цен на кассы...", ConsoleColor.Green);
+
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SELECT `id`,`barcode`,`date` FROM `tasks`", conn);
+                cmd.CommandTimeout = 0;
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        if (!dr.IsDBNull(0))
+                        {
+                            Msg.SendUser("LsTradeAgent", "DR", 1, dr.GetValue(0) + ";" + dr.GetValue(1) + ";" + dr.GetDateTime(2).ToString("yyyy-MM-dd,HH:mm:ss"));
+                            Thread.Sleep(200);
+                        }
+                    }
+
+                    Color.WriteLineColor("Отправлено.", ConsoleColor.Green);
+
+                    Msg.SendUser("LsTradeAgent", "DR", 2, "Данные для проверки задач отправлены.");
+                }
             }
 
             using (MD5 md5Hash = MD5.Create())

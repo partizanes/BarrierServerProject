@@ -15,7 +15,7 @@ namespace LsTradeAgent
 
             Boolean isExecuting = true;
 
-            conn.ConnectionString = "Provider=vfpoledb.1;Data Source=" + LsTradeDir + ";Mode=Read;Collating Sequence=MACHINE;CODEPAGE=866";
+            conn.ConnectionString = "Provider=vfpoledb.1;Data Source=" + LsTradeDir + ";Mode=Read;Collating Sequence=MACHINE;CODEPAGE=1251";
 
             cmd.Connection = conn;
 

@@ -17,7 +17,7 @@ namespace BarrierServerProject
             GC.Collect();
             
             //10 min 600000
-            System.Threading.Thread.Sleep(20000);
+            System.Threading.Thread.Sleep(300000);
 
             StartCheck();
         }

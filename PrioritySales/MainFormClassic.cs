@@ -830,6 +830,8 @@ namespace PrioritySales
 
             tasks.UpdateDataGrid();
 
+            tasks.UpdateDataGridAcceptedTasks();
+
             TimerIconChange.Enabled = false;
 
             var icon1 = Properties.Resources.logo;
@@ -914,9 +916,15 @@ namespace PrioritySales
             switch (e.KeyCode)
             {
                 case Keys.Down:
+                case Keys.Enter:
                     {
+                        ButtonTasks.ForeColor = Color.DodgerBlue;
+                        tasks.DataGridViewTasks.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Green;
+
                         if (tasks.Visible)
+                        {
                             tasks.DataGridViewTasks.Focus();
+                        }
                         else
                         {
                             ButtonTasks_Click(sender, e);
@@ -931,6 +939,7 @@ namespace PrioritySales
             switch (e.KeyCode)
             {
                 case Keys.Down:
+                case Keys.Enter:
                     e.IsInputKey = true;
                     break;
             }
@@ -945,8 +954,10 @@ namespace PrioritySales
             else
             {
                 tasks.Location = new System.Drawing.Point((this.Location.X + this.Size.Width) + 1, (this.Location.Y));
+                tasks.DataGridViewTasks.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Green;
                 tasks.Show();
                 tasks.UpdateDataGrid();
+                tasks.UpdateDataGridAcceptedTasks();
                 tasks.DataGridViewTasks.Focus();
             }
         }

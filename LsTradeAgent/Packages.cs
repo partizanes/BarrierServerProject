@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
+using MySql.Data.MySqlClient;
 
 namespace LsTradeAgent
 {
     class Packages
     {
         private static Boolean StatusParse = true;
+        private static string[] DataParse;
+        private static List<string> ar = new List<string>();
 
         public static void parse(string p_id, int com, string msg)
         {
@@ -43,8 +47,75 @@ namespace LsTradeAgent
                             GC.Collect();
 
                             break;
+                        case 1:
+                            Color.WriteLineColor("Принято: " + msg, ConsoleColor.Green);
+                            ar.Add(msg);
+                            break;
+                        case 2:
+                            foreach (string str in ar)
+                            {
+                                string[] split_data = str.Split(new Char[] { ';' });
+
+                                string id = split_data[0];
+                                string barcode = split_data[1];
+                                string date = split_data[2];
+
+                                CheckSendPrice(id, barcode, date);
+                            }
+                            break;
                     }
                     break;
+            }
+        }
+
+        private static void CheckSendPrice(string id,string barcode,string date)
+        {
+            OleDbDataReader dr = null;
+
+            //TODO k_dev in config;
+            dr = Dbf.dbf_read("select n_cenu,kod_isp,p_time,k_dev from dvkinpr where k_grup = '" + barcode + "' AND p_time > {^ " + date + " } AND k_dev IN('К3','Ц2')");
+
+            if (dr == null)
+            {
+                Color.WriteLineColor("Отсутствуют данные отправки на кассу по штрихкоду: " + barcode, ConsoleColor.Yellow);
+                return;
+            }
+
+            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", "barrierserver")))
+            {
+                MySqlCommand cmd = new MySqlCommand();
+
+                try
+                {
+                    conn.Open();
+
+                    cmd.Connection = conn;
+
+                    cmd.CommandText = "INSERT INTO `sendprice` VALUES(@id, @price, @isp, @datetime, @operation)";
+                    cmd.Prepare();
+
+                    cmd.Parameters.AddWithValue("@id", 1);
+                    cmd.Parameters.AddWithValue("@price", 8500);
+                    cmd.Parameters.AddWithValue("@isp", 22);
+                    cmd.Parameters.AddWithValue("@datetime", "2012-01-01 00:00:00" );
+                    cmd.Parameters.AddWithValue("@operation", "text");
+
+                    while (dr.Read())
+                    {
+                        cmd.Parameters["@id"].Value = id;
+                        cmd.Parameters["@price"].Value = dr.GetValue(0);
+                        cmd.Parameters["@isp"].Value = dr.GetValue(1);
+                        cmd.Parameters["@datetime"].Value = dr.GetDateTime(2).ToString("yyyy-MM-dd,HH:mm:ss");
+                        cmd.Parameters["@operation"].Value = dr.GetValue(3);
+
+                        cmd.ExecuteNonQuery();
+                    }
+
+                }
+                catch (System.Exception ex)
+                {
+                    Color.WriteLineColor(ex.Message, ConsoleColor.Red);
+                }
             }
         }
 
