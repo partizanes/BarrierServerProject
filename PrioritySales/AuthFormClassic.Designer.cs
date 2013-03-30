@@ -92,6 +92,9 @@
             this.LabelAction.TabIndex = 0;
             this.LabelAction.Text = "ОЧЕРЕДНОСТЬ ПРОДАЖ";
             this.LabelAction.Visible = false;
+            this.LabelAction.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LabelAction_MouseDown);
+            this.LabelAction.MouseMove += new System.Windows.Forms.MouseEventHandler(this.LabelAction_MouseMove);
+            this.LabelAction.MouseUp += new System.Windows.Forms.MouseEventHandler(this.LabelAction_MouseUp);
             // 
             // BackPanelUserText
             // 

@@ -385,8 +385,8 @@ namespace PrioritySales
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                xOffset = -e.X - SystemInformation.FrameBorderSize.Width;
-                yOffset = -e.Y - SystemInformation.FrameBorderSize.Height;
+                xOffset = -e.X;// -SystemInformation.FrameBorderSize.Width;
+                yOffset = -e.Y;// -SystemInformation.FrameBorderSize.Height;
                 mouseOffset = new Point(xOffset, yOffset);
                 isMouseDown = true;
             }
@@ -397,13 +397,38 @@ namespace PrioritySales
             if (isMouseDown)
             {
                 Point mousePos = Control.MousePosition;
-                //mousePos.Offset(mouseOffset.X, mouseOffset.Y);
-                mousePos.Offset(mouseOffset.X - 1, mouseOffset.Y - 1);
+                mousePos.Offset(mouseOffset.X, mouseOffset.Y);
                 Location = mousePos;
             }
         }
 
         private void AuthPanelMain_MouseUp(object sender, MouseEventArgs e)
+        {
+            isMouseDown = false;
+        }
+
+        private void LabelAction_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isMouseDown)
+            {
+                Point mousePos = Control.MousePosition;
+                mousePos.Offset(mouseOffset.X, mouseOffset.Y);
+                Location = mousePos;
+            }
+        }
+
+        private void LabelAction_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                xOffset = -e.X - SystemInformation.FrameBorderSize.Width - 30;
+                yOffset = -e.Y - SystemInformation.FrameBorderSize.Height - 7;
+                mouseOffset = new Point(xOffset, yOffset);
+                isMouseDown = true;
+            }
+        }
+
+        private void LabelAction_MouseUp(object sender, MouseEventArgs e)
         {
             isMouseDown = false;
         }
