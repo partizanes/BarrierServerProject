@@ -39,7 +39,7 @@ namespace PrioritySales
                     {
                         (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { AuthFormClassic.status = false; }));
                         (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).BackColor = Color.DarkRed; }));
-                        System.Threading.Thread.Sleep(2000);
+                        System.Threading.Thread.Sleep(1000);
                         (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).BackColor = Color.DodgerBlue; }));
                         (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).ButtonSend.Enabled = true; }));
                         (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).PassTextBox.Text = ""; }));
