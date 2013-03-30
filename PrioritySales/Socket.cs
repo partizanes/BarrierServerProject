@@ -90,6 +90,7 @@ namespace PrioritySales
                         if (ex.ErrorCode == 10054)
                         {
                             Application.Exit();
+                            //Check this
                             Process.GetCurrentProcess().Kill();
                         }
 
