@@ -692,7 +692,7 @@ namespace PrioritySales
                 Server.Sender("PrioritySale", 9,StatusUpdate);
 
                 if (!Packages.mf.PanelAddBg.Visible)
-                    (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.dataGridViewMainForm.Focus(); }));
+                    (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { Packages.mf.dataGridViewMainForm.Focus(); }));
             }
             else
             {
@@ -851,7 +851,7 @@ namespace PrioritySales
 
             _forBlinking = !_forBlinking;
 
-            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.PrioritySalesIcon.Icon = _forBlinking ? icon1 : icon2; }));
+            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { Packages.mf.PrioritySalesIcon.Icon = _forBlinking ? icon1 : icon2; }));
         }
 
         private void dataGridViewMainForm_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
@@ -923,6 +923,12 @@ namespace PrioritySales
 
                         if (tasks.Visible)
                         {
+                            if (tasks.DataGridViewTasks.Rows.Count == 0)
+                            {
+                                ButtonTasks.ForeColor = Color.Green;
+                                return;
+                            }
+
                             tasks.DataGridViewTasks.Focus();
                         }
                         else
@@ -959,6 +965,13 @@ namespace PrioritySales
                 tasks.UpdateDataGrid();
                 tasks.UpdateDataGridAcceptedTasks();
                 tasks.DataGridViewTasks.Focus();
+
+                if (tasks.DataGridViewTasks.Rows.Count == 0)
+                {
+                    ButtonTasks.ForeColor = Color.Green;
+                    ButtonTasks.Focus();
+                    return;
+                }
             }
         }
 

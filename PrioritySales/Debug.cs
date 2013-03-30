@@ -7,7 +7,7 @@ namespace PrioritySales
     {
         public static void show_msg(string msg)
         {
-            switch (AuthForm.log_level)
+            switch (AuthFormClassic.log_level)
             {
                 case 0:
                     Console.WriteLine(msg);

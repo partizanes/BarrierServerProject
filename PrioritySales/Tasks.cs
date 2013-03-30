@@ -33,12 +33,26 @@ namespace PrioritySales
                             break;
                         }
 
+                        if (DataGridViewTasks.Rows.Count == 0)
+                        {
+                            Packages.mf.ButtonTasks.Focus();
+                            Packages.mf.ButtonTasks.ForeColor = System.Drawing.Color.Green;
+                            return;
+                        }
+
                         GetInfo(DataGridViewTasks.Rows[DataGridViewTasks.SelectedCells[0].RowIndex - 1].Cells[0].Value.ToString());
 
                         break;
                     }
                 case Keys.Down:
                     {
+                        if (DataGridViewTasks.Rows.Count == 0)
+                        {
+                            Packages.mf.ButtonTasks.Focus();
+                            Packages.mf.ButtonTasks.ForeColor = System.Drawing.Color.Green;
+                            return;
+                        }
+
                         if (DataGridViewTasks.SelectedCells[0].RowIndex == DataGridViewTasks.RowCount - 1)
                             break;
 
@@ -75,7 +89,7 @@ namespace PrioritySales
 
             using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", "barrierserver")))
             {
-                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewTasks.Rows.Clear(); }));
+                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewTasks.Rows.Clear(); }));
 
                 conn.Open();
 
@@ -85,7 +99,7 @@ namespace PrioritySales
                 {
 
                     while (dr.Read())
-                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewTasks.Rows.Add(dr.GetString(0),dr.GetString(2) +" "+ dr.GetString(1)); }));
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewTasks.Rows.Add(dr.GetString(0),dr.GetString(2) +" "+ dr.GetString(1)); }));
 
                 if (!dr.IsClosed)
                     dr.Close();
@@ -100,7 +114,7 @@ namespace PrioritySales
         {
             using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", "barrierserver")))
             {
-                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewAccepted.Rows.Clear(); }));
+                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewAccepted.Rows.Clear(); }));
 
                 conn.Open();
 
@@ -112,7 +126,7 @@ namespace PrioritySales
                 {
 
                     while (dr.Read())
-                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewAccepted.Rows.Add(dr.GetString(0), dr.GetString(2) + " " + dr.GetString(1)); }));
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewAccepted.Rows.Add(dr.GetString(0), dr.GetString(2) + " " + dr.GetString(1)); }));
 
                     if (!dr.IsClosed)
                         dr.Close();
@@ -155,23 +169,23 @@ namespace PrioritySales
             string bar = "";
             DateTime date = new DateTime();
 
-            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.labelBarText.Text = "..."; }));
+            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.labelBarText.Text = "..."; }));
 
-            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.NameBarText.Text = "..."; }));
+            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.NameBarText.Text = "..."; }));
 
-            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.PriceBarText.Text = "..."; }));
+            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.PriceBarText.Text = "..."; }));
 
-            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.CountBarText.Text = "..."; }));
+            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.CountBarText.Text = "..."; }));
 
-            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DetectedBarText.Text = "..."; }));
+            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DetectedBarText.Text = "..."; }));
 
-            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.ActionText.Text = "..."; }));
+            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.ActionText.Text = "..."; }));
 
-            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.labIdText.Text = s; }));
+            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.labIdText.Text = s; }));
 
-            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DataGridViewSail.Rows.Clear(); }));
+            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DataGridViewSail.Rows.Clear(); }));
 
-            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DataGridViewSend.Rows.Clear(); }));
+            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DataGridViewSend.Rows.Clear(); }));
 
             using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", "barrierserver")))
             {
@@ -192,14 +206,14 @@ namespace PrioritySales
 
                     while (dr.Read())
                     {
-                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.labelBarText.Text = dr.GetString(0); }));
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.labelBarText.Text = dr.GetString(0); }));
                         bar = dr.GetString(0).Replace(" ","");
 
-                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.NameBarText.Text = dr.GetString(1); }));
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.NameBarText.Text = dr.GetString(1); }));
 
-                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.PriceBarText.Text = dr.GetString(2); }));
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.PriceBarText.Text = dr.GetString(2); }));
 
-                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.CountBarText.Text = dr.GetString(3); }));
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.CountBarText.Text = dr.GetString(3); }));
 
                         date = dr.GetDateTime(4);
 
@@ -233,7 +247,7 @@ namespace PrioritySales
                         if (dr.GetString(0) == "0" || dr.GetString(1) == "0")
                             continue;
 
-                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DataGridViewSail.Rows.Add(dr.GetString(0), dr.GetString(1)); }));
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DataGridViewSail.Rows.Add(dr.GetString(0), dr.GetString(1)); }));
                     }
 
                     if (!dr.IsClosed)
@@ -259,7 +273,7 @@ namespace PrioritySales
 
                         while (dr.Read())
                         {
-                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.PriceUkmText.Text = dr.GetString(0).Replace(",0000",""); }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.PriceUkmText.Text = dr.GetString(0).Replace(",0000",""); }));
                         }
 
                         if (!dr.IsClosed)
@@ -289,7 +303,7 @@ namespace PrioritySales
 
                         while (dr.Read())
                         {
-                            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DataGridViewSend.Rows.Add(dr.GetString(0), dr.GetString(1), dr.GetString(2), dr.GetString(3)); }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DataGridViewSend.Rows.Add(dr.GetString(0), dr.GetString(1), dr.GetString(2), dr.GetString(3)); }));
                         }
 
                         if (!dr.IsClosed)
@@ -307,8 +321,8 @@ namespace PrioritySales
             string DetectedText = "";
             string ActionText = "";
 
-            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DetectedBarText.ForeColor = System.Drawing.Color.ForestGreen; }));
-            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.ActionText.ForeColor = System.Drawing.Color.ForestGreen; }));
+            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DetectedBarText.ForeColor = System.Drawing.Color.ForestGreen; }));
+            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.ActionText.ForeColor = System.Drawing.Color.ForestGreen; }));
 
             int TotalDay = Convert.ToInt32((DateTime.Now - date).TotalSeconds) / 86400;
 
@@ -353,8 +367,8 @@ namespace PrioritySales
                     break;
             }
 
-            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DetectedBarText.Text = DetectedText; }));
-            (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.ActionText.Text = ActionText; }));
+            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DetectedBarText.Text = DetectedText; }));
+            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.ActionText.Text = ActionText; }));
         }
 
         private void DataGridViewTasks_RowEnter(object sender, DataGridViewCellEventArgs e)

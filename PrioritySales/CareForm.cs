@@ -83,7 +83,7 @@ namespace PrioritySales
                     else
                     {
                         Packages.mf.TimerIconChange.Enabled = false;
-                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { Packages.mf.PrioritySalesIcon.Icon = Properties.Resources.logo; }));
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { Packages.mf.PrioritySalesIcon.Icon = Properties.Resources.logo; }));
                     }
                 }
             }

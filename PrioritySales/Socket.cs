@@ -1,6 +1,7 @@
 ﻿using Serialization;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -23,34 +24,19 @@ namespace PrioritySales
             if (server.Connected)
                 return;  
 
-            listbox_msg("                Соединение...");
-
             try
             {
                 server.Connect(ip, port);
-
                 Receiver(server);
             }
             catch (SocketException exc)
             {
                 if (exc.ErrorCode == 10061)
-                {
-                    listbox_msg("           Сервер недоступен.");
                     MessageBox.Show("Сервер возможно отключен или недоступен в данный момент времени , уточните параметры сервера в настройках и повторите подключение \n Текст исключения: " + exc.Message);
-                    try
-                    {
-                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).buttonCancel_Click(); }));
-                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).textboxPass.Text = ""; }));
-                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).textboxPass.Focus(); }));
-                    }
-                    catch { }
-                }
             }
             catch (System.Exception ex)
             {
-                listbox_msg("           Сервер недоступен.");
                 MessageBox.Show("Текст исключения: " + ex.Message);
-                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).buttonCancel_Click(); }));
             }
         }
 
@@ -73,30 +59,6 @@ namespace PrioritySales
             {
                 threads.Remove(Thread.CurrentThread);
                 Thread.ResetAbort();
-            }
-        }
-
-        public static void listbox_msg(string msg)
-        {
-            try
-            {
-                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).LabelMsg.Text = msg; }));
-                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).LabelMsg.Update(); }));
-                (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).Refresh(); }));
-            }
-            catch (Exception ex)
-            {
-                Log.log_write(ex.Message, "exception", "exception");
-
-                try
-                {
-                    Thread.CurrentThread.Abort();
-                }
-                catch (ThreadAbortException)
-                {
-                    threads.Remove(Thread.CurrentThread);
-                    Thread.ResetAbort();
-                }
             }
         }
 
@@ -126,18 +88,16 @@ namespace PrioritySales
                     catch (SocketException ex)
                     {
                         if (ex.ErrorCode == 10054)
+                        {
                             Application.Exit();
+                            Process.GetCurrentProcess().Kill();
+                        }
 
                         //TODO FORM RECCONECT TO SERVER!!!!
                     }
-                    catch (Exception exc)
-                    {
-                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).LabelMsg.Text = exc.Message; }));
-                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).LabelMsg.Update(); }));
-                        (Application.OpenForms[1] as AuthForm).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthForm).Refresh(); }));
-                    }
+                    catch { }
                 }
-        });
+            });
             th.Start();
             th.Name = "Слушаю ответ";
             threads.Add(th);
