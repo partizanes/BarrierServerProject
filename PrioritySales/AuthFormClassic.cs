@@ -114,6 +114,19 @@ namespace PrioritySales
 
         private void AuthFormClassic_Shown(object sender, EventArgs e)
         {
+            try
+            {
+                if (bool.Parse(Config.GetParametr("SaveLastLogin")))
+                {
+                    LabelUserText.Text = Config.GetParametr("LastLogin");
+
+                    LabelUserText.SelectionStart = LabelUserText.Text.Length;
+                }
+
+
+            }
+            catch { }
+
             connecting.Hide();
 
             LabelUserText.Focus();
@@ -259,6 +272,13 @@ namespace PrioritySales
                 case Keys.Down:
                     if (LabelUserText.Text.Length > 3 && PassTextBox.Text.Length > 3)
                     {
+                        try
+                        {
+                            if (bool.Parse(Config.GetParametr("SaveLastLogin")))
+                                Config.Set("SETTINGS", "LastLogin", LabelUserText.Text);
+                        }
+                        catch { }
+
                         ButtonSend.Enabled = false;
 
                         StartStatus();
