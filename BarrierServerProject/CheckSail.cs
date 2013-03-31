@@ -66,6 +66,8 @@ namespace BarrierServerProject
                         {
                             Packages.connector.ExecuteNonQuery("UPDATE .`tasks` SET `user_id`='" + dr.GetValue(3) + "' WHERE `barcode` = '" + dr.GetValue(0) + "' AND `sailprice` = '" + dr.GetValue(1) + "' AND `group` = '" + dr.GetValue(2) + "' AND `priority`='" + dr.GetValue(4) + "' AND `date`='" + dr.GetDateTime(5) + "';");
                         }
+
+                        Packages.connector.ExecuteNonQuery("DELETE FROM `tmp_tasks`");
                     }
                 }
             }
