@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -50,6 +51,14 @@ namespace PrioritySales
                         {
                             Packages.mf.ButtonTasks.Focus();
                             Packages.mf.ButtonTasks.ForeColor = System.Drawing.Color.Green;
+                            return;
+                        }
+
+                        if (DataGridViewAccepted.Rows.Count > 0)
+                        {
+                            DataGridViewTasks.DefaultCellStyle.SelectionForeColor = Color.DodgerBlue;
+                            DataGridViewAccepted.DefaultCellStyle.SelectionForeColor = Color.ForestGreen;
+                            DataGridViewAccepted.Focus();
                             return;
                         }
 
@@ -274,6 +283,9 @@ namespace PrioritySales
                         while (dr.Read())
                         {
                             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.PriceUkmText.Text = dr.GetString(0).Replace(",0000",""); }));
+
+                            try { CheckPrice(Convert.ToInt32(MainFormClassic.infocontrol.PriceBarText.Text), Convert.ToInt32(MainFormClassic.infocontrol.PriceUkmText.Text)); }
+                            catch { }
                         }
 
                         if (!dr.IsClosed)
@@ -314,6 +326,18 @@ namespace PrioritySales
             thg.Name = "Запрос отправки цен на кассу";
             Server.threads.Add(thg);
             thg.Start();
+        }
+
+        private void CheckPrice(int pricebar,int priceukm)
+        {
+            if(pricebar > priceukm)
+                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.PriceUkmText.ForeColor = Color.Red; }));
+
+            if (pricebar < priceukm)
+                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.PriceUkmText.ForeColor = Color.Yellow; }));
+
+            if(pricebar == priceukm)
+                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.PriceUkmText.ForeColor = Color.ForestGreen; }));
         }
 
         private void DetectedText(int i,DateTime date)
@@ -359,6 +383,13 @@ namespace PrioritySales
                     ActionText = "Прогрузка цены на кассу.Принять меры к возмещению ущерба.";
                     break;
                 case 5:
+                    MainFormClassic.infocontrol.DetectedBarText.ForeColor = System.Drawing.Color.OrangeRed;
+                    MainFormClassic.infocontrol.ActionText.ForeColor = System.Drawing.Color.OrangeRed;
+
+                    DetectedText = "Были продажи дешевле цены очереди";
+                    ActionText = "Поиск причины.Возмещение ущерба.";
+                    break;
+                case 6:
                     MainFormClassic.infocontrol.DetectedBarText.ForeColor = System.Drawing.Color.Yellow;
                     MainFormClassic.infocontrol.ActionText.ForeColor = System.Drawing.Color.Yellow;
 
@@ -375,6 +406,22 @@ namespace PrioritySales
         {
             if (Packages.mf.Controls.Contains(MainFormClassic.infocontrol))
                 GetInfo(DataGridViewTasks.Rows[e.RowIndex].Cells[0].Value.ToString());
+        }
+
+        private void DataGridViewAccepted_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+            case Keys.Up:
+                    if (DataGridViewTasks.Rows.GetFirstRow(DataGridViewElementStates.Selected) == 0)
+                    {
+                        DataGridViewAccepted.DefaultCellStyle.SelectionForeColor = Color.DodgerBlue;
+                        DataGridViewTasks.DefaultCellStyle.SelectionForeColor = Color.ForestGreen;
+                        DataGridViewTasks.Focus();
+                        break;
+                    }
+            	break;
+            }
         }
     }
 }

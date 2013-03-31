@@ -73,9 +73,6 @@ namespace PrioritySales
 
                         if (dr.Read())
                             i = dr.GetInt32(0);
-
-                        if (!dr.IsClosed)
-                            dr.Close();
                     }
 
                     if (i > 0)

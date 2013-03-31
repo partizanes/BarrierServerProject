@@ -111,6 +111,9 @@ namespace PrioritySales
                                             }
                                         }
                                     }
+
+                                    MainFormClassic.tasks.UpdateDataGrid();
+                                    MainFormClassic.tasks.UpdateDataGridAcceptedTasks();
                                 }
                             }
                             catch (System.Exception ex)
