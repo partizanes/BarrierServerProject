@@ -22,7 +22,7 @@ namespace PrioritySales
         {
             InitializeComponent();
 
-            check_dll();
+            //check_dll();
 
             connecting.Show();
 

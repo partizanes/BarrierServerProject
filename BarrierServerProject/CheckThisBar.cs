@@ -40,6 +40,41 @@ namespace BarrierServerProject
             return bar;
         }
 
+        public static int GetPriceUkmId(int id)
+        {
+            int price = 0;
+
+            string _ukmservername = Config.GetParametr("BdName");
+            string _mainservername = Config.GetParametr("MainDbName");
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BdName"))))
+                {
+                    conn.Open();
+
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT b.price FROM " + _ukmservername + ".trm_in_var C LEFT JOIN " + _ukmservername + ".trm_in_items A ON A.id=C.item LEFT JOIN " + _ukmservername + ".trm_in_pricelist_items B ON B.item=c.item WHERE C.item= (SELECT `bar` FROM " + _mainservername + ".`priority` WHERE `id` = '" + id + "' ) AND b.pricelist_id= " + Config.GetParametr("pricelist_id"), conn);
+
+                    cmd.CommandTimeout = 0;
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            price = dr.GetInt32(0);
+                        }
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Color.WriteLineColor("[GetPriceUkm] " + ex.Message, ConsoleColor.Red);
+                Log.ExcWrite("[GetPriceUkm] " + ex.Message);
+            }
+
+            return price;
+        }
+
         public static int GetPriceUkm(string bar)
         {
             int price = 0;
@@ -77,6 +112,8 @@ namespace BarrierServerProject
             string bar;
             int price;
             DateTime date;
+
+            Color.WriteLineColor("Запрос в LsTrade информации по списаниям...", ConsoleColor.Cyan);
 
             try
             {
@@ -146,7 +183,7 @@ namespace BarrierServerProject
 
         public static void GetUkmSail(int id, string bar, int turn_price, DateTime date)
         {
-            Color.WriteLineColor("Запрос на кассовый сервер...", ConsoleColor.Cyan);
+            Color.WriteLineColor("Запрос на кассовый сервер информации по продажам...", ConsoleColor.Cyan);
 
             using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BdName"))))
             {
@@ -164,19 +201,38 @@ namespace BarrierServerProject
 
                 using (MySqlDataReader dr = cmd.ExecuteReader())
                 {
+                    Packages.connector.ExecuteNonQuery("DELETE FROM `operations` WHERE `id` = " + id + " AND `operation` = '51'");
                     if (dr == null) { }
 
                     if (!dr.HasRows) { }
 
                     while (dr.Read())
                     {
+                        string count = dr.GetValue(0).ToString().Replace(",",".");
 
+                        if (Packages.connector.ExecuteNonQuery("INSERT INTO `operations`(`id`,`operation`,`count`,`price`,`inactive`) VALUES ( '" + id + "','51','" + count + "','" + dr.GetValue(1) + "','0')"))
+                            Color.WriteLineColor("Операция продажи добавлена успешно по номеру " + id, ConsoleColor.Gray);
+                        else
+                            Color.WriteLineColor("Отклонено: " + id, ConsoleColor.Red);
                     }
 
                     if (!dr.IsClosed)
                         dr.Close();
                 }
             }
+        }
+
+        public static void UpdatePrice(int id)
+        {
+            if(Program.debug)
+                Color.WriteLineColor("Запрос текущей цены на кассе по номеру " + id, ConsoleColor.Gray);
+
+            int price_ukm = GetPriceUkmId(id);
+
+            if(Packages.connector.ExecuteNonQuery("UPDATE `priority` SET `current_price_ukm` = " + price_ukm + "   WHERE `id` = " + id))
+                Color.WriteLineColor("Цена обновлена.", ConsoleColor.Gray);
+            else
+                Color.WriteLineColor("Обновить цену по id" + id + " не удалось", ConsoleColor.Red);
         }
 
     }

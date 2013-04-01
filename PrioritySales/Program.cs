@@ -9,7 +9,6 @@ namespace PrioritySales
         /// Главная точка входа для приложения.
         /// </summary>
         [STAThread]
-
         static void Main()
         {
             if (System.Diagnostics.Process.GetProcessesByName(Application.ProductName).Length > 1)

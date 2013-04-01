@@ -39,13 +39,6 @@ namespace LsTradeAgent
 
                             Color.WriteLineColor("Пакет обработан!", ConsoleColor.Green);
 
-                            if (!Dbf.DbfDataReader.IsClosed)
-                                Dbf.DbfDataReader.Close();
-
-                            Dbf.DbfDataReader.Dispose();
-
-                            GC.Collect();
-
                             break;
                         case 1:
                             Color.WriteLineColor("Принято: " + msg, ConsoleColor.Green);
@@ -136,11 +129,13 @@ namespace LsTradeAgent
 
                     OleDbCommand cmd = new OleDbCommand(@"SELECT k_mat,k_op,SUM(n_mat),n_cenu FROM dvmat WHERE k_mat IN(SELECT k_mat FROM sprmat WHERE k_grup  ='" + barcode + "' AND p_time > {^" + split_data[3] + "}) AND k_op IN ('53', '61','62','72','93') AND p_time > {^" + split_data[3] + "} GROUP BY k_mat,k_op,n_cenu");
 
+                    cmd.Connection = conn;
+
                     cmd.CommandTimeout = 0;
 
                     using (OleDbDataReader DbfDataReader = cmd.ExecuteReader())
                     {
-                        connector.ExecuteNonQuery("DELETE FROM `operations` WHERE `id` = " + id, Config.GetParametr("MainDbName"));
+                        connector.ExecuteNonQuery("DELETE FROM `operations` WHERE `id` = " + id + " AND `operation` IN ('53', '61','62','72','93')", Config.GetParametr("MainDbName"));
 
                         if (DbfDataReader == null)
                         {
@@ -150,10 +145,14 @@ namespace LsTradeAgent
 
                         while (DbfDataReader.Read())
                         {
-                            if (connector.ExecuteNonQuery("INSERT INTO `operations`(`id`,`operation`,`count`,`price`,`inactive`) VALUES ( '" + id + "','" + DbfDataReader.GetValue(1) + "','" + DbfDataReader.GetValue(2) + "','" + DbfDataReader.GetValue(3) + "','0');", Config.GetParametr("MainDbName")))
-                                Color.WriteLineColor("Добавлен код операции: " + DbfDataReader.GetValue(1) + " Количество: " + DbfDataReader.GetValue(2) + " Цена: " + DbfDataReader.GetValue(3), ConsoleColor.Yellow);
+                            string count = DbfDataReader.GetValue(2).ToString().Replace(",", ".");
+                            string oper = DbfDataReader.GetString(1);
+                            object price = DbfDataReader.GetValue(3);
+
+                            if (connector.ExecuteNonQuery("INSERT INTO `operations`(`id`,`operation`,`count`,`price`,`inactive`) VALUES ( '" + id + "','" + oper + "','" + count + "','" + price + "','0');", Config.GetParametr("MainDbName")))
+                                Color.WriteLineColor("Добавлен код операции: " + oper + " Количество: " + count + " Цена: " + price, ConsoleColor.Yellow);
                             else
-                                Color.WriteLineColor("Отклонен код операции: " + DbfDataReader.GetValue(1) + " Количество: " + DbfDataReader.GetValue(2) + " Цена: " + DbfDataReader.GetValue(3), ConsoleColor.Red);
+                                Color.WriteLineColor("Отклонен код операции: " + oper + " Количество: " + count + " Цена: " + price, ConsoleColor.Red);
                         }
                     }
                 }

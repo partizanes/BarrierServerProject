@@ -87,7 +87,7 @@ namespace BarrierServerProject
                                         Color.WriteLineColor(split_data[0] + " Добавлен!", ConsoleColor.Cyan);
                                         Msg.SendUser(split_data[0], "PrioritySale", 1, split_data[0]);
                                         user.username = split_data[0];
-                                        Packages.connector.ExecuteNonQuery("UPDATE `users` SET `status`='1',`ip`='" + IPAddress.Parse(((IPEndPoint)r_client.RemoteEndPoint).Address.ToString()) + "' WHERE `username`='" + split_data[0] + "'");
+                                        Packages.connector.ExecuteNonQuery("UPDATE `users` SET `online`='1',`ip`='" + IPAddress.Parse(((IPEndPoint)r_client.RemoteEndPoint).Address.ToString()) + "' WHERE `username`='" + split_data[0] + "'");
                                         Log.log_write(split_data[0], "[AUTH_S]", "AUTHLOG");
                                     }
                                     else
@@ -112,10 +112,24 @@ namespace BarrierServerProject
                             if (PriorityAddBarcode(msg, user, out _LastId))
                             {
                                 Color.WriteLineColor("Присвоен уникальный номер " + _LastId, ConsoleColor.Green);
+
+                                CheckThisBar.UpdatePrice(_LastId);
+
+                                CheckThisBar.GetLsTradeSail(_LastId);
+
+                                Thread th = new Thread(delegate()
+                                    {
+                                        CheckThisBar.GetUkmSailParametrs(_LastId);
+                                    }); ;
+                                th.Name = "GetUkmSailParametrs";
+                                th.Start();
+
+                                Color.WriteLineColor("Обработка штрихкода " + CheckThisBar.GetBarOnID(_LastId) + " завершена.", ConsoleColor.Green);
+
+                                Thread.Sleep(5000);
+
+                                //TODO SEND ALL USER INFORMATION ABOUT 
                             }
-
-
-
                             break;
                         case 8:
                             Color.WriteLineColor("Версия очередности обновлена у клиента " + user.username, ConsoleColor.Yellow);
@@ -207,7 +221,7 @@ namespace BarrierServerProject
                     conn.Open();
 
                     MySqlCommand cmd = new MySqlCommand(@"INSERT INTO `priority`(`id`,`bar`,`name`,`turn_price`,`count`,`sailed`,`status`,`status_text`,`current_price_ukm`,`date`) VALUES ( 
-                                NULL,'" + bar + "','" + name + "','" + turnprice + "','" + turncount + "','0','0','','0','" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "');SELECT LAST_INSERT_ID();", conn);
+                                NULL,'" + bar + "','" + name + "','" + turnprice + "','" + turncount.Replace(",", ".") + "','0','0','','0','" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "');SELECT LAST_INSERT_ID();", conn);
 
                     using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
