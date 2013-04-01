@@ -113,20 +113,16 @@ namespace BarrierServerProject
                             {
                                 Color.WriteLineColor("Присвоен уникальный номер " + _LastId, ConsoleColor.Green);
 
-                                CheckThisBar.UpdatePrice(_LastId);
-
-                                CheckThisBar.GetLsTradeSail(_LastId);
-
                                 Thread th = new Thread(delegate()
-                                    {
-                                        CheckThisBar.GetUkmSailParametrs(_LastId);
-                                    }); ;
+                                {
+                                    Color.WriteLineColor("[Thread] Add GetSailAndPrice ", ConsoleColor.Gray);
+
+                                    CheckThisBar.GetSailAndPrice(_LastId);
+
+                                    Color.WriteLineColor("[Thread] Remove GetSailAndPrice ", ConsoleColor.Gray);
+                                }); ;
                                 th.Name = "GetUkmSailParametrs";
                                 th.Start();
-
-                                Color.WriteLineColor("Обработка штрихкода " + CheckThisBar.GetBarOnID(_LastId) + " завершена.", ConsoleColor.Green);
-
-                                Thread.Sleep(5000);
 
                                 //TODO SEND ALL USER INFORMATION ABOUT 
                             }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace BarrierServerProject
 {
@@ -143,6 +144,11 @@ namespace BarrierServerProject
                 Color.WriteLineColor("[GetLsTradeSail] " + ex.Message, ConsoleColor.Red);
                 Log.ExcWrite("[GetLsTradeSail] " + ex.Message);
             }
+
+            finally
+            {
+                Color.WriteLineColor("Запрос отправлен.", ConsoleColor.Gray);
+            }
         }
 
         public static void GetUkmSailParametrs(int id)
@@ -211,9 +217,9 @@ namespace BarrierServerProject
                         string count = dr.GetValue(0).ToString().Replace(",",".");
 
                         if (Packages.connector.ExecuteNonQuery("INSERT INTO `operations`(`id`,`operation`,`count`,`price`,`inactive`) VALUES ( '" + id + "','51','" + count + "','" + dr.GetValue(1) + "','0')"))
-                            Color.WriteLineColor("Операция продажи добавлена успешно по номеру " + id, ConsoleColor.Gray);
+                            Color.WriteLineColor("[" + id + "] Успешно добавлена операция расхода(51) по штрихкоду " + bar, ConsoleColor.Gray);
                         else
-                            Color.WriteLineColor("Отклонено: " + id, ConsoleColor.Red);
+                            Color.WriteLineColor("[" + id + "] Отклонена операция расхода(51) по штрихкоду " + bar, ConsoleColor.Red);
                     }
 
                     if (!dr.IsClosed)
@@ -225,14 +231,35 @@ namespace BarrierServerProject
         public static void UpdatePrice(int id)
         {
             if(Program.debug)
-                Color.WriteLineColor("Запрос текущей цены на кассе по номеру " + id, ConsoleColor.Gray);
+                Color.WriteLineColor("[" + id + "] Запрос текущей цены на кассе. ", ConsoleColor.Gray);
 
             int price_ukm = GetPriceUkmId(id);
 
             if(Packages.connector.ExecuteNonQuery("UPDATE `priority` SET `current_price_ukm` = " + price_ukm + "   WHERE `id` = " + id))
-                Color.WriteLineColor("Цена обновлена.", ConsoleColor.Gray);
+                Color.WriteLineColor("[" + id + "] Цена обновлена. ", ConsoleColor.Gray);
             else
-                Color.WriteLineColor("Обновить цену по id" + id + " не удалось", ConsoleColor.Red);
+                Color.WriteLineColor("[" + id + "] Отказ обновления цены. ", ConsoleColor.Red);
+        }
+
+        public static void UpdateCountOut(int id)
+        {
+            if(Packages.connector.ExecuteNonQuery("UPDATE `priority` SET `sailed` = (SELECT SUM(`count`) FROM `operations` WHERE `id` = " + id + " AND inactive = 0 )"))
+                Color.WriteLineColor("[" + id + "] Обновлен расход в основном перечне.", ConsoleColor.Gray);
+            else
+                Color.WriteLineColor("[" + id + "] Обновлен расход в основном перечне.", ConsoleColor.Gray);
+        }
+
+        public static void GetSailAndPrice(int id)
+        {
+            Color.WriteLineColor("Запущено обновление информации по штрихкоду " + CheckThisBar.GetBarOnID(id), ConsoleColor.Gray);
+
+            CheckThisBar.UpdatePrice(id);
+
+            CheckThisBar.GetLsTradeSail(id);
+
+            CheckThisBar.GetUkmSailParametrs(id);
+
+            CheckThisBar.UpdateCountOut(id);
         }
 
     }
