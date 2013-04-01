@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="Color.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Connector.cs" />
     <Compile Include="Dbf.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Packages.cs" />

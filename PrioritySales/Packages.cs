@@ -10,6 +10,7 @@ namespace PrioritySales
         public static MainFormClassic mf = new MainFormClassic();
         public static Connector connector = new Connector();
         public static CareForm careform = new CareForm();
+        public static string MainDbName = Config.GetParametr("MainDbName");
         public static int Zx = SystemInformation.PrimaryMonitorSize.Width - (SystemInformation.PrimaryMonitorSize.Width/6);
         public static int Zy = SystemInformation.PrimaryMonitorSize.Height - (SystemInformation.PrimaryMonitorSize.Height / 15);
 
@@ -77,11 +78,11 @@ namespace PrioritySales
 
                                 if (mf.dataGridViewMainForm.Visible == true)
                                 {
-                                    using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", "barrierserver")))
+                                    using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", MainDbName)))
                                     {
                                         conn.Open();
 
-                                        MySqlCommand cmd = new MySqlCommand("SELECT * FROM `state`", conn);
+                                        MySqlCommand cmd = new MySqlCommand("SELECT * FROM `priority`", conn);
 
                                         using (MySqlDataReader dr = cmd.ExecuteReader())
                                         {
@@ -95,19 +96,20 @@ namespace PrioritySales
 
                                             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.dataGridViewMainForm.Rows.Clear(); }));
 
-
                                             while (dr.Read())
                                             {
-                                                string barcode = dr.GetString(0).Replace(" ", "");
-                                                string name = dr.GetString(1).Replace("  ", "");
-                                                object price = dr.GetValue(2);
-                                                object pricesail = dr.GetValue(3);
-                                                object count = dr.GetValue(4);
+                                                object u_id = dr.GetValue(0);
+                                                string barcode = dr.GetString(1).Replace(" ", "");
+                                                string name = dr.GetString(2).Replace("  ", "");
+                                                object turn_price = dr.GetValue(3);
+                                                object turn_count = dr.GetValue(4);
                                                 object sail = dr.GetValue(5);
                                                 object status = dr.GetValue(6);
-                                                string dt = dr.GetString(7);
+                                                string status_text = dr.GetString(7);
+                                                object current_price_ukm = dr.GetValue(8);
+                                                string dt = dr.GetString(9);
 
-                                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.dataGridViewMainForm.Rows.Add(barcode, name, price, pricesail, count.ToString().Replace(",000", ""), sail.ToString().Replace(",000", ""), status, dt); }));
+                                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.dataGridViewMainForm.Rows.Add(u_id, barcode, name, turn_price, turn_count.ToString().Replace(",000", ""), sail.ToString().Replace(",000", ""), status, current_price_ukm, dt); }));
                                             }
                                         }
                                     }

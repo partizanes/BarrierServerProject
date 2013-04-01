@@ -22,6 +22,17 @@ namespace PrioritySales
             catch { }
         }
 
+        public static void ExcWrite(string text)
+        {
+            log_write(text, "EXCEPTION", "exception");
+        }
+
+        public static void LogWriteDebug(string text)
+        {
+            if (AuthFormClassic.debug)
+                log_write(text, "DEBUG", "debug");
+        }
+
         public static void articul_write(string articul, string logname)
         {
             check_dir();

@@ -8,7 +8,7 @@ namespace LsTradeAgent
     class Packages
     {
         private static Boolean StatusParse = true;
-        private static string[] DataParse;
+        public static Connector connector = new Connector();
         private static List<string> ar = new List<string>();
 
         public static void parse(string p_id, int com, string msg)
@@ -123,41 +123,49 @@ namespace LsTradeAgent
         {
             try
             {
-                OleDbDataReader dr = null;
-
                 StatusParse = true;
 
                 string[] split_data = msg.Replace("\0", "").Split(new Char[] { ';' });
 
-                string barcode = split_data[0].Replace(" ", "");
+                int id = int.Parse(split_data[0].Replace(" ", ""));
+                string barcode = split_data[1].Replace(" ", "");
 
-                dr = Dbf.dbf_read("SELECT k_mat,k_op,SUM(n_mat),n_cenu FROM dvmat WHERE k_mat IN(SELECT k_mat FROM sprmat WHERE k_grup  ='" + barcode + "' AND p_time > {^" + split_data[3] + "}) AND k_op IN ('53', '61','62','72','93') AND p_time > {^" + split_data[3] + "} GROUP BY k_mat,k_op,n_cenu");
-
-                if (dr == null)
+                using (OleDbConnection conn = new OleDbConnection(string.Format("Provider=vfpoledb.1;Data Source=" + Config.GetParametr("LsTradeDir") + ";Mode=Read;Collating Sequence=MACHINE;CODEPAGE=1251")))
                 {
-                    Color.WriteLineColor("Отсутствуют партии расхода по баркоду: " + barcode, ConsoleColor.Yellow);
-                    return;
+                    conn.Open();
+
+                    OleDbCommand cmd = new OleDbCommand(@"SELECT k_mat,k_op,SUM(n_mat),n_cenu FROM dvmat WHERE k_mat IN(SELECT k_mat FROM sprmat WHERE k_grup  ='" + barcode + "' AND p_time > {^" + split_data[3] + "}) AND k_op IN ('53', '61','62','72','93') AND p_time > {^" + split_data[3] + "} GROUP BY k_mat,k_op,n_cenu");
+
+                    cmd.CommandTimeout = 0;
+
+                    using (OleDbDataReader DbfDataReader = cmd.ExecuteReader())
+                    {
+                        connector.ExecuteNonQuery("DELETE FROM `operations` WHERE `id` = " + id, Config.GetParametr("MainDbName"));
+
+                        if (DbfDataReader == null)
+                        {
+                            Color.WriteLineColor("Отсутствуют партии расхода по баркоду: " + barcode, ConsoleColor.Yellow);
+                            return;
+                        }
+
+                        while (DbfDataReader.Read())
+                        {
+                            if (connector.ExecuteNonQuery("INSERT INTO `operations`(`id`,`operation`,`count`,`price`,`inactive`) VALUES ( '" + id + "','" + DbfDataReader.GetValue(1) + "','" + DbfDataReader.GetValue(2) + "','" + DbfDataReader.GetValue(3) + "','0');", Config.GetParametr("MainDbName")))
+                                Color.WriteLineColor("Добавлен код операции: " + DbfDataReader.GetValue(1) + " Количество: " + DbfDataReader.GetValue(2) + " Цена: " + DbfDataReader.GetValue(3), ConsoleColor.Yellow);
+                            else
+                                Color.WriteLineColor("Отклонен код операции: " + DbfDataReader.GetValue(1) + " Количество: " + DbfDataReader.GetValue(2) + " Цена: " + DbfDataReader.GetValue(3), ConsoleColor.Red);
+                        }
+                    }
                 }
-
-                while (dr.Read())
-                {
-                    Color.WriteLineColor("Код операции: " + dr.GetValue(1) + " Количество: " + dr.GetValue(2) + " Цена: " + dr.GetValue(3), ConsoleColor.Yellow);
-
-                    Server.Sender("LsTradeAgent", 9, barcode + ";" + dr.GetValue(1) + ";" + dr.GetValue(2) + ";" + dr.GetValue(3) + ";" + split_data[3]);
-
-                    System.Threading.Thread.Sleep(1000);
-                }
-
-                if (!dr.IsClosed)
-                    dr.Close();
-
-                dr.Dispose();
             }
             catch (System.Exception ex)
             {
-                Color.WriteLineColor(ex.Message, ConsoleColor.Red);
+                Color.WriteLineColor("[GetLsTradeSail] " + ex.Message, ConsoleColor.Red);
+                Log.ExcWrite("[GetLsTradeSail] " + ex.Message);
+
                 StatusParse = false;
             }
+
             finally
             {
                 Server.Sender("LsTradeAgent", 8, "Пакет успешно обработан!");

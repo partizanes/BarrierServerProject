@@ -32,9 +32,9 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFormClassic));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFormClassic));
             this.PanelMainClassic = new System.Windows.Forms.Panel();
             this.PanelBackButton = new System.Windows.Forms.Panel();
             this.PanelButton = new System.Windows.Forms.Panel();
@@ -70,17 +70,18 @@
             this.PanelMsgBg = new System.Windows.Forms.Panel();
             this.PanelMsg = new System.Windows.Forms.Panel();
             this.dataGridViewMainForm = new System.Windows.Forms.DataGridView();
-            this.Barcode = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NameItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PriceSail = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CountStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DateCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TimerClearMsg = new System.Windows.Forms.Timer(this.components);
             this.PrioritySalesIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.TimerIconChange = new System.Windows.Forms.Timer(this.components);
+            this.u_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Barcode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NameItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CountStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Kassa = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DateCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PanelMainClassic.SuspendLayout();
             this.PanelBackButton.SuspendLayout();
             this.PanelButton.SuspendLayout();
@@ -562,13 +563,14 @@
             this.dataGridViewMainForm.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewMainForm.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewMainForm.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.u_id,
             this.Barcode,
             this.NameItem,
             this.Price,
-            this.PriceSail,
             this.CountStart,
             this.Count,
             this.Status,
+            this.Kassa,
             this.DateCol});
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.BackColor = System.Drawing.Color.Black;
@@ -608,6 +610,30 @@
             this.dataGridViewMainForm.Enter += new System.EventHandler(this.dataGridViewMainForm_Enter);
             this.dataGridViewMainForm.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridView1_KeyDown);
             // 
+            // TimerClearMsg
+            // 
+            this.TimerClearMsg.Interval = 3000;
+            this.TimerClearMsg.Tick += new System.EventHandler(this.TimerClearMsg_Tick);
+            // 
+            // PrioritySalesIcon
+            // 
+            this.PrioritySalesIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("PrioritySalesIcon.Icon")));
+            this.PrioritySalesIcon.Text = "Двойной клик для активации приложения.";
+            this.PrioritySalesIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PrioritySales_MouseDoubleClick);
+            // 
+            // TimerIconChange
+            // 
+            this.TimerIconChange.Interval = 1000;
+            this.TimerIconChange.Tick += new System.EventHandler(this.TimerIconChange_Tick);
+            // 
+            // u_id
+            // 
+            this.u_id.Frozen = true;
+            this.u_id.HeaderText = "ID";
+            this.u_id.Name = "u_id";
+            this.u_id.ReadOnly = true;
+            this.u_id.Width = 25;
+            // 
             // Barcode
             // 
             this.Barcode.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
@@ -617,7 +643,7 @@
             this.Barcode.Name = "Barcode";
             this.Barcode.ReadOnly = true;
             this.Barcode.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Barcode.Width = 88;
+            this.Barcode.Width = 85;
             // 
             // NameItem
             // 
@@ -628,7 +654,7 @@
             this.NameItem.Name = "NameItem";
             this.NameItem.ReadOnly = true;
             this.NameItem.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.NameItem.Width = 210;
+            this.NameItem.Width = 190;
             // 
             // Price
             // 
@@ -639,16 +665,7 @@
             this.Price.Name = "Price";
             this.Price.ReadOnly = true;
             this.Price.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Price.Width = 55;
-            // 
-            // PriceSail
-            // 
-            this.PriceSail.Frozen = true;
-            this.PriceSail.HeaderText = "ЦП";
-            this.PriceSail.Name = "PriceSail";
-            this.PriceSail.ReadOnly = true;
-            this.PriceSail.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.PriceSail.Width = 55;
+            this.Price.Width = 50;
             // 
             // CountStart
             // 
@@ -657,7 +674,7 @@
             this.CountStart.Name = "CountStart";
             this.CountStart.ReadOnly = true;
             this.CountStart.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.CountStart.Width = 50;
+            this.CountStart.Width = 60;
             // 
             // Count
             // 
@@ -677,30 +694,21 @@
             this.Status.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Status.Width = 50;
             // 
+            // Kassa
+            // 
+            this.Kassa.Frozen = true;
+            this.Kassa.HeaderText = "Касса";
+            this.Kassa.Name = "Kassa";
+            this.Kassa.ReadOnly = true;
+            this.Kassa.Width = 45;
+            // 
             // DateCol
             // 
-            this.DateCol.Frozen = true;
             this.DateCol.HeaderText = "Дата";
             this.DateCol.Name = "DateCol";
             this.DateCol.ReadOnly = true;
             this.DateCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.DateCol.Width = 86;
-            // 
-            // TimerClearMsg
-            // 
-            this.TimerClearMsg.Interval = 3000;
-            this.TimerClearMsg.Tick += new System.EventHandler(this.TimerClearMsg_Tick);
-            // 
-            // PrioritySalesIcon
-            // 
-            this.PrioritySalesIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("PrioritySalesIcon.Icon")));
-            this.PrioritySalesIcon.Text = "Двойной клик для активации приложения.";
-            this.PrioritySalesIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PrioritySales_MouseDoubleClick);
-            // 
-            // TimerIconChange
-            // 
-            this.TimerIconChange.Interval = 1000;
-            this.TimerIconChange.Tick += new System.EventHandler(this.TimerIconChange_Tick);
+            this.DateCol.Width = 89;
             // 
             // MainFormClassic
             // 
@@ -775,15 +783,16 @@
         public System.Windows.Forms.Button ButtonList;
         public System.Windows.Forms.NotifyIcon PrioritySalesIcon;
         public System.Windows.Forms.Timer TimerIconChange;
+        public System.Windows.Forms.Button ButtonTasks;
+        private System.Windows.Forms.DataGridViewTextBoxColumn u_id;
         private System.Windows.Forms.DataGridViewTextBoxColumn Barcode;
         private System.Windows.Forms.DataGridViewTextBoxColumn NameItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn Price;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PriceSail;
         private System.Windows.Forms.DataGridViewTextBoxColumn CountStart;
         private System.Windows.Forms.DataGridViewTextBoxColumn Count;
         private System.Windows.Forms.DataGridViewTextBoxColumn Status;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Kassa;
         private System.Windows.Forms.DataGridViewTextBoxColumn DateCol;
-        public System.Windows.Forms.Button ButtonTasks;
 
 
 

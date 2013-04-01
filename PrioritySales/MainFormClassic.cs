@@ -251,45 +251,53 @@ namespace PrioritySales
 
         private void getname()
         {
-            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", Config.GetParametr("BdName"))))
+            try
             {
-                conn.Open();
+                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", Config.GetParametr("BdName"))))
+                {
+                    conn.Open();
 
-                MySqlCommand cmd = new MySqlCommand(@"SELECT a.name, b.price
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT a.name, b.price
                 FROM trm_in_var C
                 LEFT JOIN trm_in_items A ON A.id=C.item
                 LEFT JOIN trm_in_pricelist_items B ON B.item=c.item
-                WHERE a.id='" + TextboxAddBar.Text + 
-                "' AND (b.pricelist_id=" + pricelistId + ")", conn);
+                WHERE a.id='" + TextboxAddBar.Text +
+                    "' AND (b.pricelist_id=" + pricelistId + ")", conn);
 
-                using (MySqlDataReader dr = cmd.ExecuteReader())
-                {
-                    if (dr == null)
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
-                        DeclineErr(true, "                             Запрос ничего не вернул,повторите попытку!");
-                        return;
-                    }
+                        if (dr == null)
+                        {
+                            DeclineErr(true, "                             Запрос ничего не вернул,повторите попытку!");
+                            return;
+                        }
 
-                    if (!dr.HasRows)
-                    {
-                        DeclineErr(true, "                                                Штрихкод не найден в базе!");
-                        TextboxAddBar.Text = "";
-                        TextboxCountAdd.Text = "";
-                        TextboxNameItem.Text = "";
-                        TextboxPrice.Text = "";
-                        TextboxAddBar.Focus();
-                        return;
-                    }
+                        if (!dr.HasRows)
+                        {
+                            DeclineErr(true, "                                                Штрихкод не найден в базе!");
+                            TextboxAddBar.Text = "";
+                            TextboxCountAdd.Text = "";
+                            TextboxNameItem.Text = "";
+                            TextboxPrice.Text = "";
+                            TextboxAddBar.Focus();
+                            return;
+                        }
 
-                    if (dr.Read())
-                    {
-                        TextboxNameItem.Text = dr.GetString(0);
-                        string[] split_data = dr.GetString(1).Split(new Char[] { ',' });
-                        TextboxPrice.Text = Convert.ToInt32(split_data[0]).ToString();
-                    }
+                        if (dr.Read())
+                        {
+                            TextboxNameItem.Text = dr.GetString(0);
+                            string[] split_data = dr.GetString(1).Split(new Char[] { ',' });
+                            TextboxPrice.Text = Convert.ToInt32(split_data[0]).ToString();
+                        }
 
-                    TextboxCountAdd.Focus();
+                        TextboxCountAdd.Focus();
+                    }
                 }
+            }
+            catch (System.Exception ex)
+            {
+                DeclineErr(true, "                             Не удалось соединиться с Mysql сервером!");
+                Log.ExcWrite("[getname]" + ex.Message);
             }
         }
 

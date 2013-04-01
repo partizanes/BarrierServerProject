@@ -16,6 +16,7 @@ namespace BarrierServerProject
     class Packages
     {
         public static string StatusString = "";
+        public static string MainDbName = Config.GetParametr("MainDbName");  //TODO  CHECK CONFIG AND IF MISS WRITE THIS;
         public static Connector connector = new Connector();
 
         public static void parse(string p_id, int com, string msg, User user,System.Net.Sockets.Socket r_client)
@@ -38,33 +39,6 @@ namespace BarrierServerProject
                             Server.clients[r_client] = p_id;
                             Color.WriteLineColor("Модуль связи с LsTrade загружен!",ConsoleColor.Cyan);
                             Msg.SendUser("LsTradeAgent", "LS", 1, "Идентификация пройдена.");
-
-                            //check thread work
-                            Thread th = new Thread(delegate()
-                                {
-                                    CheckSail.StartCheck();
-                                });
-                                th.Name = "Проверка очередности";
-                                th.Start();
-
-                                break;
-                        case 8:
-                            CheckSail.CheckSend = true;
-                                break;
-                        case 9:
-                            string[] split_data = msg.Replace("\0", "").Split(new Char[] { ';' });
-
-                            string barcode = split_data[0];
-                            string operation = split_data[1].Replace(" ", "");
-                            string count = split_data[2];
-                            string price = split_data[3];
-                            DateTime datetime = Convert.ToDateTime(split_data[4]);
-
-                            if (Dbf.ExecuteNonQuery("INSERT INTO operation.dbf (barcode,operation,count,price,dt) VALUES ('" + barcode + "'," + operation + "," + count.ToString().Replace(",", ".") + "," + price + ",{^" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "})"))
-                                Color.WriteLineColor("Успешно добавлена операция расхода из LsTradeAgent",ConsoleColor.Green);
-                            else
-                                Color.WriteLineColor("Добавление из LsTradeAgent завершилось с ошибкой", ConsoleColor.Red);
-
                             break;
                     }
                     break;
@@ -77,7 +51,7 @@ namespace BarrierServerProject
                         case 0:
                             string[] split_data = msg.Replace("\0", "").Replace(" ", "").Split(new Char[] { ':' });
 
-                            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=15;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", "barrierserver")))
+                            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=15;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", MainDbName)))
                             {
                                 try { conn.Open(); }
                                 catch (MySqlException ex)
@@ -113,7 +87,7 @@ namespace BarrierServerProject
                                         Color.WriteLineColor(split_data[0] + " Добавлен!", ConsoleColor.Cyan);
                                         Msg.SendUser(split_data[0], "PrioritySale", 1, split_data[0]);
                                         user.username = split_data[0];
-                                        Packages.connector.ExecuteNonQuery("UPDATE `barrierserver`.`users` SET `status`='1',`ip`='" + IPAddress.Parse(((IPEndPoint)r_client.RemoteEndPoint).Address.ToString()) + "' WHERE `username`='" + split_data[0] + "'");
+                                        Packages.connector.ExecuteNonQuery("UPDATE `users` SET `status`='1',`ip`='" + IPAddress.Parse(((IPEndPoint)r_client.RemoteEndPoint).Address.ToString()) + "' WHERE `username`='" + split_data[0] + "'");
                                         Log.log_write(split_data[0], "[AUTH_S]", "AUTHLOG");
                                     }
                                     else
@@ -133,31 +107,15 @@ namespace BarrierServerProject
                                 }
                             }
                         case 5:
-                            string[] sd = msg.Replace("\0", "").Split(new Char[] { ';' });
+                            Int32 _LastId;
 
-                            string bar = sd[0].Replace(" ", "");
-                            string count = sd[1].Replace(" ", "");
-                            string price = sd[2].Replace(" ", "");
-
-                            DateTime datetime = new DateTime();
-
-                            datetime = Convert.ToDateTime(sd[3]);
-
-                            string item = sd[4];
-
-                            if (Dbf.ExecuteNonQuery("INSERT INTO balance.dbf (barcode,price,count,date,item) VALUES ('" + bar + "'," + price + "," + count.Replace(",",".") + ",{^" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "},'"+ item +"')"))
+                            if (PriorityAddBarcode(msg, user, out _LastId))
                             {
-                                Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.", ConsoleColor.Green);
-
-                                Msg.SendUser(user.username, "PrioritySale", 2, "                Штрихкод: " + bar + " в количестве: " + count + " поставлен в очередь.");
-
-                                CheckSail.CheckOne(bar, "0", double.Parse(count), Convert.ToInt32(price), datetime);
+                                Color.WriteLineColor("Присвоен уникальный номер " + _LastId, ConsoleColor.Green);
                             }
-                            else
-                            {
-                                Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + count + " Отклонён!", ConsoleColor.Red);
-                                Msg.SendUser(user.username, "PrioritySale", 3, "                                                                     Отклонено!");
-                            }
+
+
+
                             break;
                         case 8:
                             Color.WriteLineColor("Версия очередности обновлена у клиента " + user.username, ConsoleColor.Yellow);
@@ -226,6 +184,61 @@ namespace BarrierServerProject
             }
 
             return sBuilder.ToString();
+        }
+
+        private static bool PriorityAddBarcode(string msg, User user, out Int32 id)
+        {
+            string[] sd = msg.Replace("\0", "").Split(new Char[] { ';' });
+
+            string bar = sd[0].Replace(" ", "");
+            string turncount = sd[1].Replace(" ", "");
+            string turnprice = sd[2].Replace(" ", "");
+
+            DateTime datetime = new DateTime();
+
+            datetime = Convert.ToDateTime(sd[3]);
+
+            string name = sd[4];
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", MainDbName)))
+                {
+                    conn.Open();
+
+                    MySqlCommand cmd = new MySqlCommand(@"INSERT INTO `priority`(`id`,`bar`,`name`,`turn_price`,`count`,`sailed`,`status`,`status_text`,`current_price_ukm`,`date`) VALUES ( 
+                                NULL,'" + bar + "','" + name + "','" + turnprice + "','" + turncount + "','0','0','','0','" + datetime.ToString("yyyy-MM-dd,HH:mm:ss") + "');SELECT LAST_INSERT_ID();", conn);
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            id = dr.GetInt32(0);
+                            
+                            Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + turncount + " поставлен в очередь.", ConsoleColor.Green); 
+       
+                            Msg.SendUser(user.username, "PrioritySale", 2, "                Штрихкод: " + bar + " в количестве: " + turncount + " поставлен в очередь.");
+                            return true;
+                        }
+                        else
+                            throw new Exception();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Color.WriteLineColor("[PriorityAddBarcode] " + ex.Message, ConsoleColor.Red);
+
+                Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + turncount + " Отклонён!", ConsoleColor.Red);
+
+                Log.log_write("Штрихкод: " + bar + " в количестве: " + turncount + " Отклонён!", "[ADD]", "PRIORITY");
+
+                Msg.SendUser(user.username, "PrioritySale", 3, "                                                                     Отклонено!");
+                
+                id = 0;
+                
+                return false;
+            }
         }
     }
 }
