@@ -210,7 +210,7 @@ namespace BarrierServerProject
                     Packages.connector.ExecuteNonQuery("DELETE FROM `operations` WHERE `id` = " + id + " AND `operation` = '51'");
                     if (dr == null) { }
 
-                    if (!dr.HasRows) { }
+                    if (!dr.HasRows) { NoSales(id, bar, turn_price, date); }
 
                     while (dr.Read())
                     {
@@ -262,5 +262,22 @@ namespace BarrierServerProject
             CheckThisBar.UpdateCountOut(id);
         }
 
+        private static void NoSales(int id, string bar, int price, DateTime date)
+        {
+            Color.WriteLineColor("[" + id + "] Реализация товара: " + bar + " не обнаружена с " + date, ConsoleColor.Yellow);
+
+            int TotalDay = Convert.ToInt32((DateTime.Now - date).TotalSeconds) / 86400;
+            int ConfigTotalDayNoSales;
+
+            try { ConfigTotalDayNoSales = int.Parse(Config.GetParametr("TotalDayNoSales"));}
+            catch { ConfigTotalDayNoSales = 4 ;}
+
+            if (TotalDay > ConfigTotalDayNoSales)
+            {
+                Color.WriteLineColor("[" + id + "] Товар " + bar + " не продается долгое время.Число дней " + TotalDay, ConsoleColor.Red);
+
+                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`tasks_id`,`priority_id`,`user_group`,`task_text`,`user_id`,`priority`,`date`) VALUES ( NULL,'" + id + "','1','Товар " + bar + " не продается долгое время.Число дней " + TotalDay + "','0','1','" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "')");
+            }
+        }
     }
 }
