@@ -30,6 +30,8 @@ CREATE TABLE `operations` (
 
 /*Data for the table `operations` */
 
+insert  into `operations`(`id`,`operation`,`count`,`price`,`inactive`) values (36,72,5.620,65050,0),(36,51,1810.139,65050,0);
+
 /*Table structure for table `priority` */
 
 DROP TABLE IF EXISTS `priority`;
@@ -46,9 +48,30 @@ CREATE TABLE `priority` (
   `current_price_ukm` mediumint(7) NOT NULL,
   `date` datetime NOT NULL,
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
 /*Data for the table `priority` */
+
+insert  into `priority`(`id`,`bar`,`name`,`turn_price`,`count`,`sailed`,`status`,`status_text`,`current_price_ukm`,`date`) values (36,'07376','П/Ф ШЕЙНАЯ ЧАСТЬ СВИНАЯ ВИТЕБСКАЯ ОХЛ.',65050,5.159,1815.759,0,'',65050,'2013-02-01 21:39:47');
+
+/*Table structure for table `tasks` */
+
+DROP TABLE IF EXISTS `tasks`;
+
+CREATE TABLE `tasks` (
+  `tasks_id` bigint(20) unsigned NOT NULL auto_increment,
+  `priority_id` bigint(20) unsigned NOT NULL,
+  `user_group` int(2) NOT NULL,
+  `task_text` longtext NOT NULL,
+  `user_id` tinyint(4) NOT NULL,
+  `priority` tinyint(4) NOT NULL,
+  `date` datetime NOT NULL,
+  UNIQUE KEY `tasks_id` (`tasks_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+/*Data for the table `tasks` */
+
+insert  into `tasks`(`tasks_id`,`priority_id`,`user_group`,`task_text`,`user_id`,`priority`,`date`) values (1,36,1,'dawdwadawdaw',0,0,'2012-12-01 20:00:00');
 
 /*Table structure for table `users` */
 
