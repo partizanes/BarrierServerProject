@@ -75,16 +75,20 @@ namespace BarrierServerProject
 
                 Thread th = new Thread(delegate()
                 {
-                    //TODO sleep time add
-                    Thread.Sleep(1000);
-                    CheckTasks.StartCheck();
+                    Thread.Sleep(3000);
+
+                    while (true)
+                    {
+                        Color.WriteLineColor("[THREAD] CheckSailAndPriceUpdate запущен", ConsoleColor.DarkYellow);
+
+                        CheckThisBar.CheckSailAndPriceUpdate();
+
+                        Color.WriteLineColor("[THREAD] CheckSailAndPriceUpdate завершен", ConsoleColor.DarkYellow);
+                        Thread.Sleep(1800000);
+                    }
                 });
                 th.Name = "Проверка задач";
                 th.Start();
-
-                Thread.Sleep(3000);
-
-                CheckSail.CheckAll(false);
             }
 
             Thread.Sleep(1000);

@@ -110,8 +110,8 @@ namespace PrioritySales
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                xOffset = -e.X;
-                yOffset = -e.Y;
+                xOffset = -e.X - 1;
+                yOffset = -e.Y - 1 ;
                 mouseOffset = new Point(xOffset, yOffset);
                 isMouseDown = true;
             }
@@ -149,8 +149,8 @@ namespace PrioritySales
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                xOffset = -e.X - this.LabelCareForm.Location.X;
-                yOffset = -e.Y - this.LabelCareForm.Location.Y;
+                xOffset = -e.X - this.LabelCareForm.Location.X -1;
+                yOffset = -e.Y - this.LabelCareForm.Location.Y -1;
                 mouseOffset = new Point(xOffset, yOffset);
                 isMouseDown = true;
             }

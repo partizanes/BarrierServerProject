@@ -219,7 +219,8 @@ namespace PrioritySales
                         string name = dr.GetString(1);
                         int turn_price = Convert.ToInt32(dr.GetValue(2));
                         float count = dr.GetFloat(3);
-                        float sailed = dr.GetFloat(4);
+                        //try { float sailed = dr.GetFloat(4); }
+                        //catch { float sailed = 0; }
                         int status = Convert.ToInt32(dr.GetValue(5));
                         string status_text = dr.GetString(6);
 
@@ -289,7 +290,7 @@ namespace PrioritySales
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand(@"SELECT `action`,`price`,`kod_isp`,`datetime` FROM `sendPOS` WHERE id = (SELECT `priority_id` FROM `tasks` WHERE `tasks_id` = " + s + ")", conn);
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT `action`,`price`,`kod_isp`,`datetime` FROM `sendPOS` WHERE id = " + s, conn);
                     cmd.CommandTimeout = 0;
 
                     using (MySqlDataReader dr = cmd.ExecuteReader())

@@ -55,6 +55,9 @@ namespace LsTradeAgent
 
                                 CheckSendPrice(id, barcode, date);
                             }
+
+                            ar.Clear();
+
                             break;
                     }
                     break;
@@ -84,22 +87,22 @@ namespace LsTradeAgent
 
                     cmd.Connection = conn;
 
-                    cmd.CommandText = "INSERT INTO `sendPOS` VALUES(@id, @price, @isp, @datetime, @operation)";
+                    cmd.CommandText = "INSERT IGNORE INTO `sendPOS` VALUES(@id, @price, @kod_isp, @datetime, @action)";
                     cmd.Prepare();
 
                     cmd.Parameters.AddWithValue("@id", 1);
                     cmd.Parameters.AddWithValue("@price", 8500);
-                    cmd.Parameters.AddWithValue("@isp", 22);
+                    cmd.Parameters.AddWithValue("@kod_isp", 22);
                     cmd.Parameters.AddWithValue("@datetime", "2012-01-01 00:00:00" );
-                    cmd.Parameters.AddWithValue("@operation", "text");
+                    cmd.Parameters.AddWithValue("@action", "text");
 
                     while (dr.Read())
                     {
                         cmd.Parameters["@id"].Value = id;
                         cmd.Parameters["@price"].Value = dr.GetValue(0);
-                        cmd.Parameters["@isp"].Value = dr.GetValue(1);
+                        cmd.Parameters["@kod_isp"].Value = dr.GetValue(1);
                         cmd.Parameters["@datetime"].Value = dr.GetDateTime(2).ToString("yyyy-MM-dd,HH:mm:ss");
-                        cmd.Parameters["@operation"].Value = dr.GetValue(3);
+                        cmd.Parameters["@action"].Value = dr.GetValue(3);
 
                         cmd.ExecuteNonQuery();
                     }

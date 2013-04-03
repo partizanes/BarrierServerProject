@@ -10,16 +10,17 @@ namespace BarrierServerProject
     {
         public static void StartCheck()
         {
+            Color.WriteLineColor("Запуск проверки заданий.", ConsoleColor.Green);
             TasksCheck("1");
 
             TasksCheck("2");
 
             GC.Collect();
-            
-            //10 min 600000
-            System.Threading.Thread.Sleep(300000);
 
+            //10 min 600000
             StartCheck();
+
+            System.Threading.Thread.Sleep(300000);
         }
         private static void TasksCheck(string group)
         {

@@ -89,6 +89,7 @@ namespace BarrierServerProject
                                         user.username = split_data[0];
                                         Packages.connector.ExecuteNonQuery("UPDATE `users` SET `online`='1',`ip`='" + IPAddress.Parse(((IPEndPoint)r_client.RemoteEndPoint).Address.ToString()) + "' WHERE `username`='" + split_data[0] + "'");
                                         Log.log_write(split_data[0], "[AUTH_S]", "AUTHLOG");
+
                                     }
                                     else
                                     {
@@ -115,11 +116,11 @@ namespace BarrierServerProject
 
                                 Thread th = new Thread(delegate()
                                 {
-                                    Color.WriteLineColor("[Thread] Add GetSailAndPrice ", ConsoleColor.Gray);
+                                    Color.WriteLineColor("[Thread] GetSailAndPrice запущен... ", ConsoleColor.DarkYellow);
 
                                     CheckThisBar.GetSailAndPrice(_LastId);
 
-                                    Color.WriteLineColor("[Thread] Remove GetSailAndPrice ", ConsoleColor.Gray);
+                                    Color.WriteLineColor("[Thread] GetSailAndPrice завершен.", ConsoleColor.DarkYellow);
                                 }); ;
                                 th.Name = "GetUkmSailParametrs";
                                 th.Start();

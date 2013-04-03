@@ -32,6 +32,31 @@ namespace PrioritySales
         private void MainFormClassic_Shown(object sender, EventArgs e)
         {
             ButtonAdd.Focus();
+
+            CheckTasks();
+        }
+
+        private void CheckTasks()
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+                {
+                    conn.Open();
+
+                    MySqlCommand cmd = new MySqlCommand("SELECT COUNT(tasks_id) FROM tasks WHERE `user_group` = (SELECT `group` FROM `users` WHERE `username` = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "' ) AND `user_id` = 0", conn);
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr == null) { return; }
+                        if (dr.Read()) { Packages.parse("PrioritySale", 8, ""); }
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Log.LogWriteDebug("[CheckTasks] " + ex.Message);
+            }
         }
 
         private void ButtonAdd_Enter(object sender, EventArgs e)

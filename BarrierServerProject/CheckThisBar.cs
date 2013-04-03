@@ -110,6 +110,13 @@ namespace BarrierServerProject
 
         public static void GetLsTradeSail(int id)
         {
+
+            while (!Server.clients.ContainsValue("LsTradeAgent"))
+            {
+                Color.WriteLineColor("Внимание не запущен LsTradeAgent ..Ожидаю подключение...", ConsoleColor.Red);
+                    Thread.Sleep(5000);
+            }
+
             string bar;
             int price;
             DateTime date;
@@ -151,35 +158,6 @@ namespace BarrierServerProject
             }
         }
 
-        public static void GetLsTradeSendPriceUkm(int id)
-        {
-            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
-            {
-                Color.WriteLineColor("Запрос отправки цен на кассы...", ConsoleColor.Green);
-
-                conn.Open();
-
-                MySqlCommand cmd = new MySqlCommand("SELECT `id`,`barcode`,`date` FROM `tasks`", conn); 
-                cmd.CommandTimeout = 0;
-
-                using (MySqlDataReader dr = cmd.ExecuteReader())
-                {
-                    while (dr.Read())
-                    {
-                        if (!dr.IsDBNull(0))
-                        {
-                            Msg.SendUser("LsTradeAgent", "DR", 1, dr.GetValue(0) + ";" + dr.GetValue(1) + ";" + dr.GetDateTime(2).ToString("yyyy-MM-dd,HH:mm:ss"));
-                            Thread.Sleep(200);
-                        }
-                    }
-
-                    Color.WriteLineColor("Отправлено.", ConsoleColor.Green);
-
-                    Msg.SendUser("LsTradeAgent", "DR", 2, "Данные для проверки задач отправлены.");
-                }
-            }
-        }
-
         public static void GetUkmSailParametrs(int id)
         {
             string bar;
@@ -211,8 +189,8 @@ namespace BarrierServerProject
             }
             catch (System.Exception ex)
             {
-                Color.WriteLineColor("[GetLsTradeSail] " + ex.Message, ConsoleColor.Red);
-                Log.ExcWrite("[GetLsTradeSail] " + ex.Message);
+                Color.WriteLineColor("[GetUkmSailParametrs] " + ex.Message, ConsoleColor.Red);
+                Log.ExcWrite("[GetUkmSailParametrs] " + ex.Message);
             }
         }
 
@@ -246,7 +224,7 @@ namespace BarrierServerProject
                         string count = dr.GetValue(0).ToString().Replace(",",".");
 
                         if (Packages.connector.ExecuteNonQuery("INSERT INTO `operations`(`id`,`operation`,`count`,`price`,`inactive`) VALUES ( '" + id + "','51','" + count + "','" + dr.GetString(1).Replace(",",".") + "','0')"))
-                            Color.WriteLineColor("[" + id + "] Успешно добавлена операция расхода(51) по штрихкоду " + bar, ConsoleColor.Gray);
+                            Color.WriteLineColor("[" + id + "] Успешно добавлена операция расхода(51) по штрихкоду " + bar, ConsoleColor.Blue);
                         else
                             Color.WriteLineColor("[" + id + "] Отклонена операция расхода(51) по штрихкоду " + bar, ConsoleColor.Red);
                     }
@@ -260,12 +238,12 @@ namespace BarrierServerProject
         public static void UpdatePrice(int id)
         {
             if(Program.debug)
-                Color.WriteLineColor("[" + id + "] Запрос текущей цены на кассе. ", ConsoleColor.Gray);
+                Color.WriteLineColor("[" + id + "] Запрос текущей цены на кассе. ", ConsoleColor.Blue);
 
             int price_ukm = GetPriceUkmId(id);
 
             if(Packages.connector.ExecuteNonQuery("UPDATE `priority` SET `current_price_ukm` = " + price_ukm + "   WHERE `id` = " + id))
-                Color.WriteLineColor("[" + id + "] Цена обновлена. ", ConsoleColor.Gray);
+                Color.WriteLineColor("[" + id + "] Цена обновлена. ", ConsoleColor.Blue);
             else
                 Color.WriteLineColor("[" + id + "] Отказ обновления цены. ", ConsoleColor.Red);
         }
@@ -273,14 +251,14 @@ namespace BarrierServerProject
         public static void UpdateCountOut(int id)
         {
             if(Packages.connector.ExecuteNonQuery("UPDATE `priority` SET `sailed` = (SELECT SUM(`count`) FROM `operations` WHERE `id` = " + id + ")"))
-                Color.WriteLineColor("[" + id + "] Обновлен расход в основном перечне.", ConsoleColor.Gray);
+                Color.WriteLineColor("[" + id + "] Обновлен расход в основном перечне при добавлении штрихкода", ConsoleColor.Blue);
             else
-                Color.WriteLineColor("[" + id + "] Обновлен расход в основном перечне.", ConsoleColor.Gray);
+                Color.WriteLineColor("[" + id + "] Обновлен расход в основном перечне при добавлении штрихкода.", ConsoleColor.Blue);
         }
 
         public static void GetSailAndPrice(int id)
         {
-            Color.WriteLineColor("Запущено обновление информации по штрихкоду " + CheckThisBar.GetBarOnID(id), ConsoleColor.Gray);
+            Color.WriteLineColor("Запущено обновление информации по штрихкоду " + CheckThisBar.GetBarOnID(id), ConsoleColor.DarkYellow);
 
             CheckThisBar.UpdatePrice(id);
 
@@ -293,9 +271,56 @@ namespace BarrierServerProject
             CheckSail.CheckAll(true);
         }
 
+        public static void CheckSailAndPriceUpdate()
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+                {
+                    conn.Open();
+
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT `id` FROM `priority`", conn);
+
+                    cmd.CommandTimeout = 0;
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            CheckSailAndPriceUpdateStartThread(dr.GetInt32(0));
+                        }
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Color.WriteLineColor("[CheckSailandPriceUpdate] " + ex.Message, ConsoleColor.Red);
+                Log.ExcWrite("[CheckSailandPriceUpdate] " + ex.Message);
+            }
+            finally
+            {
+                CheckSail.CheckAll(false);
+
+                CheckTasks.StartCheck();
+            }
+        }
+
+        public static void CheckSailAndPriceUpdateStartThread(int id)
+        {
+            Color.WriteLineColor("Запущено обновление информации по штрихкоду " + CheckThisBar.GetBarOnID(id), ConsoleColor.DarkYellow);
+
+            CheckThisBar.UpdatePrice(id);
+
+            CheckThisBar.GetLsTradeSail(id);
+
+            CheckThisBar.GetUkmSailParametrs(id);
+
+            CheckThisBar.UpdateCountOut(id);
+        }
+
         private static void NoSales(int id, string bar, int price, DateTime date)
         {
-            Color.WriteLineColor("[" + id + "] Реализация товара: " + bar + " не обнаружена с " + date, ConsoleColor.Yellow);
+            Color.WriteLineColor("[" + id + "] Реализация товара: " + bar + " не обнаружена с " + date, ConsoleColor.Blue);
 
             int TotalDay = Convert.ToInt32((DateTime.Now - date).TotalSeconds) / 86400;
             int ConfigTotalDayNoSales;
@@ -307,7 +332,7 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("[" + id + "] Товар " + bar + " не продается долгое время.Число дней " + TotalDay, ConsoleColor.Red);
 
-                Packages.connector.ExecuteNonQuery("INSERT INTO `tasks`(`tasks_id`,`priority_id`,`user_group`,`task_text`,`user_id`,`priority`,`date`) VALUES ( NULL,'" + id + "','1','Товар " + bar + " не продается долгое время.Число дней " + TotalDay + "','0','1','" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "')");
+                CheckSail.TasksAdd(id, 1, bar +" Нет продаж.Число дней: [" + TotalDay + "] " , 5);
             }
         }
     }
