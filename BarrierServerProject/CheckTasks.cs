@@ -25,11 +25,11 @@ namespace BarrierServerProject
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", "barrierserver")))
+                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand("SELECT COUNT(id) FROM tasks WHERE `group` = " + group + " AND `user_id` = 0", conn);
+                    MySqlCommand cmd = new MySqlCommand("SELECT COUNT(tasks_id) FROM tasks WHERE `user_group` = " + group + " AND `user_id` = 0", conn);
 
                     int i = 0;
 
@@ -62,11 +62,11 @@ namespace BarrierServerProject
         {
             try
             {
-                using (MySqlConnection conn2 = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", "barrierserver")))
+                using (MySqlConnection conn2 = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
                 {
                     conn2.Open();
 
-                    MySqlCommand cmd2 = new MySqlCommand("SELECT username FROM `users` WHERE `status` = 1 AND `group` = " + group, conn2);
+                    MySqlCommand cmd2 = new MySqlCommand("SELECT username FROM `users` WHERE `online` = 1 AND `group` = " + group, conn2);
 
                     using (MySqlDataReader usersonline = cmd2.ExecuteReader())
                     {

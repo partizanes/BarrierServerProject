@@ -35,9 +35,15 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.InfoFormMainPanel = new System.Windows.Forms.Panel();
+            this.labIdText = new System.Windows.Forms.Label();
+            this.LabId = new System.Windows.Forms.Label();
             this.ButtonMark = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.DataGridViewSend = new System.Windows.Forms.DataGridView();
+            this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ButtonAccept = new System.Windows.Forms.Button();
             this.CountBarText = new System.Windows.Forms.Label();
             this.CountBar = new System.Windows.Forms.Label();
@@ -56,14 +62,9 @@
             this.PriceBar = new System.Windows.Forms.Label();
             this.labelBarText = new System.Windows.Forms.Label();
             this.LabelBar = new System.Windows.Forms.Label();
+            this.operation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.labIdText = new System.Windows.Forms.Label();
-            this.LabId = new System.Windows.Forms.Label();
             this.InfoFormMainPanel.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridViewSend)).BeginInit();
@@ -99,6 +100,28 @@
             this.InfoFormMainPanel.Name = "InfoFormMainPanel";
             this.InfoFormMainPanel.Size = new System.Drawing.Size(571, 335);
             this.InfoFormMainPanel.TabIndex = 0;
+            // 
+            // labIdText
+            // 
+            this.labIdText.AutoSize = true;
+            this.labIdText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labIdText.ForeColor = System.Drawing.Color.ForestGreen;
+            this.labIdText.Location = new System.Drawing.Point(35, 13);
+            this.labIdText.Name = "labIdText";
+            this.labIdText.Size = new System.Drawing.Size(17, 16);
+            this.labIdText.TabIndex = 24;
+            this.labIdText.Text = "...";
+            // 
+            // LabId
+            // 
+            this.LabId.AutoSize = true;
+            this.LabId.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.LabId.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.LabId.Location = new System.Drawing.Point(5, 13);
+            this.LabId.Name = "LabId";
+            this.LabId.Size = new System.Drawing.Size(24, 16);
+            this.LabId.TabIndex = 23;
+            this.LabId.Text = "ID:";
             // 
             // ButtonMark
             // 
@@ -180,6 +203,38 @@
             this.DataGridViewSend.TabIndex = 21;
             this.DataGridViewSend.TabStop = false;
             // 
+            // type
+            // 
+            this.type.Frozen = true;
+            this.type.HeaderText = "Вид";
+            this.type.Name = "type";
+            this.type.ReadOnly = true;
+            this.type.Width = 26;
+            // 
+            // Column1
+            // 
+            this.Column1.Frozen = true;
+            this.Column1.HeaderText = "Цена";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.Width = 40;
+            // 
+            // Column2
+            // 
+            this.Column2.Frozen = true;
+            this.Column2.HeaderText = "Исп";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            this.Column2.Width = 30;
+            // 
+            // Column3
+            // 
+            this.Column3.Frozen = true;
+            this.Column3.HeaderText = "Дата";
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            this.Column3.Width = 104;
+            // 
             // ButtonAccept
             // 
             this.ButtonAccept.BackColor = System.Drawing.Color.Transparent;
@@ -246,6 +301,7 @@
             this.DataGridViewSail.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.DataGridViewSail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DataGridViewSail.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.operation,
             this.dataGridViewTextBoxColumn1,
             this.dataGridViewTextBoxColumn2});
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -429,6 +485,14 @@
             this.LabelBar.TabIndex = 0;
             this.LabelBar.Text = "Штрихкод:";
             // 
+            // operation
+            // 
+            this.operation.Frozen = true;
+            this.operation.HeaderText = "Вид";
+            this.operation.Name = "operation";
+            this.operation.ReadOnly = true;
+            this.operation.Width = 30;
+            // 
             // dataGridViewTextBoxColumn1
             // 
             this.dataGridViewTextBoxColumn1.Frozen = true;
@@ -447,61 +511,7 @@
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             this.dataGridViewTextBoxColumn2.ReadOnly = true;
             this.dataGridViewTextBoxColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewTextBoxColumn2.Width = 101;
-            // 
-            // type
-            // 
-            this.type.Frozen = true;
-            this.type.HeaderText = "Вид";
-            this.type.Name = "type";
-            this.type.ReadOnly = true;
-            this.type.Width = 26;
-            // 
-            // Column1
-            // 
-            this.Column1.Frozen = true;
-            this.Column1.HeaderText = "Цена";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            this.Column1.Width = 40;
-            // 
-            // Column2
-            // 
-            this.Column2.Frozen = true;
-            this.Column2.HeaderText = "Исп";
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
-            this.Column2.Width = 30;
-            // 
-            // Column3
-            // 
-            this.Column3.Frozen = true;
-            this.Column3.HeaderText = "Дата";
-            this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
-            this.Column3.Width = 104;
-            // 
-            // labIdText
-            // 
-            this.labIdText.AutoSize = true;
-            this.labIdText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labIdText.ForeColor = System.Drawing.Color.ForestGreen;
-            this.labIdText.Location = new System.Drawing.Point(35, 13);
-            this.labIdText.Name = "labIdText";
-            this.labIdText.Size = new System.Drawing.Size(17, 16);
-            this.labIdText.TabIndex = 24;
-            this.labIdText.Text = "...";
-            // 
-            // LabId
-            // 
-            this.LabId.AutoSize = true;
-            this.LabId.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.LabId.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.LabId.Location = new System.Drawing.Point(5, 13);
-            this.LabId.Name = "LabId";
-            this.LabId.Size = new System.Drawing.Size(24, 16);
-            this.LabId.TabIndex = 23;
-            this.LabId.Text = "ID:";
+            this.dataGridViewTextBoxColumn2.Width = 70;
             // 
             // InfoControl
             // 
@@ -547,13 +557,14 @@
         public System.Windows.Forms.Label PriceUkmText;
         public System.Windows.Forms.Label DetectedBarText;
         public System.Windows.Forms.Label ActionText;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn type;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         public System.Windows.Forms.Label labIdText;
         private System.Windows.Forms.Label LabId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn operation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
     }
 }

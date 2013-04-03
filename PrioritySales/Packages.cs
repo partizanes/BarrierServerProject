@@ -10,7 +10,7 @@ namespace PrioritySales
         public static MainFormClassic mf = new MainFormClassic();
         public static Connector connector = new Connector();
         public static CareForm careform = new CareForm();
-        public static string MainDbName = Config.GetParametr("MainDbName");
+        public static string MainDbName = Config.GetParametr("BarrierDataBase");
         public static int Zx = SystemInformation.PrimaryMonitorSize.Width - (SystemInformation.PrimaryMonitorSize.Width/6);
         public static int Zy = SystemInformation.PrimaryMonitorSize.Height - (SystemInformation.PrimaryMonitorSize.Height / 15);
 

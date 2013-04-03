@@ -41,7 +41,7 @@ namespace BarrierServerProject
                 case CtrlType.CTRL_SHUTDOWN_EVENT:
                 case CtrlType.CTRL_CLOSE_EVENT:
                 default:
-                     Packages.connector.ExecuteNonQuery("UPDATE `users` SET `status`='0' ");
+                     Packages.connector.ExecuteNonQuery("UPDATE `users` SET `online`='0' ");
                     return true;
             }
         }
@@ -81,6 +81,10 @@ namespace BarrierServerProject
                 });
                 th.Name = "Проверка задач";
                 th.Start();
+
+                Thread.Sleep(3000);
+
+                CheckSail.CheckAll(false);
             }
 
             Thread.Sleep(1000);

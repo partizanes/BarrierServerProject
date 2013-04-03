@@ -101,7 +101,7 @@ namespace PrioritySales
 
         private void ButtonAccept_Click(object sender, EventArgs e)
         {
-            Packages.connector.ExecuteNonQuery("UPDATE `tasks` SET `user_id` = (SELECT id FROM users WHERE username = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "' ) WHERE  id = " + labIdText.Text, "barrierserver");
+            Packages.connector.ExecuteNonQuery("UPDATE `tasks` SET `user_id` = (SELECT id FROM users WHERE username = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "' ) WHERE  id = " + labIdText.Text, Config.GetParametr("BarrierDataBase"));
 
             MainFormClassic.infocontrol.Hide();
             Packages.mf.Controls.Remove(MainFormClassic.infocontrol);

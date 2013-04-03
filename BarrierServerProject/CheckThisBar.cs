@@ -15,7 +15,7 @@ namespace BarrierServerProject
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("MainDbName"))))
+                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
                 {
                     conn.Open();
 
@@ -46,7 +46,7 @@ namespace BarrierServerProject
             int price = 0;
 
             string _ukmservername = Config.GetParametr("BdName");
-            string _mainservername = Config.GetParametr("MainDbName");
+            string _mainservername = Config.GetParametr("BarrierDataBase");
 
             try
             {
@@ -118,7 +118,7 @@ namespace BarrierServerProject
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("MainDbName"))))
+                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
                 {
                     conn.Open();
 
@@ -151,6 +151,35 @@ namespace BarrierServerProject
             }
         }
 
+        public static void GetLsTradeSendPriceUkm(int id)
+        {
+            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+            {
+                Color.WriteLineColor("Запрос отправки цен на кассы...", ConsoleColor.Green);
+
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SELECT `id`,`barcode`,`date` FROM `tasks`", conn); 
+                cmd.CommandTimeout = 0;
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        if (!dr.IsDBNull(0))
+                        {
+                            Msg.SendUser("LsTradeAgent", "DR", 1, dr.GetValue(0) + ";" + dr.GetValue(1) + ";" + dr.GetDateTime(2).ToString("yyyy-MM-dd,HH:mm:ss"));
+                            Thread.Sleep(200);
+                        }
+                    }
+
+                    Color.WriteLineColor("Отправлено.", ConsoleColor.Green);
+
+                    Msg.SendUser("LsTradeAgent", "DR", 2, "Данные для проверки задач отправлены.");
+                }
+            }
+        }
+
         public static void GetUkmSailParametrs(int id)
         {
             string bar;
@@ -159,7 +188,7 @@ namespace BarrierServerProject
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("MainDbName"))))
+                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
                 {
                     conn.Open();
 
@@ -216,7 +245,7 @@ namespace BarrierServerProject
                     {
                         string count = dr.GetValue(0).ToString().Replace(",",".");
 
-                        if (Packages.connector.ExecuteNonQuery("INSERT INTO `operations`(`id`,`operation`,`count`,`price`,`inactive`) VALUES ( '" + id + "','51','" + count + "','" + dr.GetValue(1) + "','0')"))
+                        if (Packages.connector.ExecuteNonQuery("INSERT INTO `operations`(`id`,`operation`,`count`,`price`,`inactive`) VALUES ( '" + id + "','51','" + count + "','" + dr.GetString(1).Replace(",",".") + "','0')"))
                             Color.WriteLineColor("[" + id + "] Успешно добавлена операция расхода(51) по штрихкоду " + bar, ConsoleColor.Gray);
                         else
                             Color.WriteLineColor("[" + id + "] Отклонена операция расхода(51) по штрихкоду " + bar, ConsoleColor.Red);
@@ -243,7 +272,7 @@ namespace BarrierServerProject
 
         public static void UpdateCountOut(int id)
         {
-            if(Packages.connector.ExecuteNonQuery("UPDATE `priority` SET `sailed` = (SELECT SUM(`count`) FROM `operations` WHERE `id` = " + id + " AND inactive = 0 )"))
+            if(Packages.connector.ExecuteNonQuery("UPDATE `priority` SET `sailed` = (SELECT SUM(`count`) FROM `operations` WHERE `id` = " + id + ")"))
                 Color.WriteLineColor("[" + id + "] Обновлен расход в основном перечне.", ConsoleColor.Gray);
             else
                 Color.WriteLineColor("[" + id + "] Обновлен расход в основном перечне.", ConsoleColor.Gray);
@@ -260,6 +289,8 @@ namespace BarrierServerProject
             CheckThisBar.GetUkmSailParametrs(id);
 
             CheckThisBar.UpdateCountOut(id);
+
+            CheckSail.CheckAll(true);
         }
 
         private static void NoSales(int id, string bar, int price, DateTime date)

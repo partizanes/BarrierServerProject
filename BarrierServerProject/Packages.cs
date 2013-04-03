@@ -16,7 +16,7 @@ namespace BarrierServerProject
     class Packages
     {
         public static string StatusString = "";
-        public static string MainDbName = Config.GetParametr("MainDbName");  //TODO  CHECK CONFIG AND IF MISS WRITE THIS;
+        public static string MainDbName = Config.GetParametr("BarrierDataBase");  //TODO  CHECK CONFIG AND IF MISS WRITE THIS;
         public static Connector connector = new Connector();
 
         public static void parse(string p_id, int com, string msg, User user,System.Net.Sockets.Socket r_client)
@@ -27,7 +27,7 @@ namespace BarrierServerProject
                     switch (com)
                     {
                         case 0:
-                            Color.WriteLineColor(msg, ConsoleColor.DarkBlue);
+                            Color.WriteLineColor(msg, ConsoleColor.Blue);
                             Color.WriteLineColor("Модуль связи с LsTrade отключен!", ConsoleColor.Red);
                             Thread.Sleep(3000);
                             r_client.Disconnect(false);

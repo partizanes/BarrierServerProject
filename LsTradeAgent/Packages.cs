@@ -74,7 +74,7 @@ namespace LsTradeAgent
                 return;
             }
 
-            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", "barrierserver")))
+            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
             {
                 MySqlCommand cmd = new MySqlCommand();
 
@@ -84,7 +84,7 @@ namespace LsTradeAgent
 
                     cmd.Connection = conn;
 
-                    cmd.CommandText = "INSERT INTO `sendprice` VALUES(@id, @price, @isp, @datetime, @operation)";
+                    cmd.CommandText = "INSERT INTO `sendPOS` VALUES(@id, @price, @isp, @datetime, @operation)";
                     cmd.Prepare();
 
                     cmd.Parameters.AddWithValue("@id", 1);
@@ -135,7 +135,7 @@ namespace LsTradeAgent
 
                     using (OleDbDataReader DbfDataReader = cmd.ExecuteReader())
                     {
-                        connector.ExecuteNonQuery("DELETE FROM `operations` WHERE `id` = " + id + " AND `operation` IN ('53', '61','62','72','93')", Config.GetParametr("MainDbName"));
+                        connector.ExecuteNonQuery("DELETE FROM `operations` WHERE `id` = " + id + " AND `operation` IN ('53', '61','62','72','93')", Config.GetParametr("BarrierDataBase"));
 
                         if (DbfDataReader == null)
                         {
@@ -147,9 +147,9 @@ namespace LsTradeAgent
                         {
                             string count = DbfDataReader.GetValue(2).ToString().Replace(",", ".");
                             string oper = DbfDataReader.GetString(1);
-                            object price = DbfDataReader.GetValue(3);
+                            string price = DbfDataReader.GetValue(3).ToString().Replace(",", ".");
 
-                            if (connector.ExecuteNonQuery("INSERT INTO `operations`(`id`,`operation`,`count`,`price`,`inactive`) VALUES ( '" + id + "','" + oper + "','" + count + "','" + price + "','0');", Config.GetParametr("MainDbName")))
+                            if (connector.ExecuteNonQuery("INSERT INTO `operations`(`id`,`operation`,`count`,`price`,`inactive`) VALUES ( '" + id + "','" + oper + "','" + count + "','" + price + "','0');", Config.GetParametr("BarrierDataBase")))
                                 Color.WriteLineColor("Добавлен код операции: " + oper + " Количество: " + count + " Цена: " + price, ConsoleColor.Yellow);
                             else
                                 Color.WriteLineColor("Отклонен код операции: " + oper + " Количество: " + count + " Цена: " + price, ConsoleColor.Red);

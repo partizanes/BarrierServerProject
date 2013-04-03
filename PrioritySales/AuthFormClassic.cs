@@ -28,7 +28,7 @@ namespace PrioritySales
 
             Application.DoEvents();
 
-            Packages.connector.ExecuteNonQuery("SHOW DATABASES", "barrierserver");
+            Packages.connector.ExecuteNonQuery("SHOW DATABASES", Config.GetParametr("BarrierDataBase"));
             try { log_level = int.Parse(Config.GetParametr("log_level")); }
             catch (FormatException) { Config.Set("SETTINGS", "log_level", "3"); }
         }
