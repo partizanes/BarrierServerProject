@@ -172,7 +172,7 @@ namespace BarrierServerProject
                     {
                         case 0000:
                             Color.WriteLineColor(Server.clients[r_client] + ": Завершение сеанса.", ConsoleColor.Red);
-                            Packages.connector.ExecuteNonQuery("UPDATE `barrierserver`.`users` SET `status`='0' WHERE `username`='" + user.username + "'");
+                            Packages.connector.ExecuteNonQuery("UPDATE `barrierserver`.`users` SET `online`='0' WHERE `username`='" + user.username + "'");
                             Thread.Sleep(3000);
                             r_client.Disconnect(false);
                             r_client.Close();

@@ -101,7 +101,7 @@ namespace BarrierServerProject
                     {
                         if (exc.ErrorCode == 10054)
                         {
-                            Packages.connector.ExecuteNonQuery("UPDATE `barrierserver`.`users` SET `status`='0' WHERE `username`='" + user.username + "'");
+                            Packages.connector.ExecuteNonQuery("UPDATE `barrierserver`.`users` SET `online`='0' WHERE `username`='" + user.username + "'");
 
                             Color.WriteLineColor("Клиент отключился: " + Server.clients[r_client], ConsoleColor.Cyan);
 
