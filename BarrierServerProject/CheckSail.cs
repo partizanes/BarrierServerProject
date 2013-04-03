@@ -10,10 +10,8 @@ namespace BarrierServerProject
 {
     public static class CheckSail
     {
-        public static void CheckAll(bool one)
+        public static void CheckAll()
         {
-            while (true)
-            {
                 Thread th = new Thread(delegate()
                 {
                     Color.WriteLineColor("[Thread] CheckAll запущен", ConsoleColor.DarkYellow);
@@ -38,12 +36,6 @@ namespace BarrierServerProject
                 }); ;
                 th.Name = "CheckAll";
                 th.Start();
-
-                if (one)
-                    return;
-
-                Thread.Sleep(3600000);
-            }
         }
 
         public static void SendUserNewState()

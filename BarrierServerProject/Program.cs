@@ -83,12 +83,26 @@ namespace BarrierServerProject
 
                         CheckThisBar.CheckSailAndPriceUpdate();
 
+                        CheckSail.CheckAll();
+
                         Color.WriteLineColor("[THREAD] CheckSailAndPriceUpdate завершен", ConsoleColor.DarkYellow);
+
+
+                        Color.WriteLineColor("Запланирована проверка через 30 минут.", ConsoleColor.Blue);
                         Thread.Sleep(1800000);
+                        Color.WriteLineColor("НАчало запланированной проверки", ConsoleColor.Blue);
                     }
                 });
-                th.Name = "Проверка задач";
+                th.Name = "Проверка общая";
                 th.Start();
+
+                Thread tha = new Thread(delegate()
+                {
+                    Thread.Sleep(120000);
+                    CheckTasks.StartCheck();
+                });
+                tha.Name = "Проверка задач";
+                tha.Start();
             }
 
             Thread.Sleep(1000);

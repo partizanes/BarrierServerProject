@@ -268,7 +268,7 @@ namespace BarrierServerProject
 
             CheckThisBar.UpdateCountOut(id);
 
-            CheckSail.CheckAll(true);
+            CheckSail.CheckAll();
         }
 
         public static void CheckSailAndPriceUpdate()
@@ -296,12 +296,6 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("[CheckSailandPriceUpdate] " + ex.Message, ConsoleColor.Red);
                 Log.ExcWrite("[CheckSailandPriceUpdate] " + ex.Message);
-            }
-            finally
-            {
-                CheckSail.CheckAll(false);
-
-                CheckTasks.StartCheck();
             }
         }
 

@@ -17,10 +17,11 @@ namespace BarrierServerProject
 
             GC.Collect();
 
-            //10 min 600000
+            System.Threading.Thread.Sleep(1200000);
+
             StartCheck();
 
-            System.Threading.Thread.Sleep(300000);
+            //10 min 600000
         }
         private static void TasksCheck(string group)
         {
