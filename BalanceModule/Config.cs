@@ -8,19 +8,13 @@ namespace BalanceModule
     class Config
     {    
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern uint GetPrivateProfileString(
-        string lpAppName,
-        string lpKeyName,
-        string lpDefault,
-        StringBuilder lpReturnedString,
-        uint nSize,
-        string lpFileName);
+        //[return: MarshalAs(UnmanagedType.Bool)]
+        static extern uint GetPrivateProfileString(string lpAppName,string lpKeyName,string lpDefault,StringBuilder lpReturnedString,uint nSize,string lpFileName);
+
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool WritePrivateProfileString(string lpAppName,
-           string lpKeyName, string lpString, string lpFileName);
+        static extern bool WritePrivateProfileString(string lpAppName,string lpKeyName, string lpString, string lpFileName);
 
         public static void Set(string section, string key, string value)
         {
@@ -31,7 +25,9 @@ namespace BalanceModule
         {
             StringBuilder buffer = new StringBuilder(50, 50);
 
-            GetPrivateProfileString("SETTINGS", par, "null", buffer, 50, Environment.CurrentDirectory + "\\config.ini");
+            try { GetPrivateProfileString("SETTINGS", par, "null", buffer, 50, Environment.CurrentDirectory + "\\config.ini"); }
+
+            catch (Exception exc) { MessageBox.Show(exc.Message); }
 
             if(buffer.ToString() == "null")
             {

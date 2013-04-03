@@ -13,6 +13,7 @@ namespace BalanceModule
     {
         //=========================================================================================
         public static Socket client;
+        string str = Config.GetParametr("server_ip");
         private static IPAddress ip = IPAddress.Parse(Config.GetParametr("server_ip"));
         private int port = int.Parse(Config.GetParametr("server_port"));
         private static List<Thread> threads = new List<Thread>();
