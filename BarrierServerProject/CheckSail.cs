@@ -161,7 +161,7 @@ namespace BarrierServerProject
 
                         if (turn_count < (sail_price + 1))
                         {
-                            //TODO товар на подходе; 
+                            //TODO товар на подходе 99 status;
                         }
 
                         if (turn_count > sail_price)

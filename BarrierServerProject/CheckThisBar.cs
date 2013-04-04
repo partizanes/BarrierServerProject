@@ -323,7 +323,7 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("[" + id + "] Товар " + bar + " не продается долгое время.Число дней " + TotalDay, ConsoleColor.Red);
 
-                CheckSail.TasksAdd(id, 1, bar +" Нет продаж.Число дней: [" + TotalDay + "] " , 5);
+                CheckSail.TasksAdd(id, 1, " " + bar +" Нет продаж.Число дней: [" + TotalDay + "] " , 1);
             }
         }
     }

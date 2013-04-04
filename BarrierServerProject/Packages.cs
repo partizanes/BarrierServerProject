@@ -38,7 +38,7 @@ namespace BarrierServerProject
                             user.userid = 2;
                             Server.clients[r_client] = p_id;
                             Color.WriteLineColor("Модуль связи с LsTrade загружен!",ConsoleColor.Cyan);
-                            Msg.SendUser("LsTradeAgent", "LS", 1, "Идентификация пройдена.");
+                            Msg.SendUser("LsTradeAgent", "LS", 1, "�?дентификация пройдена.");
                             break;
                     }
                     break;
@@ -94,7 +94,7 @@ namespace BarrierServerProject
                                     else
                                     {
                                         Server.clients[r_client] = split_data[0];
-                                        Msg.SendUser(split_data[0], "PrioritySale", 0, "Идентификация не пройдена.");
+                                        Msg.SendUser(split_data[0], "PrioritySale", 0, "�?дентификация не пройдена.");
                                         Color.WriteLineColor(split_data[0] + " авторизация неудачна", ConsoleColor.Red);
                                         Log.log_write(split_data[0], "[AUTH_F]", "AUTHLOG");
                                     }
@@ -128,6 +128,14 @@ namespace BarrierServerProject
                                 //TODO SEND ALL USER INFORMATION ABOUT 
                             }
                             break;
+                        case 7:
+                            Color.WriteLineColor("Есть новые сообщение на доске объявлений.Отправка уведомления...", ConsoleColor.Yellow);
+
+                            foreach (System.Collections.DictionaryEntry de in Server.clients)
+                            {
+                                Msg.SendUser((de.Value).ToString(), "PrioritySale", 6, "");
+                            }
+                            break;
                         case 8:
                             Color.WriteLineColor("Версия очередности обновлена у клиента " + user.username, ConsoleColor.Yellow);
                             break;
@@ -149,7 +157,7 @@ namespace BarrierServerProject
                             user.userid = 1;
                             Server.clients[r_client] = "BalanceModule";
                             Color.WriteLineColor("Модуль проверки весов загружен!",ConsoleColor.Cyan);
-                            Msg.SendUser("BalanceModule", "BS", 1, "Идентификация пройдена.");
+                            Msg.SendUser("BalanceModule", "BS", 1, "�?дентификация пройдена.");
                                 break;
                         case 1:
                             Color.WriteLineColor(msg, ConsoleColor.Cyan);

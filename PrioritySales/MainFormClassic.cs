@@ -34,6 +34,8 @@ namespace PrioritySales
             ButtonAdd.Focus();
 
             CheckTasks();
+
+            Packages.GetMsgBoard();
         }
 
         private void CheckTasks()
@@ -835,10 +837,26 @@ namespace PrioritySales
         {
             switch (e.KeyCode)
             {
+                case Keys.Enter:
+                    BoxStatus boxstatus = new BoxStatus();
+                    boxstatus.Location = new System.Drawing.Point(Packages.mf.Location.X + Packages.mf.Size.Width / 3 + 50, Packages.mf.Location.Y + 370);
+                    boxstatus.Show();
+                    break;
                 case Keys.Escape:
                 case Keys.Up:
                     PanelMsgBg.Visible = false;
                     ButtonMsg.Focus();
+                    break;
+                case Keys.ControlKey:
+                    ColorDialog colorDlg = new ColorDialog();
+                    colorDlg.AllowFullOpen = false;
+                    colorDlg.AnyColor = false;
+                    colorDlg.SolidColorOnly = true;
+
+                    colorDlg.Color = TextBoxMessage.ForeColor;
+
+                    if (colorDlg.ShowDialog() == DialogResult.OK)
+                        TextBoxMessage.ForeColor = colorDlg.Color;
                     break;
             }
         }

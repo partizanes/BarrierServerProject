@@ -74,6 +74,12 @@
     <Compile Include="AuthFormClassic.Designer.cs">
       <DependentUpon>AuthFormClassic.cs</DependentUpon>
     </Compile>
+    <Compile Include="BoxStatus.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BoxStatus.Designer.cs">
+      <DependentUpon>BoxStatus.cs</DependentUpon>
+    </Compile>
     <Compile Include="CareForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,6 +125,9 @@
     </Compile>
     <EmbeddedResource Include="AuthFormClassic.resx">
       <DependentUpon>AuthFormClassic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BoxStatus.resx">
+      <DependentUpon>BoxStatus.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CareForm.resx">
       <DependentUpon>CareForm.cs</DependentUpon>

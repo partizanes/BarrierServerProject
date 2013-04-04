@@ -54,7 +54,7 @@ namespace PrioritySales
                             return;
                         }
 
-                        if (DataGridViewAccepted.Rows.Count > 0)
+                        if (DataGridViewTasks.SelectedCells[0].RowIndex == DataGridViewTasks.RowCount - 1 && DataGridViewAccepted.Rows.Count > 0)
                         {
                             DataGridViewTasks.DefaultCellStyle.SelectionForeColor = Color.DodgerBlue;
                             DataGridViewAccepted.DefaultCellStyle.SelectionForeColor = Color.ForestGreen;
@@ -436,12 +436,21 @@ namespace PrioritySales
         {
             switch (e.KeyCode)
             {
-            case Keys.Up:
-                    if (DataGridViewTasks.Rows.GetFirstRow(DataGridViewElementStates.Selected) == 0)
+                case Keys.Up:
+                    if (DataGridViewAccepted.SelectedCells[0].RowIndex == 0 && DataGridViewTasks.RowCount > 0)
                     {
                         DataGridViewAccepted.DefaultCellStyle.SelectionForeColor = Color.DodgerBlue;
                         DataGridViewTasks.DefaultCellStyle.SelectionForeColor = Color.ForestGreen;
                         DataGridViewTasks.Focus();
+                        break;
+                    }
+                    if (DataGridViewAccepted.SelectedCells[0].RowIndex == 0 && DataGridViewTasks.RowCount == 0)
+                    {
+                        Packages.mf.ButtonTasks.Focus();
+                        Packages.mf.ButtonTasks.ForeColor = System.Drawing.Color.Green;
+                        DataGridViewTasks.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.DodgerBlue;
+                        MainFormClassic.infocontrol.Hide();
+                        Packages.mf.Controls.Remove(MainFormClassic.infocontrol);
                         break;
                     }
             	break;

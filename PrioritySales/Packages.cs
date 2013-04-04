@@ -50,6 +50,9 @@ namespace PrioritySales
                             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).ButtonSend.Enabled = true; }));
                             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).ButtonSend.Focus(); }));
                             break;
+                        case 6:
+                            GetMsgBoard();
+                            break;
                         case 7:
                             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { Packages.mf.PrioritySalesIcon.Icon = Properties.Resources.logo; }));
                             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.TimerIconChange.Enabled = false; }));
@@ -134,9 +137,6 @@ namespace PrioritySales
                                     Server.Sender("PrioritySale", 8, MainFormClassic.StatusUpdate);
 
                                 GC.Collect();
-
-//                                  if (!mf.ButtonList.ContainsFocus)
-//                                      (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.data.Focus(); }));
                             }
                             break;
                     }
@@ -169,6 +169,89 @@ namespace PrioritySales
             }
 
             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.Refresh(); }));
+        }
+
+        public static void GetMsgBoard()
+        {
+            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+            {
+                conn.Open();
+
+                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Clear(); }));
+
+                MySqlCommand cmd = new MySqlCommand("SELECT u.username,m.msg,m.msg_color,m.msg_datetime FROM users u,message m WHERE u.id = m.userid ORDER BY m.msg_priority", conn);
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr == null) { return; }
+
+                    if (!dr.HasRows) { return; }
+
+                    while (dr.Read())
+                    {
+                        string username = dr.GetString(0);
+                        string msg = dr.GetString(1);
+                        Color color = Color.FromName(dr.GetString(2));
+
+                        if(color.ToString().Contains("ff"))
+                        {
+                            ColorConverter colcon = new ColorConverter();
+
+                            color = (Color)colcon.ConvertFromString("#" + color.Name);
+                        }
+
+                        string datetime = dr.GetString(3);
+
+                        string _CompleteMsg = "[" + datetime + "] " + " [" + username + "] " + msg;
+
+                        if (_CompleteMsg.Length > 115 && _CompleteMsg.Length <= 230)
+                        {
+                            string part1 = _CompleteMsg.Substring(0, 115);
+                            string part2 = _CompleteMsg.Substring(115, _CompleteMsg.Length - 115);
+
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part1); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part2); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+
+                            continue;
+                        }
+
+                        if (_CompleteMsg.Length > 230 && _CompleteMsg.Length <= 345)
+                        {
+                            string part1 = _CompleteMsg.Substring(0, 115);
+                            string part2 = _CompleteMsg.Substring(115, 115);
+                            string part3 = _CompleteMsg.Substring(230, _CompleteMsg.Length - 230);
+
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part1); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part2); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part3); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+
+                            continue;
+                        }
+
+                        if (_CompleteMsg.Length > 345 && _CompleteMsg.Length <= 460)
+                        {
+                            string part1 = _CompleteMsg.Substring(0, 115);
+                            string part2 = _CompleteMsg.Substring(115, 115);
+                            string part3 = _CompleteMsg.Substring(230, 115);
+                            string part4 = _CompleteMsg.Substring(345, _CompleteMsg.Length - 345);
+
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part1); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part2); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part3); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part4); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+
+
+                            continue;
+                        }
+
+                        if (_CompleteMsg.Length < 115)
+                        {
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(_CompleteMsg); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                            continue;
+                        }
+                    }
+                }
+            }
         }
     }
 }
