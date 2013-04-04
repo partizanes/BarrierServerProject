@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFormClassic));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.PanelMainClassic = new System.Windows.Forms.Panel();
             this.PanelBackButton = new System.Windows.Forms.Panel();
             this.PanelButton = new System.Windows.Forms.Panel();
@@ -69,10 +69,9 @@
             this.TextboxAddBar = new System.Windows.Forms.TextBox();
             this.PanelMsgBg = new System.Windows.Forms.Panel();
             this.PanelMsg = new System.Windows.Forms.Panel();
+            this.TextBoxMessage = new System.Windows.Forms.TextBox();
+            this.ListBoxMsg = new System.Windows.Forms.ListBox();
             this.dataGridViewMainForm = new System.Windows.Forms.DataGridView();
-            this.TimerClearMsg = new System.Windows.Forms.Timer(this.components);
-            this.PrioritySalesIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.TimerIconChange = new System.Windows.Forms.Timer(this.components);
             this.u_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Barcode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NameItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -82,6 +81,9 @@
             this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Kassa = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DateCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TimerClearMsg = new System.Windows.Forms.Timer(this.components);
+            this.PrioritySalesIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.TimerIconChange = new System.Windows.Forms.Timer(this.components);
             this.PanelMainClassic.SuspendLayout();
             this.PanelBackButton.SuspendLayout();
             this.PanelButton.SuspendLayout();
@@ -92,6 +94,7 @@
             this.PanelAddBg.SuspendLayout();
             this.PanelAddTask.SuspendLayout();
             this.PanelMsgBg.SuspendLayout();
+            this.PanelMsg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMainForm)).BeginInit();
             this.SuspendLayout();
             // 
@@ -540,10 +543,36 @@
             // PanelMsg
             // 
             this.PanelMsg.BackColor = System.Drawing.Color.Black;
+            this.PanelMsg.Controls.Add(this.TextBoxMessage);
+            this.PanelMsg.Controls.Add(this.ListBoxMsg);
             this.PanelMsg.Location = new System.Drawing.Point(2, 2);
             this.PanelMsg.Name = "PanelMsg";
             this.PanelMsg.Size = new System.Drawing.Size(646, 182);
             this.PanelMsg.TabIndex = 0;
+            // 
+            // TextBoxMessage
+            // 
+            this.TextBoxMessage.BackColor = System.Drawing.Color.Black;
+            this.TextBoxMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.TextBoxMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TextBoxMessage.ForeColor = System.Drawing.Color.Silver;
+            this.TextBoxMessage.Location = new System.Drawing.Point(0, 160);
+            this.TextBoxMessage.Name = "TextBoxMessage";
+            this.TextBoxMessage.Size = new System.Drawing.Size(648, 26);
+            this.TextBoxMessage.TabIndex = 0;
+            this.TextBoxMessage.TabStop = false;
+            this.TextBoxMessage.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxMessage_KeyDown);
+            // 
+            // ListBoxMsg
+            // 
+            this.ListBoxMsg.BackColor = System.Drawing.Color.Black;
+            this.ListBoxMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.ListBoxMsg.ForeColor = System.Drawing.Color.White;
+            this.ListBoxMsg.FormattingEnabled = true;
+            this.ListBoxMsg.Location = new System.Drawing.Point(4, 2);
+            this.ListBoxMsg.Name = "ListBoxMsg";
+            this.ListBoxMsg.Size = new System.Drawing.Size(643, 156);
+            this.ListBoxMsg.TabIndex = 0;
             // 
             // dataGridViewMainForm
             // 
@@ -553,14 +582,14 @@
             this.dataGridViewMainForm.AllowUserToResizeRows = false;
             this.dataGridViewMainForm.BackgroundColor = System.Drawing.Color.Black;
             this.dataGridViewMainForm.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.DodgerBlue;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewMainForm.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle16.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle16.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.Color.DodgerBlue;
+            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewMainForm.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle16;
             this.dataGridViewMainForm.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewMainForm.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.u_id,
@@ -572,30 +601,30 @@
             this.Status,
             this.Kassa,
             this.DateCol});
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.DodgerBlue;
-            dataGridViewCellStyle4.Format = "N0";
-            dataGridViewCellStyle4.NullValue = null;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewMainForm.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle19.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle19.ForeColor = System.Drawing.Color.DodgerBlue;
+            dataGridViewCellStyle19.Format = "N0";
+            dataGridViewCellStyle19.NullValue = null;
+            dataGridViewCellStyle19.SelectionBackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewMainForm.DefaultCellStyle = dataGridViewCellStyle19;
             this.dataGridViewMainForm.EnableHeadersVisualStyles = false;
             this.dataGridViewMainForm.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.dataGridViewMainForm.Location = new System.Drawing.Point(2, 1);
             this.dataGridViewMainForm.MultiSelect = false;
             this.dataGridViewMainForm.Name = "dataGridViewMainForm";
             this.dataGridViewMainForm.ReadOnly = true;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.DodgerBlue;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Green;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewMainForm.RowHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle20.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle20.ForeColor = System.Drawing.Color.DodgerBlue;
+            dataGridViewCellStyle20.SelectionBackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle20.SelectionForeColor = System.Drawing.Color.Green;
+            dataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewMainForm.RowHeadersDefaultCellStyle = dataGridViewCellStyle20;
             this.dataGridViewMainForm.RowHeadersVisible = false;
             this.dataGridViewMainForm.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewMainForm.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -606,25 +635,10 @@
             this.dataGridViewMainForm.Visible = false;
             this.dataGridViewMainForm.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMainForm_CellEnter);
             this.dataGridViewMainForm.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMainForm_CellLeave);
+            this.dataGridViewMainForm.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMainForm_RowEnter);
             this.dataGridViewMainForm.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridViewMainForm_RowsAdded);
             this.dataGridViewMainForm.Enter += new System.EventHandler(this.dataGridViewMainForm_Enter);
             this.dataGridViewMainForm.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridView1_KeyDown);
-            // 
-            // TimerClearMsg
-            // 
-            this.TimerClearMsg.Interval = 3000;
-            this.TimerClearMsg.Tick += new System.EventHandler(this.TimerClearMsg_Tick);
-            // 
-            // PrioritySalesIcon
-            // 
-            this.PrioritySalesIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("PrioritySalesIcon.Icon")));
-            this.PrioritySalesIcon.Text = "Двойной клик для активации приложения.";
-            this.PrioritySalesIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PrioritySales_MouseDoubleClick);
-            // 
-            // TimerIconChange
-            // 
-            this.TimerIconChange.Interval = 1000;
-            this.TimerIconChange.Tick += new System.EventHandler(this.TimerIconChange_Tick);
             // 
             // u_id
             // 
@@ -647,8 +661,8 @@
             // 
             // NameItem
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.NameItem.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.NameItem.DefaultCellStyle = dataGridViewCellStyle17;
             this.NameItem.Frozen = true;
             this.NameItem.HeaderText = "Наименование";
             this.NameItem.Name = "NameItem";
@@ -658,8 +672,8 @@
             // 
             // Price
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.Price.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.Price.DefaultCellStyle = dataGridViewCellStyle18;
             this.Price.Frozen = true;
             this.Price.HeaderText = "Цена";
             this.Price.Name = "Price";
@@ -710,6 +724,22 @@
             this.DateCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.DateCol.Width = 89;
             // 
+            // TimerClearMsg
+            // 
+            this.TimerClearMsg.Interval = 3000;
+            this.TimerClearMsg.Tick += new System.EventHandler(this.TimerClearMsg_Tick);
+            // 
+            // PrioritySalesIcon
+            // 
+            this.PrioritySalesIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("PrioritySalesIcon.Icon")));
+            this.PrioritySalesIcon.Text = "Двойной клик для активации приложения.";
+            this.PrioritySalesIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PrioritySales_MouseDoubleClick);
+            // 
+            // TimerIconChange
+            // 
+            this.TimerIconChange.Interval = 1000;
+            this.TimerIconChange.Tick += new System.EventHandler(this.TimerIconChange_Tick);
+            // 
             // MainFormClassic
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -739,6 +769,8 @@
             this.PanelAddTask.ResumeLayout(false);
             this.PanelAddTask.PerformLayout();
             this.PanelMsgBg.ResumeLayout(false);
+            this.PanelMsg.ResumeLayout(false);
+            this.PanelMsg.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMainForm)).EndInit();
             this.ResumeLayout(false);
 
@@ -793,6 +825,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Status;
         private System.Windows.Forms.DataGridViewTextBoxColumn Kassa;
         private System.Windows.Forms.DataGridViewTextBoxColumn DateCol;
+        private System.Windows.Forms.ListBox ListBoxMsg;
+        public System.Windows.Forms.TextBox TextBoxMessage;
 
 
 

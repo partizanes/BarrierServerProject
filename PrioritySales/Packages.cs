@@ -109,6 +109,9 @@ namespace PrioritySales
                                                 object current_price_ukm = dr.GetValue(8);
                                                 string dt = dr.GetString(9);
 
+                                                if(sail.ToString() == "")
+                                                    sail = 0;
+
                                                 (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.dataGridViewMainForm.Rows.Add(u_id, barcode, name, turn_price, turn_count.ToString().Replace(",000", ""), sail.ToString().Replace(",000", ""), status, current_price_ukm, dt); }));
                                             }
                                         }

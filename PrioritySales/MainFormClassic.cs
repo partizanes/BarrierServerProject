@@ -734,14 +734,6 @@ namespace PrioritySales
             }
         }
 
-        private void ButtonMsg_Click(object sender, EventArgs e)
-        {
-            if (PanelMsgBg.Visible == true)
-                PanelMsgBg.Visible = false;
-            else
-                PanelMsgBg.Visible = true;
-        }
-
         private void dataGridView1_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -828,6 +820,29 @@ namespace PrioritySales
             }
         }
 
+        private void ButtonMsg_Click(object sender, EventArgs e)
+        {
+            if (PanelMsgBg.Visible == true)
+                PanelMsgBg.Visible = false;
+            else
+            {
+                PanelMsgBg.Visible = true;
+                TextBoxMessage.Focus();
+            }
+        }
+
+        private void TextBoxMessage_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                case Keys.Up:
+                    PanelMsgBg.Visible = false;
+                    ButtonMsg.Focus();
+                    break;
+            }
+        }
+
         private void MainFormClassic_Load(object sender, EventArgs e)
         {
             if (tasks.Visible)
@@ -887,6 +902,33 @@ namespace PrioritySales
             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { Packages.mf.PrioritySalesIcon.Icon = _forBlinking ? icon1 : icon2; }));
         }
 
+        private void dataGridViewMainForm_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+
+//             switch (Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].Cells[6].Value.ToString())
+//             {
+//                 case "0":
+//                     Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.DodgerBlue;
+//                     break;
+//                 case "1":
+//                     Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.Olive;
+//                     break;
+//                 case "2":
+//                     Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.Orange;
+//                     break;
+//                 case "3":
+//                     Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.OrangeRed;
+//                     break;
+//                 case "4":
+//                     Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.Red;
+//                     break;
+//                 case "5":
+//                     Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.DarkRed;
+//                     break;
+//             }
+        }
+
         private void dataGridViewMainForm_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
             switch (Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].Cells[6].Value.ToString())
@@ -908,6 +950,18 @@ namespace PrioritySales
                     break;
                 case "5":
                     Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.DarkRed;
+                    break;
+                case "6":
+                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.RosyBrown;     // Товар продается дороже цены очерёдности , завышение цены.
+                    break;
+                case "7":
+                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.OrangeRed;     // Цена на кассе больше цены очередности
+                    break;
+                case "8":
+                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.PaleVioletRed;  //Цена на кассе меньше цены очередности
+                    break;
+                case "99":
+                    Packages.mf.dataGridViewMainForm.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.Salmon;  //товар на подходе
                     break;
             }
         }
@@ -935,6 +989,18 @@ namespace PrioritySales
                     break;
                 case "5":
                     Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.DarkRed;
+                    break;
+                case "6":
+                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.RosyBrown;     // Товар продается дороже цены очерёдности , завышение цены.
+                    break;
+                case "7":
+                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.OrangeRed;     // Цена на кассе больше цены очередности
+                    break;
+                case "8":
+                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.PaleVioletRed;  //Цена на кассе меньше цены очередности
+                    break;
+                case "99":
+                    Packages.mf.dataGridViewMainForm.RowsDefaultCellStyle.SelectionForeColor = Color.PaleVioletRed;  //товар на подходе
                     break;
             }
         }

@@ -69,8 +69,8 @@ namespace BarrierServerProject
             }
             catch (System.Exception ex)
             {
-                Color.WriteLineColor("[GetPriceUkm] " + ex.Message, ConsoleColor.Red);
-                Log.ExcWrite("[GetPriceUkm] " + ex.Message);
+                Color.WriteLineColor("[GetPriceUkmId] " + ex.Message, ConsoleColor.Red);
+                Log.ExcWrite("[GetPriceUkmId] " + ex.Message);
             }
 
             return price;
@@ -228,9 +228,6 @@ namespace BarrierServerProject
                         else
                             Color.WriteLineColor("[" + id + "] Отклонена операция расхода(51) по штрихкоду " + bar, ConsoleColor.Red);
                     }
-
-                    if (!dr.IsClosed)
-                        dr.Close();
                 }
             }
         }
@@ -253,7 +250,7 @@ namespace BarrierServerProject
             if(Packages.connector.ExecuteNonQuery("UPDATE `priority` SET `sailed` = (SELECT SUM(`count`) FROM `operations` WHERE `id` = " + id + ")"))
                 Color.WriteLineColor("[" + id + "] Обновлен расход в основном перечне при добавлении штрихкода", ConsoleColor.Blue);
             else
-                Color.WriteLineColor("[" + id + "] Обновлен расход в основном перечне при добавлении штрихкода.", ConsoleColor.Blue);
+                Color.WriteLineColor("[" + id + "] Отказано в обновлении расхода в основном перечне при добавлении штрихкода.", ConsoleColor.Red);
         }
 
         public static void GetSailAndPrice(int id)

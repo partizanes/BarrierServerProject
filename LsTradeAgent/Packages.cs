@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using MySql.Data.MySqlClient;
+using System.Threading;
 
 namespace LsTradeAgent
 {
@@ -45,18 +46,29 @@ namespace LsTradeAgent
                             ar.Add(msg);
                             break;
                         case 2:
-                            foreach (string str in ar)
-                            {
-                                string[] split_data = str.Split(new Char[] { ';' });
+                            Thread th = new Thread(delegate()
+                                {
+                                    Color.WriteLineColor("[Thread] Поток парсер создан", ConsoleColor.Yellow);
+                                    List<string> ar_copy = new List<string>();
+                                    Color.WriteLineColor("Сделана копия массива", ConsoleColor.Blue);
+                                    ar_copy = ar;
+                                    ar.Clear();
 
-                                string id = split_data[0];
-                                string barcode = split_data[1];
-                                string date = split_data[2];
+                                    foreach (string str in ar_copy)
+                                    {
+                                        string[] split_data = str.Split(new Char[] { ';' });
 
-                                CheckSendPrice(id, barcode, date);
-                            }
+                                        string id = split_data[0];
+                                        string barcode = split_data[1];
+                                        string date = split_data[2];
 
-                            ar.Clear();
+                                        CheckSendPrice(id, barcode, date);
+                                    }
+
+                                    Color.WriteLineColor("[Thread] Поток парсер завершен", ConsoleColor.Yellow);
+                                });
+                                th.Name = "Проверка общая";
+                                th.Start();
 
                             break;
                     }
@@ -105,12 +117,15 @@ namespace LsTradeAgent
                         cmd.Parameters["@action"].Value = dr.GetValue(3);
 
                         cmd.ExecuteNonQuery();
+
+                        Color.WriteLineColor("[sendPOS] Добавлена строка " + id, ConsoleColor.DarkYellow);
                     }
 
                 }
                 catch (System.Exception ex)
                 {
-                    Color.WriteLineColor(ex.Message, ConsoleColor.Red);
+                    Color.WriteLineColor("[CheckSendPrice]" + ex.Message, ConsoleColor.Red);
+                    Log.ExcWrite("[CheckSendPrice]" + ex.Message);
                 }
             }
         }
@@ -162,8 +177,8 @@ namespace LsTradeAgent
             }
             catch (System.Exception ex)
             {
-                Color.WriteLineColor("[GetLsTradeSail] " + ex.Message, ConsoleColor.Red);
-                Log.ExcWrite("[GetLsTradeSail] " + ex.Message);
+                Color.WriteLineColor("[CheckSailOff] " + ex.Message, ConsoleColor.Red);
+                Log.ExcWrite("[CheckSailOff] " + ex.Message);
 
                 StatusParse = false;
             }
