@@ -59,13 +59,13 @@
             this.PassTextBox.BackColor = System.Drawing.Color.Black;
             this.PassTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.PassTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.PassTextBox.Font = new System.Drawing.Font("Modern No. 20", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PassTextBox.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PassTextBox.ForeColor = System.Drawing.Color.Gray;
             this.PassTextBox.Location = new System.Drawing.Point(1, 1);
             this.PassTextBox.Name = "PassTextBox";
             this.PassTextBox.PasswordChar = '*';
             this.PassTextBox.ShortcutsEnabled = false;
-            this.PassTextBox.Size = new System.Drawing.Size(222, 23);
+            this.PassTextBox.Size = new System.Drawing.Size(222, 25);
             this.PassTextBox.TabIndex = 0;
             this.PassTextBox.TabStop = false;
             this.PassTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -245,7 +245,7 @@
             this.BackPanelPassText.ForeColor = System.Drawing.Color.Coral;
             this.BackPanelPassText.Location = new System.Drawing.Point(34, 86);
             this.BackPanelPassText.Name = "BackPanelPassText";
-            this.BackPanelPassText.Size = new System.Drawing.Size(224, 25);
+            this.BackPanelPassText.Size = new System.Drawing.Size(224, 27);
             this.BackPanelPassText.TabIndex = 1;
             // 
             // labelG

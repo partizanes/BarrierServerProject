@@ -51,7 +51,11 @@ namespace PrioritySales
                     using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
                         if (dr == null) { return; }
-                        if (dr.Read()) { Packages.parse("PrioritySale", 8, ""); }
+                        if (dr.Read())
+                        {
+                            if(dr.GetInt32(0) > 0)
+                                Packages.parse("PrioritySale", 8, "");
+                        }
                     }
                 }
             }

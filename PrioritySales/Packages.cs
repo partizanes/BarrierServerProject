@@ -200,9 +200,9 @@ namespace PrioritySales
                             color = (Color)colcon.ConvertFromString("#" + color.Name);
                         }
 
-                        string datetime = dr.GetString(3);
+                        DateTime datetime = dr.GetDateTime(3);
 
-                        string _CompleteMsg = "[" + datetime + "] " + " [" + username + "] " + msg;
+                        string _CompleteMsg = "[" + datetime.ToString("dd.MM") + "] [" + datetime.ToShortTimeString() + "] " + " [" + username + "] " + msg;
 
                         if (_CompleteMsg.Length > 115 && _CompleteMsg.Length <= 230)
                         {

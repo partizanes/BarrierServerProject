@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Security.Cryptography;
@@ -17,12 +18,15 @@ namespace PrioritySales
         public static Connecting connecting = new Connecting();
         public static bool debug = Boolean.Parse(Config.GetParametr("Debug"));
         public static bool status = true;
+        public static int version = 1;
 
         public AuthFormClassic()
         {
             InitializeComponent();
 
             //check_dll();
+
+            //CheckVersion();
 
             connecting.Show();
 
@@ -31,6 +35,39 @@ namespace PrioritySales
             Packages.connector.ExecuteNonQuery("SHOW DATABASES", Config.GetParametr("BarrierDataBase"));
             try { log_level = int.Parse(Config.GetParametr("log_level")); }
             catch (FormatException) { Config.Set("SETTINGS", "log_level", "3"); }
+        }
+
+        public void CheckVersion()
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+                {
+                    conn.Open();
+
+                    MySqlCommand cmd = new MySqlCommand("SELECT `ver`,`bin` FROM `version` WHERE `name` = 'PrioritySales'", conn);
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr == null) { return; }
+                        if (dr.Read())
+                        {
+                            if (version != dr.GetInt32(0))
+                            {
+                                System.Diagnostics.Process.Start("Update.exe");
+
+                                Thread.Sleep(100);
+
+                                System.Diagnostics.Process.GetCurrentProcess().Kill();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Log.LogWriteDebug("[CheckVersion] " + ex.Message);
+            }
         }
 
         public void check_dll()
