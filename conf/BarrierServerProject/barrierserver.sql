@@ -1,6 +1,6 @@
 /*
 SQLyog Ultimate v8.62 
-MySQL - 5.0.84-community-nt : Database - barrierserver
+MySQL - 5.5.18 : Database - barrierserver
 *********************************************************************
 */
 
@@ -53,12 +53,12 @@ insert  into `operations`(`id`,`operation`,`count`,`price`,`inactive`) values (1
 DROP TABLE IF EXISTS `priority`;
 
 CREATE TABLE `priority` (
-  `id` bigint(20) NOT NULL auto_increment,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `bar` tinytext NOT NULL,
   `name` tinytext NOT NULL,
   `turn_price` mediumint(7) unsigned NOT NULL,
   `count` float(7,3) unsigned NOT NULL,
-  `sailed` float(7,3) unsigned default '0.000',
+  `sailed` float(7,3) unsigned DEFAULT '0.000',
   `status` tinyint(2) NOT NULL,
   `status_text` tinytext NOT NULL,
   `current_price_ukm` mediumint(7) unsigned NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE `sendpos` (
 DROP TABLE IF EXISTS `tasks`;
 
 CREATE TABLE `tasks` (
-  `tasks_id` bigint(20) unsigned NOT NULL auto_increment,
+  `tasks_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `priority_id` bigint(20) unsigned NOT NULL,
   `user_group` int(2) NOT NULL,
   `task_text` longtext NOT NULL,
@@ -109,14 +109,14 @@ insert  into `tasks`(`tasks_id`,`priority_id`,`user_group`,`task_text`,`user_id`
 DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
-  `id` tinyint(4) NOT NULL auto_increment,
+  `id` tinyint(4) NOT NULL AUTO_INCREMENT,
   `username` tinytext NOT NULL,
   `hash` tinytext NOT NULL,
-  `group` tinyint(2) default NULL,
-  `online` tinyint(1) default NULL,
+  `group` tinyint(2) DEFAULT NULL,
+  `online` tinyint(1) DEFAULT NULL,
   `ip` tinytext,
-  `tasks_count` int(11) default NULL,
-  `tasks_failed` int(11) default NULL,
+  `tasks_count` int(11) DEFAULT NULL,
+  `tasks_failed` int(11) DEFAULT NULL,
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -129,16 +129,16 @@ insert  into `users`(`id`,`username`,`hash`,`group`,`online`,`ip`,`tasks_count`,
 DROP TABLE IF EXISTS `version`;
 
 CREATE TABLE `version` (
-  `id` int(10) unsigned NOT NULL auto_increment,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` text NOT NULL,
   `ver` int(10) unsigned NOT NULL,
   `source` text NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `version` */
 
-insert  into `version`(`id`,`name`,`ver`,`source`) values (1,'PrioritySales',1,'');
+insert  into `version`(`id`,`name`,`ver`,`source`) values (1,'PrioritySales',2,'\\\\SERVERHOME\\net\\PrioritySales.exe');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
