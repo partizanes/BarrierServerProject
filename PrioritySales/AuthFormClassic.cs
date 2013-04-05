@@ -26,7 +26,7 @@ namespace PrioritySales
 
             //check_dll();
 
-            //CheckVersion();
+            CheckVersion();
 
             connecting.Show();
 
@@ -45,7 +45,7 @@ namespace PrioritySales
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand("SELECT `ver`,`bin` FROM `version` WHERE `name` = 'PrioritySales'", conn);
+                    MySqlCommand cmd = new MySqlCommand("SELECT `ver` FROM `version` WHERE `name` = 'PrioritySales'", conn);
 
                     using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
@@ -54,6 +54,12 @@ namespace PrioritySales
                         {
                             if (version != dr.GetInt32(0))
                             {
+                                if (Config.GetUpdateStatus() == 0)
+                                {
+                                    MessageBox.Show("Внимание!Последние обновление было неудачным , обратитесь с системному администратору!");
+                                    return;
+                                }
+
                                 System.Diagnostics.Process.Start("Update.exe");
 
                                 Thread.Sleep(100);

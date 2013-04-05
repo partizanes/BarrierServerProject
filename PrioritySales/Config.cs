@@ -39,5 +39,16 @@ namespace PrioritySales
 
             return buffer.ToString();
         }
+
+        public static int GetUpdateStatus()
+        {
+            StringBuilder buffer = new StringBuilder(50, 50);
+
+            GetPrivateProfileString("SETTINGS", "UpdateStatus", "1", buffer, 50, Environment.CurrentDirectory + "\\update.ini");
+
+            if (buffer.ToString() == "null") { return 0; }
+
+            return int.Parse(buffer.ToString());
+        }
     }
 }
