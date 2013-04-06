@@ -49,10 +49,17 @@ namespace LsTradeAgent
                             Thread th = new Thread(delegate()
                                 {
                                     Color.WriteLineColor("[Thread] Поток парсер создан", ConsoleColor.Yellow);
+
                                     List<string> ar_copy = new List<string>();
-                                    Color.WriteLineColor("Сделана копия массива", ConsoleColor.Blue);
-                                    ar_copy = ar;
+
+                                    foreach (string str in ar)
+                                    {
+                                        ar_copy.Add(str);
+                                    }
+
                                     ar.Clear();
+
+                                    Color.WriteLineColor("Сделана копия массива", ConsoleColor.Blue);
 
                                     foreach (string str in ar_copy)
                                     {
@@ -80,8 +87,11 @@ namespace LsTradeAgent
         {
             OleDbDataReader dr = null;
 
+            string kass = @"К3";
+            string cena = @"Ц2";
+
             //TODO k_dev in config;
-            dr = Dbf.dbf_read("select n_cenu,kod_isp,p_time,k_dev from dvkinpr where k_grup = '" + barcode + "' AND p_time > {^ " + date + " } AND k_dev IN('К3','Ц2')");
+            dr = Dbf.dbf_read("select n_cenu,kod_isp,p_time,k_dev from dvkinpr where k_grup = '" + barcode + "' AND p_time > {^ " + date + " } AND k_dev IN('" + kass + "','" + cena + "')");
 
             if (dr == null)
             {
@@ -95,6 +105,8 @@ namespace LsTradeAgent
 
                 try
                 {
+                    Color.WriteLineColor("Открытие соединения для добавления данных отправки на кассу...", ConsoleColor.Green);
+
                     conn.Open();
 
                     cmd.Connection = conn;
@@ -107,6 +119,9 @@ namespace LsTradeAgent
                     cmd.Parameters.AddWithValue("@kod_isp", 22);
                     cmd.Parameters.AddWithValue("@datetime", "2012-01-01 00:00:00" );
                     cmd.Parameters.AddWithValue("@action", "text");
+
+                    if(!dr.HasRows)
+                        Color.WriteLineColor("Отсутствуют данные отправки на кассу по штрихкоду: " + barcode, ConsoleColor.Yellow);
 
                     while (dr.Read())
                     {

@@ -159,8 +159,6 @@ namespace PrioritySales
         {
             if (!Packages.mf.Controls.Contains(MainFormClassic.infocontrol))
             {
-                //MainFormClassic.infocontrol.Visible = true;
-
                 Packages.mf.Controls.Add(MainFormClassic.infocontrol);
 
                 MainFormClassic.infocontrol.BringToFront();
@@ -354,15 +352,6 @@ namespace PrioritySales
             RequestSendPrice(s);
 
         }
-
-
-
-//             string bar = "";
-//             DateTime date = new DateTime();
-// 
-// 
-// 
-// 
 
 //         private void DetectedText(int i,DateTime date)
 //         {
