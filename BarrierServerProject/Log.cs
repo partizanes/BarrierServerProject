@@ -5,16 +5,14 @@ namespace BarrierServerProject
 {
     class Log
     {
-        public static void log_write(string str, string reason, string logname)
+        public static void Write(string str, string reason, string logname)
         {
             string EntryTime = DateTime.Now.ToLongTimeString();
             string EntryDate = DateTime.Today.ToShortDateString();
             string fileName = "log/" + logname + ".log";  //log + data +logname ? 
 
             if (!Directory.Exists(Environment.CurrentDirectory + "/log/"))
-            {
                 Directory.CreateDirectory((Environment.CurrentDirectory + "/log/"));
-            }
 
             try
             {
@@ -24,21 +22,18 @@ namespace BarrierServerProject
                 //check this
                 sw.Dispose();
             }
-            catch (Exception ex)
-            {
-                log_write(ex.Message, "Exception", "Exception");
-            }
+            catch (Exception ex) { Write(ex.Message, "Exception", "Exception"); }
         }
 
         public static void ExcWrite(string text)
         {
-            log_write(text, "EXCEPTION", "exception");
+            Write(text, "EXCEPTION", "exception");
         }
 
         public static void LogWriteDebug(string text)
         {
             if (Program.debug)
-                log_write(text, "DEBUG", "debug");
+                Write(text, "DEBUG", "debug");
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Data.OleDb;
 
 namespace BarrierServerProject
 {
-    class Dbf
+    class Dbf  //not use
     {
         public static Boolean ExecuteNonQuery(string str)
         {

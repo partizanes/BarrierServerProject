@@ -16,7 +16,7 @@ namespace BarrierServerProject
             {
                 MSG packet = new MSG(group, type, msg);
 
-                byte[] buf = new byte[1024];
+                byte[] buf = new byte[2048];
 
                 buf = Util.Serialization(packet);
 
@@ -29,7 +29,7 @@ namespace BarrierServerProject
             catch (System.Exception ex)
             {
                 //parse this error and other send to administrator 
-                Log.log_write(ex.Message, "Exception", "exception");
+                Log.Write(ex.Message, "Exception", "exception");
                 Color.WriteLineColor(ex.Message, ConsoleColor.Red);
                 return false;
             }

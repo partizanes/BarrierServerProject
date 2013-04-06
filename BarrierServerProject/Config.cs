@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -9,23 +7,25 @@ namespace BarrierServerProject
 {
     class Config
     {
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         static extern uint GetPrivateProfileString(string lpAppName, string lpKeyName, string lpDefault, StringBuilder lpReturnedString, uint nSize, string lpFileName);
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool WritePrivateProfileString(string lpAppName, string lpKeyName, string lpString, string lpFileName);
 
+        public static string ConfigTarget = Environment.CurrentDirectory + "\\config.ini";
+
         public static void Set(string section, string key, string value)
         {
-            WritePrivateProfileString(section, key, value, Environment.CurrentDirectory + "\\config.ini");
+            WritePrivateProfileString(section, key, value, ConfigTarget);
         }
 
         public static string GetParametr(string par)
         {
             StringBuilder buffer = new StringBuilder(50, 50);
 
-            GetPrivateProfileString("SETTINGS", par, "null", buffer, 50, Environment.CurrentDirectory + "\\config.ini");
+            GetPrivateProfileString("SETTINGS", par, "null", buffer, 50, ConfigTarget);
 
 
             if (buffer.ToString() == "null")

@@ -57,7 +57,7 @@ namespace BarrierServerProject
 
         public static void CheckErrorSailPrice()
         {
-            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
             {
                 conn.Open();
 
@@ -88,14 +88,11 @@ namespace BarrierServerProject
 
         public static void CheckCurrentPrices()
         {
-            string b = Config.GetParametr("BarrierDataBase");
-            string u = Config.GetParametr("BdName");
-
-            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
             {
                 conn.Open();
 
-                MySqlCommand cmd = new MySqlCommand(@"SELECT p.id,p.turn_price,b.price FROM " + b + ".priority p," + u + ".trm_in_var C LEFT JOIN " + u + ".trm_in_items A ON A.id=C.item LEFT JOIN " + u + ".trm_in_pricelist_items B ON B.item=c.item WHERE C.item = p.bar AND p.turn_price != b.price AND b.pricelist_id= 1", conn);
+                MySqlCommand cmd = new MySqlCommand(@"SELECT p.id,p.turn_price,b.price FROM " + Connector.BarrierDataBase + ".priority p," + Connector.UkmDataBase + ".trm_in_var C LEFT JOIN " + Connector.UkmDataBase + ".trm_in_items A ON A.id=C.item LEFT JOIN " + Connector.UkmDataBase + ".trm_in_pricelist_items B ON B.item=c.item WHERE C.item = p.bar AND p.turn_price != b.price AND b.pricelist_id= 1", conn);
 
                 cmd.CommandTimeout = 0;
 
@@ -125,7 +122,7 @@ namespace BarrierServerProject
             string b = Config.GetParametr("BarrierDataBase");
 
 
-            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
             {
                 conn.Open();
 
@@ -181,7 +178,7 @@ namespace BarrierServerProject
                     Thread.Sleep(5000);
             }
 
-            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
             {
                 conn.Open();
 
@@ -230,7 +227,7 @@ namespace BarrierServerProject
 
 //           Log.LogWriteDebug(query);
 
-            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
             {
                 conn.Open();
 
@@ -248,8 +245,8 @@ namespace BarrierServerProject
                     {
                         Color.WriteLineColor("Обнаружена идентичная задача.Статус обновлен.Записано в лог.Пропущено.", ConsoleColor.Yellow);
                         Packages.connector.ExecuteNonQuery(uquery);
-                        Log.log_write(cmd.CommandText,"1","IDENTICAL");
-                        Log.log_write(query, "2", "IDENTICAL");
+                        Log.Write(cmd.CommandText,"1","IDENTICAL");
+                        Log.Write(query, "2", "IDENTICAL");
                     }
                 }
             }

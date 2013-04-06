@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -36,7 +37,22 @@ namespace Update
                 
                 Thread.Sleep(1000);
 
-                MsgAdd("Версия на сервере " + GetVersionProgram() + ".");
+                int version = GetVersionProgram();
+
+                MsgAdd("Версия на сервере " + version + " .");
+
+                if (version == 0)
+                {
+                    MsgAdd("Внимание не удалось получить версию обновления на сервере.Записан статус 0.Выход через 10 секунд...");
+
+                    Config.Set("SETTINGS", "UpdateStatus", "0");
+
+                    Thread.Sleep(5000);
+
+                    MsgAdd("Выход через 5 секунд...");
+
+                    Application.Exit();
+                }
 
                 StartUpdate();
             }); ;
@@ -73,7 +89,7 @@ namespace Update
                     }
                 }
             }
-            catch (System.Exception ex) { Log.ExcWrite("[GetNameProgramUpdate] " + ex.Message); MsgAdd(ex.Message); return 0; }
+            catch (System.Exception ex) { Log.ExcWrite("[GetNameProgramUpdate] " + ex.Message); MsgAdd(ex.Message); this.BackColor = Color.Red; return 0; }
 
             return 0;
         }
@@ -107,7 +123,7 @@ namespace Update
                     }
                 }
             }
-            catch (System.Exception ex) { Log.ExcWrite("[GetSourceProgramUpdate] " + ex.Message); MsgAdd(ex.Message); return null; }
+            catch (System.Exception ex) { Log.ExcWrite("[GetSourceProgramUpdate] " + ex.Message); MsgAdd(ex.Message); this.BackColor = Color.Red; return null; }
 
             return null;
         }
@@ -128,9 +144,11 @@ namespace Update
             }
             catch (System.Exception ex)
             {
+                this.BackColor = Color.Red;
+
                 MsgAdd(ex.Message);
                 Log.ExcWrite("[StartUpdate] " + ex.Message);
-                Log.log_write("Произошло исключение.Записан статус обновления 0", "[StartUpdate]", "Exception");
+                Log.log_write("Произошло исключение.Записан статус обновления 0", "StartUpdate", "Exception");
                 Config.Set("SETTINGS", "UpdateStatus", "0");
                 Application.Exit();
             }
@@ -138,6 +156,8 @@ namespace Update
 
         private void Downloader(string _URL, string _SaveAs)
         {
+            bool s = true;
+
             MsgAdd("Запускаю скачивание...");
             ProgressBarMainForm.PerformStep();
             Thread.Sleep(1000);
@@ -156,18 +176,29 @@ namespace Update
             }
             catch (System.Exception exc)
             {
+                s = false;
+
+                this.BackColor = Color.Red;
+
                 MsgAdd(exc.Message);
-                Log.ExcWrite("[StartUpdate] " + exc.Message);
-                Log.log_write("Произошло исключение.Записан статус обновления 0", "[StartUpdate]", "Exception");
+                MsgAdd("[Downloader] Произошло исключение.Записан статус обновления 0");
+
+                Log.ExcWrite("[Downloader] " + exc.Message);
+                Log.log_write("Произошло исключение.Записан статус обновления 0", "Downloader", "Exception");
+
                 Config.Set("SETTINGS", "UpdateStatus", "0");
+
+                MsgAdd("Неудачно!");
+
+                Thread.Sleep(10000);
                 Application.Exit();
             }
-            finally
+
+            if (s)
             {
                 ProgressBarMainForm.PerformStep();
                 Copy(downloadFileName);
             }
-
         }
 
         private void Copy(string name)
@@ -226,6 +257,8 @@ namespace Update
                 }
                 else
                 {
+                    this.BackColor = Color.Red;
+
                     Log.ExcWrite("[Copy] Произошло исключение." );
 
                     //check this
@@ -234,6 +267,8 @@ namespace Update
             }
             catch (System.Exception exс)
             {
+                this.BackColor = Color.Red;
+
                 Log.ExcWrite("[Copy] " + exс.Message);
                 status = false;
 
@@ -248,6 +283,10 @@ namespace Update
                     ProgressBarMainForm.Value = 100;
                     Thread.Sleep(4000);
                     Application.Exit();
+                }
+                else
+                {
+                    Thread.Sleep(5000);
                 }
             }
         }
@@ -275,6 +314,7 @@ namespace Update
             }
             catch (System.Exception exc)
             {
+                this.BackColor = Color.Red;
                 Log.ExcWrite("[RevertUpdate] " + exc.Message);
             }
             finally

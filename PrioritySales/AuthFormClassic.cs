@@ -133,8 +133,11 @@ namespace PrioritySales
                                               ";Уровень записи в лог",
                                               "log_level=3",
                                               "",
+                                              "; Отладочная информация",
+                                              "Debug = true",
+                                              "",
                                               ";Название база данных ukm на кассовом севрере",
-                                              "BdName=ukmserver",
+                                              "UkmDataBase=ukmserver",
                                               "",
                                               ";Проверка наличия установленного Mysql connector",
                                               "ConnectorCheck=true",
@@ -145,7 +148,7 @@ namespace PrioritySales
 
                     File.WriteAllLines(Environment.CurrentDirectory + "\\" + "config.ini", createText, outputEnc);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     Log.log_write(ex.Message, "EXCEPTION", "exception");
                 }
@@ -412,15 +415,11 @@ namespace PrioritySales
 
                 string hash;
 
-                using (MD5 md5Hash = MD5.Create())
-                {
-                    hash = GetMd5Hash(md5Hash, (GetMd5Hash(md5Hash, "1?234%5aZ!") + GetMd5Hash(md5Hash, PassTextBox.Text)));
-                }
+                using (MD5 md5Hash = MD5.Create()) { hash = GetMd5Hash(md5Hash, (GetMd5Hash(md5Hash, "1?234%5aZ!") + GetMd5Hash(md5Hash, PassTextBox.Text))); }
 
                 if (Server.server.Connected)
-                {
                     Server.Sender("PrioritySale", 0, LabelUserText.Text + ":" + hash);
-                }
+
             }); ;
             thh.Name = "Авторизация";
             Server.threads.Add(thh);
@@ -445,8 +444,8 @@ namespace PrioritySales
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                xOffset = -e.X;// -SystemInformation.FrameBorderSize.Width;
-                yOffset = -e.Y;// -SystemInformation.FrameBorderSize.Height;
+                xOffset = -e.X;
+                yOffset = -e.Y;
                 mouseOffset = new Point(xOffset, yOffset);
                 isMouseDown = true;
             }

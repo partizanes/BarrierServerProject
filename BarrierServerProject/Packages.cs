@@ -38,7 +38,7 @@ namespace BarrierServerProject
                             user.userid = 2;
                             Server.clients[r_client] = p_id;
                             Color.WriteLineColor("Модуль связи с LsTrade загружен!",ConsoleColor.Cyan);
-                            Msg.SendUser("LsTradeAgent", "LS", 1, "�?дентификация пройдена.");
+                            Msg.SendUser("LsTradeAgent", "LS", 1, "Идентификация пройдена.");
                             break;
                     }
                     break;
@@ -51,7 +51,7 @@ namespace BarrierServerProject
                         case 0:
                             string[] split_data = msg.Replace("\0", "").Replace(" ", "").Split(new Char[] { ':' });
 
-                            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=15;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", MainDbName)))
+                            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                             {
                                 try { conn.Open(); }
                                 catch (MySqlException ex)
@@ -77,7 +77,7 @@ namespace BarrierServerProject
                                 {
                                     if (dr == null)
                                     {
-                                        Log.log_write("Запрос вернул null", "Exception", "Exception");
+                                        Log.Write("Запрос вернул null", "Exception", "Exception");
                                         Log.ExcWrite("[AUTH] Запрос вернул null");
                                     }
 
@@ -88,15 +88,15 @@ namespace BarrierServerProject
                                         Msg.SendUser(split_data[0], "PrioritySale", 1, split_data[0]);
                                         user.username = split_data[0];
                                         Packages.connector.ExecuteNonQuery("UPDATE `users` SET `online`='1',`ip`='" + IPAddress.Parse(((IPEndPoint)r_client.RemoteEndPoint).Address.ToString()) + "' WHERE `username`='" + split_data[0] + "'");
-                                        Log.log_write(split_data[0], "[AUTH_S]", "AUTHLOG");
+                                        Log.Write(split_data[0], "[AUTH_S]", "AUTHLOG");
 
                                     }
                                     else
                                     {
                                         Server.clients[r_client] = split_data[0];
-                                        Msg.SendUser(split_data[0], "PrioritySale", 0, "�?дентификация не пройдена.");
+                                        Msg.SendUser(split_data[0], "PrioritySale", 0, "Идентификация не пройдена.");
                                         Color.WriteLineColor(split_data[0] + " авторизация неудачна", ConsoleColor.Red);
-                                        Log.log_write(split_data[0], "[AUTH_F]", "AUTHLOG");
+                                        Log.Write(split_data[0], "[AUTH_F]", "AUTHLOG");
                                     }
 
                                     using (MD5 md5Hash = MD5.Create())
@@ -157,7 +157,7 @@ namespace BarrierServerProject
                             user.userid = 1;
                             Server.clients[r_client] = "BalanceModule";
                             Color.WriteLineColor("Модуль проверки весов загружен!",ConsoleColor.Cyan);
-                            Msg.SendUser("BalanceModule", "BS", 1, "�?дентификация пройдена.");
+                            Msg.SendUser("BalanceModule", "BS", 1, "Идентификация пройдена.");
                                 break;
                         case 1:
                             Color.WriteLineColor(msg, ConsoleColor.Cyan);
@@ -221,7 +221,7 @@ namespace BarrierServerProject
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", MainDbName)))
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                 {
                     conn.Open();
 
@@ -250,7 +250,7 @@ namespace BarrierServerProject
 
                 Color.WriteLineColor("Штрихкод: " + bar + " в количестве: " + turncount + " Отклонён!", ConsoleColor.Red);
 
-                Log.log_write("Штрихкод: " + bar + " в количестве: " + turncount + " Отклонён!", "[ADD]", "PRIORITY");
+                Log.Write("Штрихкод: " + bar + " в количестве: " + turncount + " Отклонён!", "[ADD]", "PRIORITY");
 
                 Msg.SendUser(user.username, "PrioritySale", 3, "                                                                     Отклонено!");
                 

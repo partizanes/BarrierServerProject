@@ -15,7 +15,7 @@ namespace BarrierServerProject
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                 {
                     conn.Open();
 
@@ -45,12 +45,12 @@ namespace BarrierServerProject
         {
             int price = 0;
 
-            string _ukmservername = Config.GetParametr("BdName");
+            string _ukmservername = Config.GetParametr("UkmDataBase");
             string _mainservername = Config.GetParametr("BarrierDataBase");
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BdName"))))
+                using (MySqlConnection conn = new MySqlConnection(Connector.UkmStringConnecting))
                 {
                     conn.Open();
 
@@ -82,7 +82,7 @@ namespace BarrierServerProject
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BdName"))))
+                using (MySqlConnection conn = new MySqlConnection(Connector.UkmStringConnecting))
                 {
                     conn.Open();
 
@@ -125,7 +125,7 @@ namespace BarrierServerProject
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                 {
                     conn.Open();
 
@@ -166,7 +166,7 @@ namespace BarrierServerProject
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                 {
                     conn.Open();
 
@@ -198,7 +198,7 @@ namespace BarrierServerProject
         {
             Color.WriteLineColor("Запрос на кассовый сервер информации по продажам...", ConsoleColor.Cyan);
 
-            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BdName"))))
+            using (MySqlConnection conn = new MySqlConnection(Connector.UkmStringConnecting))
             {
                 conn.Open();
 
@@ -272,7 +272,7 @@ namespace BarrierServerProject
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                 {
                     conn.Open();
 
