@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace PrioritySales
@@ -50,7 +44,7 @@ namespace PrioritySales
             if(message.Length < 5 || msg_color.Length < 2 || username.Length < 3)
                 return;
 
-            if (Packages.connector.ExecuteNonQuery("INSERT IGNORE INTO `message`(`userid`,`msg_priority`,`msg_color`,`msg`,`msg_datetime`) VALUES ( (SELECT id FROM users WHERE username = '" + username + "'),'" + priority + "','" + msg_color + "','" + message + "','" + datetime + "')", Config.GetParametr("BarrierDataBase")))
+            if (Packages.connector.ExecuteNonQuery("INSERT IGNORE INTO `message`(`userid`,`msg_priority`,`msg_color`,`msg`,`msg_datetime`) VALUES ( (SELECT id FROM users WHERE username = '" + username + "'),'" + priority + "','" + msg_color + "','" + message + "','" + datetime + "')"))
             {
                 Packages.mf.TextBoxMessage.Text = "";
                 Packages.mf.TextBoxMessage.ForeColor = Color.Silver;

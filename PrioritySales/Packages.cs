@@ -10,7 +10,6 @@ namespace PrioritySales
         public static MainFormClassic mf = new MainFormClassic();
         public static Connector connector = new Connector();
         public static CareForm careform = new CareForm();
-        public static string MainDbName = Config.GetParametr("BarrierDataBase");
         public static int Zx = SystemInformation.PrimaryMonitorSize.Width - (SystemInformation.PrimaryMonitorSize.Width/6);
         public static int Zy = SystemInformation.PrimaryMonitorSize.Height - (SystemInformation.PrimaryMonitorSize.Height / 15);
 
@@ -81,7 +80,7 @@ namespace PrioritySales
 
                                 if (mf.dataGridViewMainForm.Visible == true)
                                 {
-                                    using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", MainDbName)))
+                                    using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                                     {
                                         conn.Open();
 
@@ -173,7 +172,7 @@ namespace PrioritySales
 
         public static void GetMsgBoard()
         {
-            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
             {
                 conn.Open();
 

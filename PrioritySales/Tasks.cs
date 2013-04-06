@@ -96,7 +96,7 @@ namespace PrioritySales
         {
             Boolean foc = MainFormClassic.tasks.DataGridViewTasks.Focused;
 
-            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
             {
                 conn.Open();
 
@@ -123,7 +123,7 @@ namespace PrioritySales
 
         public void UpdateDataGridAcceptedTasks()
         {
-            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
             {
                 (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewAccepted.Rows.Clear(); }));
 
@@ -200,7 +200,7 @@ namespace PrioritySales
 
         private void GetMainInfo(string s)
         {
-            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
             {
                 conn.Open();
 
@@ -238,7 +238,7 @@ namespace PrioritySales
         {
             Thread thh = new Thread(delegate()
             {
-                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BdName"))))
+                using (MySqlConnection conn = new MySqlConnection(Connector.UkmStringConnecting))
                 {
                     conn.Open();
 
@@ -286,7 +286,7 @@ namespace PrioritySales
         {
             Thread thg = new Thread(delegate()
             {
-                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                 {
                     conn.Open();
 
@@ -317,7 +317,7 @@ namespace PrioritySales
 
         private void RequestSailPriceAndCount(string s)
         {
-            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
             {
                 conn.Open();
 

@@ -32,7 +32,7 @@ namespace PrioritySales
 
             Application.DoEvents();
 
-            Packages.connector.ExecuteNonQuery("SHOW DATABASES", Config.GetParametr("BarrierDataBase"));
+            Packages.connector.ExecuteNonQuery("SHOW DATABASES");
             try { log_level = int.Parse(Config.GetParametr("log_level")); }
             catch (FormatException) { Config.Set("SETTINGS", "log_level", "3"); }
         }
@@ -41,7 +41,7 @@ namespace PrioritySales
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "BarrierServerR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                 {
                     conn.Open();
 
