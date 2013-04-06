@@ -40,9 +40,9 @@
             // 
             // ProgressBarMainForm
             // 
-            this.ProgressBarMainForm.Location = new System.Drawing.Point(11, 293);
+            this.ProgressBarMainForm.Location = new System.Drawing.Point(12, 216);
             this.ProgressBarMainForm.Name = "ProgressBarMainForm";
-            this.ProgressBarMainForm.Size = new System.Drawing.Size(484, 18);
+            this.ProgressBarMainForm.Size = new System.Drawing.Size(483, 18);
             this.ProgressBarMainForm.TabIndex = 1;
             // 
             // PanelMainForm
@@ -52,7 +52,7 @@
             this.PanelMainForm.Controls.Add(this.ProgressBarMainForm);
             this.PanelMainForm.Location = new System.Drawing.Point(1, 1);
             this.PanelMainForm.Name = "PanelMainForm";
-            this.PanelMainForm.Size = new System.Drawing.Size(508, 322);
+            this.PanelMainForm.Size = new System.Drawing.Size(508, 245);
             this.PanelMainForm.TabIndex = 2;
             // 
             // PanelListBox
@@ -61,7 +61,7 @@
             this.PanelListBox.Controls.Add(this.MainListBox);
             this.PanelListBox.Location = new System.Drawing.Point(11, 11);
             this.PanelListBox.Name = "PanelListBox";
-            this.PanelListBox.Size = new System.Drawing.Size(484, 272);
+            this.PanelListBox.Size = new System.Drawing.Size(484, 197);
             this.PanelListBox.TabIndex = 4;
             // 
             // MainListBox
@@ -74,7 +74,7 @@
             this.MainListBox.ItemHeight = 15;
             this.MainListBox.Location = new System.Drawing.Point(1, 1);
             this.MainListBox.Name = "MainListBox";
-            this.MainListBox.Size = new System.Drawing.Size(482, 270);
+            this.MainListBox.Size = new System.Drawing.Size(482, 195);
             this.MainListBox.TabIndex = 0;
             // 
             // Update
@@ -83,7 +83,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(510, 324);
+            this.ClientSize = new System.Drawing.Size(510, 247);
             this.ControlBox = false;
             this.Controls.Add(this.PanelMainForm);
             this.ForeColor = System.Drawing.SystemColors.Desktop;

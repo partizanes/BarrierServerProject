@@ -28,15 +28,14 @@ namespace PrioritySales
                     break;
                 case Keys.Escape:             
                     this.Hide();
-                    this.Dispose();
                     break;
             }
         }
 
         private void AddMessageToBase(int priority)
         {
-            string message = Packages.mf.TextBoxMessage.Text;
-            string msg_color = Packages.mf.TextBoxMessage.ForeColor.Name.ToString();
+            string message = MainFormClassic.msgdesk.TextBoxMessage.Text;
+            string msg_color = MainFormClassic.msgdesk.TextBoxMessage.ForeColor.Name.ToString();
             string username = Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "");
             string datetime = DateTime.Now.ToString("yyyy-MM-dd,HH:mm:ss");
             Color color = Color.FromName(msg_color);
@@ -46,8 +45,8 @@ namespace PrioritySales
 
             if (Connector.ExecuteNonQuery("INSERT IGNORE INTO `message`(`userid`,`msg_priority`,`msg_color`,`msg`,`msg_datetime`) VALUES ( (SELECT id FROM users WHERE username = '" + username + "'),'" + priority + "','" + msg_color + "','" + message + "','" + datetime + "')"))
             {
-                Packages.mf.TextBoxMessage.Text = "";
-                Packages.mf.TextBoxMessage.ForeColor = Color.Silver;
+                MainFormClassic.msgdesk.TextBoxMessage.Text = "";
+                MainFormClassic.msgdesk.TextBoxMessage.ForeColor = Color.Silver;
 
                 if (Server.server.Connected)
                     Server.Sender("PrioritySale", 7, MainFormClassic.StatusUpdate);

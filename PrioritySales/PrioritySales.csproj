@@ -102,6 +102,12 @@
       <DependentUpon>MainFormClassic.cs</DependentUpon>
     </Compile>
     <Compile Include="Log.cs" />
+    <Compile Include="MsgDesk.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MsgDesk.Designer.cs">
+      <DependentUpon>MsgDesk.cs</DependentUpon>
+    </Compile>
     <Compile Include="Packages.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -137,6 +143,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainFormClassic.resx">
       <DependentUpon>MainFormClassic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MsgDesk.resx">
+      <DependentUpon>MsgDesk.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

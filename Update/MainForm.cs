@@ -24,7 +24,7 @@ namespace Update
 
         private void MsgAdd(string str)
         {           
-            (Application.OpenForms[0] as Update).Invoke((MethodInvoker)(delegate() { MainListBox.Items.Add("[" + DateTime.Now.ToShortDateString() + "]  " + str); }));
+            (Application.OpenForms[0] as Update).Invoke((MethodInvoker)(delegate() { MainListBox.Items.Add("[" + DateTime.Now.ToShortTimeString() + "]  " + str); }));
         }
 
         private void Update_Shown(object sender, EventArgs e)
@@ -237,6 +237,7 @@ namespace Update
 
                 if (File.Exists(name))
                 {
+                    ProgressBarMainForm.Value = 99;
                     Log.log_write("Запускаем обновленное приложение", "INFO", "update");
                     MsgAdd("Запускаем обновленное приложение");
 
