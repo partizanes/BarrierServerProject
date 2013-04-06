@@ -6,20 +6,12 @@ namespace PrioritySales
 {
     class Config
     {
-        //import dll from use configuration file
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        static extern uint GetPrivateProfileString(
-        string lpAppName,
-        string lpKeyName,
-        string lpDefault,
-        StringBuilder lpReturnedString,
-        uint nSize,
-        string lpFileName);
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern uint GetPrivateProfileString( string lpAppName,string lpKeyName,string lpDefault,StringBuilder lpReturnedString,uint nSize,string lpFileName);
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool WritePrivateProfileString(string lpAppName,
-           string lpKeyName, string lpString, string lpFileName);
+        static extern bool WritePrivateProfileString(string lpAppName,string lpKeyName, string lpString, string lpFileName);
 
         public static void Set(string section, string key, string value)
         {

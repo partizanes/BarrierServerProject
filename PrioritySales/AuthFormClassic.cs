@@ -32,7 +32,7 @@ namespace PrioritySales
 
             Application.DoEvents();
 
-            Packages.connector.ExecuteNonQuery("SHOW DATABASES");
+            Connector.ExecuteNonQuery("SHOW DATABASES");
             try { log_level = int.Parse(Config.GetParametr("log_level")); }
             catch (FormatException) { Config.Set("SETTINGS", "log_level", "3"); }
         }

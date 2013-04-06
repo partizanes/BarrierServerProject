@@ -11,15 +11,14 @@ namespace PrioritySales
         public static string BarrierDataBase = Config.GetParametr("BarrierDataBase");
         public static string UkmDataBase = Config.GetParametr("UkmDataBase");
         public static string IpCashServer = Config.GetParametr("IpCashServer");
-        private int CommandTimeout = int.Parse(Config.GetParametr("CommandTimeout"));
+        public static int CommandTimeout = int.Parse(Config.GetParametr("CommandTimeout"));
         public static int ConnectTimeout = int.Parse(Config.GetParametr("ConnectTimeout"));
         public static string BarrierStringConnecting = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=" + ConnectTimeout + ";", IpCashServer, "BarrierServerR", "***REMOVED***", BarrierDataBase);
         public static string UkmStringConnecting = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60" + ConnectTimeout + ";", IpCashServer, "BarrierServerR", "***REMOVED***", UkmDataBase);
 
-        public Boolean ExecuteNonQuery(string str)
+        public static Boolean ExecuteNonQuery(string str)
         {
-            try
-            {
+            try {
                 using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                 {
                     conn.Open();

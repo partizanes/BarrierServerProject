@@ -196,8 +196,8 @@ namespace BarrierServerProject
                             string bar = dr.GetString(2);
                             string datetime = dr.GetDateTime(3).ToString("yyyy-MM-dd,HH:mm:ss");
 
-                            //send user tasks_id;bar;datetime
-                            Msg.SendUser("LsTradeAgent", "DR", 1, tasks_id + ";" + bar + ";" + datetime);
+                            //send lstradeagent priority_id;bar;datetime
+                            Msg.SendUser("LsTradeAgent", "DR", 1, priority_id + ";" + bar + ";" + datetime);
                             Thread.Sleep(200);
                         }
                     }

@@ -65,11 +65,11 @@ namespace LsTradeAgent
                                     {
                                         string[] split_data = str.Split(new Char[] { ';' });
 
-                                        string id = split_data[0];
+                                        string priority_id = split_data[0];
                                         string barcode = split_data[1];
                                         string date = split_data[2];
 
-                                        CheckSendPrice(id, barcode, date);
+                                        CheckSendPrice(priority_id, barcode, date);
                                     }
 
                                     Color.WriteLineColor("[Thread] Поток парсер завершен", ConsoleColor.Yellow);
@@ -83,7 +83,7 @@ namespace LsTradeAgent
             }
         }
 
-        private static void CheckSendPrice(string id,string barcode,string date)
+        private static void CheckSendPrice(string priority_id, string barcode, string date)
         {
             OleDbDataReader dr = null;
 
@@ -125,7 +125,7 @@ namespace LsTradeAgent
 
                     while (dr.Read())
                     {
-                        cmd.Parameters["@id"].Value = id;
+                        cmd.Parameters["@id"].Value = priority_id;
                         cmd.Parameters["@price"].Value = dr.GetValue(0);
                         cmd.Parameters["@kod_isp"].Value = dr.GetValue(1);
                         cmd.Parameters["@datetime"].Value = dr.GetDateTime(2).ToString("yyyy-MM-dd,HH:mm:ss");
@@ -133,7 +133,7 @@ namespace LsTradeAgent
 
                         cmd.ExecuteNonQuery();
 
-                        Color.WriteLineColor("[sendPOS] Добавлена строка " + id, ConsoleColor.DarkYellow);
+                        Color.WriteLineColor("[sendPOS] Добавлена строка " + priority_id, ConsoleColor.DarkYellow);
                     }
 
                 }

@@ -96,7 +96,7 @@ namespace PrioritySales
 
         private void ButtonAccept_Click(object sender, EventArgs e)
         {
-            Packages.connector.ExecuteNonQuery("UPDATE `tasks` SET `user_id` = (SELECT id FROM users WHERE username = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "' ) WHERE  tasks_id = " + labIdText.Text);
+            Connector.ExecuteNonQuery("UPDATE `tasks` SET `user_id` = (SELECT id FROM users WHERE username = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "' ) WHERE  tasks_id = " + labIdText.Text);
 
             MainFormClassic.infocontrol.Hide();
             Packages.mf.Controls.Remove(MainFormClassic.infocontrol);

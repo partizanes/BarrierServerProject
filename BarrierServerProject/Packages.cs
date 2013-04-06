@@ -128,6 +128,14 @@ namespace BarrierServerProject
                                 //TODO SEND ALL USER INFORMATION ABOUT 
                             }
                             break;
+                        case 6:
+                            Color.WriteLineColor("Производиться удаление строки...", ConsoleColor.Yellow);
+
+                            foreach (System.Collections.DictionaryEntry de in Server.clients)
+                            {
+                                Msg.SendUser((de.Value).ToString(), "PrioritySale", 9, Packages.StatusString + ";" + DateTime.Now);
+                            }
+                            break;
                         case 7:
                             Color.WriteLineColor("Есть новые сообщение на доске объявлений.Отправка уведомления...", ConsoleColor.Yellow);
 

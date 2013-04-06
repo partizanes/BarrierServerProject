@@ -24,6 +24,7 @@ namespace PrioritySales
         public bool isMouseDown = false;
         private Point mouseOffset;
         public static string StatusUpdate;
+        public static int UserGroup = 0;
 
         public static Tasks tasks = new Tasks();
         public static InfoControl infocontrol = new InfoControl();
@@ -36,6 +37,22 @@ namespace PrioritySales
             CheckTasks();
 
             Packages.GetMsgBoard();
+        }
+
+        private void GetUserGroup()
+        {
+            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SELECT `group` FROM `users` WHERE `username` = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "'", conn);
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr == null) { return; }
+                    if (dr.Read()) { UserGroup = dr.GetInt32(0); }
+                }
+            }
         }
 
         private void CheckTasks()
@@ -158,6 +175,8 @@ namespace PrioritySales
         private void ButtonAdd_Click(object sender, EventArgs e)
         {
             PanelAddBg.Location = new System.Drawing.Point(69, 31);
+
+            dateTimePicker1.Text = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
 
             if (PanelAddBg.Visible == false)
             {
@@ -757,6 +776,13 @@ namespace PrioritySales
                             ButtonList.Focus();
                         break;
                     }
+                case Keys.ControlKey:
+                    Point pCell = dataGridViewMainForm.GetCellDisplayRectangle(dataGridViewMainForm.CurrentCell.ColumnIndex, dataGridViewMainForm.CurrentCell.RowIndex, true).Location;
+
+                    MenuStripDataGrid.Show(pCell.X + Packages.mf.Location.X + dataGridViewMainForm.Size.Width/4, pCell.Y + Packages.mf.Location.Y + 100);
+
+                    MenuStripDataGrid.Items[0].Select();
+                    break;
             }
         }
 
@@ -1102,6 +1128,56 @@ namespace PrioritySales
 
             if (dataGridViewMainForm.Rows.Count == 0)
                 Packages.mf.ButtonList.Focus();
+        }
+
+        private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (UserGroup == 0)
+                return;
+
+            try
+            {
+                int _index = dataGridViewMainForm.Rows.GetFirstRow(DataGridViewElementStates.Selected);
+
+                string _priorityid = dataGridViewMainForm.Rows[_index].Cells[0].Value.ToString();
+
+                if (UserGroup > 1)
+                {
+                    DeleteFromPriority(_priorityid);
+                }
+                else
+                {
+                    CheckDeleteFromPriority(_priorityid);
+                }
+
+            }
+            catch (System.Exception ex) { Log.ExcWrite("[удалитьToolStripMenuItem_Click]" + ex.Message); }
+
+        }
+
+        private void DeleteFromPriority(string _priorityid)
+        {
+            string message = "Вы действительно хотите удалить строку с номером " + _priorityid + "?";
+            string caption = "Удаление";
+            var result = MessageBox.Show(message, caption,
+                                         MessageBoxButtons.YesNo,
+                                         MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                Connector.ExecuteNonQuery("DELETE FROM `priority` WHERE `id` = " + _priorityid + ";DELETE FROM `priority` WHERE `id` = " + _priorityid + ";DELETE FROM `sendpos` WHERE `id` = " + _priorityid + "; DELETE FROM `tasks` WHERE `priority_id` = " + _priorityid + ";");
+
+                Server.Sender("PrioritySale", 6, "Удаление строки.");
+            }
+        }
+
+        private void CheckDeleteFromPriority(string id)
+        {
+            MessageBox.Show("Уровень вашего доступа не позволяет удалять вам записи!");
+        }
+
+        private void LabelUserName_TextChanged(object sender, EventArgs e)
+        {
+            GetUserGroup();
         }
     }
 }
