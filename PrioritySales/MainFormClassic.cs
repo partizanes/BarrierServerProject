@@ -25,6 +25,7 @@ namespace PrioritySales
         private Point mouseOffset;
         public static string StatusUpdate;
         public static int UserGroup = 0;
+        public static int UserId = 0;
 
         public static Tasks tasks = new Tasks();
         public static InfoControl infocontrol = new InfoControl();
@@ -60,6 +61,29 @@ namespace PrioritySales
             catch (System.Exception ex)
             {
                 Log.log_write("[GetUserGroup]" + ex.Message,"EXCEPTION","exception");
+            }
+        }
+
+        private void GetUserId()
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+                {
+                    conn.Open();
+
+                    MySqlCommand cmd = new MySqlCommand("SELECT `id` FROM `users` WHERE `username` = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "'", conn);
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr == null) { return; }
+                        if (dr.Read()) { UserId = dr.GetInt32(0); }
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Log.log_write("[GetUserGroup]" + ex.Message, "EXCEPTION", "exception");
             }
         }
 
@@ -1169,6 +1193,8 @@ namespace PrioritySales
         private void LabelUserName_TextChanged(object sender, EventArgs e)
         {
             GetUserGroup();
+
+            GetUserId();
         }
     }
 }

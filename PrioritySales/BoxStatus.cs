@@ -18,13 +18,28 @@ namespace PrioritySales
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            int i ;
+            int i = 0;
             switch (e.KeyCode)
             {
                 case Keys.Enter:
                     try { i = int.Parse(textBox1.Text); }
-                    catch { return; }
-                    AddMessageToBase(i);
+                    catch { MessageBox.Show("Неверный приоритет сообщения!"); return; }
+
+                    switch (MainFormClassic.UserGroup)
+                    {
+                        case 1:
+                            if (i < 4)
+                                AddMessageToBase(i);
+                            else
+                                MessageBox.Show("Вы не имеете права отправлять сообщение с статусом выше 3.");
+                            break;
+                        case 2:
+                            AddMessageToBase(i);
+                            break;
+                    default:
+                            MessageBox.Show("Вы не имеете права отправлять сообщения");
+                            break;
+                    }
                     break;
                 case Keys.Escape:             
                     this.Hide();

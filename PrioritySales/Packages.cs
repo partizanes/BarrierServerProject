@@ -177,7 +177,7 @@ namespace PrioritySales
 
                 (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Clear(); }));
 
-                MySqlCommand cmd = new MySqlCommand("SELECT u.username,m.msg,m.msg_color,m.msg_datetime FROM users u,message m WHERE u.id = m.userid ORDER BY m.msg_priority", conn);
+                MySqlCommand cmd = new MySqlCommand("SELECT u.username,m.msg,m.msg_color,m.msg_datetime,m.msg_id FROM users u,message m WHERE u.id = m.userid ORDER BY m.msg_priority", conn);
 
                 using (MySqlDataReader dr = cmd.ExecuteReader())
                 {
@@ -190,6 +190,7 @@ namespace PrioritySales
                         string username = dr.GetString(0);
                         string msg = dr.GetString(1);
                         Color color = Color.FromName(dr.GetString(2));
+                        UInt64 id_msg = dr.GetUInt64(4);
 
                         if(color.ToString().Contains("ff"))
                         {
@@ -200,7 +201,7 @@ namespace PrioritySales
 
                         DateTime datetime = dr.GetDateTime(3);
 
-                        string _CompleteMsg = "[" + datetime.ToString("dd.MM") + "] [" + datetime.ToShortTimeString() + "] " + " [" + username + "] " + msg;
+                        string _CompleteMsg = id_msg + ": [" + datetime.ToString("dd.MM") + "] [" + datetime.ToShortTimeString() + "] " + " [" + username + "] " + msg;
 
                         if (_CompleteMsg.Length > 115 && _CompleteMsg.Length <= 230)
                         {

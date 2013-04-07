@@ -72,6 +72,8 @@ namespace LsTradeAgent
                                         CheckSendPrice(priority_id, barcode, date);
                                     }
 
+                                    ar_copy.Clear();
+
                                     Color.WriteLineColor("[Thread] Поток парсер завершен", ConsoleColor.Yellow);
                                 });
                                 th.Name = "Проверка общая";

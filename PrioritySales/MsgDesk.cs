@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace PrioritySales
 {
@@ -84,12 +85,49 @@ namespace PrioritySales
 
         private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int _fIndex = MainFormClassic.msgdesk.ListViewMsg.SelectedIndices[0];
+            if (MainFormClassic.UserGroup == 0)
+                return;
 
-            //MainFormClassic.msgdesk.ListViewMsg.Items[_fIndex].Text.
+            int _index = MainFormClassic.msgdesk.ListViewMsg.SelectedIndices[0];
 
-            //if (MainFormClassic.UserGroup > 1)
-             //   DeleteFromMsg(_MsgId);
+            string[] split = MainFormClassic.msgdesk.ListViewMsg.Items[_index].Text.Split(new Char[] { ':' });
+
+            if (MainFormClassic.UserGroup > 1)
+                DeleteFromMsg(split[0]);
+            else
+                CheckUserDeleteMsg(split[0]);
+        }
+
+        private void CheckUserDeleteMsg(string _MsgId)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+                {
+                    conn.Open();
+
+                    MySqlCommand cmd = new MySqlCommand("SELECT `userid` FROM `message` WHERE  `msg_id` = " +_MsgId, conn);
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr == null)
+                        {
+                            MessageBox.Show("Недостаточно прав для удаления.");
+                        }
+                        if (dr.Read())
+                        {
+                            if (dr.GetInt32(0) == MainFormClassic.UserId)
+                                DeleteFromMsg(_MsgId);
+                            else
+                                MessageBox.Show("Недостаточно прав для удаления.");
+                        }
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Log.log_write("[GetUserGroup]" + ex.Message, "EXCEPTION", "exception");
+            }
         }
 
         private void DeleteFromMsg(string _MsgId)
@@ -101,9 +139,9 @@ namespace PrioritySales
                                          MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
-                Connector.ExecuteNonQuery("");
+                Connector.ExecuteNonQuery("DELETE FROM `message` WHERE `msg_id` = " + _MsgId);
 
-                Server.Sender("PrioritySale", 6, "Удаление строки.");
+                Server.Sender("PrioritySale", 7, "Удаление сообщения с доски.");
             }
         }
     }
