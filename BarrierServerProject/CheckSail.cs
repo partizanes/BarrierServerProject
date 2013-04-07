@@ -118,6 +118,9 @@ namespace BarrierServerProject
                             int turn_price = Convert.ToInt32(dr.GetValue(1));
                             int sail_price = Convert.ToInt32(dr.GetValue(2));
 
+                            if (CheckAddTasks(id))
+                                continue;
+
                             if (turn_price > sail_price)
                                 TasksAdd(id, 1, " Цена на кассе меньше цены очередности [" + sail_price + "]", 8);
                             else
@@ -245,6 +248,39 @@ namespace BarrierServerProject
             else
                 Color.WriteLineColor("Обновлен расход в основном перечне.", ConsoleColor.Gray);
         }
+
+        private static bool CheckAddTasks(int priority_id)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+                {
+                    conn.Open();
+
+                    MySqlCommand cmd = new MySqlCommand("SELECT tasks_id FROM `tasks` WHERE `priority_id` = " + priority_id + " AND `user_id` > 0 AND `priority` = 3", conn);
+                    cmd.CommandTimeout = 0;
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            Color.WriteLineColor("Найдена принятая к прогрузке задача.",ConsoleColor.Yellow);
+                            return true;
+                        }
+
+                        Color.WriteLineColor("Задачи на прогрузку не найдены.", ConsoleColor.Blue);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Color.WriteLineColor("[CheckAddTasks]" + ex.Message, ConsoleColor.Red);
+                Log.ExcWrite("[CheckAddTasks]" + ex.Message);
+                return true;
+            }
+        }
+
 
         public static void TasksAdd(int id,int user_group, string task_text, int priority)
         {
