@@ -28,6 +28,7 @@ namespace PrioritySales
 
         public static Tasks tasks = new Tasks();
         public static InfoControl infocontrol = new InfoControl();
+        public static MsgDesk msgdesk = new MsgDesk();
         // ForeColor for all button block start
 
         private void MainFormClassic_Shown(object sender, EventArgs e)
@@ -861,40 +862,23 @@ namespace PrioritySales
 
         private void ButtonMsg_Click(object sender, EventArgs e)
         {
-            if (PanelMsgBg.Visible == true)
-                PanelMsgBg.Visible = false;
+            if (!Packages.mf.Controls.Contains(MainFormClassic.msgdesk))
+            {
+                Packages.mf.Controls.Add(MainFormClassic.msgdesk);
+
+                MainFormClassic.msgdesk.BringToFront();
+
+                MainFormClassic.msgdesk.Show();
+
+                MainFormClassic.msgdesk.Focus();
+
+                MainFormClassic.msgdesk.TextBoxMessage.Focus();
+            }
             else
             {
-                PanelMsgBg.Visible = true;
-                TextBoxMessage.Focus();
-            }
-        }
+                MainFormClassic.msgdesk.Hide();
 
-        private void TextBoxMessage_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.Enter:
-                    BoxStatus boxstatus = new BoxStatus();
-                    boxstatus.Location = new System.Drawing.Point(Packages.mf.Location.X + Packages.mf.Size.Width / 3 + 50, Packages.mf.Location.Y + 370);
-                    boxstatus.Show();
-                    break;
-                case Keys.Escape:
-                case Keys.Up:
-                    PanelMsgBg.Visible = false;
-                    ButtonMsg.Focus();
-                    break;
-                case Keys.ControlKey:
-                    ColorDialog colorDlg = new ColorDialog();
-                    colorDlg.AllowFullOpen = false;
-                    colorDlg.AnyColor = false;
-                    colorDlg.SolidColorOnly = true;
-
-                    colorDlg.Color = TextBoxMessage.ForeColor;
-
-                    if (colorDlg.ShowDialog() == DialogResult.OK)
-                        TextBoxMessage.ForeColor = colorDlg.Color;
-                    break;
+                Packages.mf.Controls.Remove(MainFormClassic.msgdesk);
             }
         }
 

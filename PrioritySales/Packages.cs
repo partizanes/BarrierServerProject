@@ -175,7 +175,7 @@ namespace PrioritySales
             {
                 conn.Open();
 
-                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Clear(); }));
+                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Clear(); }));
 
                 MySqlCommand cmd = new MySqlCommand("SELECT u.username,m.msg,m.msg_color,m.msg_datetime FROM users u,message m WHERE u.id = m.userid ORDER BY m.msg_priority", conn);
 
@@ -207,8 +207,8 @@ namespace PrioritySales
                             string part1 = _CompleteMsg.Substring(0, 115);
                             string part2 = _CompleteMsg.Substring(115, _CompleteMsg.Length - 115);
 
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part1); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part2); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part1); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part2); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
 
                             continue;
                         }
@@ -219,9 +219,9 @@ namespace PrioritySales
                             string part2 = _CompleteMsg.Substring(115, 115);
                             string part3 = _CompleteMsg.Substring(230, _CompleteMsg.Length - 230);
 
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part1); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part2); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part3); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part1); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part2); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part3); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
 
                             continue;
                         }
@@ -233,10 +233,10 @@ namespace PrioritySales
                             string part3 = _CompleteMsg.Substring(230, 115);
                             string part4 = _CompleteMsg.Substring(345, _CompleteMsg.Length - 345);
 
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part1); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part2); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part3); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(part4); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part1); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part2); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part3); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part4); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
 
 
                             continue;
@@ -244,7 +244,7 @@ namespace PrioritySales
 
                         if (_CompleteMsg.Length < 115)
                         {
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.ListViewMsg.Items.Add(_CompleteMsg); mf.ListViewMsg.Items[mf.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(_CompleteMsg); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
                             continue;
                         }
                     }
