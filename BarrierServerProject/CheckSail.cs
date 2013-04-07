@@ -57,116 +57,137 @@ namespace BarrierServerProject
 
         public static void CheckErrorSailPrice()
         {
-            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+            try
             {
-                conn.Open();
-
-                MySqlCommand cmd = new MySqlCommand(@"select p.id,p.turn_price,o.price from priority as p,operations as o where o.id = p.id AND p.turn_price != o.price AND o.inactive = 0", conn);
-
-                cmd.CommandTimeout = 0;
-
-                using (MySqlDataReader dr = cmd.ExecuteReader())
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                 {
-                    if (dr == null) { return; }
+                    conn.Open();
 
-                    if (!dr.HasRows) { return; }
+                    MySqlCommand cmd = new MySqlCommand(@"select p.id,p.turn_price,o.price from priority as p,operations as o where o.id = p.id AND p.turn_price != o.price AND o.inactive = 0", conn);
 
-                    while (dr.Read())
+                    cmd.CommandTimeout = 0;
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
-                        int id = dr.GetInt32(0);
-                        int turn_price = dr.GetInt32(1);
-                        int sailed_price = dr.GetInt32(2);
+                        if (dr == null) { return; }
 
-                        if (turn_price > sailed_price)
-                            TasksAdd(id, 2, " Продажи дешевле цены очередности [" + sailed_price + "]", 5);
-                        else
-                            TasksAdd(id, 1, " Продажи дороже цены очередности [" + sailed_price + "]", 6);
+                        if (!dr.HasRows) { return; }
+
+                        while (dr.Read())
+                        {
+                            int id = dr.GetInt32(0);
+                            int turn_price = dr.GetInt32(1);
+                            int sailed_price = dr.GetInt32(2);
+
+                            if (turn_price > sailed_price)
+                                TasksAdd(id, 2, " Продажи дешевле цены очередности [" + sailed_price + "]", 5);
+                            else
+                                TasksAdd(id, 1, " Продажи дороже цены очередности [" + sailed_price + "]", 6);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Color.WriteLineColor("[CheckErrorSailPrice]" + ex.Message,ConsoleColor.Red);
+                Log.ExcWrite("[CheckErrorSailPrice]" + ex.Message);
             }
         }
 
         public static void CheckCurrentPrices()
         {
-            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+            try
             {
-                conn.Open();
-
-                MySqlCommand cmd = new MySqlCommand(@"SELECT p.id,p.turn_price,b.price FROM " + Connector.BarrierDataBase + ".priority p," + Connector.UkmDataBase + ".trm_in_var C LEFT JOIN " + Connector.UkmDataBase + ".trm_in_items A ON A.id=C.item LEFT JOIN " + Connector.UkmDataBase + ".trm_in_pricelist_items B ON B.item=c.item WHERE C.item = p.bar AND p.turn_price != b.price AND b.pricelist_id= 1", conn);
-
-                cmd.CommandTimeout = 0;
-
-                using (MySqlDataReader dr = cmd.ExecuteReader())
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                 {
-                    if (dr == null) { return; }
+                    conn.Open();
 
-                    if (!dr.HasRows) { return; }
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT p.id,p.turn_price,b.price FROM " + Connector.BarrierDataBase + ".priority p," + Connector.UkmDataBase + ".trm_in_var C LEFT JOIN " + Connector.UkmDataBase + ".trm_in_items A ON A.id=C.item LEFT JOIN " + Connector.UkmDataBase + ".trm_in_pricelist_items B ON B.item=c.item WHERE C.item = p.bar AND p.turn_price != b.price AND b.pricelist_id= 1", conn);
 
-                    while (dr.Read())
+                    cmd.CommandTimeout = 0;
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
-                        int id = dr.GetInt32(0);
-                        int turn_price = Convert.ToInt32(dr.GetValue(1));
-                        int sail_price = Convert.ToInt32(dr.GetValue(2));
+                        if (dr == null) { return; }
 
-                        if (turn_price > sail_price)
-                            TasksAdd(id, 1, " Цена на кассе меньше цены очередности [" + sail_price + "]", 8);
-                        else
-                            TasksAdd(id, 1, " Цена на кассе больше цены очередности [" + sail_price + "]", 7);
+                        if (!dr.HasRows) { return; }
+
+                        while (dr.Read())
+                        {
+                            int id = dr.GetInt32(0);
+                            int turn_price = Convert.ToInt32(dr.GetValue(1));
+                            int sail_price = Convert.ToInt32(dr.GetValue(2));
+
+                            if (turn_price > sail_price)
+                                TasksAdd(id, 1, " Цена на кассе меньше цены очередности [" + sail_price + "]", 8);
+                            else
+                                TasksAdd(id, 1, " Цена на кассе больше цены очередности [" + sail_price + "]", 7);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Color.WriteLineColor("[CheckCurrentPrices]" + ex.Message, ConsoleColor.Red);
+                Log.ExcWrite("[CheckCurrentPrices]" + ex.Message);
             }
         }
 
         private static void CurrentStatusRemains()
         {
-            string b = Config.GetParametr("BarrierDataBase");
-
-
-            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+            try
             {
-                conn.Open();
-
-                MySqlCommand cmd = new MySqlCommand(@"SELECT p.id,p.count,SUM(o.count) FROM operations o,priority p WHERE o.id = p.id GROUP BY o.id", conn);
-
-                cmd.CommandTimeout = 0;
-
-                using (MySqlDataReader dr = cmd.ExecuteReader())
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                 {
-                    if (dr == null) { return; }
+                    conn.Open();
 
-                    if (!dr.HasRows) { return; }
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT p.id,p.count,SUM(o.count) FROM operations o,priority p WHERE o.id = p.id GROUP BY o.id", conn);
 
-                    while (dr.Read())
+                    cmd.CommandTimeout = 0;
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
-                        int id = dr.GetInt32(0);
+                        if (dr == null) { return; }
 
-                        double turn_count = dr.GetDouble(1);
-                        double sail_price = dr.GetDouble(2);
+                        if (!dr.HasRows) { return; }
 
-                        if(turn_count < sail_price)
+                        while (dr.Read())
                         {
-                            TasksAdd(id,1," Нужна прогрузка цены на кассу",3);
-                            TasksAdd(id,2," Продано больше чем нужно",3);
-                            continue;
-                        }
+                            int id = dr.GetInt32(0);
 
-                        if (turn_count == sail_price)
-                        {
-                            TasksAdd(id, 1, " Нужна прогрузка цены на касску", 2);
-                            continue;
-                        }
+                            double turn_count = dr.GetDouble(1);
+                            double sail_price = dr.GetDouble(2);
 
-                        if (turn_count < (sail_price + 1))
-                        {
-                            //TODO товар на подходе 99 status;
-                        }
+                            if (turn_count < sail_price)
+                            {
+                                TasksAdd(id, 1, " Нужна прогрузка цены на кассу", 3);
+                                TasksAdd(id, 2, " Продано больше чем нужно", 3);
+                                continue;
+                            }
 
-                        if (turn_count > sail_price)
-                        {
-                            //Все ок!
+                            if (turn_count == sail_price)
+                            {
+                                TasksAdd(id, 1, " Нужна прогрузка цены на касску", 2);
+                                continue;
+                            }
+
+                            if (turn_count < (sail_price + 1))
+                            {
+                                //TODO товар на подходе 99 status;
+                            }
+
+                            if (turn_count > sail_price) 
+                            {
+                                //Все ок! 
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Color.WriteLineColor("[CurrentStatusRemains]" + ex.Message, ConsoleColor.Red);
+                Log.ExcWrite("[CurrentStatusRemains]" + ex.Message);
             }
         }
 
@@ -178,34 +199,42 @@ namespace BarrierServerProject
                     Thread.Sleep(5000);
             }
 
-            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+            try
             {
-                conn.Open();
-
-                MySqlCommand cmd = new MySqlCommand("SELECT t.tasks_id,p.id,p.bar,p.date FROM tasks t,priority p WHERE  p.id = t.priority_id", conn);
-                cmd.CommandTimeout = 0;
-
-                using (MySqlDataReader dr = cmd.ExecuteReader())
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                 {
-                    while (dr.Read())
+                    conn.Open();
+
+                    MySqlCommand cmd = new MySqlCommand("SELECT t.tasks_id,p.id,p.bar,p.date FROM tasks t,priority p WHERE  p.id = t.priority_id", conn);
+                    cmd.CommandTimeout = 0;
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
-                        if (!dr.IsDBNull(0))
+                        while (dr.Read())
                         {
-                            int tasks_id = dr.GetInt32(0);
-                            int priority_id = dr.GetInt32(1);
-                            string bar = dr.GetString(2);
-                            string datetime = dr.GetDateTime(3).ToString("yyyy-MM-dd,HH:mm:ss");
+                            if (!dr.IsDBNull(0))
+                            {
+                                int tasks_id = dr.GetInt32(0);
+                                int priority_id = dr.GetInt32(1);
+                                string bar = dr.GetString(2);
+                                string datetime = dr.GetDateTime(3).ToString("yyyy-MM-dd,HH:mm:ss");
 
-                            //send lstradeagent priority_id;bar;datetime
-                            Msg.SendUser("LsTradeAgent", "DR", 1, priority_id + ";" + bar + ";" + datetime);
-                            Thread.Sleep(200);
+                                //send lstradeagent priority_id;bar;datetime
+                                Msg.SendUser("LsTradeAgent", "DR", 1, priority_id + ";" + bar + ";" + datetime);
+                                Thread.Sleep(200);
+                            }
                         }
+
+                        Color.WriteLineColor("Данные для проверки задач отправлены в LsTradeAgent.", ConsoleColor.Cyan);
+
+                        Msg.SendUser("LsTradeAgent", "DR", 2, "Данные для проверки задач отправлены.");
                     }
-
-                    Color.WriteLineColor("Данные для проверки задач отправлены в LsTradeAgent.", ConsoleColor.Cyan);
-
-                    Msg.SendUser("LsTradeAgent", "DR", 2, "Данные для проверки задач отправлены.");
                 }
+            }
+            catch (Exception ex)
+            {
+                Color.WriteLineColor("[CheckSendUkmPrice]" + ex.Message, ConsoleColor.Red);
+                Log.ExcWrite("[CheckSendUkmPrice]" + ex.Message);
             }
         }
 
@@ -225,30 +254,36 @@ namespace BarrierServerProject
 
             string uquery = @"UPDATE `priority` SET `status` = " + priority + " WHERE id =" + id;
 
-//           Log.LogWriteDebug(query);
-
-            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+            try
             {
-                conn.Open();
-
-                MySqlCommand cmd = new MySqlCommand(@"SELECT * FROM `tasks` WHERE priority_id = " + id + " AND task_text = '" + task_text + "' AND priority =" + priority, conn);
-
-                cmd.CommandTimeout = 0;
-
-                using (MySqlDataReader dr = cmd.ExecuteReader())
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                 {
-                    if (dr == null) { Packages.connector.ExecuteNonQuery(query + uquery); return; }
+                    conn.Open();
 
-                    if (!dr.HasRows) { Packages.connector.ExecuteNonQuery(query + uquery); return; }
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT * FROM `tasks` WHERE priority_id = " + id + " AND task_text = '" + task_text + "' AND priority =" + priority, conn);
 
-                    while (dr.Read())
+                    cmd.CommandTimeout = 0;
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
-                        Color.WriteLineColor("Обнаружена идентичная задача.Статус обновлен.Записано в лог.Пропущено.", ConsoleColor.Yellow);
-                        Packages.connector.ExecuteNonQuery(uquery);
-                        Log.Write(cmd.CommandText,"1","IDENTICAL");
-                        Log.Write(query, "2", "IDENTICAL");
+                        if (dr == null) { Packages.connector.ExecuteNonQuery(query + uquery); return; }
+
+                        if (!dr.HasRows) { Packages.connector.ExecuteNonQuery(query + uquery); return; }
+
+                        while (dr.Read())
+                        {
+                            Color.WriteLineColor("Обнаружена идентичная задача.Статус обновлен.Записано в лог.Пропущено.", ConsoleColor.Yellow);
+                            Packages.connector.ExecuteNonQuery(uquery);
+                            Log.Write(cmd.CommandText, "1", "IDENTICAL");
+                            Log.Write(query, "2", "IDENTICAL");
+                        }
                     }
                 }
+            }
+            catch (System.Exception ex)
+            {
+                Color.WriteLineColor("[TasksAdd]" + ex.Message, ConsoleColor.Red);
+                Log.ExcWrite("[TasksAdd]" + ex.Message);
             }
         }
     }

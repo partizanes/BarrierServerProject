@@ -198,11 +198,13 @@ namespace BarrierServerProject
         {
             Color.WriteLineColor("Запрос на кассовый сервер информации по продажам...", ConsoleColor.Cyan);
 
-            using (MySqlConnection conn = new MySqlConnection(Connector.UkmStringConnecting))
+            try
             {
-                conn.Open();
+                using (MySqlConnection conn = new MySqlConnection(Connector.UkmStringConnecting))
+                {
+                    conn.Open();
 
-                MySqlCommand cmd = new MySqlCommand(@"SELECT SUM(IF(h.type IN (0,5), 1, -1) * i.quantity) quantity,i.price
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT SUM(IF(h.type IN (0,5), 1, -1) * i.quantity) quantity,i.price
              												FROM trm_in_pos c INNER JOIN 
              												trm_out_receipt_header h ON h.cash_id = c.cash_id INNER JOIN 
              												trm_out_receipt_item i ON i.cash_id = h.cash_id AND i.receipt_header = h.id  LEFT JOIN 
@@ -210,25 +212,31 @@ namespace BarrierServerProject
              												trm_out_receipt_footer f ON f.cash_id = h.cash_id AND f.id = h.id 
              												WHERE i2.link_item IS NULL AND i.type = 0 AND 
              												h.type IN (0,5,1,4) AND f.result IN (0) AND 1001 = c.store_id AND i.item LIKE '" + bar + "%' AND f.date >= '" + date.ToString("yyyy-MM-dd,HH:mm:ss") + "' GROUP BY i.price", conn);
-                cmd.CommandTimeout = 0;
+                    cmd.CommandTimeout = 0;
 
-                using (MySqlDataReader dr = cmd.ExecuteReader())
-                {
-                    Packages.connector.ExecuteNonQuery("DELETE FROM `operations` WHERE `id` = " + id + " AND `operation` = '51'");
-                    if (dr == null) { }
-
-                    if (!dr.HasRows) { NoSales(id, bar, turn_price, date); }
-
-                    while (dr.Read())
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
-                        string count = dr.GetValue(0).ToString().Replace(",",".");
+                        Packages.connector.ExecuteNonQuery("DELETE FROM `operations` WHERE `id` = " + id + " AND `operation` = '51'");
+                        if (dr == null) { }
 
-                        if (Packages.connector.ExecuteNonQuery("INSERT INTO `operations`(`id`,`operation`,`count`,`price`,`inactive`) VALUES ( '" + id + "','51','" + count + "','" + dr.GetString(1).Replace(",",".") + "','0')"))
-                            Color.WriteLineColor("[" + id + "] Успешно добавлена операция расхода(51) по штрихкоду " + bar, ConsoleColor.Blue);
-                        else
-                            Color.WriteLineColor("[" + id + "] Отклонена операция расхода(51) по штрихкоду " + bar, ConsoleColor.Red);
+                        if (!dr.HasRows) { NoSales(id, bar, turn_price, date); }
+
+                        while (dr.Read())
+                        {
+                            string count = dr.GetValue(0).ToString().Replace(",", ".");
+
+                            if (Packages.connector.ExecuteNonQuery("INSERT INTO `operations`(`id`,`operation`,`count`,`price`,`inactive`) VALUES ( '" + id + "','51','" + count + "','" + dr.GetString(1).Replace(",", ".") + "','0')"))
+                                Color.WriteLineColor("[" + id + "] Успешно добавлена операция расхода(51) по штрихкоду " + bar, ConsoleColor.Blue);
+                            else
+                                Color.WriteLineColor("[" + id + "] Отклонена операция расхода(51) по штрихкоду " + bar, ConsoleColor.Red);
+                        }
                     }
                 }
+            }
+            catch (System.Exception ex)
+            {
+                Color.WriteLineColor("[GetUkmSail] " + ex.Message, ConsoleColor.Red);
+                Log.ExcWrite("[GetUkmSail] " + ex.Message);
             }
         }
 

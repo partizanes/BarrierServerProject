@@ -41,17 +41,24 @@ namespace PrioritySales
 
         private void GetUserGroup()
         {
-            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+            try
             {
-                conn.Open();
-
-                MySqlCommand cmd = new MySqlCommand("SELECT `group` FROM `users` WHERE `username` = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "'", conn);
-
-                using (MySqlDataReader dr = cmd.ExecuteReader())
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                 {
-                    if (dr == null) { return; }
-                    if (dr.Read()) { UserGroup = dr.GetInt32(0); }
+                    conn.Open();
+
+                    MySqlCommand cmd = new MySqlCommand("SELECT `group` FROM `users` WHERE `username` = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "'", conn);
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr == null) { return; }
+                        if (dr.Read()) { UserGroup = dr.GetInt32(0); }
+                    }
                 }
+            }
+            catch (System.Exception ex)
+            {
+                Log.log_write("[GetUserGroup]" + ex.Message,"EXCEPTION","exception");
             }
         }
 
@@ -78,7 +85,7 @@ namespace PrioritySales
             }
             catch (System.Exception ex)
             {
-                Log.LogWriteDebug("[CheckTasks] " + ex.Message);
+                Log.ExcWrite("[CheckTasks]" + ex.Message);
             }
         }
 
