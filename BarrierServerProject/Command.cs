@@ -128,6 +128,8 @@ namespace BarrierServerProject
                     int h = i / 3600 - (day * 24);
                     int minute = (i / 60) - (h * 60);
                     int second = i - (minute * 60) - (h * 3600);
+
+                    string _h = "";
                     string n = "";
                     string m = "";
 
@@ -137,7 +139,10 @@ namespace BarrierServerProject
                     if (minute < 10)
                         m = "0";
 
-                    return @"Время работы сервера составляет: " + day + "д. " + h + ":" + m + minute + ":" + n + second;
+                    if (h < 10)
+                        _h = "0";
+
+                    return @"Время работы сервера составляет: " +  day + "д. " + _h + h + ":" + m + minute + ":" + n + second;
 
                 default:
                     {
