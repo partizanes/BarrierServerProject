@@ -58,6 +58,8 @@ namespace LsTradeAgent
                                     }
 
                                     ar.Clear();
+                                    ar = null;
+                                    GC.Collect();
 
                                     Color.WriteLineColor("Сделана копия массива", ConsoleColor.Blue);
 
@@ -72,7 +74,8 @@ namespace LsTradeAgent
                                         CheckSendPrice(priority_id, barcode, date);
                                     }
 
-                                    ar_copy.Clear();
+                                    ar_copy = null;
+                                    GC.Collect();
 
                                     Color.WriteLineColor("[Thread] Поток парсер завершен", ConsoleColor.Yellow);
                                 });
@@ -87,63 +90,70 @@ namespace LsTradeAgent
 
         private static void CheckSendPrice(string priority_id, string barcode, string date)
         {
-            OleDbDataReader dr = null;
-
             string kass = @"К3";
             string cena = @"Ц2";
 
-            //TODO k_dev in config;
-            dr = Dbf.dbf_read("select n_cenu,kod_isp,p_time,k_dev from dvkinpr where k_grup = '" + barcode + "' AND p_time > {^ " + date + " } AND k_dev IN('" + kass + "','" + cena + "')");
-
-            if (dr == null)
+            try
             {
-                Color.WriteLineColor("Отсутствуют данные отправки на кассу по штрихкоду: " + barcode, ConsoleColor.Yellow);
-                return;
-            }
-
-            using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
-            {
-                MySqlCommand cmd = new MySqlCommand();
-
-                try
+                using (OleDbConnection OleDbconn = new OleDbConnection(Dbf.ConnectingString))
                 {
-                    Color.WriteLineColor("Открытие соединения для добавления данных отправки на кассу...", ConsoleColor.Green);
+                    OleDbconn.Open();
 
-                    conn.Open();
+                    //TODO k_dev in config;
+                    OleDbCommand OleDbcmd = new OleDbCommand(@"select n_cenu,kod_isp,p_time,k_dev from dvkinpr where k_grup = '" + barcode + "' AND p_time > {^ " + date + " } AND k_dev IN('" + kass + "','" + cena + "')");
 
-                    cmd.Connection = conn;
+                    OleDbcmd.Connection = OleDbconn;
 
-                    cmd.CommandText = "INSERT IGNORE INTO `sendPOS` VALUES(@id, @price, @kod_isp, @datetime, @action)";
-                    cmd.Prepare();
+                    OleDbcmd.CommandTimeout = 0;
 
-                    cmd.Parameters.AddWithValue("@id", 1);
-                    cmd.Parameters.AddWithValue("@price", 8500);
-                    cmd.Parameters.AddWithValue("@kod_isp", 22);
-                    cmd.Parameters.AddWithValue("@datetime", "2012-01-01 00:00:00" );
-                    cmd.Parameters.AddWithValue("@action", "text");
-
-                    if(!dr.HasRows)
-                        Color.WriteLineColor("Отсутствуют данные отправки на кассу по штрихкоду: " + barcode, ConsoleColor.Yellow);
-
-                    while (dr.Read())
+                    using (OleDbDataReader OleDbDr = OleDbcmd.ExecuteReader())
                     {
-                        cmd.Parameters["@id"].Value = priority_id;
-                        cmd.Parameters["@price"].Value = dr.GetValue(0);
-                        cmd.Parameters["@kod_isp"].Value = dr.GetValue(1);
-                        cmd.Parameters["@datetime"].Value = dr.GetDateTime(2).ToString("yyyy-MM-dd,HH:mm:ss");
-                        cmd.Parameters["@action"].Value = dr.GetValue(3);
+                        if (OleDbDr == null || !OleDbDr.HasRows)
+                        {
+                            Color.WriteLineColor("Отсутствуют данные отправки на кассу по штрихкоду: " + barcode, ConsoleColor.Yellow);
+                            return;
+                        }
 
-                        cmd.ExecuteNonQuery();
+                        using (MySqlConnection MySqlconn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+                        {
+                            MySqlCommand MySqlCmd = new MySqlCommand();
 
-                        Color.WriteLineColor("[sendPOS] Добавлена строка " + priority_id, ConsoleColor.DarkYellow);
+
+                            Color.WriteLineColor("Открытие соединения для добавления данных отправки на кассу...", ConsoleColor.Green);
+
+                            MySqlconn.Open();
+
+                            MySqlCmd.Connection = MySqlconn;
+
+                            MySqlCmd.CommandText = "INSERT IGNORE INTO `sendPOS` VALUES(@id, @price, @kod_isp, @datetime, @action)";
+                            MySqlCmd.Prepare();
+
+                            MySqlCmd.Parameters.AddWithValue("@id", 1);
+                            MySqlCmd.Parameters.AddWithValue("@price", 8500);
+                            MySqlCmd.Parameters.AddWithValue("@kod_isp", 22);
+                            MySqlCmd.Parameters.AddWithValue("@datetime", "2012-01-01 00:00:00");
+                            MySqlCmd.Parameters.AddWithValue("@action", "text");
+
+                            while (OleDbDr.Read())
+                            {
+                                MySqlCmd.Parameters["@id"].Value = priority_id;
+                                MySqlCmd.Parameters["@price"].Value = OleDbDr.GetValue(0);
+                                MySqlCmd.Parameters["@kod_isp"].Value = OleDbDr.GetValue(1);
+                                MySqlCmd.Parameters["@datetime"].Value = OleDbDr.GetDateTime(2).ToString("yyyy-MM-dd,HH:mm:ss");
+                                MySqlCmd.Parameters["@action"].Value = OleDbDr.GetValue(3);
+
+                                MySqlCmd.ExecuteNonQuery();
+
+                                Color.WriteLineColor("[sendPOS] Добавлена строка " + priority_id, ConsoleColor.DarkYellow);
+                            }
+                        }
                     }
-
                 }
-                catch (System.Exception ex)
-                {
-                    Color.WriteLineColor("[CheckSendPrice]" + ex.Message, ConsoleColor.Red);
-                    Log.ExcWrite("[CheckSendPrice]" + ex.Message);
-                }
+            }
+            catch (System.Exception ex)
+            {
+                Color.WriteLineColor("[CheckSendPrice]" + ex.Message, ConsoleColor.Red);
+                Log.ExcWrite("[CheckSendPrice]" + ex.Message);
             }
         }
 

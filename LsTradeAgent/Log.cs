@@ -8,7 +8,7 @@ namespace LsTradeAgent
 {
     class Log
     {
-        public static void log_write(string str, string reason, string logname)
+        public static void Write(string str, string reason, string logname)
         {
             string EntryTime = DateTime.Now.ToLongTimeString();
             string EntryDate = DateTime.Today.ToShortDateString();
@@ -29,13 +29,13 @@ namespace LsTradeAgent
             }
             catch (Exception ex)
             {
-                log_write(ex.Message, "Exception", "Exception");
+                Write(ex.Message, "Exception", "Exception");
             }
         }
 
         public static void ExcWrite(string text)
         {
-            log_write(text, "EXCEPTION", "exception");
+            Write(text, "EXCEPTION", "exception");
         }
     }
 }
