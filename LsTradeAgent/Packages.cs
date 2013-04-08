@@ -43,41 +43,55 @@ namespace LsTradeAgent
                             break;
                         case 1:
                             Color.WriteLineColor("Принято: " + msg, ConsoleColor.Green);
-                            ar.Add(msg);
+                            try
+                            {
+                                ar.Add(msg);
+                            }
+                            catch (System.Exception ex)
+                            {
+                                Color.WriteLineColor("При попытке добавить в массив произошло исключение. " + ex.Message, ConsoleColor.Red);
+                                Log.ExcWrite(ex.Message);
+                            }
                             break;
                         case 2:
                             Thread th = new Thread(delegate()
                                 {
-                                    Color.WriteLineColor("[Thread] Поток парсер создан", ConsoleColor.Yellow);
-
-                                    List<string> ar_copy = new List<string>();
-
-                                    foreach (string str in ar)
+                                    try
                                     {
-                                        ar_copy.Add(str);
+                                        Color.WriteLineColor("[Thread] Поток парсер создан", ConsoleColor.Yellow);
+
+                                        List<string> ar_copy = new List<string>();
+
+                                        foreach (string str in ar)
+                                        {
+                                            ar_copy.Add(str);
+                                        }
+
+                                        ar.Clear();
+                                        GC.Collect();
+
+                                        Color.WriteLineColor("Сделана копия массива", ConsoleColor.Blue);
+                                        foreach (string str in ar_copy)
+                                        {
+                                            string[] split_data = str.Split(new Char[] { ';' });
+
+                                            string priority_id = split_data[0];
+                                            string barcode = split_data[1];
+                                            string date = split_data[2];
+
+                                            CheckSendPrice(priority_id, barcode, date);
+                                        }
+
+                                        ar_copy = null;
+                                        GC.Collect();
+
+                                        Color.WriteLineColor("[Thread] Поток парсер завершен", ConsoleColor.Yellow);
                                     }
-
-                                    ar.Clear();
-                                    ar = null;
-                                    GC.Collect();
-
-                                    Color.WriteLineColor("Сделана копия массива", ConsoleColor.Blue);
-
-                                    foreach (string str in ar_copy)
+                                    catch (System.Exception ex)
                                     {
-                                        string[] split_data = str.Split(new Char[] { ';' });
-
-                                        string priority_id = split_data[0];
-                                        string barcode = split_data[1];
-                                        string date = split_data[2];
-
-                                        CheckSendPrice(priority_id, barcode, date);
+                                        Color.WriteLineColor(ex.Message, ConsoleColor.Red);
+                                        Log.ExcWrite(ex.Message);
                                     }
-
-                                    ar_copy = null;
-                                    GC.Collect();
-
-                                    Color.WriteLineColor("[Thread] Поток парсер завершен", ConsoleColor.Yellow);
                                 });
                                 th.Name = "Проверка общая";
                                 th.Start();

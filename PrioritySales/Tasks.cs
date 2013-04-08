@@ -288,7 +288,7 @@ namespace PrioritySales
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand(@"SELECT `action`,`price`,`kod_isp`,`datetime` FROM `sendPOS` WHERE id = " + s, conn);
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT `action`,`price`,`kod_isp`,`datetime` FROM `sendPOS` WHERE id = (SELECT priority_id FROM `tasks` WHERE tasks_id = " + s + ")", conn);
                     cmd.CommandTimeout = 0;
 
                     using (MySqlDataReader dr = cmd.ExecuteReader())

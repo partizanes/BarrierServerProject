@@ -11,6 +11,7 @@ namespace BarrierServerProject
         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
         static IntPtr ConsoleHandle = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
+        public static DateTime DateTimeStartPrg = DateTime.Now;
 
         private const int SW_MINIMIZE = 6;
         private const int SW_MAXIMIZE = 3;
@@ -103,6 +104,17 @@ namespace BarrierServerProject
                 });
                 tha.Name = "Проверка задач";
                 tha.Start();
+
+                Thread ths = new Thread(delegate()
+                {
+                    while (true)
+                    {
+                        Command.SwitchCommand("uptime");
+                        Thread.Sleep(3600000);
+                    }
+                });
+                ths.Name = "Проверка общая";
+                ths.Start();
             }
 
             Thread.Sleep(1000);
