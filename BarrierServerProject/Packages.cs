@@ -107,6 +107,8 @@ namespace BarrierServerProject
 
                                 }
                             }
+                        case 4:
+
                         case 5:
                             Int32 _LastId;
 
@@ -129,7 +131,10 @@ namespace BarrierServerProject
                             }
                             break;
                         case 6:
-                            Color.WriteLineColor("Производиться удаление строки...", ConsoleColor.Yellow);
+                            Color.WriteLineColor("[" + user.username + "] "  + msg, ConsoleColor.DarkGreen);
+
+                            if(msg.Contains("отказался"))
+                                Log.Write("[" + user.username + "] " + msg, "[DECLINE]", "Decline");
 
                             foreach (System.Collections.DictionaryEntry de in Server.clients)
                             {

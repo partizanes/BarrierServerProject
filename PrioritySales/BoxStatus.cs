@@ -51,14 +51,13 @@ namespace PrioritySales
         {
             string message = MainFormClassic.msgdesk.TextBoxMessage.Text;
             string msg_color = MainFormClassic.msgdesk.TextBoxMessage.ForeColor.Name.ToString();
-            string username = Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "");
             string datetime = DateTime.Now.ToString("yyyy-MM-dd,HH:mm:ss");
             Color color = Color.FromName(msg_color);
 
-            if(message.Length < 5 || msg_color.Length < 2 || username.Length < 3)
+            if (message.Length < 5 || msg_color.Length < 2 || MainFormClassic.UserName.Length < 3)
                 return;
 
-            if (Connector.ExecuteNonQuery("INSERT IGNORE INTO `message`(`userid`,`msg_priority`,`msg_color`,`msg`,`msg_datetime`) VALUES ( (SELECT id FROM users WHERE username = '" + username + "'),'" + priority + "','" + msg_color + "','" + message + "','" + datetime + "')"))
+            if (Connector.ExecuteNonQuery("INSERT IGNORE INTO `message`(`userid`,`msg_priority`,`msg_color`,`msg`,`msg_datetime`) VALUES ( (SELECT id FROM users WHERE username = '" + MainFormClassic.UserName + "'),'" + priority + "','" + msg_color + "','" + message + "','" + datetime + "')"))
             {
                 MainFormClassic.msgdesk.TextBoxMessage.Text = "";
                 MainFormClassic.msgdesk.TextBoxMessage.ForeColor = Color.Silver;

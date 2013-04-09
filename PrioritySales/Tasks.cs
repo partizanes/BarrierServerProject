@@ -129,9 +129,7 @@ namespace PrioritySales
 
                 conn.Open();
 
-                string username = Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "");
-
-                MySqlCommand cmd = new MySqlCommand("SELECT tasks_id,priority_id,task_text FROM tasks WHERE `user_group` = (SELECT `group` FROM users WHERE `username` = '" + username + "') AND `user_id` = (SELECT `id` FROM users WHERE `username` = '" + username + "') AND `inactive` = 0 ORDER BY priority DESC", conn);
+                MySqlCommand cmd = new MySqlCommand("SELECT tasks_id,priority_id,task_text FROM tasks WHERE `user_group` = (SELECT `group` FROM users WHERE `username` = '" + MainFormClassic.UserName + "') AND `user_id` = (SELECT `id` FROM users WHERE `username` = '" + MainFormClassic.UserName + "') AND `inactive` = 0 ORDER BY priority DESC", conn);
 
                 using (MySqlDataReader dr = cmd.ExecuteReader())
                 {
@@ -442,8 +440,60 @@ namespace PrioritySales
                         Packages.mf.Controls.Remove(MainFormClassic.infocontrol);
                         break;
                     }
-            	break;
+                    break;
+                case Keys.ControlKey:
+                    Point pCell = DataGridViewAccepted.GetCellDisplayRectangle(DataGridViewAccepted.CurrentCell.ColumnIndex, DataGridViewAccepted.CurrentCell.RowIndex, true).Location;
+                    MenuStripDataGrid.Show(pCell.X + MainFormClassic.tasks.Location.X + DataGridViewAccepted.Location.X + DataGridViewAccepted.Size.Width / 4, pCell.Y + MainFormClassic.tasks.Location.Y + DataGridViewAccepted.Location.Y + 23);
+                    MenuStripDataGrid.Items[0].Select();
+                    break;
             }
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            string s = DataGridViewAccepted.Rows[DataGridViewAccepted.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
+
+            Connector.ExecuteNonQuery("UPDATE `tasks` SET `user_id` = 0 WHERE  tasks_id = " + s );
+
+            if (Server.server.Connected)
+                Server.Sender("PrioritySale", 6, "Пользователь отказался от задачи " + s);
+
+            CheckRowCount();
+        }
+
+        private void CompliteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string s = DataGridViewAccepted.Rows[DataGridViewAccepted.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
+
+            Connector.ExecuteNonQuery("UPDATE `tasks` SET `inactive` = 2 WHERE  tasks_id = " + s);
+
+            if (Server.server.Connected)
+                Server.Sender("PrioritySale", 6, "Пользователь выполнил задачу " + s);
+
+            CheckRowCount();
+        }
+
+        private void CheckRowCount()
+        {
+
+            if (DataGridViewAccepted.Rows.Count == 1)
+            {
+                if (DataGridViewTasks.Rows.Count > 0)
+                {
+                    DataGridViewAccepted.DefaultCellStyle.SelectionForeColor = Color.DodgerBlue;
+                    DataGridViewTasks.DefaultCellStyle.SelectionForeColor = Color.ForestGreen;
+                    DataGridViewTasks.Focus();
+                }
+                else
+                {
+                    Packages.mf.ButtonTasks.Focus();
+                    Packages.mf.ButtonTasks.ForeColor = System.Drawing.Color.Green;
+                    DataGridViewTasks.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.DodgerBlue;
+                }
+            }
+
+            MainFormClassic.tasks.UpdateDataGrid();
+            MainFormClassic.tasks.UpdateDataGridAcceptedTasks();
         }
     }
 }

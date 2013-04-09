@@ -30,6 +30,8 @@ namespace PrioritySales
         public static Tasks tasks = new Tasks();
         public static InfoControl infocontrol = new InfoControl();
         public static MsgDesk msgdesk = new MsgDesk();
+        public static string UserName;
+
         // ForeColor for all button block start
 
         private void MainFormClassic_Shown(object sender, EventArgs e)
@@ -1192,6 +1194,8 @@ namespace PrioritySales
 
         private void LabelUserName_TextChanged(object sender, EventArgs e)
         {
+            UserName = Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "");
+
             GetUserGroup();
 
             GetUserId();

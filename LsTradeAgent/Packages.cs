@@ -9,7 +9,7 @@ namespace LsTradeAgent
     class Packages
     {
         private static Boolean StatusParse = true;
-        public static Connector connector = new Connector();
+        //public static Connector connector = new Connector();
         private static List<string> ar = new List<string>();
 
         public static void parse(string p_id, int com, string msg)
@@ -150,6 +150,7 @@ namespace LsTradeAgent
 
                             while (OleDbDr.Read())
                             {
+                                Connector.ExecuteNonQuery("DELETE FROM `sendPOS` WHERE `id` =" + priority_id + " AND `price` =" + OleDbDr.GetValue(0) + " AND `kod_isp` = " + OleDbDr.GetValue(1) + " AND `datetime` = '" + OleDbDr.GetDateTime(2).ToString("yyyy-MM-dd,HH:mm:ss") + "'");
                                 MySqlCmd.Parameters["@id"].Value = priority_id;
                                 MySqlCmd.Parameters["@price"].Value = OleDbDr.GetValue(0);
                                 MySqlCmd.Parameters["@kod_isp"].Value = OleDbDr.GetValue(1);
@@ -194,7 +195,7 @@ namespace LsTradeAgent
 
                     using (OleDbDataReader DbfDataReader = cmd.ExecuteReader())
                     {
-                        connector.ExecuteNonQuery("DELETE FROM `operations` WHERE `id` = " + id + " AND `operation` IN ('53', '61','62','72','93')", Config.GetParametr("BarrierDataBase"));
+                        Connector.ExecuteNonQuery("DELETE FROM `operations` WHERE `id` = " + id + " AND `operation` IN ('53', '61','62','72','93')");
 
                         if (DbfDataReader == null)
                         {
@@ -208,7 +209,7 @@ namespace LsTradeAgent
                             string oper = DbfDataReader.GetString(1);
                             string price = DbfDataReader.GetValue(3).ToString().Replace(",", ".");
 
-                            if (connector.ExecuteNonQuery("INSERT INTO `operations`(`id`,`operation`,`count`,`price`,`inactive`) VALUES ( '" + id + "','" + oper + "','" + count + "','" + price + "','0');", Config.GetParametr("BarrierDataBase")))
+                            if (Connector.ExecuteNonQuery("INSERT INTO `operations`(`id`,`operation`,`count`,`price`,`inactive`) VALUES ( '" + id + "','" + oper + "','" + count + "','" + price + "','0');"))
                                 Color.WriteLineColor("Добавлен код операции: " + oper + " Количество: " + count + " Цена: " + price, ConsoleColor.Yellow);
                             else
                                 Color.WriteLineColor("Отклонен код операции: " + oper + " Количество: " + count + " Цена: " + price, ConsoleColor.Red);

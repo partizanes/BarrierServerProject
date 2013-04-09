@@ -9,35 +9,35 @@ namespace LsTradeAgent
 {
     class Connector
     {
-        private MySqlCommand cmd;
-        private MySqlConnection serverConn;
-        private string connStr;
+        public static string BarrierDataBase = Config.GetParametr("BarrierDataBase");
+        public static string UkmDataBase = Config.GetParametr("UkmDataBase");
+        public static string IpCashServer = Config.GetParametr("IpCashServer");
+        private static int CommandTimeout = int.Parse(Config.GetParametr("CommandTimeout"));
+        public static int ConnectTimeout = int.Parse(Config.GetParametr("ConnectTimeout"));
+        public static string BarrierStringConnecting = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=" + ConnectTimeout + ";", IpCashServer, "BarrierServerR", "***REMOVED***", BarrierDataBase);
+        public static string UkmStringConnecting = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60" + ConnectTimeout + ";", IpCashServer, "BarrierServerR", "***REMOVED***", UkmDataBase);
 
-        public Boolean ExecuteNonQuery(string str, string bdname)
+
+        public static Boolean ExecuteNonQuery(string str)
         {
             try
             {
-                connStr = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySail", "***REMOVED***", bdname);
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+                {
+                    conn.Open();
 
-                serverConn = new MySqlConnection(connStr);
+                    MySqlCommand cmd = new MySqlCommand(str, conn);
 
-                serverConn.Open();
+                    cmd.CommandTimeout = CommandTimeout;
 
-                cmd = new MySqlCommand(str, serverConn);
-
-                cmd.CommandTimeout = 0;
-
-                cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
+                }
             }
             catch (System.Exception ex)
             {
-                Color.WriteLineColor("[ExecuteNonQuery] " + ex.Message, ConsoleColor.Red);
-                return false;
-            }
-            finally
-            {
-                if (serverConn.State != ConnectionState.Closed)
-                    serverConn.Close();
+                Color.WriteLineColor("При запросе с базы данных произошло исключение. " + ex.Message, ConsoleColor.Red);
+                Log.ExcWrite("[Connector][ExecuteNonQuery]" + str);
+                Log.ExcWrite("[Connector][ExecuteNonQuery]" + ex.Message);
             }
 
             return true;

@@ -98,6 +98,9 @@ namespace PrioritySales
         {
             Connector.ExecuteNonQuery("UPDATE `tasks` SET `user_id` = (SELECT id FROM users WHERE username = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "' ) WHERE  tasks_id = " + labIdText.Text);
 
+            if (Server.server.Connected)
+                Server.Sender("PrioritySale", 6, "Пользователь принял задачу " + labIdText.Text);
+
             MainFormClassic.infocontrol.Hide();
             Packages.mf.Controls.Remove(MainFormClassic.infocontrol);
             Packages.mf.ButtonTasks.Focus();
