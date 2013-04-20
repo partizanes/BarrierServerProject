@@ -129,6 +129,12 @@
     <Compile Include="InfoControl.Designer.cs">
       <DependentUpon>InfoControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="PriorityDetails.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PriorityDetails.Designer.cs">
+      <DependentUpon>PriorityDetails.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AuthFormClassic.resx">
       <DependentUpon>AuthFormClassic.cs</DependentUpon>
     </EmbeddedResource>
@@ -157,6 +163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="InfoControl.resx">
       <DependentUpon>InfoControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PriorityDetails.resx">
+      <DependentUpon>PriorityDetails.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

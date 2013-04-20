@@ -28,6 +28,9 @@ namespace BarrierServerProject
                     Color.WriteLineColor("Запрос отправки цен на кассу...", ConsoleColor.Cyan);
                     CheckSendUkmPrice();
 
+                    Color.WriteLineColor("Запрос движения...", ConsoleColor.Cyan);
+                    СheckMovement.GetMovementInformation();
+
                     UpdateAllSailMainPrice();
 
                     Color.WriteLineColor("[Thread] CheckAll остановлен", ConsoleColor.DarkYellow);
