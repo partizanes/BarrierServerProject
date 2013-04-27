@@ -9,8 +9,8 @@ namespace LsTradeAgent
     class Packages
     {
         private static Boolean StatusParse = true;
-        //public static Connector connector = new Connector();
         private static List<string> ar = new List<string>();
+        private static List<string> MovementBar = new List<string>();
 
         public static void parse(string p_id, int com, string msg)
         {
@@ -95,7 +95,57 @@ namespace LsTradeAgent
                                 });
                                 th.Name = "Проверка общая";
                                 th.Start();
+                            break;
+                        case 3:
+                            Color.WriteLineColor("Принято: " + msg, ConsoleColor.Green);
+                            try { MovementBar.Add(msg); }
+                            catch (System.Exception ex)
+                            {
+                                Color.WriteLineColor("При попытке добавить в массив произошло исключение. " + ex.Message, ConsoleColor.Red);
+                                Log.ExcWrite(ex.Message);
+                            }
+                            break;
+                        case 4:
+                            Thread MovementThread = new Thread(delegate()
+                                {
+                                    try {
+                                        Color.WriteLineColor("[Thread] Поток движения создан", ConsoleColor.Yellow);
 
+                                        List<string> MovementCopy = new List<string>();
+
+                                        foreach (string str in MovementBar)
+                                        {
+                                            MovementCopy.Add(str);
+                                        }
+
+                                        MovementBar.Clear();
+                                        GC.Collect();
+
+                                        Color.WriteLineColor("Сделана копия массива движения", ConsoleColor.Blue);
+
+                                        foreach (string str in MovementCopy)
+                                        {
+                                            string[] split_data = str.Split(new Char[] { ';' });
+
+                                            string id = split_data[0];
+                                            string p_bar = split_data[1];
+
+                                            GetMovement(id, p_bar);
+                                        }
+
+                                        MovementCopy = null;
+                                        GC.Collect();
+
+                                        Color.WriteLineColor("[Thread] Поток движения завершен", ConsoleColor.Yellow);
+                                    }
+                                    catch (System.Exception ex)
+                                    {
+                                        Color.WriteLineColor(ex.Message, ConsoleColor.Red);
+                                        Log.ExcWrite(ex.Message);
+                                    }
+                                });
+                                MovementThread.Name = "Получение движения товаров";
+                                MovementThread.Start();
                             break;
                     }
                     break;
@@ -235,6 +285,57 @@ namespace LsTradeAgent
                 }
 
                 StatusParse = false;
+            }
+        }
+
+        private static void GetMovement(string id, string p_bar)
+        {
+            try
+            {
+                using (OleDbConnection conn = new OleDbConnection(string.Format("Provider=vfpoledb.1;Data Source=" + Config.GetParametr("LsTradeDir") + ";Mode=Read;Collating Sequence=MACHINE;CODEPAGE=1251")))
+                {
+                    conn.Open();
+
+                    OleDbCommand cmd = new OleDbCommand(@"select k_op,dok,d_vv,n_mat,n_sum,kod_isp,n_izg,ndsp,n_tn,n_cenu,n_matost,n_discsum from dvmat WHERE `k_mat` IN (select k_mat from sprmat where k_grup = '" + p_bar + "')");
+
+                    Log.ExcWrite(cmd.CommandText);
+
+                    cmd.Connection = conn;
+
+                    cmd.CommandTimeout = 0;
+
+                    using (OleDbDataReader DbfDataReader = cmd.ExecuteReader())
+                    {
+                        Connector.ExecuteNonQuery("DELETE FROM `movement` WHERE `id` = " + id);
+
+                        if (DbfDataReader == null) { throw new Exception("Запрос вернул null " + p_bar); }
+
+                        if (!DbfDataReader.HasRows) { throw new Exception("Не найдено ничего по штрихкоду " + p_bar); }
+
+                        while (DbfDataReader.Read())
+                        {
+                            string k_op = DbfDataReader.GetString(0);
+                            object dok = DbfDataReader.GetValue(1);
+                            DateTime d_vv = DbfDataReader.GetDateTime(2);
+                            string n_mat = DbfDataReader.GetString(3).Replace(",", ".");
+                            object n_sum = DbfDataReader.GetValue(4);
+                            object kod_isp = DbfDataReader.GetValue(5);
+                            object n_izg = DbfDataReader.GetValue(6);
+                            string ndsp = DbfDataReader.GetString(7).Replace(",",".");
+                            string n_tn = DbfDataReader.GetString(8).Replace(",", ".");
+                            object n_cenu = DbfDataReader.GetValue(9);
+                            string n_matost = DbfDataReader.GetString(10).Replace(",", ".");
+                            object n_discsum = DbfDataReader.GetValue(11);
+
+                            Connector.ExecuteNonQuery(@"INSERT INTO `movement`(`id`,`k_op`,`dok`,`d_vv`,`n_mat`,`n_sum`,`kod_isp`,`n_izg`,`ndsp`,`n_tn`,`n_cenu`,`n_matost`,`n_discsum`) VALUES ( '" + id + "','" + k_op + "','" + dok + "','" + d_vv.ToString("yyyy-MM-dd") + "','" + n_mat + "','" + n_sum + "','" + kod_isp + "','" + n_izg + "','" + ndsp + "','" + n_tn + "','" + n_cenu + "','" + n_matost + "','" + n_discsum + "');");
+                        }
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Color.WriteLineColor("[GetMovement]" + ex.Message, ConsoleColor.Red);
+                Log.ExcWrite("[GetMovement]" + ex.Message);
             }
         }
     }
