@@ -123,27 +123,7 @@ namespace BarrierServerProject
 
                     }
                 case "uptime":
-                    int i = Convert.ToInt32((DateTime.Now - Program.DateTimeStartPrg).TotalSeconds);
-                    int day = i / 86400;
-                    int h = i / 3600 - (day * 24);
-                    int minute = (i / 60) - (h * 60);
-                    int second = i - (minute * 60) - (h * 3600);
-
-                    string _h = "";
-                    string n = "";
-                    string m = "";
-
-                    if (second < 10)
-                        n = "0";
-
-                    if (minute < 10)
-                        m = "0";
-
-                    if (h < 10)
-                        _h = "0";
-
-                    return @"Время работы сервера составляет: " +  day + "д. " + _h + h + ":" + m + minute + ":" + n + second;
-
+                    return ((DateTime.Now - Program.DateTimeStartPrg).ToString(@"dd\.hh\:mm\:ss"));
                 default:
                     {
                         return "Комманда не найдена!";
