@@ -68,9 +68,6 @@ namespace PrioritySales
                         case 9:
                             try
                             {
-                                if (!mf.dataGridViewMainForm.Visible)
-                                    return;
-
                                 string[] split_data = msg.Replace("\0", "").Split(new Char[] { ';' });
 
                                 MainFormClassic.StatusUpdate = split_data[0];
@@ -117,10 +114,10 @@ namespace PrioritySales
                                             }
                                         }
                                     }
-
-                                    MainFormClassic.tasks.UpdateDataGrid();
-                                    MainFormClassic.tasks.UpdateDataGridAcceptedTasks();
                                 }
+
+                                MainFormClassic.tasks.UpdateDataGrid();
+                                MainFormClassic.tasks.UpdateDataGridAcceptedTasks();
                             }
                             catch (System.Exception ex)
                             {

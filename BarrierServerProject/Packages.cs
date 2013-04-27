@@ -108,7 +108,6 @@ namespace BarrierServerProject
                                 }
                             }
                         case 4:
-
                         case 5:
                             Int32 _LastId;
 
