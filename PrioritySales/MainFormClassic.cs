@@ -1089,6 +1089,14 @@ namespace PrioritySales
                         {
                             if (tasks.DataGridViewTasks.Rows.Count == 0)
                             {
+                                if (tasks.DataGridViewAccepted.Rows.Count > 0)
+                                {
+                                    tasks.DataGridViewTasks.DefaultCellStyle.SelectionForeColor = Color.DodgerBlue;
+                                    tasks.DataGridViewAccepted.DefaultCellStyle.SelectionForeColor = Color.ForestGreen;
+                                    tasks.DataGridViewAccepted.Focus();
+                                    return;
+                                }
+
                                 ButtonTasks.ForeColor = Color.Green;
                                 return;
                             }

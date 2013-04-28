@@ -434,8 +434,9 @@ namespace PrioritySales
                     if (DataGridViewAccepted.SelectedCells[0].RowIndex == 0 && DataGridViewTasks.RowCount == 0)
                     {
                         Packages.mf.ButtonTasks.Focus();
-                        Packages.mf.ButtonTasks.ForeColor = System.Drawing.Color.Green;
-                        DataGridViewTasks.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.DodgerBlue;
+                        Packages.mf.ButtonTasks.ForeColor = Color.Green;
+                        DataGridViewAccepted.DefaultCellStyle.SelectionForeColor = Color.DodgerBlue;
+                        DataGridViewTasks.DefaultCellStyle.SelectionForeColor = Color.DodgerBlue;
                         MainFormClassic.infocontrol.Hide();
                         Packages.mf.Controls.Remove(MainFormClassic.infocontrol);
                         break;

@@ -74,8 +74,8 @@ namespace PrioritySales
 
                                 (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.LabelVersionBd.Text = ("Бд: " + split_data[1]); }));
 
-                                if (mf.dataGridViewMainForm.Visible == true)
-                                {
+//                                 if (mf.dataGridViewMainForm.Visible == true)
+//                                 {
                                     using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                                     {
                                         conn.Open();
@@ -114,7 +114,7 @@ namespace PrioritySales
                                             }
                                         }
                                     }
-                                }
+/*                                }*/
 
                                 MainFormClassic.tasks.UpdateDataGrid();
                                 MainFormClassic.tasks.UpdateDataGridAcceptedTasks();
