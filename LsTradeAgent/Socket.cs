@@ -57,6 +57,15 @@ namespace LsTradeAgent
                 {
                     Color.WriteLineColor("Соединение установлено.", ConsoleColor.Green);
                     Sender("LsTradeAgent", 1, "hello!");
+
+                    Color.WriteLineColor(@"Запуск отладочной проверки соединения", ConsoleColor.Cyan);
+
+                    Thread tc = new Thread(delegate()
+                    {
+                        Checker.CheckCircle();
+                    });
+                    tc.Start();
+                    tc.Name = "Отладка";
                 }
             }
         }
