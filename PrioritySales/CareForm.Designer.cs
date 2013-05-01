@@ -28,10 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
             this.LabelCareForm = new System.Windows.Forms.Label();
-            this.TimerChangeColor = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,12 +59,6 @@
             this.LabelCareForm.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LabelCareForm_MouseDown);
             this.LabelCareForm.MouseMove += new System.Windows.Forms.MouseEventHandler(this.LabelCareForm_MouseMove);
             this.LabelCareForm.MouseUp += new System.Windows.Forms.MouseEventHandler(this.LabelCareForm_MouseUp);
-            // 
-            // TimerChangeColor
-            // 
-            this.TimerChangeColor.Enabled = true;
-            this.TimerChangeColor.Interval = 1000;
-            this.TimerChangeColor.Tick += new System.EventHandler(this.TimerChangeColor_Tick);
             // 
             // CareForm
             // 
@@ -98,7 +90,6 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Timer TimerChangeColor;
         public System.Windows.Forms.Label LabelCareForm;
     }
 }

@@ -317,14 +317,14 @@ namespace LsTradeAgent
                             string k_op = DbfDataReader.GetString(0);
                             object dok = DbfDataReader.GetValue(1);
                             DateTime d_vv = DbfDataReader.GetDateTime(2);
-                            string n_mat = DbfDataReader.GetString(3).Replace(",", ".");
+                            string n_mat = DbfDataReader.GetValue(3).ToString().Replace(",", ".");
                             object n_sum = DbfDataReader.GetValue(4);
                             object kod_isp = DbfDataReader.GetValue(5);
                             object n_izg = DbfDataReader.GetValue(6);
-                            string ndsp = DbfDataReader.GetString(7).Replace(",",".");
-                            string n_tn = DbfDataReader.GetString(8).Replace(",", ".");
+                            string ndsp = DbfDataReader.GetValue(7).ToString().Replace(",", ".");
+                            string n_tn = DbfDataReader.GetValue(8).ToString().Replace(",", ".");
                             object n_cenu = DbfDataReader.GetValue(9);
-                            string n_matost = DbfDataReader.GetString(10).Replace(",", ".");
+                            string n_matost = DbfDataReader.GetValue(10).ToString().Replace(",", ".");
                             object n_discsum = DbfDataReader.GetValue(11);
 
                             Connector.ExecuteNonQuery(@"INSERT INTO `movement`(`id`,`k_op`,`dok`,`d_vv`,`n_mat`,`n_sum`,`kod_isp`,`n_izg`,`ndsp`,`n_tn`,`n_cenu`,`n_matost`,`n_discsum`) VALUES ( '" + id + "','" + k_op + "','" + dok + "','" + d_vv.ToString("yyyy-MM-dd") + "','" + n_mat + "','" + n_sum + "','" + kod_isp + "','" + n_izg + "','" + ndsp + "','" + n_tn + "','" + n_cenu + "','" + n_matost + "','" + n_discsum + "');");

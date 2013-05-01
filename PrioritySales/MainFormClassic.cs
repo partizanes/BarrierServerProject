@@ -51,7 +51,7 @@ namespace PrioritySales
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand("SELECT `group` FROM `users` WHERE `username` = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "'", conn);
+                    MySqlCommand cmd = new MySqlCommand("SELECT `group` FROM `users` WHERE `username` = '" + UserName + "'", conn);
 
                     using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
@@ -74,7 +74,7 @@ namespace PrioritySales
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand("SELECT `id` FROM `users` WHERE `username` = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "'", conn);
+                    MySqlCommand cmd = new MySqlCommand("SELECT `id` FROM `users` WHERE `username` = '" + UserName + "'", conn);
 
                     using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
@@ -97,14 +97,14 @@ namespace PrioritySales
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand("SELECT COUNT(tasks_id) FROM tasks WHERE `user_group` = (SELECT `group` FROM `users` WHERE `username` = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "' ) AND `user_id` = 0", conn);
+                    MySqlCommand cmd = new MySqlCommand("SELECT COUNT(tasks_id) FROM tasks WHERE `user_group` = (SELECT `group` FROM `users` WHERE `username` = '" + UserName + "' ) AND `user_id` = 0", conn);
 
                     using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
                         if (dr == null) { return; }
                         if (dr.Read())
                         {
-                            if(dr.GetInt32(0) > 0)
+                            if (dr.GetInt32(0) > 0)
                                 Packages.parse("PrioritySale", 8, "");
                         }
                     }
@@ -965,6 +965,11 @@ namespace PrioritySales
             _forBlinking = !_forBlinking;
 
             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { Packages.mf.PrioritySalesIcon.Icon = _forBlinking ? icon1 : icon2; }));
+
+            if (Packages.careform.LabelCareForm.ForeColor == Color.DodgerBlue)
+                Packages.careform.LabelCareForm.ForeColor = Color.Yellow;
+            else
+                Packages.careform.LabelCareForm.ForeColor = Color.DodgerBlue;
         }
 
         private void dataGridViewMainForm_RowEnter(object sender, DataGridViewCellEventArgs e)

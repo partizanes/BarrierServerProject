@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
             this.LabelConnecting = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -79,5 +81,6 @@
 
         private System.Windows.Forms.Panel panel1;
         public System.Windows.Forms.Label LabelConnecting;
+        private System.Windows.Forms.Timer timer1;
     }
 }
