@@ -78,7 +78,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Checker.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Connector.cs" />

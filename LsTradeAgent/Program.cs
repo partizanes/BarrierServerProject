@@ -40,12 +40,12 @@ namespace LsTradeAgent
 
                 Console.CancelKeyPress += new ConsoleCancelEventHandler(AppExit);
 
-/*              while (true)
+              while (true)
                 {
                     string com = Console.ReadLine().ToLower();
                     Color.WriteLineColor(com, ConsoleColor.Yellow);
                 }
-*/
+
             }
         }
 

@@ -298,8 +298,6 @@ namespace LsTradeAgent
 
                     OleDbCommand cmd = new OleDbCommand(@"select k_op,dok,d_vv,n_mat,n_sum,kod_isp,n_izg,ndsp,n_tn,n_cenu,n_matost,n_discsum from dvmat WHERE `k_mat` IN (select k_mat from sprmat where k_grup = '" + p_bar + "')");
 
-                    Log.ExcWrite(cmd.CommandText);
-
                     cmd.Connection = conn;
 
                     cmd.CommandTimeout = 0;

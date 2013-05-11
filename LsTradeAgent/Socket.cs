@@ -31,6 +31,8 @@ namespace LsTradeAgent
             }
             catch (SocketException exc)
             {
+                Log.ExcWrite("[Connect][SocketException] " + exc.Message);
+
                 if (exc.ErrorCode == 10061)
                 {
                     Color.WriteLineColor("Сервер недоступен.", ConsoleColor.Red);
@@ -47,9 +49,10 @@ namespace LsTradeAgent
 
                 Receiver(server);
             }
-            catch (System.Exception ex)
+            catch (System.Exception exc)
             {
-                Color.WriteLineColor("Текст исключения: " + ex.Message, ConsoleColor.Red);
+                Color.WriteLineColor("Текст исключения: " + exc.Message, ConsoleColor.Red);
+                Log.ExcWrite("[Connect][Exception] " + exc.Message);
             }
             finally
             {
@@ -57,15 +60,6 @@ namespace LsTradeAgent
                 {
                     Color.WriteLineColor("Соединение установлено.", ConsoleColor.Green);
                     Sender("LsTradeAgent", 1, "hello!");
-
-                    Color.WriteLineColor(@"Запуск отладочной проверки соединения", ConsoleColor.Cyan);
-
-                    Thread tc = new Thread(delegate()
-                    {
-                        Checker.CheckCircle();
-                    });
-                    tc.Start();
-                    tc.Name = "Отладка";
                 }
             }
         }
@@ -84,8 +78,9 @@ namespace LsTradeAgent
             {
                 Thread.CurrentThread.Abort();
             }
-            catch (ThreadAbortException)
+            catch (ThreadAbortException exc)
             {
+                Log.ExcWrite("[Sender][ThreadAbortException] " + exc.Message);
                 threads.Remove(Thread.CurrentThread);
                 Thread.ResetAbort();
             }
@@ -114,16 +109,18 @@ namespace LsTradeAgent
                             Packages.parse(packet.group, packet.type, packet.message);
                         }
                     }
-                    catch (SocketException ex)
+                    catch (SocketException exc)
                     {
-                         if (ex.ErrorCode == 10054)
+                         if (exc.ErrorCode == 10054)
                              Environment.Exit(0);
 
+                         Log.ExcWrite("[Receiver][SocketException] " + exc.Message);
                         //TODO FORM RECCONECT TO SERVER!!!!
                     }
                     catch (Exception exc)
                     {
                         Color.WriteLineColor("Текст исключения: " + exc.Message,  ConsoleColor.Red);
+                        Log.ExcWrite("[Receiver][Exception] " + exc.Message);
                     }
                 }
             });
