@@ -29,6 +29,7 @@ namespace PrioritySales
 
         public static Tasks tasks = new Tasks();
         public static InfoControl infocontrol = new InfoControl();
+        public static PriorityDetails prioritydetails = new PriorityDetails();
         public static MsgDesk msgdesk = new MsgDesk();
         public static string UserName;
 
@@ -1212,6 +1213,63 @@ namespace PrioritySales
             GetUserGroup();
 
             GetUserId();
+        }
+
+        private void подробноToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!Packages.mf.Controls.Contains(MainFormClassic.prioritydetails))
+            {
+                Packages.mf.Controls.Add(MainFormClassic.prioritydetails);
+
+                MainFormClassic.prioritydetails.BringToFront();
+
+                MainFormClassic.prioritydetails.Show();
+
+                MainFormClassic.prioritydetails.Focus();
+
+                MainFormClassic.prioritydetails.dataGridViewMainForm.Focus();
+
+                string index = dataGridViewMainForm.SelectedRows[0].Cells[0].Value.ToString();
+
+                LoadPriorityDetails(index);
+            }
+        }
+
+        private void LoadPriorityDetails(string index)
+        {
+            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand(@"SELECT dok,d_vv,k_op,n_mat,n_cenu,n_sum,n_matost,n_izg,ndsp,n_tn FROM `movement` WHERE `id` = " + index + " ORDER BY `d_vv`", conn);
+                cmd.CommandTimeout = 0;
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr == null) { return; }
+
+                    if (!dr.HasRows) { }
+
+                    while (dr.Read())
+                    {
+                        if (dr.GetString(0) == "0" || dr.GetString(1) == "0")
+                            continue;
+
+                        string dok = dr.GetString(0);
+                        string d_vv = dr.GetString(1);
+                        string k_op = dr.GetString(2);
+                        string k_mat = dr.GetString(3);
+                        string n_cenu = dr.GetString(4);
+                        string n_sum = dr.GetString(5);
+                        string n_matost = dr.GetString(6);
+                        string n_izg = dr.GetString(7);
+                        string ndsp = dr.GetString(8);
+                        string n_tn = dr.GetString(9);
+                                                                                                                                                        // 1     2     3     4       5       6       7        8     9    10  
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { prioritydetails.dataGridViewMainForm.Rows.Add(dok, d_vv, k_op, k_mat, n_cenu, n_sum, n_matost, n_izg, ndsp, n_tn); }));
+                    }
+                }
+            }
         }
     }
 }

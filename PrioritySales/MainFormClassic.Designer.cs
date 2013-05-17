@@ -706,7 +706,7 @@
             this.MenuStripDataGrid.Name = "MenuStripDataGrid";
             this.MenuStripDataGrid.ShowImageMargin = false;
             this.MenuStripDataGrid.ShowItemToolTips = false;
-            this.MenuStripDataGrid.Size = new System.Drawing.Size(130, 70);
+            this.MenuStripDataGrid.Size = new System.Drawing.Size(130, 92);
             // 
             // подробноToolStripMenuItem
             // 
@@ -715,6 +715,7 @@
             this.подробноToolStripMenuItem.Name = "подробноToolStripMenuItem";
             this.подробноToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
             this.подробноToolStripMenuItem.Text = "Подробно";
+            this.подробноToolStripMenuItem.Click += new System.EventHandler(this.подробноToolStripMenuItem_Click);
             // 
             // редактироватьToolStripMenuItem
             // 

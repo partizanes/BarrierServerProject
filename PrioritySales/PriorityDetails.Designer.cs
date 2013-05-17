@@ -33,6 +33,15 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.dataGridViewMainForm = new System.Windows.Forms.DataGridView();
+            this.doc_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.kod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.count = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Rprice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ost = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Izg = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Nds = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMainForm)).BeginInit();
             this.SuspendLayout();
@@ -63,6 +72,16 @@
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewMainForm.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewMainForm.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewMainForm.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.doc_id,
+            this.date,
+            this.kod,
+            this.count,
+            this.Rprice,
+            this.ost,
+            this.Izg,
+            this.Nds,
+            this.tn});
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.Color.Black;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -94,7 +113,71 @@
             this.dataGridViewMainForm.Size = new System.Drawing.Size(615, 348);
             this.dataGridViewMainForm.TabIndex = 1;
             this.dataGridViewMainForm.TabStop = false;
-            this.dataGridViewMainForm.Visible = false;
+            this.dataGridViewMainForm.Enter += new System.EventHandler(this.dataGridViewMainForm_Enter);
+            this.dataGridViewMainForm.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridViewMainForm_KeyDown);
+            // 
+            // doc_id
+            // 
+            this.doc_id.HeaderText = "Документ";
+            this.doc_id.Name = "doc_id";
+            this.doc_id.ReadOnly = true;
+            this.doc_id.Width = 115;
+            // 
+            // date
+            // 
+            this.date.HeaderText = "Дата";
+            this.date.Name = "date";
+            this.date.ReadOnly = true;
+            this.date.Width = 95;
+            // 
+            // kod
+            // 
+            this.kod.HeaderText = "Код";
+            this.kod.Name = "kod";
+            this.kod.ReadOnly = true;
+            this.kod.Width = 41;
+            // 
+            // count
+            // 
+            this.count.HeaderText = "К-во";
+            this.count.Name = "count";
+            this.count.ReadOnly = true;
+            this.count.Width = 70;
+            // 
+            // Rprice
+            // 
+            this.Rprice.HeaderText = "Р.Цена";
+            this.Rprice.Name = "Rprice";
+            this.Rprice.ReadOnly = true;
+            this.Rprice.Width = 86;
+            // 
+            // ost
+            // 
+            this.ost.HeaderText = "Ост.";
+            this.ost.Name = "ost";
+            this.ost.ReadOnly = true;
+            this.ost.Width = 50;
+            // 
+            // Izg
+            // 
+            this.Izg.HeaderText = "Ц.Изг";
+            this.Izg.Name = "Izg";
+            this.Izg.ReadOnly = true;
+            this.Izg.Width = 75;
+            // 
+            // Nds
+            // 
+            this.Nds.HeaderText = "Ндс";
+            this.Nds.Name = "Nds";
+            this.Nds.ReadOnly = true;
+            this.Nds.Width = 40;
+            // 
+            // tn
+            // 
+            this.tn.HeaderText = "Тн";
+            this.tn.Name = "tn";
+            this.tn.ReadOnly = true;
+            this.tn.Width = 40;
             // 
             // PriorityDetails
             // 
@@ -104,6 +187,8 @@
             this.Controls.Add(this.panel1);
             this.Name = "PriorityDetails";
             this.Size = new System.Drawing.Size(623, 356);
+            this.Load += new System.EventHandler(this.PriorityDetails_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PriorityDetails_KeyDown);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMainForm)).EndInit();
             this.ResumeLayout(false);
@@ -114,5 +199,14 @@
 
         private System.Windows.Forms.Panel panel1;
         public System.Windows.Forms.DataGridView dataGridViewMainForm;
+        private System.Windows.Forms.DataGridViewTextBoxColumn doc_id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn date;
+        private System.Windows.Forms.DataGridViewTextBoxColumn kod;
+        private System.Windows.Forms.DataGridViewTextBoxColumn count;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Rprice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ost;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Izg;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Nds;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tn;
     }
 }
