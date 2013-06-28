@@ -1265,8 +1265,8 @@ namespace PrioritySales
                         string n_izg = dr.GetString(7);
                         string ndsp = dr.GetString(8);
                         string n_tn = dr.GetString(9);
-                                                                                                                                                        // 1     2     3     4       5       6       7        8     9    10  
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { prioritydetails.dataGridViewMainForm.Rows.Add(dok, d_vv, k_op, k_mat, n_cenu, n_sum, n_matost, n_izg, ndsp, n_tn); }));
+                                                                                                                                                        // 1   2     3     4       5       6       7      8      9
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { prioritydetails.dataGridViewMainForm.Rows.Add(dok, d_vv, k_op, k_mat, n_cenu, n_matost, n_izg, ndsp, n_tn); }));
                     }
                 }
             }
