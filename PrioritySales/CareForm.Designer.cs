@@ -39,7 +39,7 @@
             this.panel1.Controls.Add(this.LabelCareForm);
             this.panel1.Location = new System.Drawing.Point(1, 1);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(210, 36);
+            this.panel1.Size = new System.Drawing.Size(210, 37);
             this.panel1.TabIndex = 0;
             this.panel1.DoubleClick += new System.EventHandler(this.panel1_DoubleClick);
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);

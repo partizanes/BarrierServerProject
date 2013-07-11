@@ -18,7 +18,7 @@ namespace PrioritySales
         public static Connecting connecting = new Connecting();
         public static bool debug = Boolean.Parse(Config.GetParametr("Debug"));
         public static bool status = true;
-        public static int version = 7;
+        public static int version = 9;
 
         public AuthFormClassic()
         {

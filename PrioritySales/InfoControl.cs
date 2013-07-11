@@ -101,6 +101,8 @@ namespace PrioritySales
             if (Server.server.Connected)
                 Server.Sender("PrioritySale", 6, "Пользователь принял задачу " + labIdText.Text);
 
+            Clipboard.SetDataObject(MainFormClassic.infocontrol.labelBarText.Text);
+
             MainFormClassic.infocontrol.Hide();
             Packages.mf.Controls.Remove(MainFormClassic.infocontrol);
             Packages.mf.ButtonTasks.Focus();
