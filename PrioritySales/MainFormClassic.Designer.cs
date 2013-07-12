@@ -38,7 +38,7 @@
             this.PanelMainClassic = new System.Windows.Forms.Panel();
             this.PanelBackButton = new System.Windows.Forms.Panel();
             this.PanelButton = new System.Windows.Forms.Panel();
-            this.ButtonUnk2 = new System.Windows.Forms.Button();
+            this.ButtonLog = new System.Windows.Forms.Button();
             this.ButtonExit = new System.Windows.Forms.Button();
             this.ButtonAdd = new System.Windows.Forms.Button();
             this.ButtonSetting = new System.Windows.Forms.Button();
@@ -82,6 +82,7 @@
             this.TimerIconChange = new System.Windows.Forms.Timer(this.components);
             this.MenuStripDataGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.подробноToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.копироватьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.редактироватьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.удалитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.PanelMainClassic.SuspendLayout();
@@ -124,7 +125,7 @@
             // PanelButton
             // 
             this.PanelButton.BackColor = System.Drawing.Color.Black;
-            this.PanelButton.Controls.Add(this.ButtonUnk2);
+            this.PanelButton.Controls.Add(this.ButtonLog);
             this.PanelButton.Controls.Add(this.ButtonExit);
             this.PanelButton.Controls.Add(this.ButtonAdd);
             this.PanelButton.Controls.Add(this.ButtonSetting);
@@ -140,19 +141,20 @@
             this.PanelButton.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PanelButton_MouseMove);
             this.PanelButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PanelButton_MouseUp);
             // 
-            // ButtonUnk2
+            // ButtonLog
             // 
-            this.ButtonUnk2.BackColor = System.Drawing.Color.Transparent;
-            this.ButtonUnk2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ButtonUnk2.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.ButtonUnk2.Location = new System.Drawing.Point(331, 13);
-            this.ButtonUnk2.Name = "ButtonUnk2";
-            this.ButtonUnk2.Size = new System.Drawing.Size(75, 23);
-            this.ButtonUnk2.TabIndex = 5;
-            this.ButtonUnk2.Text = "Unk2";
-            this.ButtonUnk2.UseVisualStyleBackColor = false;
-            this.ButtonUnk2.Enter += new System.EventHandler(this.ButtonUnk2_Enter);
-            this.ButtonUnk2.Leave += new System.EventHandler(this.button1_Leave);
+            this.ButtonLog.BackColor = System.Drawing.Color.Transparent;
+            this.ButtonLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ButtonLog.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.ButtonLog.Location = new System.Drawing.Point(331, 13);
+            this.ButtonLog.Name = "ButtonLog";
+            this.ButtonLog.Size = new System.Drawing.Size(75, 23);
+            this.ButtonLog.TabIndex = 5;
+            this.ButtonLog.Text = "Лог";
+            this.ButtonLog.UseVisualStyleBackColor = false;
+            this.ButtonLog.Click += new System.EventHandler(this.ButtonLog_Click);
+            this.ButtonLog.Enter += new System.EventHandler(this.ButtonUnk2_Enter);
+            this.ButtonLog.Leave += new System.EventHandler(this.button1_Leave);
             // 
             // ButtonExit
             // 
@@ -701,6 +703,7 @@
             this.MenuStripDataGrid.BackColor = System.Drawing.Color.Black;
             this.MenuStripDataGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.подробноToolStripMenuItem,
+            this.копироватьToolStripMenuItem,
             this.редактироватьToolStripMenuItem,
             this.удалитьToolStripMenuItem});
             this.MenuStripDataGrid.Name = "MenuStripDataGrid";
@@ -717,12 +720,21 @@
             this.подробноToolStripMenuItem.Text = "Подробно";
             this.подробноToolStripMenuItem.Click += new System.EventHandler(this.подробноToolStripMenuItem_Click);
             // 
+            // копироватьToolStripMenuItem
+            // 
+            this.копироватьToolStripMenuItem.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.копироватьToolStripMenuItem.Name = "копироватьToolStripMenuItem";
+            this.копироватьToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.копироватьToolStripMenuItem.Text = "Копировать";
+            this.копироватьToolStripMenuItem.Click += new System.EventHandler(this.копироватьToolStripMenuItem_Click);
+            // 
             // редактироватьToolStripMenuItem
             // 
             this.редактироватьToolStripMenuItem.ForeColor = System.Drawing.Color.DodgerBlue;
             this.редактироватьToolStripMenuItem.Name = "редактироватьToolStripMenuItem";
             this.редактироватьToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
             this.редактироватьToolStripMenuItem.Text = "Редактировать";
+            this.редактироватьToolStripMenuItem.Click += new System.EventHandler(this.редактироватьToolStripMenuItem_Click);
             // 
             // удалитьToolStripMenuItem
             // 
@@ -781,7 +793,7 @@
         public System.Windows.Forms.Button ButtonMsg;
         private System.Windows.Forms.Panel PanelInfoBar;
         public System.Windows.Forms.Label LabelUserName;
-        private System.Windows.Forms.Button ButtonUnk2;
+        private System.Windows.Forms.Button ButtonLog;
         public System.Windows.Forms.Panel PanelAddBg;
         private System.Windows.Forms.Panel PanelAddTask;
         private System.Windows.Forms.Label msg_label;
@@ -817,6 +829,7 @@
         private System.Windows.Forms.ToolStripMenuItem подробноToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem редактироватьToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem удалитьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem копироватьToolStripMenuItem;
 
 
 

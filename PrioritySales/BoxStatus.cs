@@ -64,15 +64,10 @@ namespace PrioritySales
 
                 if (Server.server.Connected)
                     Server.Sender("PrioritySale", 7, MainFormClassic.StatusUpdate);
+            }
 
-                this.Hide();
-                this.Dispose();
-            }
-            else
-            {
-                this.Hide();
-                this.Dispose();
-            }
+            this.Hide();
+            this.textBox1.Text = "";
         }
     }
 }

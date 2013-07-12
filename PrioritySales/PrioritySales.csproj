@@ -135,6 +135,12 @@
     <Compile Include="PriorityDetails.Designer.cs">
       <DependentUpon>PriorityDetails.cs</DependentUpon>
     </Compile>
+    <Compile Include="LogForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LogForm.Designer.cs">
+      <DependentUpon>LogForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AuthFormClassic.resx">
       <DependentUpon>AuthFormClassic.cs</DependentUpon>
     </EmbeddedResource>
@@ -147,6 +153,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Connecting.resx">
       <DependentUpon>Connecting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogForm.resx">
+      <DependentUpon>LogForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainFormClassic.resx">
       <DependentUpon>MainFormClassic.cs</DependentUpon>

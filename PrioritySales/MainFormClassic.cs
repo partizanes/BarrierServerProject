@@ -31,6 +31,7 @@ namespace PrioritySales
         public static InfoControl infocontrol = new InfoControl();
         public static PriorityDetails prioritydetails = new PriorityDetails();
         public static MsgDesk msgdesk = new MsgDesk();
+        public static LogForm logform = new LogForm();
         public static string UserName;
 
         // ForeColor for all button block start
@@ -159,12 +160,12 @@ namespace PrioritySales
 
         private void ButtonUnk2_Enter(object sender, EventArgs e)
         {
-            ButtonUnk2.ForeColor = Color.Green;
+            ButtonLog.ForeColor = Color.Green;
         }
 
         private void button1_Leave(object sender, EventArgs e)
         {
-            ButtonUnk2.ForeColor = Color.DodgerBlue;
+            ButtonLog.ForeColor = Color.DodgerBlue;
         }
 
         private void ButtonSetting_Enter(object sender, EventArgs e)
@@ -1269,6 +1270,56 @@ namespace PrioritySales
                         (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { prioritydetails.dataGridViewMainForm.Rows.Add(dok, d_vv, k_op, k_mat, n_cenu, n_matost, n_izg, ndsp, n_tn); }));
                     }
                 }
+            }
+        }
+
+        private void редактироватьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Not implement! lolz!");
+        }
+
+        private void копироватьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(dataGridViewMainForm.SelectedRows[0].Cells[1].Value.ToString());
+        }
+
+        private void ButtonLog_Click(object sender, EventArgs e)
+        {
+            if (!Packages.mf.Controls.Contains(MainFormClassic.logform))
+            {
+                Packages.mf.Controls.Add(MainFormClassic.logform);
+
+                MainFormClassic.logform.BringToFront();
+
+                MainFormClassic.logform.Show();
+
+                MainFormClassic.logform.Focus();
+
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+                {
+                    conn.Open();
+
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT * FROM `log` ", conn);
+                    cmd.CommandTimeout = 0;
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr == null) { MainFormClassic.logform.listBox1.Items.Add("Записи не обнаружены!"); }
+
+                        if (!dr.HasRows) { MainFormClassic.logform.listBox1.Items.Add("Записи не обнаружены!"); }
+
+                        while (dr.Read())
+                        {
+                            { MainFormClassic.logform.listBox1.Items.Add(dr.GetValue(1)); }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MainFormClassic.logform.Hide();
+
+                Packages.mf.Controls.Remove(MainFormClassic.logform);
             }
         }
     }

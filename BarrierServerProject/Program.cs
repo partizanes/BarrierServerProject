@@ -68,6 +68,8 @@ namespace BarrierServerProject
 
                 ShowWindow(ConsoleHandle, SW_MAXIMIZE);
 
+                Packages.connector.ExecuteNonQuery(@"DELETE FROM `log`");
+
                 Logo LogoLoad = new Logo();
 
                 LogoLoad.LogoLoad();
