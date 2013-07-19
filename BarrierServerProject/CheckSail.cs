@@ -199,6 +199,9 @@ namespace BarrierServerProject
 
         private static void CheckSendUkmPrice()
         {
+            if (!TimeSpanExtensions.IsTimeWork())
+                return;
+
             while (!Server.clients.ContainsValue("LsTradeAgent"))
             {
                 Color.WriteLineColor("Внимание не запущен LsTradeAgent .\nДля продолжения работы нужно запустить LsTradeAgent", ConsoleColor.Red);
