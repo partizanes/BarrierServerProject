@@ -21,6 +21,17 @@ namespace PrioritySales
             this.Location = new System.Drawing.Point(17, 78);
         }
 
+        private void listBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                    this.Hide();
+                    Packages.mf.ButtonLog.Focus();
+                    break;
+            }
+        }
+
 
     }
 }

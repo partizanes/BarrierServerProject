@@ -793,7 +793,6 @@
         public System.Windows.Forms.Button ButtonMsg;
         private System.Windows.Forms.Panel PanelInfoBar;
         public System.Windows.Forms.Label LabelUserName;
-        private System.Windows.Forms.Button ButtonLog;
         public System.Windows.Forms.Panel PanelAddBg;
         private System.Windows.Forms.Panel PanelAddTask;
         private System.Windows.Forms.Label msg_label;
@@ -830,6 +829,7 @@
         private System.Windows.Forms.ToolStripMenuItem редактироватьToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem удалитьToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem копироватьToolStripMenuItem;
+        public System.Windows.Forms.Button ButtonLog;
 
 
 
