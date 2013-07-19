@@ -29,7 +29,7 @@ namespace BarrierServerProject
         {
             if (DateTime.Now.TimeOfDay.IsBetween(new TimeSpan(23, 00, 0), new TimeSpan(7, 30, 0)))
             {
-                Color.WriteLineColor("LsTrade монопольно используется планировщиком ,запрос информации по движению будет произведен утром после 7.30!", ConsoleColor.Red);
+                Color.WriteLineColor("Ночью LsTrade монопольно используется планировщиком. Пропущено.", ConsoleColor.Red);
                 return false;
             }
             else
