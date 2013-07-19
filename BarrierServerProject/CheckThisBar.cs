@@ -110,6 +110,8 @@ namespace BarrierServerProject
 
         public static void GetLsTradeSail(int id)
         {
+            if (!TimeSpanExtensions.IsTimeWork())
+                return;
 
             while (!Server.clients.ContainsValue("LsTradeAgent"))
             {
