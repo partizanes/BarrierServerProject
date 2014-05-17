@@ -12,6 +12,7 @@ namespace Update
     {
         private string IpCashServer = Config.GetParametr("IpCashServer");
         private string UpdateServerBase = Config.GetParametr("UpdateServerBase");
+        private string NameProgramUpdate = Config.GetParametr("NameProgramUpdate");
         private int CommandTimeout = int.Parse(Config.GetParametr("CommandTimeout"));
         private int ConnectTimeout = int.Parse(Config.GetParametr("ConnectTimeout"));
         public static bool debug = bool.Parse(Config.GetParametr("debug"));
@@ -23,7 +24,8 @@ namespace Update
         }
 
         private void MsgAdd(string str)
-        {           
+        {
+            Log.log_write(str, "[MsgAdd]");
             (Application.OpenForms[0] as Update).Invoke((MethodInvoker)(delegate() { MainListBox.Items.Add("[" + DateTime.Now.ToShortTimeString() + "]  " + str); }));
         }
 
@@ -60,8 +62,7 @@ namespace Update
             th.Start();
         }
 
-        private string GetNameProgramUpdate() { return (Config.GetParametr("NameProgramUpdate")); }
-
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Проверка запросов SQL на уязвимости безопасности")]
         private int GetVersionProgram()
         {
             try 
@@ -70,7 +71,7 @@ namespace Update
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand(@"SELECT ver FROM `version` WHERE `name` = '" + GetNameProgramUpdate() + "'", conn);
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT ver FROM `version` WHERE `name` = '" + NameProgramUpdate + "'", conn);
 
                     cmd.CommandTimeout = 0;
 
@@ -89,11 +90,15 @@ namespace Update
                     }
                 }
             }
-            catch (System.Exception ex) { Log.ExcWrite("[GetNameProgramUpdate] " + ex.Message); MsgAdd(ex.Message); this.BackColor = Color.Red; return 0; }
+            catch (System.Exception ex) { 
+                MsgAdd("[GetVersionProgram] " + ex.Message);
+                this.BackColor = Color.Red; return 0;
+            }
 
             return 0;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Проверка запросов SQL на уязвимости безопасности")]
         private string GetSourceProgramUpdate()
         {
             try
@@ -102,7 +107,7 @@ namespace Update
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand(@"SELECT source FROM `version` WHERE `name` = '" + GetNameProgramUpdate() + "'", conn);
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT source FROM `version` WHERE `name` = '" + NameProgramUpdate + "'", conn);
 
                     cmd.CommandTimeout = 0;
 
@@ -146,9 +151,7 @@ namespace Update
             {
                 this.BackColor = Color.Red;
 
-                MsgAdd(ex.Message);
-                Log.ExcWrite("[StartUpdate] " + ex.Message);
-                Log.log_write("Произошло исключение.Записан статус обновления 0", "StartUpdate", "Exception");
+                MsgAdd("[StartUpdate] " + ex.Message);
                 Config.Set("SETTINGS", "UpdateStatus", "0");
                 Application.Exit();
             }
@@ -159,6 +162,7 @@ namespace Update
             bool s = true;
 
             MsgAdd("Запускаю скачивание...");
+
             ProgressBarMainForm.PerformStep();
             Thread.Sleep(1000);
 
@@ -184,7 +188,6 @@ namespace Update
                 MsgAdd("[Downloader] Произошло исключение.Записан статус обновления 0");
 
                 Log.ExcWrite("[Downloader] " + exc.Message);
-                Log.log_write("Произошло исключение.Записан статус обновления 0", "Downloader", "Exception");
 
                 Config.Set("SETTINGS", "UpdateStatus", "0");
 
@@ -216,12 +219,12 @@ namespace Update
                         Thread.Sleep(1000);
                     }
 
-                    Log.log_write("Делаем копию файла", "INFO", "update");
+                    Log.log_write("Делаем копию файла", "INFO");
                     MsgAdd("Делаем копию файла");
                     File.Move(name, "backup_" + name);
                     Thread.Sleep(1000);
 
-                    Log.log_write("Удаляем оригинальный файл", "INFO", "update");
+                    Log.log_write("Удаляем оригинальный файл", "INFO");
                     MsgAdd("Удаляем оригинальный файл");
                     File.Delete(name);
                     Thread.Sleep(1000);
@@ -238,7 +241,7 @@ namespace Update
                 if (File.Exists(name))
                 {
                     ProgressBarMainForm.Value = 99;
-                    Log.log_write("Запускаем обновленное приложение", "INFO", "update");
+                    Log.log_write("Запускаем обновленное приложение", "INFO");
                     MsgAdd("Запускаем обновленное приложение");
 
                     Thread.Sleep(1000);
@@ -249,10 +252,10 @@ namespace Update
                     if (File.Exists("_" + name))
                     {
                         File.Delete("_" + name);
-                        Log.log_write("Удаляем временный файл", "INFO", "update");
+                        Log.log_write("Удаляем временный файл", "INFO");
                     }
 
-                    Log.log_write("Выходим из утилиты обновления", "INFO", "update");
+                    Log.log_write("Выходим из утилиты обновления", "INFO");
 
                     Application.Exit();
                 }
@@ -280,7 +283,7 @@ namespace Update
                 if(status)
                 {
                     Thread.Sleep(800);
-                    Log.log_write("Успешно!", "INFO", "update");
+                    Log.log_write("Успешно!", "INFO");
                     ProgressBarMainForm.Value = 100;
                     Thread.Sleep(4000);
                     Application.Exit();
@@ -298,11 +301,11 @@ namespace Update
             {
                 Config.Set("SETTINGS", "UpdateStatus", "1");
 
-                Log.log_write("Возвращаем все обратно", "INFO", "update");
+                Log.log_write("Возвращаем все обратно", "INFO");
                 File.Move("backup_" + name, name);
                 Thread.Sleep(500);
 
-                Log.log_write("Удаляем запасной файл", "INFO", "update");
+                Log.log_write("Удаляем запасной файл", "INFO");
                 File.Delete("backup" + name);
                 Thread.Sleep(500);
 
@@ -326,14 +329,9 @@ namespace Update
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Log.log_write("Выход из прогаммы обновления ", "INFO", "update");
+            Log.log_write("Выход из прогаммы обновления ", "INFO");
             this.Hide();
             Application.Exit();
-        }
-
-        private void Update_Load(object sender, EventArgs e)
-        {
-            Log.log_write("Программа обновления запущена ", "INFO", "update");
         }
     }
 }

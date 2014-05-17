@@ -95,7 +95,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Утилита обновления";
             this.TopMost = true;
-            this.Load += new System.EventHandler(this.Update_Load);
             this.Shown += new System.EventHandler(this.Update_Shown);
             this.PanelMainForm.ResumeLayout(false);
             this.PanelListBox.ResumeLayout(false);

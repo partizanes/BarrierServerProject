@@ -1,16 +1,17 @@
 ﻿using System;
 using System.IO;
+using System.Windows.Forms;
 
 namespace Update
 {
     class Log
     {
 
-        public static void log_write(string str, string reason, string logname)
+        public static void log_write(string str, string reason)
         {
             string EntryTime = DateTime.Now.ToLongTimeString();
             string EntryDate = DateTime.Today.ToShortDateString();
-            string fileName = "log/" + logname + ".log";  //log + data +logname ? 
+            string fileName = "log/update.log";
 
             if (!Directory.Exists(Environment.CurrentDirectory + "/log/"))
             {
@@ -22,18 +23,16 @@ namespace Update
                 StreamWriter sw = new StreamWriter(fileName, true, System.Text.Encoding.UTF8);
                 sw.WriteLine("[" + EntryDate + "][" + EntryTime + "][" + reason + "]" + " " + str);
                 sw.Close();
-                //check this
-                sw.Dispose();
             }
-            catch (Exception ex)
+            catch (Exception exc)
             {
-                log_write(ex.Message, "Exception", "Exception");
+                MessageBox.Show(exc.Message);
             }
         }
 
         public static void ExcWrite(string text)
         {
-            log_write(text, "EXCEPTION", "exception");
+            log_write(text, "EXCEPTION");
         }
     }
 }
