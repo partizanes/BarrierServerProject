@@ -5,170 +5,204 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PrioritySales
 {
     public partial class AuthFormClassic : Form
     {
-        public static int log_level = 3;
         public int xOffset, yOffset;
         public bool isMouseDown = false;
         private Point mouseOffset;
-        public static Connecting connecting = new Connecting();
-        public static bool debug = Boolean.Parse(Config.GetParametr("Debug"));
-        public static bool status = true;
+        public static int log_level = 3;
         public static int version = 13;
+        public static bool debug;
+        public static bool status = true;
+        private string lastLogin;
+        private bool SaveLastLogin;
+        public static bool permanentPanel;
+        public static Connecting connecting = new Connecting();
 
         public AuthFormClassic()
         {
             InitializeComponent();
 
-            //check_dll();
+            //проверка конфигурационных файлов и модуля обновления
+            checkDllAndConfig();
 
+            //Отобржение формы подключения к бд и проверка версии приложения
             CheckVersion();
+        }
 
-            connecting.Show();
+        private void checkDllAndConfig()
+        {
+            if (!System.IO.File.Exists(Environment.CurrentDirectory + "\\" + "config.ini"))
+            {
+                MessageBox.Show("Внимание при запуске приложения было обнаружено отсутсвие конфигурационного файла.");
+                Application.Exit();
+            }
+            if (!System.IO.File.Exists(Environment.CurrentDirectory + "\\" + "Update.exe"))
+            {
+                MessageBox.Show("Внимание при запуске приложения было обнаружено отсутсвие модуля обновления.");
+                Application.Exit();
+            }
+            if (!System.IO.File.Exists(Environment.CurrentDirectory + "\\" + "update.ini"))
+            {
+                MessageBox.Show("Внимание при запуске приложения было обнаружено отсутсвие конфигурации модуля обновления.");
+                Application.Exit();
+            }
+            if (!System.IO.File.Exists(Environment.CurrentDirectory + "\\" + "Serialization.dll"))
+            {
+                MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "Внимание при запуске приложения было обнаружено отсутсвие библиотеки Serialization.dll");
+                Application.Exit();
+            }
+            if (!System.IO.File.Exists(Environment.CurrentDirectory + "\\" + "MySql.Data.dll"))
+            {
+                MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "Внимание при запуске приложения было обнаружено отсутсвие библиотеки MySql.Data.dll");
+                Application.Exit();
+            }
+            try
+            {
+                log_level = int.Parse(Config.GetParametr("log_level"));
+                debug = Boolean.Parse(Config.GetParametr("Debug"));
+                SaveLastLogin = bool.Parse(Config.GetParametr("SaveLastLogin"));
+                lastLogin = Config.GetParametr("LastLogin");
+                permanentPanel = bool.Parse(Config.GetParametr("permanentPanel"));
+            }
+            catch (FormatException) { 
+                Config.Set("SETTINGS", "log_level", "3");
+                debug = true;
+                SaveLastLogin = true;
+                lastLogin = "partizanes";
+                permanentPanel = false;
+            }
 
-            Application.DoEvents();
-
-            Connector.ExecuteNonQuery("SHOW DATABASES");
-            try { log_level = int.Parse(Config.GetParametr("log_level")); }
-            catch (FormatException) { Config.Set("SETTINGS", "log_level", "3"); }
         }
 
         public void CheckVersion()
         {
-            try
+            ButtonSend.Enabled = false;
+
+            connecting.Show();
+
+            Action<object> action = (object obj) =>
             {
-                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+                try
                 {
-                    conn.Open();
-
-                    MySqlCommand cmd = new MySqlCommand("SELECT `ver` FROM `version` WHERE `name` = 'PrioritySales'", conn);
-
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                     {
-                        if (dr == null) { return; }
-                        if (dr.Read())
+                        conn.Open();
+
+                        MySqlCommand cmd = new MySqlCommand("SELECT `ver` FROM `version` WHERE `name` = 'PrioritySales'", conn);
+
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
-                            if (version != dr.GetInt32(0))
+                            if (dr == null) { return; }
+                            if (dr.Read())
                             {
-                                if (Config.GetUpdateStatus() == 0)
+                                if (version != dr.GetInt32(0))
                                 {
-                                    MessageBox.Show("Внимание!Последние обновление было неудачным , обратитесь с системному администратору!");
-                                    return;
+                                    if (Config.GetUpdateStatus() == 0)
+                                    {
+                                        MessageBox.Show("Внимание!Последние обновление было неудачным , обратитесь с системному администратору!");
+                                        return;
+                                    }
+
+                                    System.Diagnostics.Process.Start("Update.exe");
+
+                                    Thread.Sleep(100);
+
+                                    System.Diagnostics.Process.GetCurrentProcess().Kill();
                                 }
-
-                                System.Diagnostics.Process.Start("Update.exe");
-
-                                Thread.Sleep(100);
-
-                                System.Diagnostics.Process.GetCurrentProcess().Kill();
                             }
                         }
                     }
                 }
-            }
-            catch (System.Exception ex)
-            {
-                Log.LogWriteDebug("[CheckVersion] " + ex.Message);
-            }
+                catch (System.Exception ex)
+                {
+                    Log.LogWriteDebug("[CheckVersion] " + ex.Message);
+                }
+                finally
+                {
+                    AuthFormClassic.status = false;
+                    (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { ButtonSend.Enabled = true; }));
+                }
+            };
+
+            Task t = new Task(action, "CheckVersion");
+            t.Start();
         }
 
-        public void check_dll()
+        private void VisualEffect()
         {
-            if (Boolean.Parse(Config.GetParametr("ConnectorCheck")))
-            {
-                if (Environment.Is64BitOperatingSystem)
-                    while (!System.IO.File.Exists(System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\MySQL\\MySQL Connector Net " + Config.GetParametr("ConnectorVersion") + "\\Assemblies\\v4.0\\MySql.Data.dll"))
-                    {
-                        MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "Внимание на компьютере не найден MySQL Connector Net,установите и нажмите ок.Отключить проверку коннектора возможно в файле конфигурации");
-
-                        if (!Boolean.Parse(Config.GetParametr("ConnectorCheck")))
-                            return;
-                    }
-                else
-                    while (!System.IO.File.Exists(System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + "\\MySQL\\MySQL Connector Net " + Config.GetParametr("ConnectorVersion") + "\\Assemblies\\v4.0\\MySql.Data.dll"))
-                    {
-                        MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "Внимание на компьютере не найден MySQL Connector Net,установите и нажмите ок.Отключить проверку коннектора возможно в файле конфигурации");
-
-                        if (!Boolean.Parse(Config.GetParametr("ConnectorCheck")))
-                            return;
-                    }
-            }
-
-            while (!System.IO.File.Exists(Environment.CurrentDirectory + "\\" + "Serialization.dll"))
-            {
-                MessageBox.Show("[" + DateTime.Now.ToLongTimeString() + "] " + "В папке с программой отсутствует нужная для работы библиотека Serialization.dll \n Скопируйте в папку с программой библиотеку и нажмите ок!");
-            }
-
-            if (!File.Exists(Environment.CurrentDirectory + "\\" + "config.ini"))
+            Thread th = new Thread(delegate()
             {
                 try
                 {
-                    Encoding outputEnc = new UTF8Encoding(false);
-
-                    string[] createText = { @"[SETTINGS]",
-                                              ";Это файл конфигурации не изменяйте параметры ,если вы не понимаете что делаете!",
-                                              "",
-                                              ";Расположение сервера авторизации (barrier server)",
-                                              "IpAuthServer=127.0.0.1",
-                                              "",
-                                              ";Порт сервера авторизации (по умолчанию 1991)",
-                                              "PortAuthServer=1991",
-                                              "",
-                                              "; расположение кассового сервера (ukm server)",
-                                              "IpCashServer=192.168.1.100",
-                                              "",
-                                              ";Порт кассового сервера (по умолчанию 7000)",
-                                              "PortCashServer=7000",
-                                              "",
-                                              ";Сохранять последнее имя пользователя",
-                                              "SaveLastLogin=true",
-                                              "",
-                                              ";Последнее имя пользователя",
-                                              "LastLogin=partizanes",
-                                              "",
-                                              ";Уровень записи в лог",
-                                              "log_level=3",
-                                              "",
-                                              "; Отладочная информация",
-                                              "Debug = true",
-                                              "",
-                                              ";Название база данных ukm на кассовом севрере",
-                                              "UkmDataBase=ukmserver",
-                                              "",
-                                              ";Проверка наличия установленного Mysql connector",
-                                              "ConnectorCheck=true",
-                                              "",
-                                              ";Версия Mysql Connector",
-                                              "ConnectorVersion=6.6.5"
-                                          };
-
-                    File.WriteAllLines(Environment.CurrentDirectory + "\\" + "config.ini", createText, outputEnc);
+                    while (!ButtonSend.Enabled)
+                    {
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelB.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelB.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelC.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelC.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelD.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelD.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelE.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelE.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelF.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelF.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelG.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelG.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelI.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelI.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelJ.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelJ.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelK.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelK.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelL.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelL.ForeColor = Color.Yellow; }));
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Log.log_write(ex.Message, "EXCEPTION", "exception");
-                }
-            }
+                catch (Exception exc) { MessageBox.Show(exc.Message); }
+
+            }); ;
+            th.Name = "Visual AutoForm";
+            th.Start();
         }
 
         private void AuthFormClassic_Shown(object sender, EventArgs e)
         {
             try
             {
-                if (bool.Parse(Config.GetParametr("SaveLastLogin")))
+                if (SaveLastLogin)
                 {
-                    LabelUserText.Text = Config.GetParametr("LastLogin");
+                    LabelUserText.Text = lastLogin;
 
                     LabelUserText.SelectionStart = LabelUserText.Text.Length;
                 }
 
-
             }
-            catch { }
+            catch (Exception exc) { Log.ExcWrite("[AuthFormClassic_Shown]" + exc.Message); }
 
             connecting.Hide();
 
@@ -179,7 +213,7 @@ namespace PrioritySales
                  try
                  {
                      Thread.Sleep(100);
-                     (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelB.Visible = true; }));
+                     (Application.OpenForms[1] as AuthFormClassic).BeginInvoke((MethodInvoker)(delegate() { labelB.Visible = true; }));
                      Thread.Sleep(100);
                      (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelB.ForeColor = Color.Yellow; }));
                      (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelC.Visible = true; }));
@@ -225,6 +259,12 @@ namespace PrioritySales
                  }
                  catch (Exception exc) { Console.WriteLine(exc.Message); }
                  
+                 finally
+                 {
+                     //Визуальный эффект(ожидание проверки версии приложения)
+                     VisualEffect();
+                 }
+
              }); ;
              th.Name = "Visual AutoForm";
              th.Start();
