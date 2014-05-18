@@ -26,7 +26,9 @@ namespace PrioritySales
             switch (e.KeyCode)
             {
                 case Keys.Escape:
+                case Keys.Enter:
                     this.Hide();
+                    Packages.mf.Controls.Remove(MainFormClassic.logform);
                     Packages.mf.ButtonLog.Focus();
                     break;
             }

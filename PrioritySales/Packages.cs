@@ -103,7 +103,10 @@ namespace PrioritySales
 
                                         if (!dr.HasRows)
                                         {
-                                            //TODO
+                                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() {
+                                                    if (mf.dataGridViewMainForm.Focused)
+                                                        mf.ButtonList.Focus();
+                                                }));
                                         }
 
                                         (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.dataGridViewMainForm.Rows.Clear(); }));

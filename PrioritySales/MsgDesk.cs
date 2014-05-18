@@ -38,8 +38,17 @@ namespace PrioritySales
             switch (e.KeyCode)
             {
                 case Keys.Enter:
-                    boxstatus.Location = new Point(Packages.mf.Location.X + Packages.mf.Size.Width / 3 + 50, Packages.mf.Location.Y + 370);
-                    boxstatus.Show();
+                    if(TextBoxMessage.Text.Length > 3)
+                    {
+                        boxstatus.Location = new Point(Packages.mf.Location.X + Packages.mf.Size.Width / 3 + 50, Packages.mf.Location.Y + 370);
+                        boxstatus.Show();
+                    }
+                    else
+                    {
+                        MainFormClassic.msgdesk.Hide();
+                        Packages.mf.Controls.Remove(MainFormClassic.msgdesk);
+                        Packages.mf.ButtonMsg.Focus();
+                    }
                     break;
                 case Keys.Escape:
                 case Keys.Up:

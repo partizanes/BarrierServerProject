@@ -279,6 +279,14 @@ namespace PrioritySales
                 case Keys.Down:
                 case Keys.Enter:
                     {
+                        if (TextboxAddBar.Text.Length == 0)
+                        {
+                            PanelAddBg.Visible = false;
+                            PanelAddTask.Visible = false;
+                            ButtonAdd.Focus();
+                            return;
+                        }
+
                         if (TextboxAddBar.Text.Length < 5)
                         {
                             DeclineErr(true, "                                          Баркод должен быть более 4 цифр!");
@@ -1189,6 +1197,7 @@ namespace PrioritySales
             {
                 case Keys.Down:
                 case Keys.Enter:
+                case Keys.Escape:
                     {
                         ButtonTasks.ForeColor = Color.DodgerBlue;
                         tasks.DataGridViewTasks.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Green;
@@ -1204,9 +1213,12 @@ namespace PrioritySales
                                     tasks.DataGridViewAccepted.Focus();
                                     return;
                                 }
-
-                                ButtonTasks.ForeColor = Color.Green;
-                                return;
+                                else
+                                {
+                                    tasks.Hide();
+                                    ButtonTasks.ForeColor = Color.Green;
+                                    return;
+                                }
                             }
 
                             tasks.DataGridViewTasks.Focus();
