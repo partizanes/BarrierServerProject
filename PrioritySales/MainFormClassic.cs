@@ -90,7 +90,7 @@ namespace PrioritySales
 
         private void CheckTasks()
         {
-            Thread.Sleep(1000);
+            Thread.Sleep(300);
 
             Action<object> action = (object obj) =>
             {
@@ -115,8 +115,12 @@ namespace PrioritySales
                                 if (AuthFormClassic.permanentPanel)
                                     Packages.parse("PrioritySale", 5, "");
 
-                                if ( dr.GetInt32(0) > 0)
-                                    Packages.parse("PrioritySale", 8, "");
+                                if (dr.GetInt32(0) > 0) {
+                                    Action<object> action1 = (object obj1) => { Packages.parse("PrioritySale", 8, ""); };
+                                    Task t1 = new Task(action1, "Packages.parse(PrioritySale 8)");
+                                    t1.Start();
+                                    return;
+                                }
                             }
                         }
                     }
@@ -309,11 +313,27 @@ namespace PrioritySales
                 if (e.KeyCode == Keys.V)
                 {
                     nonNumberEntered = false;
-                    //TextboxAddBar.Text = Clipboard.GetText().Trim();
 
-                    if (TextboxAddBar.Text.Trim().Length == 12)
+                    string tempBar = Clipboard.GetText().Trim();
+
+                    try { int.Parse(tempBar); }
+                    catch
                     {
-                        getname();
+                        LabelInfo.ForeColor = Color.Yellow;
+                        DeclineErr(true, "                                  Баркод может состоять только из чисел!");
+                        Clipboard.Clear();
+                        return;
+                    }
+
+                    if (tempBar.Length == 13)
+                    {
+                        tempBar = tempBar.Substring(0, 12);
+                        Log.log_write("Обрезка 13 символа","SubString","PrioritySales");
+                    }
+
+                    if (tempBar.Length == 5 || tempBar.Length == 12)
+                    {
+                        getname(tempBar);
                     }
                 }
 
@@ -367,6 +387,65 @@ namespace PrioritySales
                 LEFT JOIN trm_in_items A ON A.id=C.item
                 LEFT JOIN trm_in_pricelist_items B ON B.item=c.item
                 WHERE " + str + "='" + TextboxAddBar.Text +
+                    "' AND (b.pricelist_id=" + pricelistId + ")", conn);
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr == null)
+                        {
+                            DeclineErr(true, "                             Запрос ничего не вернул,повторите попытку!");
+                            return;
+                        }
+
+                        if (!dr.HasRows)
+                        {
+                            DeclineErr(true, "                                                Штрихкод не найден в базе!");
+                            TextboxAddBar.Text = "";
+                            TextboxCountAdd.Text = "";
+                            TextboxNameItem.Text = "";
+                            TextboxPrice.Text = "";
+                            TextboxAddBar.Focus();
+                            return;
+                        }
+
+                        if (dr.Read())
+                        {
+                            TextboxNameItem.Text = dr.GetString(0);
+                            string[] split_data = dr.GetString(1).Split(new Char[] { ',' });
+                            TextboxPrice.Text = Convert.ToInt32(split_data[0]).ToString();
+                        }
+
+                        TextboxCountAdd.Focus();
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                DeclineErr(true, "                             Не удалось соединиться с Mysql сервером!");
+                Log.ExcWrite("[getname]" + ex.Message);
+            }
+        }
+
+        private void getname(string tempBar)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Connector.UkmStringConnecting))
+                {
+                    TextboxAddBar.Text = tempBar;
+
+                    conn.Open();
+
+                    string str = "c.id";
+
+                    if (TextboxAddBar.Text.Length == 5)
+                        str = "a.id";
+
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT a.name, b.price
+                FROM trm_in_var C
+                LEFT JOIN trm_in_items A ON A.id=C.item
+                LEFT JOIN trm_in_pricelist_items B ON B.item=c.item
+                WHERE " + str + "='" + tempBar +
                     "' AND (b.pricelist_id=" + pricelistId + ")", conn);
 
                     using (MySqlDataReader dr = cmd.ExecuteReader())

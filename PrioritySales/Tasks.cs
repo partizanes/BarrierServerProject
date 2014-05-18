@@ -95,42 +95,42 @@ namespace PrioritySales
 
         public void UpdateDataGrid()
         {
-            Thread.Sleep(1000);
 
             Action<object> action = (object obj) =>
             {
+                Thread.Sleep(100);
+
                 try
                 {
-                    (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate()
+                    Boolean foc = true;
+
+                    (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { foc = MainFormClassic.tasks.DataGridViewTasks.Focused; }));
+
+                    using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                     {
-                        Boolean foc = MainFormClassic.tasks.DataGridViewTasks.Focused;
+                        conn.Open();
 
-                        using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewTasks.Rows.Clear(); }));
+
+                        MySqlCommand cmd = new MySqlCommand("SELECT tasks_id,priority_id,task_text FROM tasks WHERE `user_group` = (SELECT `group` FROM users WHERE `username` = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "') AND `user_id` = 0 AND `inactive` = 0  ORDER BY priority DESC", conn);
+
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
-                            conn.Open();
-
-                            MainFormClassic.tasks.DataGridViewTasks.Rows.Clear();
-
-                            MySqlCommand cmd = new MySqlCommand("SELECT tasks_id,priority_id,task_text FROM tasks WHERE `user_group` = (SELECT `group` FROM users WHERE `username` = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "') AND `user_id` = 0 AND `inactive` = 0  ORDER BY priority DESC", conn);
-
-                            using (MySqlDataReader dr = cmd.ExecuteReader())
+                            while (dr.Read())
                             {
-                                while (dr.Read())
-                                {
-                                    Application.DoEvents();
+                                Application.DoEvents();
 
-                                    int tasks_id = dr.GetInt32(0);
-                                    int priority_id = dr.GetInt32(1);
-                                    string tasks_text = dr.GetString(2);
+                                int tasks_id = dr.GetInt32(0);
+                                int priority_id = dr.GetInt32(1);
+                                string tasks_text = dr.GetString(2);
 
-                                    (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewTasks.Rows.Add(tasks_id, "[" + priority_id + "] " + tasks_text); }));
-                                }
+                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewTasks.Rows.Add(tasks_id, "[" + priority_id + "] " + tasks_text); }));
                             }
-
-                            if (foc)
-                                MainFormClassic.tasks.DataGridViewTasks.Focus();
                         }
-                    }));
+
+                        if (foc)
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewTasks.Focus(); }));
+                    }
                 }
                 catch (Exception exc)
                 {
@@ -147,33 +147,32 @@ namespace PrioritySales
         {
             Action<object> action = (object obj) =>
             {
+                Thread.Sleep(100);
+
                 try
                 {
-                    (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate()
+                    using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                     {
-                        using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewAccepted.Rows.Clear(); }));
+
+                        conn.Open();
+
+                        MySqlCommand cmd = new MySqlCommand("SELECT tasks_id,priority_id,task_text FROM tasks WHERE `user_group` = (SELECT `group` FROM users WHERE `username` = '" + MainFormClassic.UserName + "') AND `user_id` = (SELECT `id` FROM users WHERE `username` = '" + MainFormClassic.UserName + "') AND `inactive` = 0 ORDER BY priority DESC", conn);
+
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewAccepted.Rows.Clear(); }));
-
-                            conn.Open();
-
-                            MySqlCommand cmd = new MySqlCommand("SELECT tasks_id,priority_id,task_text FROM tasks WHERE `user_group` = (SELECT `group` FROM users WHERE `username` = '" + MainFormClassic.UserName + "') AND `user_id` = (SELECT `id` FROM users WHERE `username` = '" + MainFormClassic.UserName + "') AND `inactive` = 0 ORDER BY priority DESC", conn);
-
-                            using (MySqlDataReader dr = cmd.ExecuteReader())
+                            while (dr.Read())
                             {
-                                while (dr.Read())
-                                {
-                                    Application.DoEvents();
+                                Application.DoEvents();
 
-                                    int tasks_id = dr.GetInt32(0);
-                                    int priority_id = dr.GetInt32(1);
-                                    string tasks_text = dr.GetString(2);
+                                int tasks_id = dr.GetInt32(0);
+                                int priority_id = dr.GetInt32(1);
+                                string tasks_text = dr.GetString(2);
 
-                                    (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewAccepted.Rows.Add(tasks_id, "[" + priority_id + "] " + tasks_text); }));
-                                }
+                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewAccepted.Rows.Add(tasks_id, "[" + priority_id + "] " + tasks_text); }));
                             }
                         }
-                    }));
+                    }
                 }
                 catch (Exception exc)
                 {
