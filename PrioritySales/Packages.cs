@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace PrioritySales
@@ -30,9 +31,10 @@ namespace PrioritySales
                             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).PassTextBox.Focus(); }));
                             break;
                         case 1:
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).Hide(); }));
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.Show(); }));
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.LabelUserName.Text = "Пользователь:  " + msg; }));
+                            (Application.OpenForms[1] as AuthFormClassic).BeginInvoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).Hide(); }));
+                            (Application.OpenForms[1] as AuthFormClassic).BeginInvoke((MethodInvoker)(delegate() { AuthFormClassic.status = false; }));
+                            (Application.OpenForms[1] as AuthFormClassic).BeginInvoke((MethodInvoker)(delegate() { mf.Show(); }));
+                            (Application.OpenForms[1] as AuthFormClassic).BeginInvoke((MethodInvoker)(delegate() { mf.LabelUserName.Text = "Пользователь:  " + msg; }));
                             break;
                         case 2:
                             QueryStatus(true, msg);
@@ -47,6 +49,12 @@ namespace PrioritySales
                             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).BackColor = Color.DodgerBlue; }));
                             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).ButtonSend.Enabled = true; }));
                             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).ButtonSend.Focus(); }));
+                            break;
+                        case 5:
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { careform.Location = new System.Drawing.Point(Zx, Zy); }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { careform.Show(); }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { careform.LabelCareForm.Visible = false; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.Focus(); }));
                             break;
                         case 6:
                             GetMsgBoard();
@@ -96,6 +104,8 @@ namespace PrioritySales
 
                                             while (dr.Read())
                                             {
+                                                Application.DoEvents();
+
                                                 object u_id = dr.GetValue(0);
                                                 string barcode = dr.GetString(1).Replace(" ", "");
                                                 string name = dr.GetString(2).Replace("  ", "");
@@ -114,7 +124,6 @@ namespace PrioritySales
                                             }
                                         }
                                     }
-/*                                }*/
 
                                 MainFormClassic.tasks.UpdateDataGrid();
                                 MainFormClassic.tasks.UpdateDataGridAcceptedTasks();
@@ -168,85 +177,100 @@ namespace PrioritySales
 
         public static void GetMsgBoard()
         {
-            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+            try
             {
-                conn.Open();
+                Thread.Sleep(1000);
 
-                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Clear(); }));
-
-                MySqlCommand cmd = new MySqlCommand("SELECT u.username,m.msg,m.msg_color,m.msg_datetime,m.msg_id FROM users u,message m WHERE u.id = m.userid ORDER BY m.msg_priority", conn);
-
-                using (MySqlDataReader dr = cmd.ExecuteReader())
-                {
-                    if (dr == null) { return; }
-
-                    if (!dr.HasRows) { return; }
-
-                    while (dr.Read())
+                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() {
+                    using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                     {
-                        string username = dr.GetString(0);
-                        string msg = dr.GetString(1);
-                        Color color = Color.FromName(dr.GetString(2));
-                        UInt64 id_msg = dr.GetUInt64(4);
+                        conn.Open();
 
-                        if(color.ToString().Contains("ff"))
+                        MainFormClassic.msgdesk.ListViewMsg.Items.Clear();
+
+                        MySqlCommand cmd = new MySqlCommand("SELECT u.username,m.msg,m.msg_color,m.msg_datetime,m.msg_id FROM users u,message m WHERE u.id = m.userid ORDER BY m.msg_priority", conn);
+
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
-                            ColorConverter colcon = new ColorConverter();
+                            if (dr == null) { return; }
 
-                            color = (Color)colcon.ConvertFromString("#" + color.Name);
-                        }
+                            if (!dr.HasRows) { return; }
 
-                        DateTime datetime = dr.GetDateTime(3);
+                            while (dr.Read())
+                            {
+                                Application.DoEvents();
 
-                        string _CompleteMsg = id_msg + ": [" + datetime.ToString("dd.MM") + "] [" + datetime.ToShortTimeString() + "] " + " [" + username + "] " + msg;
+                                string username = dr.GetString(0);
+                                string msg = dr.GetString(1);
+                                Color color = Color.FromName(dr.GetString(2));
+                                UInt64 id_msg = dr.GetUInt64(4);
 
-                        if (_CompleteMsg.Length > 115 && _CompleteMsg.Length <= 230)
-                        {
-                            string part1 = _CompleteMsg.Substring(0, 115);
-                            string part2 = _CompleteMsg.Substring(115, _CompleteMsg.Length - 115);
+                                if (color.ToString().Contains("ff"))
+                                {
+                                    ColorConverter colcon = new ColorConverter();
 
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part1); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part2); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                                    color = (Color)colcon.ConvertFromString("#" + color.Name);
+                                }
 
-                            continue;
-                        }
+                                DateTime datetime = dr.GetDateTime(3);
 
-                        if (_CompleteMsg.Length > 230 && _CompleteMsg.Length <= 345)
-                        {
-                            string part1 = _CompleteMsg.Substring(0, 115);
-                            string part2 = _CompleteMsg.Substring(115, 115);
-                            string part3 = _CompleteMsg.Substring(230, _CompleteMsg.Length - 230);
+                                string _CompleteMsg = id_msg + ": [" + datetime.ToString("dd.MM") + "] [" + datetime.ToShortTimeString() + "] " + " [" + username + "] " + msg;
 
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part1); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part2); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part3); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                                if (_CompleteMsg.Length > 115 && _CompleteMsg.Length <= 230)
+                                {
+                                    string part1 = _CompleteMsg.Substring(0, 115);
+                                    string part2 = _CompleteMsg.Substring(115, _CompleteMsg.Length - 115);
 
-                            continue;
-                        }
+                                    MainFormClassic.msgdesk.ListViewMsg.Items.Add(part1); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color;
+                                    MainFormClassic.msgdesk.ListViewMsg.Items.Add(part2); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color;
 
-                        if (_CompleteMsg.Length > 345 && _CompleteMsg.Length <= 460)
-                        {
-                            string part1 = _CompleteMsg.Substring(0, 115);
-                            string part2 = _CompleteMsg.Substring(115, 115);
-                            string part3 = _CompleteMsg.Substring(230, 115);
-                            string part4 = _CompleteMsg.Substring(345, _CompleteMsg.Length - 345);
+                                    continue;
+                                }
 
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part1); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part2); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part3); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(part4); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
+                                if (_CompleteMsg.Length > 230 && _CompleteMsg.Length <= 345)
+                                {
+                                    string part1 = _CompleteMsg.Substring(0, 115);
+                                    string part2 = _CompleteMsg.Substring(115, 115);
+                                    string part3 = _CompleteMsg.Substring(230, _CompleteMsg.Length - 230);
+
+                                    MainFormClassic.msgdesk.ListViewMsg.Items.Add(part1); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color;
+                                    MainFormClassic.msgdesk.ListViewMsg.Items.Add(part2); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color;
+                                    MainFormClassic.msgdesk.ListViewMsg.Items.Add(part3); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color;
+
+                                    continue;
+                                }
+
+                                if (_CompleteMsg.Length > 345 && _CompleteMsg.Length <= 460)
+                                {
+                                    string part1 = _CompleteMsg.Substring(0, 115);
+                                    string part2 = _CompleteMsg.Substring(115, 115);
+                                    string part3 = _CompleteMsg.Substring(230, 115);
+                                    string part4 = _CompleteMsg.Substring(345, _CompleteMsg.Length - 345);
+
+                                    MainFormClassic.msgdesk.ListViewMsg.Items.Add(part1); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color;
+                                    MainFormClassic.msgdesk.ListViewMsg.Items.Add(part2); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color;
+                                    MainFormClassic.msgdesk.ListViewMsg.Items.Add(part3); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color;
+                                    MainFormClassic.msgdesk.ListViewMsg.Items.Add(part4); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color;
 
 
-                            continue;
-                        }
+                                    continue;
+                                }
 
-                        if (_CompleteMsg.Length < 115)
-                        {
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.msgdesk.ListViewMsg.Items.Add(_CompleteMsg); MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color; }));
-                            continue;
+                                if (_CompleteMsg.Length < 115)
+                                {
+                                    MainFormClassic.msgdesk.ListViewMsg.Items.Add(_CompleteMsg);
+                                    MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].ForeColor = color;
+                                    continue;
+                                }
+                            }
                         }
                     }
-                }
+                }));
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+                Log.ExcWrite("[GetMsgBoard] " + exc.Message);
             }
         }
     }
