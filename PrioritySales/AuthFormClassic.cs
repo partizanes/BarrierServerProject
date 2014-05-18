@@ -134,62 +134,6 @@ namespace PrioritySales
             t.Start();
         }
 
-        private void VisualEffect()
-        {
-            Thread th = new Thread(delegate()
-            {
-                try
-                {
-                    while (!ButtonSend.Enabled)
-                    {
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelB.ForeColor = Color.DarkBlue; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelB.ForeColor = Color.Yellow; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelC.ForeColor = Color.DarkBlue; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelC.ForeColor = Color.Yellow; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelD.ForeColor = Color.DarkBlue; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelD.ForeColor = Color.Yellow; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelE.ForeColor = Color.DarkBlue; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelE.ForeColor = Color.Yellow; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelF.ForeColor = Color.DarkBlue; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelF.ForeColor = Color.Yellow; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelG.ForeColor = Color.DarkBlue; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelG.ForeColor = Color.Yellow; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelI.ForeColor = Color.DarkBlue; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelI.ForeColor = Color.Yellow; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelJ.ForeColor = Color.DarkBlue; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelJ.ForeColor = Color.Yellow; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelK.ForeColor = Color.DarkBlue; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelK.ForeColor = Color.Yellow; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelL.ForeColor = Color.DarkBlue; }));
-                        Thread.Sleep(50);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelL.ForeColor = Color.Yellow; }));
-                    }
-                }
-                catch (Exception exc) { MessageBox.Show(exc.Message); }
-
-            }); ;
-            th.Name = "Visual AutoForm";
-            th.Start();
-        }
-
         private void AuthFormClassic_Shown(object sender, EventArgs e)
         {
             try
@@ -464,6 +408,62 @@ namespace PrioritySales
             thh.Name = "Авторизация";
             Server.threads.Add(thh);
             thh.Start();
+        }
+
+        private void VisualEffect()
+        {
+            Thread th = new Thread(delegate()
+            {
+                try
+                {
+                    while (!ButtonSend.Enabled)
+                    {
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelB.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelB.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelC.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelC.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelD.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelD.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelE.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelE.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelF.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelF.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelG.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelG.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelI.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelI.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelJ.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelJ.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelK.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelK.ForeColor = Color.Yellow; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelL.ForeColor = Color.DarkBlue; }));
+                        Thread.Sleep(50);
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { labelL.ForeColor = Color.Yellow; }));
+                    }
+                }
+                catch (Exception exc) { MessageBox.Show(exc.Message); }
+
+            }); ;
+            th.Name = "Visual AutoForm";
+            th.Start();
         }
 
         public static string GetMd5Hash(MD5 md5Hash, string input)

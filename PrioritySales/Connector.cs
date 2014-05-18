@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Data;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace PrioritySales
@@ -18,7 +19,8 @@ namespace PrioritySales
 
         public static Boolean ExecuteNonQuery(string str)
         {
-            try {
+            try
+            {
                 using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                 {
                     conn.Open();

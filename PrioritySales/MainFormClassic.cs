@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Drawing;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PrioritySales
@@ -38,84 +39,96 @@ namespace PrioritySales
 
         private void MainFormClassic_Shown(object sender, EventArgs e)
         {
+            //WARNING
             ButtonAdd.Focus();
 
-            CheckTasks();
+            Action<object> action = (object obj) =>
+            {
+                CheckTasks();
 
-            Packages.GetMsgBoard();
+                Packages.GetMsgBoard();
+            };
+
+            Task t = new Task(action, "CheckTasksAndGetMsgBoard");
+            t.Start();
+
+            return;
         }
 
-        private void GetUserGroup()
+        private void GetUserIdAndGroup()
         {
-            try
+            Action<object> action = (object obj) =>
             {
-                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+                try
                 {
-                    conn.Open();
-
-                    MySqlCommand cmd = new MySqlCommand("SELECT `group` FROM `users` WHERE `username` = '" + UserName + "'", conn);
-
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                     {
-                        if (dr == null) { return; }
-                        if (dr.Read()) { UserGroup = dr.GetInt32(0); }
+                        conn.Open();
+
+                        MySqlCommand cmd = new MySqlCommand("SELECT `id`,`group` FROM `users` WHERE `username` = '" + UserName + "'", conn);
+
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr == null) { return; }
+                            if (dr.Read())
+                            {
+                                UserId = dr.GetInt32(0);
+                                UserGroup = dr.GetInt32(1);
+                            }
+                        }
                     }
                 }
-            }
-            catch (System.Exception ex)
-            {
-                Log.log_write("[GetUserGroup]" + ex.Message,"EXCEPTION","exception");
-            }
-        }
-
-        private void GetUserId()
-        {
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+                catch (System.Exception ex)
                 {
-                    conn.Open();
-
-                    MySqlCommand cmd = new MySqlCommand("SELECT `id` FROM `users` WHERE `username` = '" + UserName + "'", conn);
-
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
-                    {
-                        if (dr == null) { return; }
-                        if (dr.Read()) { UserId = dr.GetInt32(0); }
-                    }
+                    Log.log_write("[GetUserIdAndGroup]" + ex.Message, "EXCEPTION", "exception");
                 }
-            }
-            catch (System.Exception ex)
-            {
-                Log.log_write("[GetUserGroup]" + ex.Message, "EXCEPTION", "exception");
-            }
+            };
+
+            Task t = new Task(action, "GetUserIdAndGroup");
+            t.Start();
         }
 
         private void CheckTasks()
         {
-            try
+            Thread.Sleep(1000);
+
+            Action<object> action = (object obj) =>
             {
-                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+                try
                 {
-                    conn.Open();
-
-                    MySqlCommand cmd = new MySqlCommand("SELECT COUNT(tasks_id) FROM tasks WHERE `user_group` = (SELECT `group` FROM `users` WHERE `username` = '" + UserName + "' ) AND `user_id` = 0", conn);
-
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                     {
-                        if (dr == null) { return; }
-                        if (dr.Read())
+                        Application.DoEvents();
+
+                        conn.Open();
+
+                        MySqlCommand cmd = new MySqlCommand("SELECT COUNT(tasks_id) FROM tasks WHERE `user_group` = (SELECT `group` FROM `users` WHERE `username` = '" + UserName + "' ) AND `user_id` = 0", conn);
+
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
-                            if (dr.GetInt32(0) > 0)
-                                Packages.parse("PrioritySale", 8, "");
+                            if (dr == null) { return; }
+
+                            if (dr.Read())
+                            {
+                                Application.DoEvents();
+
+                                if (AuthFormClassic.permanentPanel)
+                                    Packages.parse("PrioritySale", 5, "");
+
+                                if ( dr.GetInt32(0) > 0)
+                                    Packages.parse("PrioritySale", 8, "");
+                            }
                         }
                     }
                 }
-            }
-            catch (System.Exception ex)
-            {
-                Log.ExcWrite("[CheckTasks]" + ex.Message);
-            }
+                catch (System.Exception ex)
+                {
+                    Log.ExcWrite("[CheckTasks]" + ex.Message);
+                }
+            };
+
+            Task t = new Task(action, "CheckTasks");
+            t.Start();
         }
 
         private void ButtonAdd_Enter(object sender, EventArgs e)
@@ -241,6 +254,7 @@ namespace PrioritySales
         private void TextboxAddBar_KeyDown(object sender, KeyEventArgs e)
         {
             nonNumberEntered = false;
+            TextboxAddBar.Text = TextboxAddBar.Text.Trim();
 
             switch (e.KeyCode)
             {
@@ -295,9 +309,9 @@ namespace PrioritySales
                 if (e.KeyCode == Keys.V)
                 {
                     nonNumberEntered = false;
-                    TextboxAddBar.Text = Clipboard.GetText();
+                    //TextboxAddBar.Text = Clipboard.GetText().Trim();
 
-                    if (TextboxAddBar.Text.Length == 12)
+                    if (TextboxAddBar.Text.Trim().Length == 12)
                     {
                         getname();
                     }
@@ -343,11 +357,16 @@ namespace PrioritySales
                 {
                     conn.Open();
 
+                    string str = "c.id";
+
+                    if (TextboxAddBar.Text.Length == 5)
+                        str = "a.id";
+
                     MySqlCommand cmd = new MySqlCommand(@"SELECT a.name, b.price
                 FROM trm_in_var C
                 LEFT JOIN trm_in_items A ON A.id=C.item
                 LEFT JOIN trm_in_pricelist_items B ON B.item=c.item
-                WHERE a.id='" + TextboxAddBar.Text +
+                WHERE " + str + "='" + TextboxAddBar.Text +
                     "' AND (b.pricelist_id=" + pricelistId + ")", conn);
 
                     using (MySqlDataReader dr = cmd.ExecuteReader())
@@ -522,22 +541,16 @@ namespace PrioritySales
 
             ButtonTurn.Enabled = false;
 
-            Thread thh = new Thread(delegate()
+            Server.Connect();
+
+            if (Server.server.Connected)
             {
-                Server.Connect();
+                DateTime datetime = new DateTime();
 
-                if (Server.server.Connected)
-                {
-                    DateTime datetime = new DateTime();
+                datetime = Convert.ToDateTime(dateTimePicker1.Text);
 
-                    datetime = Convert.ToDateTime(dateTimePicker1.Text);
-
-                    Server.Sender("PrioritySale", 5, TextboxAddBar.Text + ";" + TextboxCountAdd.Text + ";" + TextboxPrice.Text + ";" + datetime + ";" + TextboxNameItem.Text);
-                }
-            }); ;
-            thh.Name = "Авторизация";
-            Server.threads.Add(thh);
-            thh.Start();
+                Server.Sender("PrioritySale", 5, TextboxAddBar.Text + ";" + TextboxCountAdd.Text + ";" + TextboxPrice.Text + ";" + datetime + ";" + TextboxNameItem.Text);
+            }
 
             //TIMER TO ENABLED BUTTON
 //             int i = 0;
@@ -937,21 +950,30 @@ namespace PrioritySales
 
         public void UpdateOrderShow()
         {
+            Application.DoEvents();
+
             PrioritySalesIcon.Visible = false;
             Packages.mf.Show();
             tasks.Location = new System.Drawing.Point((this.Location.X + this.Size.Width) + 1, (this.Location.Y));
             tasks.Show();
             tasks.Refresh();
 
-            tasks.UpdateDataGrid();
+            Action<object> action = (object obj) =>
+            {
+                tasks.UpdateDataGrid();
+                tasks.UpdateDataGridAcceptedTasks();
+            };
 
-            tasks.UpdateDataGridAcceptedTasks();
+            Task t = new Task(action, "UpdateData");
+            t.Start();
 
             TimerIconChange.Enabled = false;
 
             var icon1 = Properties.Resources.logo;
 
             PrioritySalesIcon.Icon = icon1;
+
+            ButtonHide.Focus();
         }
 
         private void MainFormClassic_FormClosing(object sender, FormClosingEventArgs e)
@@ -1211,9 +1233,7 @@ namespace PrioritySales
         {
             UserName = Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "");
 
-            GetUserGroup();
-
-            GetUserId();
+            GetUserIdAndGroup();
         }
 
         private void подробноToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1253,6 +1273,8 @@ namespace PrioritySales
 
                     while (dr.Read())
                     {
+                        Application.DoEvents();
+
                         if (dr.GetString(0) == "0" || dr.GetString(1) == "0")
                             continue;
 
@@ -1295,25 +1317,43 @@ namespace PrioritySales
 
                 MainFormClassic.logform.Focus();
 
-                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.logform.listBox1.Items.Clear(); }));
+
+                Action<object> action = (object obj) =>
                 {
-                    conn.Open();
-
-                    MySqlCommand cmd = new MySqlCommand(@"SELECT * FROM `log` ", conn);
-                    cmd.CommandTimeout = 0;
-
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    try
                     {
-                        if (dr == null) { MainFormClassic.logform.listBox1.Items.Add("Записи не обнаружены!"); }
-
-                        if (!dr.HasRows) { MainFormClassic.logform.listBox1.Items.Add("Записи не обнаружены!"); }
-
-                        while (dr.Read())
+                        using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                         {
-                            { MainFormClassic.logform.listBox1.Items.Add(dr.GetValue(1)); }
+                            conn.Open();
+
+                            MySqlCommand cmd = new MySqlCommand(@"SELECT * FROM `log` ", conn);
+                            cmd.CommandTimeout = 0;
+
+                            using (MySqlDataReader dr = cmd.ExecuteReader())
+                            {
+                                if (dr == null || !dr.HasRows)
+                                {
+                                    (Application.OpenForms[1] as AuthFormClassic).BeginInvoke((MethodInvoker)(delegate() { MainFormClassic.logform.listBox1.Items.Add("Записи не обнаружены!"); }));
+                                }
+                                while (dr.Read())
+                                {
+                                    Application.DoEvents();
+                                    (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.logform.listBox1.Items.Add(dr.GetValue(1)); }));
+                                }
+                            }
                         }
                     }
-                }
+                    catch (Exception exc)
+                    {
+                        MessageBox.Show("[ButtonLog_Click]" + exc.Message);
+                        Log.ExcWrite("[ButtonLog_Click]" + exc.Message);
+                    }
+                };
+
+
+                Task t = new Task(action, "ButtonLog_ClickQuery");
+                t.Start();
             }
             else
             {
