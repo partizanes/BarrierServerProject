@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
 
 namespace PrioritySales
 {
@@ -26,7 +27,8 @@ namespace PrioritySales
 
             if (buffer.ToString() == "null")
             {
-                return "";
+                MessageBox.Show("В файле конфигурации не задан параметр " + par);
+                Environment.Exit(0);
             }
 
             return buffer.ToString();

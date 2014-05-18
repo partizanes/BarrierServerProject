@@ -187,8 +187,6 @@ namespace PrioritySales
         {
             PanelEditMsgBack.Visible = true;
 
-
-            
             CleanPanelEdited(_MsgId);
 
             try
