@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PrioritySales
@@ -94,57 +95,95 @@ namespace PrioritySales
 
         public void UpdateDataGrid()
         {
-            Boolean foc = MainFormClassic.tasks.DataGridViewTasks.Focused;
+            Thread.Sleep(1000);
 
-            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+            Action<object> action = (object obj) =>
             {
-                conn.Open();
-
-                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewTasks.Rows.Clear(); }));
-
-                MySqlCommand cmd = new MySqlCommand("SELECT tasks_id,priority_id,task_text FROM tasks WHERE `user_group` = (SELECT `group` FROM users WHERE `username` = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "') AND `user_id` = 0 AND `inactive` = 0  ORDER BY priority DESC", conn);
-
-                using (MySqlDataReader dr = cmd.ExecuteReader())
+                try
                 {
-                    while (dr.Read())
+                    (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate()
                     {
-                        int tasks_id = dr.GetInt32(0);
-                        int priority_id = dr.GetInt32(1);
-                        string tasks_text = dr.GetString(2);
+                        Boolean foc = MainFormClassic.tasks.DataGridViewTasks.Focused;
 
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewTasks.Rows.Add(tasks_id, "[" + priority_id + "] " + tasks_text); }));
-                    }
+                        using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+                        {
+                            conn.Open();
+
+                            MainFormClassic.tasks.DataGridViewTasks.Rows.Clear();
+
+                            MySqlCommand cmd = new MySqlCommand("SELECT tasks_id,priority_id,task_text FROM tasks WHERE `user_group` = (SELECT `group` FROM users WHERE `username` = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "') AND `user_id` = 0 AND `inactive` = 0  ORDER BY priority DESC", conn);
+
+                            using (MySqlDataReader dr = cmd.ExecuteReader())
+                            {
+                                while (dr.Read())
+                                {
+                                    Application.DoEvents();
+
+                                    int tasks_id = dr.GetInt32(0);
+                                    int priority_id = dr.GetInt32(1);
+                                    string tasks_text = dr.GetString(2);
+
+                                    (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewTasks.Rows.Add(tasks_id, "[" + priority_id + "] " + tasks_text); }));
+                                }
+                            }
+
+                            if (foc)
+                                MainFormClassic.tasks.DataGridViewTasks.Focus();
+                        }
+                    }));
                 }
+                catch (Exception exc)
+                {
+                    MessageBox.Show("[UpdateDataGrid] " + exc.Message);
+                    Log.ExcWrite("[UpdateDataGrid]" + exc.Message);
+                }
+            };
 
-                if (foc)
-                    MainFormClassic.tasks.DataGridViewTasks.Focus();
-            }
+            Task t = new Task(action, "UpdateDataGrid");
+            t.Start();
         }
 
         public void UpdateDataGridAcceptedTasks()
         {
-            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+            Action<object> action = (object obj) =>
             {
-                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewAccepted.Rows.Clear(); }));
-
-                conn.Open();
-
-                MySqlCommand cmd = new MySqlCommand("SELECT tasks_id,priority_id,task_text FROM tasks WHERE `user_group` = (SELECT `group` FROM users WHERE `username` = '" + MainFormClassic.UserName + "') AND `user_id` = (SELECT `id` FROM users WHERE `username` = '" + MainFormClassic.UserName + "') AND `inactive` = 0 ORDER BY priority DESC", conn);
-
-                using (MySqlDataReader dr = cmd.ExecuteReader())
+                try
                 {
-
-                    while (dr.Read())
+                    (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate()
                     {
-                        int tasks_id = dr.GetInt32(0);
-                        int priority_id = dr.GetInt32(1);
-                        string tasks_text = dr.GetString(2);
+                        using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+                        {
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewAccepted.Rows.Clear(); }));
 
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewAccepted.Rows.Add(tasks_id, "[" + priority_id + "] " + tasks_text); }));
- 
-                    }
+                            conn.Open();
+
+                            MySqlCommand cmd = new MySqlCommand("SELECT tasks_id,priority_id,task_text FROM tasks WHERE `user_group` = (SELECT `group` FROM users WHERE `username` = '" + MainFormClassic.UserName + "') AND `user_id` = (SELECT `id` FROM users WHERE `username` = '" + MainFormClassic.UserName + "') AND `inactive` = 0 ORDER BY priority DESC", conn);
+
+                            using (MySqlDataReader dr = cmd.ExecuteReader())
+                            {
+                                while (dr.Read())
+                                {
+                                    Application.DoEvents();
+
+                                    int tasks_id = dr.GetInt32(0);
+                                    int priority_id = dr.GetInt32(1);
+                                    string tasks_text = dr.GetString(2);
+
+                                    (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewAccepted.Rows.Add(tasks_id, "[" + priority_id + "] " + tasks_text); }));
+                                }
+                            }
+                        }
+                    }));
                 }
-            }
+                catch (Exception exc)
+                {
+                    MessageBox.Show("[UpdateDataGridAcceptedTasks]" + exc.Message);
+                    Log.ExcWrite("[UpdateDataGridAcceptedTasks]" + exc.Message);
+                }
+            };
+
+            Task t = new Task(action, "UpdateDataGrid");
+            t.Start();
         }
 
         private void DataGridViewTasks_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -196,74 +235,100 @@ namespace PrioritySales
 
         private void GetMainInfo(string s)
         {
-            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+            Action<object> action = (object obj) =>
             {
-                conn.Open();
-
-                MySqlCommand cmd = new MySqlCommand(@"SELECT bar,name,turn_price,count,sailed,status,status_text FROM priority WHERE id = (SELECT `priority_id` FROM `tasks` WHERE `tasks_id` = " + s + ")", conn);
-                cmd.CommandTimeout = 0;
-
-                using (MySqlDataReader dr = cmd.ExecuteReader())
+                try
                 {
-                    if (dr == null) { return; }
-
-                    if (!dr.HasRows) { }
-
-                    while (dr.Read())
+                    using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                     {
-                        string bar = dr.GetString(0).Replace(" ", "");
-                        string name = dr.GetString(1);
-                        int turn_price = Convert.ToInt32(dr.GetValue(2));
-                        float count = dr.GetFloat(3);
-                        //try { float sailed = dr.GetFloat(4); }
-                        //catch { float sailed = 0; }
-                        int status = Convert.ToInt32(dr.GetValue(5));
-                        string status_text = dr.GetString(6);
+                        conn.Open();
 
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.labIdText.Text = s; }));
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.labelBarText.Text = bar; }));
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.NameBarText.Text = name; }));
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.PriceBarText.Text = turn_price.ToString(); }));
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.CountBarText.Text = count.ToString(); }));
+                        MySqlCommand cmd = new MySqlCommand(@"SELECT bar,name,turn_price,count,sailed,status,status_text FROM priority WHERE id = (SELECT `priority_id` FROM `tasks` WHERE `tasks_id` = " + s + ")", conn);
+                        cmd.CommandTimeout = 0;
+
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr == null) { return; }
+
+                            if (!dr.HasRows) { }
+
+                            while (dr.Read())
+                            {
+                                Application.DoEvents();
+
+                                string bar = dr.GetString(0).Replace(" ", "");
+                                string name = dr.GetString(1);
+                                int turn_price = Convert.ToInt32(dr.GetValue(2));
+                                float count = dr.GetFloat(3);
+                                //try { float sailed = dr.GetFloat(4); }
+                                //catch { float sailed = 0; }
+                                int status = Convert.ToInt32(dr.GetValue(5));
+                                string status_text = dr.GetString(6);
+
+                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.labIdText.Text = s; }));
+                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.labelBarText.Text = bar; }));
+                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.NameBarText.Text = name; }));
+                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.PriceBarText.Text = turn_price.ToString(); }));
+                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.CountBarText.Text = count.ToString(); }));
+                            }
+                        }
                     }
                 }
-            }
+                catch(Exception exc)
+                {
+                    MessageBox.Show("[GetMainInfo]" + exc.Message);
+                    Log.ExcWrite("[GetMainInfo]" + exc.Message);
+                }
+            };
+
+            Task t = new Task(action, "GetMainInfo");
+            t.Start();
         }
 
         private void GetCurrentUkmPrice(string s)
         {
-            Thread thh = new Thread(delegate()
+            Action<object> action = (object obj) =>
             {
-                using (MySqlConnection conn = new MySqlConnection(Connector.UkmStringConnecting))
+                try
                 {
-                    conn.Open();
-
-                    MySqlCommand cmd = new MySqlCommand(@"SELECT b.price FROM trm_in_var C LEFT JOIN trm_in_items A ON A.id=C.item LEFT JOIN trm_in_pricelist_items B ON B.item=c.item WHERE C.item= '" + MainFormClassic.infocontrol.labelBarText.Text + "' AND b.pricelist_id= 1", conn);
-                    cmd.CommandTimeout = 0;
-
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    using (MySqlConnection conn = new MySqlConnection(Connector.UkmStringConnecting))
                     {
-                        if (dr == null)
-                            return;
+                        conn.Open();
 
-                        if (!dr.HasRows) { }
+                        MySqlCommand cmd = new MySqlCommand(@"SELECT b.price FROM trm_in_var C LEFT JOIN trm_in_items A ON A.id=C.item LEFT JOIN trm_in_pricelist_items B ON B.item=c.item WHERE C.item= '" + MainFormClassic.infocontrol.labelBarText.Text + "' AND b.pricelist_id= 1", conn);
+                        cmd.CommandTimeout = 0;
 
-                        while (dr.Read())
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.PriceUkmText.Text = dr.GetString(0).Replace(",0000", ""); }));
+                            if (dr == null)
+                                return;
 
-                            try { CheckPrice(Convert.ToInt32(MainFormClassic.infocontrol.PriceBarText.Text), Convert.ToInt32(MainFormClassic.infocontrol.PriceUkmText.Text)); }
-                            catch { }
+                            if (!dr.HasRows) { }
+
+                            while (dr.Read())
+                            {
+                                Application.DoEvents();
+
+                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.PriceUkmText.Text = dr.GetString(0).Replace(",0000", ""); }));
+
+                                try { CheckPrice(Convert.ToInt32(MainFormClassic.infocontrol.PriceBarText.Text), Convert.ToInt32(MainFormClassic.infocontrol.PriceUkmText.Text)); }
+                                catch { }
+                            }
+
+                            if (!dr.IsClosed)
+                                dr.Close();
                         }
-
-                        if (!dr.IsClosed)
-                            dr.Close();
                     }
                 }
-            }); ;
-            thh.Name = "Запрос цены";
-            Server.threads.Add(thh);
-            thh.Start();
+                catch (Exception exc)
+                {
+                    MessageBox.Show("[GetCurrentUkmPrice]" + exc.Message);
+                    Log.ExcWrite("[GetCurrentUkmPrice]" + exc.Message);
+                }
+            };
+
+            Task t = new Task(action, "GetCurrentUkmPrice");
+            t.Start();
         }
 
         private void CheckPrice(int pricebar, int priceukm)
@@ -280,61 +345,88 @@ namespace PrioritySales
 
         private void RequestSendPrice(string s)
         {
-            Thread thg = new Thread(delegate()
+            Action<object> action = (object obj) =>
             {
-                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+                try
                 {
-                    conn.Open();
-
-                    MySqlCommand cmd = new MySqlCommand(@"SELECT `action`,`price`,`kod_isp`,`datetime` FROM `sendPOS` WHERE id = (SELECT priority_id FROM `tasks` WHERE tasks_id = " + s + ")", conn);
-                    cmd.CommandTimeout = 0;
-
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                     {
-                        if (dr == null)
-                            return;
+                        conn.Open();
 
-                        if (!dr.HasRows) { }
+                        MySqlCommand cmd = new MySqlCommand(@"SELECT `action`,`price`,`kod_isp`,`datetime` FROM `sendPOS` WHERE id = (SELECT priority_id FROM `tasks` WHERE tasks_id = " + s + ")", conn);
+                        cmd.CommandTimeout = 0;
 
-                        while (dr.Read())
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DataGridViewSend.Rows.Add(dr.GetString(0), dr.GetString(1), dr.GetString(2), dr.GetString(3)); }));
-                        }
+                            if (dr == null)
+                                return;
 
-                        if (!dr.IsClosed)
-                            dr.Close();
+                            if (!dr.HasRows) { }
+
+                            while (dr.Read())
+                            {
+                                Application.DoEvents();
+
+                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DataGridViewSend.Rows.Add(dr.GetString(0), dr.GetString(1), dr.GetString(2), dr.GetString(3)); }));
+                            }
+
+                            if (!dr.IsClosed)
+                                dr.Close();
+                        }
                     }
                 }
-            }); ;
-            thg.Name = "Запрос отправки цен на кассу";
-            Server.threads.Add(thg);
-            thg.Start();
+                catch (Exception exc)
+                {
+                    MessageBox.Show("[RequestSendPrice]" + exc.Message);
+                    Log.ExcWrite("[RequestSendPrice]" + exc.Message);
+                }
+            };
+
+            Task t = new Task(action, "RequestSendPrice");
+            t.Start();
         }
 
         private void RequestSailPriceAndCount(string s)
         {
-            using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+            Action<object> action = (object obj) =>
             {
-                conn.Open();
-
-                MySqlCommand cmd = new MySqlCommand(@"SELECT operation,price,count FROM `operations` WHERE `id` = (SELECT `priority_id` FROM `tasks` WHERE `tasks_id` = " + s + ")", conn);
-                cmd.CommandTimeout = 0;
-
-                using (MySqlDataReader dr = cmd.ExecuteReader())
+                try
                 {
-                    if (dr == null) { return; }
-
-                    if (!dr.HasRows) { }
-
-                    while (dr.Read())
+                    using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                     {
-                        if (dr.GetString(0) == "0" || dr.GetString(1) == "0")
-                            continue;
+                        conn.Open();
 
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DataGridViewSail.Rows.Add(dr.GetString(0), dr.GetString(1), dr.GetString(2)); }));
+                        MySqlCommand cmd = new MySqlCommand(@"SELECT operation,price,count FROM `operations` WHERE `id` = (SELECT `priority_id` FROM `tasks` WHERE `tasks_id` = " + s + ")", conn);
+                        cmd.CommandTimeout = 0;
+
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr == null) { return; }
+
+                            if (!dr.HasRows) { }
+
+                            while (dr.Read())
+                            {
+                                Application.DoEvents();
+
+                                if (dr.GetString(0) == "0" || dr.GetString(1) == "0")
+                                    continue;
+
+                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DataGridViewSail.Rows.Add(dr.GetString(0), dr.GetString(1), dr.GetString(2)); }));
+                            }
+                        }
                     }
                 }
-            }
+                catch (Exception exc)
+                {
+                    MessageBox.Show("[RequestSailPriceAndCount]" + exc.Message);
+                    Log.ExcWrite("[RequestSailPriceAndCount]" + exc.Message);
+                }
+            };
+
+            Task t = new Task(action, "RequestSailPriceAndCount");
+            t.Start();
+
         }
 
         private void GetInfo(string s)
@@ -454,7 +546,14 @@ namespace PrioritySales
         {
             string s = DataGridViewAccepted.Rows[DataGridViewAccepted.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
 
-            Connector.ExecuteNonQuery("UPDATE `tasks` SET `user_id` = 0 WHERE  tasks_id = " + s );
+            //check this
+            Action<object> action = (object obj) =>
+            {
+                Connector.ExecuteNonQuery("UPDATE `tasks` SET `user_id` = 0 WHERE  tasks_id = " + s);
+            };
+
+            Task t = new Task(action, "ExecuteNonQuery");
+            t.Start();
 
             if (Server.server.Connected)
                 Server.Sender("PrioritySale", 6, "Пользователь отказался от задачи " + s);
@@ -466,7 +565,14 @@ namespace PrioritySales
         {
             string s = DataGridViewAccepted.Rows[DataGridViewAccepted.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
 
-            Connector.ExecuteNonQuery("UPDATE `tasks` SET `inactive` = 2 WHERE  tasks_id = " + s);
+            //check this
+            Action<object> action = (object obj) =>
+            {
+                Connector.ExecuteNonQuery("UPDATE `tasks` SET `inactive` = 2 WHERE  tasks_id = " + s);
+            };
+
+            Task t = new Task(action, "ExecuteNonQuery");
+            t.Start();
 
             if (Server.server.Connected)
                 Server.Sender("PrioritySale", 6, "Пользователь выполнил задачу " + s);
