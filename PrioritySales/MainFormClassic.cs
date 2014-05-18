@@ -324,12 +324,11 @@ namespace PrioritySales
 
                     string tempBar = Clipboard.GetText().Trim();
 
-                    try { int.Parse(tempBar); }
+                    try { Int64.Parse(tempBar); }
                     catch
                     {
                         LabelInfo.ForeColor = Color.Yellow;
                         DeclineErr(true, "                                  Баркод может состоять только из чисел!");
-                        Clipboard.Clear();
                         return;
                     }
 
@@ -379,118 +378,166 @@ namespace PrioritySales
 
         private void getname()
         {
-            try
+            PanelAddBg.BackColor = Color.Yellow;
+
+            Action<object> action = (object obj) =>
             {
-                using (MySqlConnection conn = new MySqlConnection(Connector.UkmStringConnecting))
+                Thread.Sleep(300);
+
+                try
                 {
-                    conn.Open();
+                    using (MySqlConnection conn = new MySqlConnection(Connector.UkmStringConnecting))
+                    {
+                        conn.Open();
 
-                    string str = "c.id";
+                        string str = "c.id";
 
-                    if (TextboxAddBar.Text.Length == 5)
-                        str = "a.id";
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() {
+                            if (TextboxAddBar.Text.Length == 5)
+                                str = "a.id";
+                        }));
 
-                    MySqlCommand cmd = new MySqlCommand(@"SELECT a.name, b.price
+
+                        MySqlCommand cmd = new MySqlCommand(@"SELECT a.name, b.price
                 FROM trm_in_var C
                 LEFT JOIN trm_in_items A ON A.id=C.item
                 LEFT JOIN trm_in_pricelist_items B ON B.item=c.item
                 WHERE " + str + "='" + TextboxAddBar.Text +
-                    "' AND (b.pricelist_id=" + pricelistId + ")", conn);
+                        "' AND (b.pricelist_id=" + pricelistId + ")", conn);
 
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
-                    {
-                        if (dr == null)
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
-                            DeclineErr(true, "                             Запрос ничего не вернул,повторите попытку!");
-                            return;
-                        }
+                            if (dr == null)
+                            {
+                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() {
+                                    DeclineErr(true, "                             Запрос ничего не вернул,повторите попытку!");
+                                    return;
+                                }));
+                            }
 
-                        if (!dr.HasRows)
-                        {
-                            DeclineErr(true, "                                                Штрихкод не найден в базе!");
-                            TextboxAddBar.Text = "";
-                            TextboxCountAdd.Text = "";
-                            TextboxNameItem.Text = "";
-                            TextboxPrice.Text = "";
-                            TextboxAddBar.Focus();
-                            return;
-                        }
+                            if (!dr.HasRows)
+                            {
+                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() {
+                                    DeclineErr(true, "                                                Штрихкод не найден в базе!");
+                                    TextboxAddBar.Text = "";
+                                    TextboxCountAdd.Text = "";
+                                    TextboxNameItem.Text = "";
+                                    TextboxPrice.Text = "";
+                                    TextboxAddBar.Focus();
+                                    return;
+                                }));
+                            }
 
-                        if (dr.Read())
-                        {
-                            TextboxNameItem.Text = dr.GetString(0);
-                            string[] split_data = dr.GetString(1).Split(new Char[] { ',' });
-                            TextboxPrice.Text = Convert.ToInt32(split_data[0]).ToString();
-                        }
+                            if (dr.Read())
+                            {
+                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() {
+                                    TextboxNameItem.Text = dr.GetString(0);
+                                    string[] split_data = dr.GetString(1).Split(new Char[] { ',' });
+                                    TextboxPrice.Text = Convert.ToInt32(split_data[0]).ToString();
+                                }));
+                            }
 
-                        TextboxCountAdd.Focus();
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate()
+                            {
+                                TextboxCountAdd.Focus();
+                                PanelAddBg.BackColor = Color.DodgerBlue;
+                            }));
+                        }
                     }
                 }
-            }
-            catch (System.Exception ex)
-            {
-                DeclineErr(true, "                             Не удалось соединиться с Mysql сервером!");
-                Log.ExcWrite("[getname]" + ex.Message);
-            }
+                catch (System.Exception ex)
+                {
+                    (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { DeclineErr(true, "                             Не удалось соединиться с Mysql сервером!"); }));
+
+                    Log.ExcWrite("[getname]" + ex.Message);
+                }
+            };
+
+            Task t = new Task(action, "getname");
+            t.Start();
         }
 
         private void getname(string tempBar)
         {
-            try
+            PanelAddBg.BackColor = Color.Yellow;
+
+            Action<object> action = (object obj) =>
             {
-                using (MySqlConnection conn = new MySqlConnection(Connector.UkmStringConnecting))
+                Thread.Sleep(300);
+
+                try
                 {
-                    TextboxAddBar.Text = tempBar;
+                    using (MySqlConnection conn = new MySqlConnection(Connector.UkmStringConnecting))
+                    {
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { TextboxAddBar.Text = tempBar; }));
 
-                    conn.Open();
+                        conn.Open();
 
-                    string str = "c.id";
+                        string str = "c.id";
 
-                    if (TextboxAddBar.Text.Length == 5)
-                        str = "a.id";
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() {
+                            if (TextboxAddBar.Text.Length == 5)
+                                str = "a.id";
+                        }));
 
-                    MySqlCommand cmd = new MySqlCommand(@"SELECT a.name, b.price
+                        MySqlCommand cmd = new MySqlCommand(@"SELECT a.name, b.price
                 FROM trm_in_var C
                 LEFT JOIN trm_in_items A ON A.id=C.item
                 LEFT JOIN trm_in_pricelist_items B ON B.item=c.item
                 WHERE " + str + "='" + tempBar +
-                    "' AND (b.pricelist_id=" + pricelistId + ")", conn);
+                        "' AND (b.pricelist_id=" + pricelistId + ")", conn);
 
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
-                    {
-                        if (dr == null)
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
-                            DeclineErr(true, "                             Запрос ничего не вернул,повторите попытку!");
-                            return;
-                        }
+                            if (dr == null)
+                            {
+                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate()
+                                {
+                                    DeclineErr(true, "                             Запрос ничего не вернул,повторите попытку!");
+                                    return;
+                                }));
+                            }
 
-                        if (!dr.HasRows)
-                        {
-                            DeclineErr(true, "                                                Штрихкод не найден в базе!");
-                            TextboxAddBar.Text = "";
-                            TextboxCountAdd.Text = "";
-                            TextboxNameItem.Text = "";
-                            TextboxPrice.Text = "";
-                            TextboxAddBar.Focus();
-                            return;
-                        }
+                            if (!dr.HasRows)
+                            {
+                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate()
+                                {
+                                    DeclineErr(true, "                                                Штрихкод не найден в базе!");
+                                    TextboxAddBar.Text = "";
+                                    TextboxCountAdd.Text = "";
+                                    TextboxNameItem.Text = "";
+                                    TextboxPrice.Text = "";
+                                    TextboxAddBar.Focus();
+                                    return;
+                                }));
+                            }
 
-                        if (dr.Read())
-                        {
-                            TextboxNameItem.Text = dr.GetString(0);
-                            string[] split_data = dr.GetString(1).Split(new Char[] { ',' });
-                            TextboxPrice.Text = Convert.ToInt32(split_data[0]).ToString();
-                        }
+                            if (dr.Read())
+                            {
+                                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate()
+                                {
+                                    TextboxNameItem.Text = dr.GetString(0);
+                                    string[] split_data = dr.GetString(1).Split(new Char[] { ',' });
+                                    TextboxPrice.Text = Convert.ToInt32(split_data[0]).ToString();
+                                }));
+                            }
 
-                        TextboxCountAdd.Focus();
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() {
+                                TextboxCountAdd.Focus();
+                                PanelAddBg.BackColor = Color.DodgerBlue;
+                            }));
+                        }
                     }
                 }
-            }
-            catch (System.Exception ex)
-            {
-                DeclineErr(true, "                             Не удалось соединиться с Mysql сервером!");
-                Log.ExcWrite("[getname]" + ex.Message);
-            }
+                catch (System.Exception ex)
+                {
+                    (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { DeclineErr(true, "                             Не удалось соединиться с Mysql сервером!"); }));
+                    Log.ExcWrite("[getname]" + ex.Message);
+                }
+            };
+
+            Task t = new Task(action, "SendBar");
+            t.Start();
         }
 
         private void dateTimePicker1_Enter(object sender, EventArgs e)
@@ -628,6 +675,8 @@ namespace PrioritySales
 
             ButtonTurn.Enabled = false;
 
+
+            Application.DoEvents();
             Server.Connect();
 
             if (Server.server.Connected)
@@ -929,6 +978,9 @@ namespace PrioritySales
                 case Keys.Down:
                     ButtonAdd_Click(sender, e);
                     break;
+                case Keys.Escape:
+                    UpdateOrderHide();
+                    break;
             }
         }
 
@@ -965,6 +1017,9 @@ namespace PrioritySales
                 case Keys.Down:
                     ButtonList_Click(sender, e);
                     break;
+                case Keys.Escape:
+                    UpdateOrderHide();
+                    break;
             }
         }
 
@@ -984,6 +1039,9 @@ namespace PrioritySales
             {
                 case Keys.Down:
                     ButtonMsg_Click(sender, e);
+                    break;
+                case Keys.Escape:
+                    UpdateOrderHide();
                     break;
             }
         }
@@ -1195,9 +1253,11 @@ namespace PrioritySales
         {
             switch (e.KeyCode)
             {
+                case Keys.Escape:
+                    UpdateOrderHide();
+                    break;
                 case Keys.Down:
                 case Keys.Enter:
-                case Keys.Escape:
                     {
                         ButtonTasks.ForeColor = Color.DodgerBlue;
                         tasks.DataGridViewTasks.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Green;
@@ -1451,6 +1511,46 @@ namespace PrioritySales
                 MainFormClassic.logform.Hide();
 
                 Packages.mf.Controls.Remove(MainFormClassic.logform);
+            }
+        }
+
+        private void ButtonLog_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                    UpdateOrderHide();
+                    break;
+            }
+        }
+
+        private void ButtonSetting_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                    UpdateOrderHide();
+                    break;
+            }
+        }
+
+        private void ButtonHide_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                    UpdateOrderHide();
+                    break;
+            }
+        }
+
+        private void ButtonExit_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                    UpdateOrderHide();
+                    break;
             }
         }
     }
