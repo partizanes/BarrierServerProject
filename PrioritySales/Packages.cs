@@ -136,7 +136,7 @@ namespace PrioritySales
                             }
                             catch (System.Exception ex)
                             {
-                                // to msg to user
+                                //to msg to user
                                 Log.log_write(ex.Message, "EXCEPTION", "exception");
                                 Console.WriteLine("Блок parse: " + ex.Message);
                                 return;
