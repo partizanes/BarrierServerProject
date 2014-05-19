@@ -8,6 +8,7 @@ namespace BarrierServerProject
 {
     class СheckMovement
     {
+        //Отправка в LsTrade штрихкода и номера из очередности
         public static void GetMovementInformation()
         {
             try
@@ -32,10 +33,10 @@ namespace BarrierServerProject
                             object p_bar = dr.GetValue(1);
 
                             Msg.SendUser("LsTradeAgent", "DR", 3,  p_id + ";" + p_bar);
-                            System.Threading.Thread.Sleep(200);
+                            System.Threading.Thread.Sleep(300);
                         }
 
-                        Msg.SendUser("LsTradeAgent", "DR", 4, "Движение товара проверка..");
+                        Msg.SendUser("LsTradeAgent", "DR", 4, "Движение товара проверка...");
                     }
                 }
             }

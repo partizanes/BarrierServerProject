@@ -60,7 +60,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Checker.cs" />
     <Compile Include="CheckSail.cs" />
     <Compile Include="CheckTasks.cs" />
     <Compile Include="CheckThisBar.cs" />

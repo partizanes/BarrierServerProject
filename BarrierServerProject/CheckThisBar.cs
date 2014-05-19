@@ -77,6 +77,12 @@ namespace BarrierServerProject
                 Log.ExcWrite("[GetPriceUkmId] " + ex.Message);
             }
 
+            if(price == 0)
+            {
+                Color.WriteLineColor("[GetPriceUkmId] Запрос не вернул цену.", ConsoleColor.Red);
+                Log.ExcWrite("[GetPriceUkmId] Запрос не вернул цену.");
+            }
+
             return price;
         }
 
@@ -109,6 +115,12 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("[GetPriceUkm] " + ex.Message, ConsoleColor.Red);
                 Log.ExcWrite("[GetPriceUkm] " + ex.Message);
+            }
+
+            if (price == 0)
+            {
+                Color.WriteLineColor("[GetPriceUkmId] Запрос не вернул цену.", ConsoleColor.Red);
+                Log.ExcWrite("[GetPriceUkmId] Запрос не вернул цену.");
             }
 
             return price;
@@ -234,7 +246,7 @@ namespace BarrierServerProject
                             string count = dr.GetValue(0).ToString().Replace(",", ".");
 
                             if (Packages.connector.ExecuteNonQuery("INSERT INTO `operations`(`id`,`operation`,`count`,`price`,`inactive`) VALUES ( '" + id + "','51','" + count + "','" + dr.GetString(1).Replace(",", ".") + "','0')"))
-                                Color.WriteLineColor("[" + id + "] Успешно добавлена операция расхода(51) по штрихкоду " + bar, ConsoleColor.Blue);
+                                Color.WriteLineColor("[" + id + "] Успешно добавлена операция расхода(51)  по штрихкоду " + bar, ConsoleColor.Blue);
                             else
                                 Color.WriteLineColor("[" + id + "] Отклонена операция расхода(51) по штрихкоду " + bar, ConsoleColor.Red);
                         }

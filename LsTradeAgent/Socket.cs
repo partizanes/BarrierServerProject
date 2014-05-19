@@ -112,7 +112,11 @@ namespace LsTradeAgent
                     catch (SocketException exc)
                     {
                          if (exc.ErrorCode == 10054)
-                             Environment.Exit(0);
+                         {
+                             //WARNING CHECK THIS
+                             Receiver(client);
+                             //Environment.Exit(0);
+                         }
 
                          Log.ExcWrite("[Receiver][SocketException] " + exc.Message);
                         //TODO FORM RECCONECT TO SERVER!!!!

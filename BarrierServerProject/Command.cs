@@ -117,7 +117,7 @@ namespace BarrierServerProject
                         Color.WriteLineColor("clr               Очищает окно программы\n", ConsoleColor.Cyan);
                         Color.WriteLineColor("bs next start     Устанавливает время запуска проверки весов в часах. not implement\n", ConsoleColor.Cyan);
                         Color.WriteLineColor("user add          Добавляет пользователя (логин пароль)\n", ConsoleColor.Cyan);
-                        Color.WriteLineColor("user delete       Удаляет пользователя (логин)\n", ConsoleColor.Cyan);
+                        Color.WriteLineColor("user del          Удаляет пользователя (логин)\n", ConsoleColor.Cyan);
                         Color.WriteLineColor("uptime            Время работы сервера)\n", ConsoleColor.Cyan);
                         return "done.";
 
