@@ -42,7 +42,8 @@ namespace PrioritySales
                             return;
                         }
 
-                        GetInfo(DataGridViewTasks.Rows[DataGridViewTasks.SelectedCells[0].RowIndex - 1].Cells[0].Value.ToString());
+                        if (Packages.mf.Controls.Contains(MainFormClassic.infocontrol))
+                            GetInfo(DataGridViewTasks.Rows[DataGridViewTasks.SelectedCells[0].RowIndex - 1].Cells[0].Value.ToString());
 
                         break;
                     }
@@ -66,7 +67,9 @@ namespace PrioritySales
                         if (DataGridViewTasks.SelectedCells[0].RowIndex == DataGridViewTasks.RowCount - 1)
                             break;
 
-                        GetInfo(DataGridViewTasks.Rows[DataGridViewTasks.SelectedCells[0].RowIndex + 1].Cells[0].Value.ToString());
+                        if (Packages.mf.Controls.Contains(MainFormClassic.infocontrol))
+                            GetInfo(DataGridViewTasks.Rows[DataGridViewTasks.SelectedCells[0].RowIndex + 1].Cells[0].Value.ToString());
+
                         break;
                     }
                 case Keys.ControlKey:
@@ -203,7 +206,7 @@ namespace PrioritySales
 
                 MainFormClassic.infocontrol.Focus();
 
-                GetInfo(s);
+               GetInfo(s);
             }
             else
             {
@@ -290,11 +293,20 @@ namespace PrioritySales
             {
                 try
                 {
+                    string bar;
+
+                    while (MainFormClassic.infocontrol.labelBarText.Text == "...")
+                        Thread.Sleep(300);
+
+                    bar = MainFormClassic.infocontrol.labelBarText.Text;
+
                     using (MySqlConnection conn = new MySqlConnection(Connector.UkmStringConnecting))
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand(@"SELECT b.price FROM trm_in_var C LEFT JOIN trm_in_items A ON A.id=C.item LEFT JOIN trm_in_pricelist_items B ON B.item=c.item WHERE C.item= '" + MainFormClassic.infocontrol.labelBarText.Text + "' AND b.pricelist_id= 1", conn);
+                        MySqlCommand cmd = new MySqlCommand(@"SELECT b.price,MAX(b.version) FROM trm_in_var C LEFT JOIN trm_in_items A ON A.id=C.item " +
+                            "LEFT JOIN trm_in_pricelist_items B ON B.item=c.item WHERE ( C.item= '"
+                            + bar + "' OR C.id= '" + bar + "')AND b.pricelist_id= 1", conn);
                         cmd.CommandTimeout = 0;
 
                         using (MySqlDataReader dr = cmd.ExecuteReader())
@@ -430,7 +442,10 @@ namespace PrioritySales
 
         private void GetInfo(string s)
         {
-            CleanInfoControl(s);
+            // Cleanup after close form infoControl
+            // mb not need
+
+            // CleanInfoControl(s);
 
             GetMainInfo(s);
 

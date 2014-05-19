@@ -45,8 +45,8 @@ namespace BarrierServerProject
         {
             int price = 0;
 
-            string _ukmservername = Config.GetParametr("UkmDataBase");
-            string _mainservername = Config.GetParametr("BarrierDataBase");
+            string _ukmservname = Config.GetParametr("UkmDataBase");
+            string _mainservname = Config.GetParametr("BarrierDataBase");
 
             try
             {
@@ -54,7 +54,11 @@ namespace BarrierServerProject
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand(@"SELECT b.price FROM " + _ukmservername + ".trm_in_var C LEFT JOIN " + _ukmservername + ".trm_in_items A ON A.id=C.item LEFT JOIN " + _ukmservername + ".trm_in_pricelist_items B ON B.item=c.item WHERE C.item= (SELECT `bar` FROM " + _mainservername + ".`priority` WHERE `id` = '" + id + "' ) AND b.pricelist_id= " + Config.GetParametr("pricelist_id"), conn);
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT b.price,MAX(b.version) FROM " + _ukmservname + ".trm_in_var C LEFT JOIN " + _ukmservname + ".trm_in_items A ON A.id=C.item LEFT JOIN "
+                        + _ukmservname + ".trm_in_pricelist_items B ON B.item=c.item WHERE (C.id= (SELECT `bar` FROM "
+                        + _mainservname + ".`priority` WHERE `id` = '" + id + "' ) OR C.item= (SELECT `bar` FROM "
+                        + _mainservname + ".`priority` WHERE `id` = '" + id + "' )) AND b.pricelist_id= "
+                        + Config.GetParametr("pricelist_id"), conn);
 
                     cmd.CommandTimeout = 0;
 
@@ -86,7 +90,9 @@ namespace BarrierServerProject
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand(@"SELECT b.price FROM trm_in_var C LEFT JOIN trm_in_items A ON A.id=C.item LEFT JOIN trm_in_pricelist_items B ON B.item=c.item WHERE C.item= '" + bar + "' AND b.pricelist_id= " + Config.GetParametr("pricelist_id"), conn);
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT b.price,MAX(b.version) FROM trm_in_var C LEFT JOIN trm_in_items A ON A.id=C.item LEFT JOIN trm_in_pricelist_items B ON B.item=c.item WHERE (C.item= '"
+                        + bar + "' OR C.id= '" + bar + "')  AND b.pricelist_id= "
+                        + Config.GetParametr("pricelist_id"), conn);
                     
                     cmd.CommandTimeout = 0;
 

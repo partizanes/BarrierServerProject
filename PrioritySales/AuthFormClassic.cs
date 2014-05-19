@@ -255,8 +255,10 @@ namespace PrioritySales
             {
                 case Keys.Enter:
                 case Keys.Down:
-                        if (LabelUserText.Text.Length > 3)
+                        if (LabelUserText.Text.Length > 3){
+                            e.SuppressKeyPress = true;
                             PassTextBox.Focus();
+                        }
                         else
                             BackPanelUserText.BackColor = Color.Red;
                         break;
@@ -272,12 +274,15 @@ namespace PrioritySales
             {
                 case Keys.Up:
                     LabelUserText.Text = "";
+                    e.SuppressKeyPress = true;
                     LabelUserText.Focus();
                     break;
                 case Keys.Enter:
                 case Keys.Down:
-                    if (LabelUserText.Text.Length > 3 && PassTextBox.Text.Length > 3)
+                    if (LabelUserText.Text.Length > 3 && PassTextBox.Text.Length > 3){
+                        e.SuppressKeyPress = true;
                         ButtonSend.Focus();
+                    }
                     else
                         BackPanelPassText.BackColor = Color.Red;
                         break;
@@ -293,6 +298,7 @@ namespace PrioritySales
             {
                 case Keys.Up:
                     PassTextBox.Text = "";
+                    e.SuppressKeyPress = true;
                     PassTextBox.Focus();
                     break;
                 case Keys.Enter:
@@ -315,6 +321,7 @@ namespace PrioritySales
                     break;
                 case Keys.Escape:
                     PassTextBox.Text = "";
+                    e.SuppressKeyPress = true;
                     PassTextBox.Focus();
                     break;
 

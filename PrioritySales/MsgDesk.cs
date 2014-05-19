@@ -32,6 +32,8 @@ namespace PrioritySales
 
                 MainFormClassic.msgdesk.ListViewMsg.Items[MainFormClassic.msgdesk.ListViewMsg.Items.Count - 1].Focused = true;
 
+                e.SuppressKeyPress = true;
+
                 MainFormClassic.msgdesk.ListViewMsg.Focus();
             }
 
@@ -47,6 +49,7 @@ namespace PrioritySales
                     {
                         MainFormClassic.msgdesk.Hide();
                         Packages.mf.Controls.Remove(MainFormClassic.msgdesk);
+                        e.SuppressKeyPress = true;
                         Packages.mf.ButtonMsg.Focus();
                     }
                     break;
@@ -54,6 +57,7 @@ namespace PrioritySales
                 case Keys.Up:
                     MainFormClassic.msgdesk.Hide();
                     Packages.mf.Controls.Remove(MainFormClassic.msgdesk);
+                    e.SuppressKeyPress = true;
                     Packages.mf.ButtonMsg.Focus();
                     break;
                 case Keys.ControlKey:

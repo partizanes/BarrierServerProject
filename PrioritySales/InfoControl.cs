@@ -47,6 +47,7 @@ namespace PrioritySales
                 case Keys.Escape:
                 case Keys.ControlKey:
                     MainFormClassic.infocontrol.Hide();
+                    CleanUpAfterHide();
                     Packages.mf.Controls.Remove(MainFormClassic.infocontrol);
                     Packages.mf.ButtonTasks.Focus();
                     Packages.mf.ButtonTasks.ForeColor = Color.DodgerBlue;
@@ -62,12 +63,26 @@ namespace PrioritySales
                 case Keys.Escape:
                 case Keys.ControlKey:
                     MainFormClassic.infocontrol.Hide();
+                    CleanUpAfterHide();
                     Packages.mf.Controls.Remove(MainFormClassic.infocontrol);
                     Packages.mf.ButtonTasks.Focus();
                     Packages.mf.ButtonTasks.ForeColor = Color.DodgerBlue;
                     MainFormClassic.tasks.DataGridViewTasks.Focus();
                     break;
             }
+        }
+
+        private void CleanUpAfterHide()
+        {
+            MainFormClassic.infocontrol.DataGridViewSail.Rows.Clear();
+            MainFormClassic.infocontrol.DataGridViewSend.Rows.Clear();
+
+            MainFormClassic.infocontrol.PriceBarText.Text = "...";
+            MainFormClassic.infocontrol.CountBarText.Text = "...";
+            MainFormClassic.infocontrol.PriceUkmText.Text = "...";
+            MainFormClassic.infocontrol.NameBarText.Text = "...";
+            MainFormClassic.infocontrol.labelBarText.Text = "...";
+            MainFormClassic.infocontrol.labIdText.Text = "...";
         }
 
         private void ButtonMark_KeyDown(object sender, KeyEventArgs e)

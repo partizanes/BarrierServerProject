@@ -267,11 +267,13 @@ namespace PrioritySales
                     {
                         PanelAddBg.Visible = false;            
                         PanelAddTask.Visible = false;
+                        e.SuppressKeyPress = true;
                         ButtonAdd.Focus();
                         return;
                     }
                 case Keys.Up:
                     {
+                        e.SuppressKeyPress = true;
                         dateTimePicker1.Focus();
                         return;
                     }
@@ -283,6 +285,7 @@ namespace PrioritySales
                         {
                             PanelAddBg.Visible = false;
                             PanelAddTask.Visible = false;
+                            e.SuppressKeyPress = true;
                             ButtonAdd.Focus();
                             return;
                         }
@@ -291,9 +294,12 @@ namespace PrioritySales
                         {
                             DeclineErr(true, "                                          Баркод должен быть более 4 цифр!");
                             LabelInfo.ForeColor = Color.Yellow;
+                            e.SuppressKeyPress = true;
                             TextboxAddBar.Focus();
                             return;
                         }
+
+                        nonNumberEntered = false;
 
                         getname();
 
@@ -557,12 +563,14 @@ namespace PrioritySales
                 case Keys.Escape:
                     {
                         PanelAddHide(true);
+                        e.SuppressKeyPress = true;
                         ButtonAdd.Focus();
                         break;
                     }
 
                 case Keys.Enter:
                     {
+                        e.SuppressKeyPress = true;
                         TextboxAddBar.Focus();
                         break;
                     }
@@ -592,6 +600,7 @@ namespace PrioritySales
                     {
                         PanelAddBg.Visible = false;
                         PanelAddTask.Visible = false;
+                        e.SuppressKeyPress = true;
                         ButtonAdd.Focus();
                         break;
                     }
@@ -601,15 +610,18 @@ namespace PrioritySales
                         TextboxCountAdd.Text = "";
                         TextboxNameItem.Text = "";
                         TextboxPrice.Text = "";
+                        e.SuppressKeyPress = true;
                         TextboxAddBar.Focus();
                         break;
                     }
                 case Keys.Right:
+                    e.SuppressKeyPress = true;
                     TextboxPrice.Focus();
                     break;
                 case Keys.Enter:
                 case Keys.Down:
                     {
+                        e.SuppressKeyPress = true;
                         ButtonTurn.Focus();
                         break;
                     }
@@ -716,6 +728,16 @@ namespace PrioritySales
         {
             if (nonNumberEntered == true)
             {
+                e.Handled = true;
+            }
+
+            // Key 'Enter'
+            if (e.KeyChar == (char)13)
+                e.Handled = true;
+
+            if(TextboxAddBar.Text.Length == 12)
+            {
+                getname();
                 e.Handled = true;
             }
         }
@@ -1118,7 +1140,10 @@ namespace PrioritySales
 
             PrioritySalesIcon.Icon = icon1;
 
-            ButtonHide.Focus();
+            if (ButtonHide.Focused)
+                ButtonHide.Focus();
+            else
+                Packages.mf.Focus();
         }
 
         private void MainFormClassic_FormClosing(object sender, FormClosingEventArgs e)
