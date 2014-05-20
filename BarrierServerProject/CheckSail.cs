@@ -202,6 +202,15 @@ namespace BarrierServerProject
             if (!TimeSpanExtensions.IsTimeWork())
                 return;
 
+            while (CheckThisBar.busyLsTradeAgent)
+            {
+                Color.WriteLineColor("LsTradeAgent занят...", ConsoleColor.Red);
+                Thread.Sleep(1000);
+            }
+
+            Color.WriteLineColor("busyLsTradeAgent = true", ConsoleColor.Cyan);
+            CheckThisBar.busyLsTradeAgent = true;
+
             while (!Server.clients.ContainsValue("LsTradeAgent"))
             {
                 Color.WriteLineColor("Внимание не запущен LsTradeAgent .\nДля продолжения работы нужно запустить LsTradeAgent", ConsoleColor.Red);
@@ -230,7 +239,7 @@ namespace BarrierServerProject
 
                                 //send lstradeagent priority_id;bar;datetime
                                 Msg.SendUser("LsTradeAgent", "DR", 1, priority_id + ";" + bar + ";" + datetime);
-                                Thread.Sleep(200);
+                                Thread.Sleep(1000);
                             }
                         }
 
@@ -244,6 +253,12 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("[CheckSendUkmPrice]" + ex.Message, ConsoleColor.Red);
                 Log.ExcWrite("[CheckSendUkmPrice]" + ex.Message);
+            }
+            finally
+            {
+                Thread.Sleep(2000);
+                Color.WriteLineColor("busyLsTradeAgent = false", ConsoleColor.Cyan);
+                CheckThisBar.busyLsTradeAgent = false;
             }
         }
 

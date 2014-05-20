@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace BarrierServerProject
 {
@@ -13,6 +14,15 @@ namespace BarrierServerProject
         {
             try
             {
+                while (CheckThisBar.busyLsTradeAgent)
+                {
+                    Color.WriteLineColor("LsTradeAgent занят...", ConsoleColor.Red);
+                    Thread.Sleep(1000);
+                }
+
+                Color.WriteLineColor("busyLsTradeAgent = true", ConsoleColor.Cyan);
+                CheckThisBar.busyLsTradeAgent = true;
+
                 using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
                 {
                     conn.Open();
@@ -33,7 +43,7 @@ namespace BarrierServerProject
                             object p_bar = dr.GetValue(1);
 
                             Msg.SendUser("LsTradeAgent", "DR", 3,  p_id + ";" + p_bar);
-                            System.Threading.Thread.Sleep(300);
+                            System.Threading.Thread.Sleep(1000);
                         }
 
                         Msg.SendUser("LsTradeAgent", "DR", 4, "Движение товара проверка...");
@@ -44,6 +54,12 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("[GetMovementInformation]" + ex.Message, ConsoleColor.Red);
                 Log.ExcWrite("[GetMovementInformation]" + ex.Message);
+            }
+            finally
+            {
+                Thread.Sleep(2000);
+                Color.WriteLineColor("busyLsTradeAgent = false", ConsoleColor.Cyan);
+                CheckThisBar.busyLsTradeAgent = false;
             }
         }
     }

@@ -154,8 +154,10 @@ namespace LsTradeAgent
 
         private static void CheckSendPrice(string priority_id, string barcode, string date)
         {
-            string kass = @"К3";
-            string cena = @"Ц2";
+            string kass = @"К";
+            string cena = @"Ц";
+            string cena1 = @"Ц1";
+            string cena2 = @"Ц2";
 
             try
             {
@@ -164,7 +166,7 @@ namespace LsTradeAgent
                     OleDbconn.Open();
 
                     //TODO k_dev in config;
-                    OleDbCommand OleDbcmd = new OleDbCommand(@"select n_cenu,kod_isp,p_time,k_dev from dvkinpr where k_grup = '" + barcode + "' AND p_time > {^ " + date + " } AND k_dev IN('" + kass + "','" + cena + "')");
+                    OleDbCommand OleDbcmd = new OleDbCommand(@"select n_cenu,kod_isp,p_time,k_dev from dvkinpr where k_grup = '" + barcode + "' AND p_time > {^ " + date + " } AND k_dev IN('" + kass + "','" + cena + "','" + cena1 + "','" + cena2 + "')");
 
                     OleDbcmd.Connection = OleDbconn;
 
@@ -178,7 +180,7 @@ namespace LsTradeAgent
                             return;
                         }
 
-                        using (MySqlConnection MySqlconn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "PrioritySailR", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+                        using (MySqlConnection MySqlconn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "partizanes", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
                         {
                             MySqlCommand MySqlCmd = new MySqlCommand();
 
@@ -247,7 +249,7 @@ namespace LsTradeAgent
                     {
                         Connector.ExecuteNonQuery("DELETE FROM `operations` WHERE `id` = " + id + " AND `operation` IN ('53', '61','62','72','93')");
 
-                        if (DbfDataReader == null)
+                        if (DbfDataReader == null || !DbfDataReader.HasRows)
                         {
                             Color.WriteLineColor("Отсутствуют партии расхода по баркоду: " + barcode, ConsoleColor.Yellow);
                             return;

@@ -78,9 +78,9 @@ namespace LsTradeAgent
             {
                 Thread.CurrentThread.Abort();
             }
-            catch (ThreadAbortException exc)
+            catch
             {
-                Log.ExcWrite("[Sender][ThreadAbortException] " + exc.Message);
+                //Log.ExcWrite("[Sender][ThreadAbortException] " + exc.Message);
                 threads.Remove(Thread.CurrentThread);
                 Thread.ResetAbort();
             }
@@ -112,18 +112,14 @@ namespace LsTradeAgent
                     catch (SocketException exc)
                     {
                          if (exc.ErrorCode == 10054)
-                         {
-                             //WARNING CHECK THIS
-                             Receiver(client);
-                             //Environment.Exit(0);
-                         }
+                             Environment.Exit(0);
 
                          Log.ExcWrite("[Receiver][SocketException] " + exc.Message);
                         //TODO FORM RECCONECT TO SERVER!!!!
                     }
                     catch (Exception exc)
                     {
-                        Color.WriteLineColor("Текст исключения: " + exc.Message,  ConsoleColor.Red);
+                        Color.WriteLineColor("[Receiver][Exception] " + exc.Message, ConsoleColor.Red);
                         Log.ExcWrite("[Receiver][Exception] " + exc.Message);
                     }
                 }

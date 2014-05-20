@@ -166,7 +166,7 @@ namespace BalanceModule
                 catch (System.Exception ex)
                 {
                     //TODO Написать обработчик исключений ,с отправкой на сервер отчетов ;
-                    list_msg("Произошло исключение при считывании параметров весов! Адрес" + m_ip + " �?мя: " + m_name + " Порт: " + m_port + " Модель: " + m_model);
+                    list_msg("Произошло исключение при считывании параметров весов! Адрес" + m_ip + " Имя: " + m_name + " Порт: " + m_port + " Модель: " + m_model);
                     list_msg("Текст исключения: " + ex.Message);
 
                     Log.log_write(ex.Message, "Exception", "Exception");
@@ -174,7 +174,14 @@ namespace BalanceModule
                     break;
                 }
 
-                if (cas.Connection(m_ip, m_port, 1, m_model) == -1)
+                int a = 0;
+
+                try { a = cas.Connection(m_ip, m_port, 1, m_model); }
+                catch (Exception exc) { MessageBox.Show(exc.Message); }
+
+
+
+                if (a == -1)
                 {
                     list_msg("Соединение с весами " + m_ip + ": " + m_port + " не удалось!");
 
@@ -428,7 +435,7 @@ namespace BalanceModule
 
             MySqlDataReader reader;
 
-            connStr = string.Format("server={0};uid={1};pwd={2};database={3};", "192.168.1.100", "pricechecker", "***REMOVED***", "ukmserver");
+            connStr = string.Format("server={0};uid={1};pwd={2};database={3};", "192.168.2.100", "partizanes", "***REMOVED***", "ukmserver");
             
             serverConn = new MySqlConnection(connStr);
 

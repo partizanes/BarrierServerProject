@@ -9,6 +9,7 @@ namespace BarrierServerProject
 {
     public static class CheckThisBar
     {
+        public static bool busyLsTradeAgent = false;
         public static string GetBarOnID(int id)
         {
             string bar = "";
@@ -131,6 +132,15 @@ namespace BarrierServerProject
             if (!TimeSpanExtensions.IsTimeWork())
                 return;
 
+            while (busyLsTradeAgent)
+            {
+                Color.WriteLineColor("LsTradeAgent занят...", ConsoleColor.Red);
+                Thread.Sleep(1000);
+            }
+
+            Color.WriteLineColor("busyLsTradeAgent = true", ConsoleColor.Cyan);
+            busyLsTradeAgent = true;
+
             while (!Server.clients.ContainsValue("LsTradeAgent"))
             {
                 Color.WriteLineColor("Внимание не запущен LsTradeAgent ..Ожидаю подключение...", ConsoleColor.Red);
@@ -175,6 +185,9 @@ namespace BarrierServerProject
             finally
             {
                 Color.WriteLineColor("Запрос отправлен.", ConsoleColor.Gray);
+                Thread.Sleep(2000);
+                Color.WriteLineColor("busyLsTradeAgent = false", ConsoleColor.Cyan);
+                busyLsTradeAgent = false;
             }
         }
 

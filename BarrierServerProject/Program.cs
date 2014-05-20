@@ -90,10 +90,13 @@ namespace BarrierServerProject
 
                         Color.WriteLineColor("[THREAD] CheckSailAndPriceUpdate завершен", ConsoleColor.DarkYellow);
 
+                        Int32 timeScheduler = 30;
+                        try { timeScheduler = (Int32.Parse(Config.GetParametr("timeScheduler"))); }
+                        catch (Exception exc) { Color.WriteLineColor("[timeScheduler]" + exc.Message, ConsoleColor.Red); }
 
-                        Color.WriteLineColor("Запланирована проверка через 30 минут.", ConsoleColor.Blue);
-                        Thread.Sleep(1800000);
-                        Color.WriteLineColor("НАчало запланированной проверки", ConsoleColor.Blue);
+                        Color.WriteLineColor("Запланирована проверка через " + timeScheduler + " минут.", ConsoleColor.Blue);
+                        Thread.Sleep(timeScheduler * 60000);
+                        Color.WriteLineColor("Начало запланированной проверки", ConsoleColor.Blue);
                     }
                 });
                 th.Name = "Проверка общая";
