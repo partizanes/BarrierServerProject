@@ -66,7 +66,9 @@ namespace BarrierServerProject
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand(@"select p.id,p.turn_price,o.price from priority as p,operations as o where o.id = p.id AND p.turn_price != o.price AND o.inactive = 0", conn);
+                    MySqlCommand cmd = new MySqlCommand(@"select p.id,p.turn_price,o.price from priority as p
+                                                            ,operations as o where o.id = p.id AND p.turn_price != 
+                                                            o.price AND o.inactive = 0", conn);
 
                     cmd.CommandTimeout = 0;
 
@@ -105,7 +107,11 @@ namespace BarrierServerProject
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand(@"SELECT p.id,p.turn_price,b.price FROM " + Connector.BarrierDataBase + ".priority p," + Connector.UkmDataBase + ".trm_in_var C LEFT JOIN " + Connector.UkmDataBase + ".trm_in_items A ON A.id=C.item LEFT JOIN " + Connector.UkmDataBase + ".trm_in_pricelist_items B ON B.item=c.item WHERE C.item = p.bar AND p.turn_price != b.price AND b.pricelist_id= 1", conn);
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT p.id,p.turn_price,b.price FROM "
+                                                            + Connector.BarrierDataBase + ".priority p," + Connector.UkmDataBase
+                                                            + ".trm_in_var C LEFT JOIN " + Connector.UkmDataBase + ".trm_in_items A ON A.id=C.item LEFT JOIN "
+                                                            + Connector.UkmDataBase + ".trm_in_pricelist_items B ON B.item=c.item WHERE (C.item = p.bar OR c.id = p.bar) " +
+                                                            "AND p.turn_price != b.price AND b.pricelist_id= 1", conn);
 
                     cmd.CommandTimeout = 0;
 
@@ -317,7 +323,8 @@ namespace BarrierServerProject
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand(@"SELECT * FROM `tasks` WHERE priority_id = " + id + " AND task_text = '" + task_text + "' AND priority =" + priority, conn);
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT * FROM `tasks` WHERE priority_id = " + id + " AND task_text = '" + 
+                                                                task_text + "' AND priority =" + priority, conn);
 
                     cmd.CommandTimeout = 0;
 

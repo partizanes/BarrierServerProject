@@ -55,11 +55,12 @@ namespace BarrierServerProject
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand(@"SELECT b.price,MAX(b.version) FROM " + _ukmservname + ".trm_in_var C LEFT JOIN " + _ukmservname + ".trm_in_items A ON A.id=C.item LEFT JOIN "
-                        + _ukmservname + ".trm_in_pricelist_items B ON B.item=c.item WHERE (C.id= (SELECT `bar` FROM "
-                        + _mainservname + ".`priority` WHERE `id` = '" + id + "' ) OR C.item= (SELECT `bar` FROM "
-                        + _mainservname + ".`priority` WHERE `id` = '" + id + "' )) AND b.pricelist_id= "
-                        + Config.GetParametr("pricelist_id"), conn);
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT b.price,MAX(b.version) FROM " + _ukmservname + ".trm_in_var C LEFT JOIN " +
+                                                            _ukmservname + ".trm_in_items A ON A.id=C.item LEFT JOIN "
+                                                            + _ukmservname + ".trm_in_pricelist_items B ON B.item=c.item WHERE (C.id= (SELECT `bar` FROM "
+                                                            + _mainservname + ".`priority` WHERE `id` = '" + id + "' ) OR C.item= (SELECT `bar` FROM "
+                                                            + _mainservname + ".`priority` WHERE `id` = '" + id + "' )) AND b.pricelist_id= "
+                                                            + Config.GetParametr("pricelist_id"), conn);
 
                     cmd.CommandTimeout = 0;
 
@@ -97,9 +98,11 @@ namespace BarrierServerProject
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand(@"SELECT b.price,MAX(b.version) FROM trm_in_var C LEFT JOIN trm_in_items A ON A.id=C.item LEFT JOIN trm_in_pricelist_items B ON B.item=c.item WHERE (C.item= '"
-                        + bar + "' OR C.id= '" + bar + "')  AND b.pricelist_id= "
-                        + Config.GetParametr("pricelist_id"), conn);
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT b.price,MAX(b.version) FROM trm_in_var C 
+                                                            LEFT JOIN trm_in_items A ON A.id=C.item 
+                                                            LEFT JOIN trm_in_pricelist_items B ON B.item=c.item 
+                                                            WHERE (C.item= '" + bar + "' OR C.id= '" + bar + "') AND b.pricelist_id= "
+                                                            + Config.GetParametr("pricelist_id"), conn);
                     
                     cmd.CommandTimeout = 0;
 

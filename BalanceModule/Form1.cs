@@ -443,7 +443,8 @@ namespace BalanceModule
             {
                 serverConn.Open();
 
-                cmd = new MySqlCommand("SELECT a.name, b.price FROM trm_in_var C LEFT JOIN trm_in_items A ON A.id=C.item LEFT JOIN trm_in_pricelist_items B ON B.item=c.item WHERE a.id='" + articul + "' AND (b.pricelist_id= 1 )", serverConn);
+                cmd = new MySqlCommand("SELECT a.name, b.price FROM trm_in_var C LEFT JOIN trm_in_items A ON A.id=C.item" +
+                    " LEFT JOIN trm_in_pricelist_items B ON B.item=c.item WHERE a.id='" + articul + "' AND (b.pricelist_id= 1 )", serverConn);
 
                 reader = cmd.ExecuteReader();
 

@@ -102,7 +102,8 @@ namespace PrioritySales
 
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand("SELECT COUNT(tasks_id) FROM tasks WHERE `user_group` = (SELECT `group` FROM `users` WHERE `username` = '" + UserName + "' ) AND `user_id` = 0", conn);
+                        MySqlCommand cmd = new MySqlCommand(@"SELECT COUNT(tasks_id) FROM tasks WHERE `user_group` = 
+                            (SELECT `group` FROM `users` WHERE `username` = '" + UserName + "' ) AND `user_id` = 0", conn);
 
                         using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
@@ -396,20 +397,14 @@ namespace PrioritySales
                     {
                         conn.Open();
 
-                        string str = "c.id";
-
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() {
-                            if (TextboxAddBar.Text.Length == 5)
-                                str = "a.id";
-                        }));
-
+                        string bar = TextboxAddBar.Text.Trim();
 
                         MySqlCommand cmd = new MySqlCommand(@"SELECT a.name, b.price
-                FROM trm_in_var C
-                LEFT JOIN trm_in_items A ON A.id=C.item
-                LEFT JOIN trm_in_pricelist_items B ON B.item=c.item
-                WHERE " + str + "='" + TextboxAddBar.Text +
-                        "' AND (b.pricelist_id=" + pricelistId + ")", conn);
+                                                                FROM trm_in_var C
+                                                                LEFT JOIN trm_in_items A ON A.id=C.item
+                                                                LEFT JOIN trm_in_pricelist_items B ON B.item=c.item
+                                                                WHERE (C.id='" + bar + "' OR C.item='" + bar + "')" +
+                                                                " AND (b.pricelist_id=" + pricelistId + ")", conn);
 
                         using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
@@ -479,19 +474,12 @@ namespace PrioritySales
 
                         conn.Open();
 
-                        string str = "c.id";
-
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() {
-                            if (TextboxAddBar.Text.Length == 5)
-                                str = "a.id";
-                        }));
-
                         MySqlCommand cmd = new MySqlCommand(@"SELECT a.name, b.price
-                FROM trm_in_var C
-                LEFT JOIN trm_in_items A ON A.id=C.item
-                LEFT JOIN trm_in_pricelist_items B ON B.item=c.item
-                WHERE " + str + "='" + tempBar +
-                        "' AND (b.pricelist_id=" + pricelistId + ")", conn);
+                                                                FROM trm_in_var C
+                                                                LEFT JOIN trm_in_items A ON A.id=C.item
+                                                                LEFT JOIN trm_in_pricelist_items B ON B.item=c.item
+                                                                WHERE (C.id='" + tempBar + "' OR C.item='" + tempBar + "')" +
+                                                                " AND (b.pricelist_id=" + pricelistId + ")", conn);
 
                         using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
@@ -1438,7 +1426,8 @@ namespace PrioritySales
             {
                 conn.Open();
 
-                MySqlCommand cmd = new MySqlCommand(@"SELECT dok,d_vv,k_op,n_mat,n_cenu,n_sum,n_matost,n_izg,ndsp,n_tn FROM `movement` WHERE `id` = " + index + " ORDER BY `d_vv`", conn);
+                MySqlCommand cmd = new MySqlCommand(@"SELECT dok,d_vv,k_op,n_mat,n_cenu,n_sum,n_matost,n_izg,ndsp,n_tn
+                                                      FROM `movement` WHERE `id` = " + index + " ORDER BY `d_vv`", conn);
                 cmd.CommandTimeout = 0;
 
                 using (MySqlDataReader dr = cmd.ExecuteReader())

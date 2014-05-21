@@ -115,7 +115,12 @@ namespace PrioritySales
 
                         (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.tasks.DataGridViewTasks.Rows.Clear(); }));
 
-                        MySqlCommand cmd = new MySqlCommand("SELECT tasks_id,priority_id,task_text FROM tasks WHERE `user_group` = (SELECT `group` FROM users WHERE `username` = '" + Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "") + "') AND `user_id` = 0 AND `inactive` = 0  ORDER BY priority DESC", conn);
+                        string username = Packages.mf.LabelUserName.Text.Replace("Пользователь:  ", "");
+
+                        MySqlCommand cmd = new MySqlCommand(@"SELECT tasks_id,priority_id,task_text FROM tasks 
+                                                                WHERE `user_group` = (SELECT `group` FROM users WHERE `username` = '"
+                                                                + username + "') AND `user_id` = 0 AND `inactive` = 0" +
+                                                                " ORDER BY priority DESC", conn);
 
                         using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
@@ -160,7 +165,12 @@ namespace PrioritySales
 
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand("SELECT tasks_id,priority_id,task_text FROM tasks WHERE `user_group` = (SELECT `group` FROM users WHERE `username` = '" + MainFormClassic.UserName + "') AND `user_id` = (SELECT `id` FROM users WHERE `username` = '" + MainFormClassic.UserName + "') AND `inactive` = 0 ORDER BY priority DESC", conn);
+                        string username = MainFormClassic.UserName;
+
+                        MySqlCommand cmd = new MySqlCommand(@"SELECT tasks_id,priority_id,task_text FROM tasks WHERE `user_group` = 
+                                                                (SELECT `group` FROM users WHERE `username` = '"
+                                                                + username + "') AND `user_id` = (SELECT `id` FROM users WHERE `username` = '"
+                                                                + username + "') AND `inactive` = 0 ORDER BY priority DESC", conn);
 
                         using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
@@ -245,7 +255,9 @@ namespace PrioritySales
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand(@"SELECT bar,name,turn_price,count,sailed,status,status_text FROM priority WHERE id = (SELECT `priority_id` FROM `tasks` WHERE `tasks_id` = " + s + ")", conn);
+                        MySqlCommand cmd = new MySqlCommand(@"SELECT bar,name,turn_price,count,sailed,status,status_text 
+                                                                FROM priority WHERE id = (SELECT `priority_id` FROM `tasks` 
+                                                                WHERE `tasks_id` = " + s + ")", conn);
                         cmd.CommandTimeout = 0;
 
                         using (MySqlDataReader dr = cmd.ExecuteReader())
@@ -364,7 +376,8 @@ namespace PrioritySales
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand(@"SELECT `action`,`price`,`kod_isp`,`datetime` FROM `sendPOS` WHERE id = (SELECT priority_id FROM `tasks` WHERE tasks_id = " + s + ")", conn);
+                        MySqlCommand cmd = new MySqlCommand(@"SELECT `action`,`price`,`kod_isp`,`datetime` FROM `sendPOS` WHERE id = 
+                                                                (SELECT priority_id FROM `tasks` WHERE tasks_id = " + s + ")", conn);
                         cmd.CommandTimeout = 0;
 
                         using (MySqlDataReader dr = cmd.ExecuteReader())
@@ -407,7 +420,8 @@ namespace PrioritySales
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand(@"SELECT operation,price,count FROM `operations` WHERE `id` = (SELECT `priority_id` FROM `tasks` WHERE `tasks_id` = " + s + ")", conn);
+                        MySqlCommand cmd = new MySqlCommand(@"SELECT operation,price,count FROM `operations` WHERE `id` = 
+                                                                (SELECT `priority_id` FROM `tasks` WHERE `tasks_id` = " + s + ")", conn);
                         cmd.CommandTimeout = 0;
 
                         using (MySqlDataReader dr = cmd.ExecuteReader())
