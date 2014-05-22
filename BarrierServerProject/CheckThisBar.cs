@@ -46,8 +46,8 @@ namespace BarrierServerProject
         {
             int price = 0;
 
-            string _ukmservname = Config.GetParametr("UkmDataBase");
-            string _mainservname = Config.GetParametr("BarrierDataBase");
+            string _ukm = Connector.UkmDataBase;
+            string _main = Connector.BarrierDataBase;
 
             try
             {
@@ -55,11 +55,11 @@ namespace BarrierServerProject
                 {
                     conn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand(@"SELECT b.price,MAX(b.version) FROM " + _ukmservname + ".trm_in_var C LEFT JOIN " +
-                                                            _ukmservname + ".trm_in_items A ON A.id=C.item LEFT JOIN "
-                                                            + _ukmservname + ".trm_in_pricelist_items B ON B.item=c.item WHERE (C.id= (SELECT `bar` FROM "
-                                                            + _mainservname + ".`priority` WHERE `id` = '" + id + "' ) OR C.item= (SELECT `bar` FROM "
-                                                            + _mainservname + ".`priority` WHERE `id` = '" + id + "' )) AND b.pricelist_id= "
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT b.price,MAX(b.version) FROM " + _ukm + ".trm_in_var C LEFT JOIN " +
+                                                            _ukm + ".trm_in_items A ON A.id=C.item LEFT JOIN "
+                                                            + _ukm + ".trm_in_pricelist_items B ON B.item=c.item WHERE (C.id= (SELECT `bar` FROM "
+                                                            + _main + ".`priority` WHERE `id` = '" + id + "' ) OR C.item= (SELECT `bar` FROM "
+                                                            + _main + ".`priority` WHERE `id` = '" + id + "' )) AND b.pricelist_id= "
                                                             + Config.GetParametr("pricelist_id"), conn);
 
                     cmd.CommandTimeout = 0;
@@ -141,7 +141,7 @@ namespace BarrierServerProject
                 Thread.Sleep(1000);
             }
 
-            Color.WriteLineColor("busyLsTradeAgent = true", ConsoleColor.Cyan);
+            //Color.WriteLineColor("busyLsTradeAgent = true", ConsoleColor.Cyan);
             busyLsTradeAgent = true;
 
             while (!Server.clients.ContainsValue("LsTradeAgent"))
@@ -189,7 +189,7 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("Запрос отправлен.", ConsoleColor.Gray);
                 Thread.Sleep(2000);
-                Color.WriteLineColor("busyLsTradeAgent = false", ConsoleColor.Cyan);
+                //Color.WriteLineColor("busyLsTradeAgent = false", ConsoleColor.Cyan);
                 busyLsTradeAgent = false;
             }
         }

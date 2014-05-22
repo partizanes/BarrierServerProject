@@ -33,6 +33,8 @@ namespace BarrierServerProject
 
                     UpdateAllSailMainPrice();
 
+                    UpdateAllStatusMainPrice();
+
                     Color.WriteLineColor("[Thread] CheckAll остановлен", ConsoleColor.DarkYellow);
 
                     SendUserNewState();
@@ -117,9 +119,14 @@ namespace BarrierServerProject
 
                     using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
-                        if (dr == null) { return; }
+                        if (dr == null) {
+                            Color.WriteLineColor("[CheckCurrentPrices] Запрос вернул null", ConsoleColor.Red);
+                            return; }
 
-                        if (!dr.HasRows) { return; }
+                        if (!dr.HasRows)
+                        {
+                            Color.WriteLineColor("[CheckCurrentPrices] Различий между ценами на кассовом сервере и в очередности не найдено", ConsoleColor.Cyan);
+                            return; }
 
                         while (dr.Read())
                         {
@@ -131,9 +138,9 @@ namespace BarrierServerProject
                                 continue;
 
                             if (turn_price > sail_price)
-                                TasksAdd(id, 1, " Цена на кассе меньше цены очередности [" + sail_price + "]", 8);
+                                TasksAdd(id, 1, " Цена на кассе меньше цены очереди [" + sail_price + "]", 8);
                             else
-                                TasksAdd(id, 1, " Цена на кассе больше цены очередности [" + sail_price + "]", 7);
+                                TasksAdd(id, 1, " Цена на кассе больше цены очереди [" + sail_price + "]", 7);
                         }
                     }
                 }
@@ -214,7 +221,7 @@ namespace BarrierServerProject
                 Thread.Sleep(1000);
             }
 
-            Color.WriteLineColor("busyLsTradeAgent = true", ConsoleColor.Cyan);
+            //Color.WriteLineColor("busyLsTradeAgent = true", ConsoleColor.Cyan);
             CheckThisBar.busyLsTradeAgent = true;
 
             while (!Server.clients.ContainsValue("LsTradeAgent"))
@@ -263,7 +270,7 @@ namespace BarrierServerProject
             finally
             {
                 Thread.Sleep(2000);
-                Color.WriteLineColor("busyLsTradeAgent = false", ConsoleColor.Cyan);
+                //Color.WriteLineColor("busyLsTradeAgent = false", ConsoleColor.Cyan);
                 CheckThisBar.busyLsTradeAgent = false;
             }
         }
@@ -274,6 +281,14 @@ namespace BarrierServerProject
                 Color.WriteLineColor("Обновлен расход в основном перечне.", ConsoleColor.Gray);
             else
                 Color.WriteLineColor("Обновлен расход в основном перечне.", ConsoleColor.Gray);
+        }
+
+        private static void UpdateAllStatusMainPrice()
+        {
+            if (Packages.connector.ExecuteNonQuery("UPDATE `priority` p SET p.`status` = (SELECT MAX(t.`priority`) FROM `tasks` t WHERE (t.`priority_id` = p.`id`))"))
+                Color.WriteLineColor("Обновлены статусы в основном перечне.", ConsoleColor.Gray);
+            else
+                Color.WriteLineColor("Обновлены статусы в основном перечне.", ConsoleColor.Gray);
         }
 
         private static bool CheckAddTasks(int priority_id)

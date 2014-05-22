@@ -20,7 +20,7 @@ namespace BarrierServerProject
                     Thread.Sleep(1000);
                 }
 
-                Color.WriteLineColor("busyLsTradeAgent = true", ConsoleColor.Cyan);
+                //Color.WriteLineColor("busyLsTradeAgent = true", ConsoleColor.Cyan);
                 CheckThisBar.busyLsTradeAgent = true;
 
                 using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
@@ -58,7 +58,7 @@ namespace BarrierServerProject
             finally
             {
                 Thread.Sleep(2000);
-                Color.WriteLineColor("busyLsTradeAgent = false", ConsoleColor.Cyan);
+                //Color.WriteLineColor("busyLsTradeAgent = false", ConsoleColor.Cyan);
                 CheckThisBar.busyLsTradeAgent = false;
             }
         }

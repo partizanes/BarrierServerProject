@@ -16,7 +16,6 @@ namespace BarrierServerProject
     class Packages
     {
         public static string StatusString = "";
-        public static string MainDbName = Config.GetParametr("BarrierDataBase");  //TODO  CHECK CONFIG AND IF MISS WRITE THIS;
         public static Connector connector = new Connector();
 
         public static void parse(string p_id, int com, string msg, User user,System.Net.Sockets.Socket r_client)
@@ -134,6 +133,9 @@ namespace BarrierServerProject
 
                             if(msg.Contains("отказался"))
                                 Log.Write("[" + user.username + "] " + msg, "[DECLINE]", "Decline");
+
+                            if (msg.Contains("выполнил"))
+                                CheckStatusUpdate(msg);
 
                             foreach (System.Collections.DictionaryEntry de in Server.clients)
                             {
@@ -269,6 +271,48 @@ namespace BarrierServerProject
                 id = 0;
                 
                 return false;
+            }
+        }
+
+        private static void CheckStatusUpdate(string msg)
+        {
+            string taskId = msg.Replace("Пользователь выполнил задачу ", "");
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+                {
+                    conn.Open();
+
+                    MySqlCommand cmd = new MySqlCommand(@"SELECT `priority_id`,MAX(`priority`) FROM `tasks` WHERE `priority_id` = 
+                                                            (SELECT `priority_id` FROM `tasks` WHERE `tasks_id` = " + taskId + 
+                                                            ") AND `inactive` = 0 GROUP BY `priority_id`", conn);
+
+                    cmd.CommandTimeout = 0;
+
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr == null) { throw new Exception("Что то запрос не удался!"); }
+
+                        if (!dr.HasRows) {
+                            string uquery = @"UPDATE `priority` SET `status` = 0 WHERE `id` = (SELECT `priority_id` FROM `tasks` WHERE `tasks_id` = " + taskId + ")";
+
+                            Packages.connector.ExecuteNonQuery(uquery);
+                        }
+
+                        while (dr.Read())
+                        {
+                            string uquery = @"UPDATE `priority` SET `status` = " + dr.GetValue(1) + " WHERE `id` = " + dr.GetValue(0);
+
+                            Packages.connector.ExecuteNonQuery(uquery);
+                        }
+                    }
+                }
+            }
+            catch (Exception exc)
+            {
+                Color.WriteLineColor("[CheckStatusUpdate]" + exc.Message, ConsoleColor.Red);
+                Log.ExcWrite("[CheckStatusUpdate]" + exc.Message);
             }
         }
     }
