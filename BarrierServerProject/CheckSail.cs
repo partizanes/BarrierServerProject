@@ -190,9 +190,12 @@ namespace BarrierServerProject
                                 continue;
                             }
 
-                            if (turn_count < (sail_count + 1))
+                            if (turn_count <= (sail_count + (Math.Ceiling(turn_count / 100))))
                             {
-                                //TODO товар на подходе 99 status;
+                                Color.WriteLineColor("Товар почти продан " + id, ConsoleColor.DarkYellow);
+
+                                string uquery = @"UPDATE `priority` SET `status` = 1 WHERE id =" + id;
+                                Packages.connector.ExecuteNonQuery(uquery);
                             }
 
                             if (turn_count > sail_count) 
