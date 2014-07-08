@@ -128,16 +128,16 @@ namespace BarrierServerProject
             {
                 Color.WriteLineColor("\nВведите комманду:", ConsoleColor.Green);
 
-                string com = Console.ReadLine().ToLower();
+                var com = Console.ReadLine().ToLower();
 
                 Color.WriteLineColor(Command.SwitchCommand(com), ConsoleColor.Yellow);
             }
         }
         public static void another_run()
         {
-            int i = 10;
+            var i = 10;
 
-            while (i != 0)
+            while (i >= 0)
             {
                 Code.RenderConsoleProgress(i * 10, '\u2592', ConsoleColor.Red, "Завершение работы сервера через [" + i.ToString() + " second]");
                 Thread.Sleep(1000);

@@ -7,7 +7,7 @@ namespace ConsoleFunctions
         private static void OverwriteConsoleMessage(string message)
         {
             Console.CursorLeft = 0;
-            int maxCharacterWidth = Console.WindowWidth - 1;
+            var maxCharacterWidth = Console.WindowWidth - 1;
             if (message.Length > maxCharacterWidth)
             {
                 message = message.Substring(0, maxCharacterWidth - 3) + "...";

@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
-using System.Data.OleDb;
-using System.Windows.Forms;
 using MySql.Data.MySqlClient;
+using DicEnt = System.Collections.DictionaryEntry;
 
 namespace BarrierServerProject
 {
@@ -50,7 +45,12 @@ namespace BarrierServerProject
                         case 0:
                             string[] split_data = msg.Replace("\0", "").Replace(" ", "").Split(new Char[] { ':' });
 
+                            var username = split_data[0];
+                            var hash = split_data[1];
+
                             using (MySqlConnection conn = new MySqlConnection(Connector.BarrierStringConnecting))
+                            using (MySqlCommand cmd = new MySqlCommand("SELECT username,hash FROM users WHERE username = '" + username + "' AND hash = '" + hash + "'", conn))
+                            using (MySqlDataReader dr = cmd.ExecuteReader())
                             {
                                 try { conn.Open(); }
                                 catch (MySqlException ex)
@@ -60,51 +60,43 @@ namespace BarrierServerProject
                                     switch (ex.Number)
                                     {
                                         case 1042:
-                                            Server.clients[r_client] = split_data[0];
-                                            Msg.SendUser(split_data[0], "PrioritySale", 4, "         Mysql недоступен");
+                                            Server.clients[r_client] = username;
+                                            Msg.SendUser(username, "PrioritySale", 4, "         Mysql недоступен");
                                             break;
                                         default:
-                                            Server.clients[r_client] = split_data[0];
-                                            Msg.SendUser(split_data[0], "PrioritySale", 4, "         Код: " + ex.Number);
+                                            Server.clients[r_client] = username;
+                                            Msg.SendUser(username, "PrioritySale", 4, "         Код: " + ex.Number);
                                             break;
                                     }
                                 }
 
-                                MySqlCommand cmd = new MySqlCommand("SELECT username,hash FROM users WHERE username = '" + split_data[0] + "' AND hash = '" + split_data[1] + "'", conn);
-
-                                using (MySqlDataReader dr = cmd.ExecuteReader())
+                                if (dr == null)
                                 {
-                                    if (dr == null)
-                                    {
-                                        Log.Write("Запрос вернул null", "Exception", "Exception");
-                                        Log.ExcWrite("[AUTH] Запрос вернул null");
-                                    }
+                                    Log.Write("Запрос вернул null", "Exception", "Exception");
+                                    Log.ExcWrite("[AUTH] Запрос вернул null");
+                                    return;
+                                }
 
-                                    if (dr.Read())
-                                    {
-                                        Server.clients[r_client] = split_data[0];
-                                        Color.WriteLineColor(split_data[0] + " Добавлен!", ConsoleColor.Cyan);
-                                        Msg.SendUser(split_data[0], "PrioritySale", 1, split_data[0]);
-                                        user.username = split_data[0];
-                                        Packages.connector.ExecuteNonQuery("UPDATE `users` SET `online`='1',`ip`='" + IPAddress.Parse(((IPEndPoint)r_client.RemoteEndPoint).Address.ToString()) + "' WHERE `username`='" + split_data[0] + "'");
-                                        Log.Write(split_data[0], "[AUTH_S]", "AUTHLOG");
-
-                                    }
-                                    else
-                                    {
-                                        Server.clients[r_client] = split_data[0];
-                                        Msg.SendUser(split_data[0], "PrioritySale", 0, "Идентификация не пройдена.");
-                                        Color.WriteLineColor(split_data[0] + " авторизация неудачна", ConsoleColor.Red);
-                                        Log.Write(split_data[0], "[AUTH_F]", "AUTHLOG");
-                                    }
-
-                                    using (MD5 md5Hash = MD5.Create())
-                                    {
-                                        Color.WriteLineColor(split_data[0] + " " + split_data[1], ConsoleColor.DarkGray);
-                                        break;
-                                    }
+                                if (dr.Read())
+                                {
+                                    Server.clients[r_client] = username;
+                                    Color.WriteLineColor(username + " Добавлен!", ConsoleColor.Cyan);
+                                    Msg.SendUser(username, "PrioritySale", 1, username);
+                                    user.username = username;
+                                    Packages.connector.ExecuteNonQuery("UPDATE `users` SET `online`='1',`ip`='" + IPAddress.Parse(((IPEndPoint)r_client.RemoteEndPoint).Address.ToString()) + "' WHERE `username`='" + username + "'");
+                                    Log.Write(username, "[AUTH_S]", "AUTHLOG");
 
                                 }
+                                else
+                                {
+                                    Server.clients[r_client] = username;
+                                    Msg.SendUser(username, "PrioritySale", 0, "Идентификация не пройдена.");
+                                    Color.WriteLineColor(username + " авторизация неудачна", ConsoleColor.Red);
+                                    Log.Write(username, "[AUTH_F]", "AUTHLOG");
+                                }
+
+                                Color.WriteLineColor(username + " " + hash, ConsoleColor.DarkGray);
+                                break;
                             }
                         case 4:
                         case 5:
@@ -114,18 +106,11 @@ namespace BarrierServerProject
                             {
                                 Color.WriteLineColor("Присвоен уникальный номер " + _LastId, ConsoleColor.Green);
 
-                                Thread th = new Thread(delegate()
-                                {
-                                    Color.WriteLineColor("[Thread] GetSailAndPrice запущен... ", ConsoleColor.DarkYellow);
-
+                                Thread th = new Thread(delegate() {
                                     CheckThisBar.GetSailAndPrice(_LastId);
-
-                                    Color.WriteLineColor("[Thread] GetSailAndPrice завершен.", ConsoleColor.DarkYellow);
                                 }); ;
                                 th.Name = "GetUkmSailParametrs";
                                 th.Start();
-
-                                //TODO SEND ALL USER INFORMATION ABOUT 
                             }
                             break;
                         case 6:
@@ -133,11 +118,10 @@ namespace BarrierServerProject
 
                             if(msg.Contains("отказался"))
                                 Log.Write("[" + user.username + "] " + msg, "[DECLINE]", "Decline");
-
-                            if (msg.Contains("выполнил"))
+                            else if (msg.Contains("выполнил"))
                                 CheckStatusUpdate(msg);
 
-                            foreach (System.Collections.DictionaryEntry de in Server.clients)
+                            foreach (DicEnt de in Server.clients)
                             {
                                 Msg.SendUser((de.Value).ToString(), "PrioritySale", 9, Packages.StatusString + ";" + DateTime.Now);
                             }
@@ -145,7 +129,7 @@ namespace BarrierServerProject
                         case 7:
                             Color.WriteLineColor("Есть новые сообщение на доске объявлений.Отправка уведомления...", ConsoleColor.Yellow);
 
-                            foreach (System.Collections.DictionaryEntry de in Server.clients)
+                            foreach (DicEnt de in Server.clients)
                             {
                                 Msg.SendUser((de.Value).ToString(), "PrioritySale", 6, "");
                             }
@@ -223,15 +207,15 @@ namespace BarrierServerProject
         {
             string[] sd = msg.Replace("\0", "").Split(new Char[] { ';' });
 
-            string bar = sd[0].Replace(" ", "");
-            string turncount = sd[1].Replace(" ", "");
-            string turnprice = sd[2].Replace(" ", "");
+            var bar = sd[0].Replace(" ", "");
+            var turncount = sd[1].Replace(" ", "");
+            var turnprice = sd[2].Replace(" ", "");
 
-            DateTime datetime = new DateTime();
+            var datetime = new DateTime();
 
             datetime = Convert.ToDateTime(sd[3]);
 
-            string name = sd[4];
+            var name = sd[4];
 
             try
             {

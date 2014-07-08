@@ -5,6 +5,7 @@ using System.Data.OleDb;
 using System.IO;
 using System.Security.Cryptography;
 using System.Threading;
+using DicEnt = System.Collections.DictionaryEntry;
 
 namespace BarrierServerProject
 {
@@ -54,7 +55,7 @@ namespace BarrierServerProject
                 Color.WriteLineColor("Версия базы:" + Packages.StatusString, ConsoleColor.Cyan);
             }
 
-            foreach (System.Collections.DictionaryEntry de in Server.clients)
+            foreach (DicEnt de in Server.clients)
             {
                 Msg.SendUser((de.Value).ToString(), "PrioritySale", 9, Packages.StatusString + ";" + DateTime.Now);
             }

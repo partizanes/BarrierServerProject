@@ -299,6 +299,8 @@ namespace BarrierServerProject
 
         public static void GetSailAndPrice(int id)
         {
+            Color.WriteLineColor("[Thread] GetSailAndPrice запущен... ", ConsoleColor.DarkYellow);
+
             Color.WriteLineColor("Запущено обновление информации по штрихкоду " + CheckThisBar.GetBarOnID(id), ConsoleColor.DarkYellow);
 
             CheckThisBar.UpdatePrice(id);
@@ -310,6 +312,8 @@ namespace BarrierServerProject
             CheckThisBar.UpdateCountOut(id);
 
             CheckSail.CheckAll();
+
+            Color.WriteLineColor("[Thread] GetSailAndPrice завершен.", ConsoleColor.DarkYellow);
         }
 
         public static void CheckSailAndPriceUpdate()

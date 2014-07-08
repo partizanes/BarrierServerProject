@@ -13,10 +13,10 @@ namespace BarrierServerProject
     {
         public static bool isServerRunning;
         public static Hashtable clients;
-        static Socket listener;
-        static int port = 1991;
-        static IPEndPoint Point;
-        static List<Thread> threads = new List<Thread>();
+        private static Socket listener;
+        private static readonly int port = 1991;
+        private static IPEndPoint Point;
+        private static List<Thread> threads = new List<Thread>();
 
         public static void ServerStart()
         {
@@ -29,7 +29,7 @@ namespace BarrierServerProject
                 try { listener.Bind(Point); }
                 catch (SocketException) {
                     Color.WriteLineColor("Порт " + port + " занят другим приложением!", ConsoleColor.Red);
-                    Color.WriteLineColor("Освободите порт " +  port + " и перезапустите приложение: " , ConsoleColor.Yellow);
+                    Color.WriteLineColor("Освободите порт " + port + " и перезапустите приложение: ", ConsoleColor.Yellow);
                     Thread.Sleep(2000);
                     Program.another_run();
                 }
@@ -72,7 +72,7 @@ namespace BarrierServerProject
 
         private static void MessageReceiver(Socket r_client)
         {
-                User user = new User();
+                var user = new User();
 
                 while (isServerRunning)
                 {
@@ -84,7 +84,7 @@ namespace BarrierServerProject
                         user.ipaddress = IPAddress.Parse(((IPEndPoint)r_client.RemoteEndPoint).Address.ToString());
                         user.port = ((IPEndPoint)r_client.RemoteEndPoint).Port;
 
-                        byte[] bytes = new byte[1024];
+                        var bytes = new byte[4096];
 
                         r_client.Receive(bytes);
 
@@ -93,8 +93,9 @@ namespace BarrierServerProject
                         packet = Util.DeSerialization(bytes);
 
                         //add debug paramter
+#if DEBUG
                         Console.WriteLine("[" + DateTime.Now.ToLongTimeString() + "] " + "[DEBUG] " + packet.group + " " + packet.type + " " + packet.message);
-
+#endif
                         Packages.parse(packet.group, packet.type, packet.message, user, r_client);
                     }
                     catch (SocketException exc)

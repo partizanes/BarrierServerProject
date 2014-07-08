@@ -4,38 +4,10 @@ namespace BarrierServerProject
 {
     public class User
     {
-       private string m_username;
-       private int m_userid;
-       private IPAddress m_ipaddress;
-       private int m_port;
-
-        public string username
-        {
-            get { return m_username; }
-
-            set { m_username = value; }
-        }
-
-        public int userid
-        {
-            get { return m_userid; }
-
-            set { m_userid = value; }
-        }
-
-        public IPAddress ipaddress
-        {
-            get { return m_ipaddress; }
-
-            set { m_ipaddress = value; }
-        }
-
-        public int port
-        {
-            get { return m_port; }
-
-            set { m_port = value; }
-        }
+        public string username { get; set; }
+        public int userid { get; set; }
+        public IPAddress ipaddress { get; set; }
+        public int port { get; set; }
     }
 }
 
