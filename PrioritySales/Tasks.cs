@@ -473,8 +473,8 @@ namespace PrioritySales
 
 //         private void DetectedText(int i,DateTime date)
 //         {
-//             string DetectedText = "";
-//             string ActionText = "";
+//             string DetectedText = String.Empty;
+//             string ActionText = String.Empty;
 // 
 //             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.DetectedBarText.ForeColor = System.Drawing.Color.ForestGreen; }));
 //             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { MainFormClassic.infocontrol.ActionText.ForeColor = System.Drawing.Color.ForestGreen; }));

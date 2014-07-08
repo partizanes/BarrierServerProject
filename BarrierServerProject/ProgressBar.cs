@@ -33,7 +33,7 @@ namespace ConsoleFunctions
             string progBar = new string(progressBarCharacter, newWidth) + 
                   new string(' ', width - newWidth);
             Console.Write(progBar);
-            if (string.IsNullOrEmpty(message)) message = "";
+            if (string.IsNullOrEmpty(message)) message = String.Empty;
             Console.CursorTop++;
             OverwriteConsoleMessage(message);
             Console.CursorTop--;

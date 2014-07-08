@@ -12,7 +12,7 @@ namespace BarrierServerProject
         public static bool busyLsTradeAgent = false;
         public static string GetBarOnID(int id)
         {
-            string bar = "";
+            string bar = String.Empty;
 
             try
             {

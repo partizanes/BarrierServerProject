@@ -126,7 +126,7 @@ namespace ReceveAndSend
                     }
 
                     r = cas.GetState();
-                    string str = "";
+                    string str = String.Empty;
                     cas.GetTransStatus(TextBoxFrom.Text, ref str);  //ipadress
                     this.Invoke((Action)delegate { listBox1.Items.Add("Чтение параметров: " + str); });
                     this.Invoke((Action)delegate { listBox1.SelectedIndex = listBox1.Items.Count - 1; ; });
@@ -168,7 +168,7 @@ namespace ReceveAndSend
 
                 count = 1;
 
-                string dataplu = "";
+                string dataplu = String.Empty;
 
                 this.Invoke((Action)delegate { progressBar1.Maximum = 5000; });
 
@@ -265,7 +265,7 @@ namespace ReceveAndSend
                 }
 
                 r = cas.GetState();
-                string str = "";
+                string str = String.Empty;
                 cas.GetTransStatus(TextBoxWhere.Text, ref str);
                 this.Invoke((Action)delegate { listBox1.Items.Add("Отправка параметров: " +str); });
                 this.Invoke((Action)delegate { listBox1.SelectedIndex = listBox1.Items.Count - 1; ; });
@@ -401,7 +401,7 @@ namespace ReceveAndSend
                                 p++;
                                 break;
                             case 29:
-                                this.Invoke((Action)delegate { LabelInfo.Text = ""; });
+                                this.Invoke((Action)delegate { LabelInfo.Text = String.Empty; });
                                 p++;
                                 break;
                             case 30:

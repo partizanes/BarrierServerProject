@@ -420,10 +420,10 @@ namespace PrioritySales
                             {
                                 (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() {
                                     DeclineErr(true, "                                                Штрихкод не найден в базе!");
-                                    TextboxAddBar.Text = "";
-                                    TextboxCountAdd.Text = "";
-                                    TextboxNameItem.Text = "";
-                                    TextboxPrice.Text = "";
+                                    TextboxAddBar.Text = String.Empty;
+                                    TextboxCountAdd.Text = String.Empty;
+                                    TextboxNameItem.Text = String.Empty;
+                                    TextboxPrice.Text = String.Empty;
                                     TextboxAddBar.Focus();
                                     return;
                                 }));
@@ -497,10 +497,10 @@ namespace PrioritySales
                                 (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate()
                                 {
                                     DeclineErr(true, "                                                Штрихкод не найден в базе!");
-                                    TextboxAddBar.Text = "";
-                                    TextboxCountAdd.Text = "";
-                                    TextboxNameItem.Text = "";
-                                    TextboxPrice.Text = "";
+                                    TextboxAddBar.Text = String.Empty;
+                                    TextboxCountAdd.Text = String.Empty;
+                                    TextboxNameItem.Text = String.Empty;
+                                    TextboxPrice.Text = String.Empty;
                                     TextboxAddBar.Focus();
                                     return;
                                 }));
@@ -594,10 +594,10 @@ namespace PrioritySales
                     }
                 case Keys.Left:
                     {
-                        TextboxAddBar.Text = "";
-                        TextboxCountAdd.Text = "";
-                        TextboxNameItem.Text = "";
-                        TextboxPrice.Text = "";
+                        TextboxAddBar.Text = String.Empty;
+                        TextboxCountAdd.Text = String.Empty;
+                        TextboxNameItem.Text = String.Empty;
+                        TextboxPrice.Text = String.Empty;
                         e.SuppressKeyPress = true;
                         TextboxAddBar.Focus();
                         break;
@@ -705,7 +705,7 @@ namespace PrioritySales
 
         private void TimerClearMsg_Tick(object sender, EventArgs e)
         {
-            LabelInfo.Text = "";
+            LabelInfo.Text = String.Empty;
             TimerClearMsg.Enabled = false;
             ButtonTurn.ForeColor = Color.DodgerBlue;
             PanelAddBg.BackColor = Color.DodgerBlue;
@@ -767,14 +767,14 @@ namespace PrioritySales
                 PanelAddTask.Visible = true;
             }
 
-            TextboxPrice.Text = "";
-            TextboxAddBar.Text = "";
-            TextboxCountAdd.Text = "";
-            TextboxNameItem.Text = "";
+            TextboxPrice.Text = String.Empty;
+            TextboxAddBar.Text = String.Empty;
+            TextboxCountAdd.Text = String.Empty;
+            TextboxNameItem.Text = String.Empty;
             PanelAddBg.BackColor = Color.DodgerBlue;
             ButtonTurn.ForeColor = Color.DodgerBlue;
             TimerClearMsg.Enabled = false;
-            LabelInfo.Text = "";
+            LabelInfo.Text = String.Empty;
         }
         private void ButtonTurn_KeyDown(object sender, KeyEventArgs e)
         {
@@ -785,7 +785,7 @@ namespace PrioritySales
                     ButtonAdd.Focus();
                     break;
                 case Keys.Up:
-                    TextboxCountAdd.Text = "";
+                    TextboxCountAdd.Text = String.Empty;
                     TextboxCountAdd.Focus();
                     break;
             }

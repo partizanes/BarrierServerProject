@@ -28,7 +28,7 @@ namespace PrioritySales
                             System.Threading.Thread.Sleep(2000);
                             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).BackColor = Color.DodgerBlue; }));
                             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).ButtonSend.Enabled = true; }));
-                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).PassTextBox.Text = ""; }));
+                            (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).PassTextBox.Text = String.Empty; }));
                             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).PassTextBox.Focus(); }));
                             break;
                         case 1:
@@ -124,7 +124,7 @@ namespace PrioritySales
                                             object current_price_ukm = dr.GetValue(8);
                                             string dt = dr.GetString(9);
 
-                                            if (sail.ToString() == "")
+                                            if (sail.ToString() == String.Empty)
                                                 sail = 0;
 
                                             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.dataGridViewMainForm.Rows.Add(u_id, barcode, name, turn_price, turn_count.ToString().Replace(",000", ""), sail.ToString().Replace(",000", ""), status, current_price_ukm, dt); }));
@@ -161,22 +161,26 @@ namespace PrioritySales
 
             if (a)
             {
-                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.PanelAddBg.BackColor = Color.Green; }));
-                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.LabelInfo.ForeColor = Color.Green; }));
-                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.TextboxNameItem.Text = ""; }));
-                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.TextboxAddBar.Text = ""; }));
-                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.TextboxCountAdd.Text = ""; }));
-                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.TextboxPrice.Text = ""; }));
-                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.LabelInfo.Text = str; }));
-                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.TimerClearMsg.Enabled = true; ; }));
-                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.TextboxAddBar.Focus(); }));
+                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() {
+                    mf.PanelAddBg.BackColor = Color.Green;
+                    mf.LabelInfo.ForeColor = Color.Green;
+                    mf.TextboxNameItem.Text = String.Empty;
+                    mf.TextboxAddBar.Text = String.Empty;
+                    mf.TextboxCountAdd.Text = String.Empty;
+                    mf.TextboxPrice.Text = String.Empty;
+                    mf.LabelInfo.Text = str;
+                    mf.TimerClearMsg.Enabled = true;
+                    mf.TextboxAddBar.Focus();
+                }));
             }
             else
             {
-                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.PanelAddBg.BackColor = Color.Red; }));
-                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.LabelInfo.ForeColor = Color.Red; }));
-                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.LabelInfo.Text = str; }));
-                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.TimerClearMsg.Enabled = true; ; }));
+                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() {
+                    mf.PanelAddBg.BackColor = Color.Red;
+                    mf.LabelInfo.ForeColor = Color.Red;
+                    mf.LabelInfo.Text = str;
+                    mf.TimerClearMsg.Enabled = true;
+                }));
             }
 
             (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { mf.Refresh(); }));

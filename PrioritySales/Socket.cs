@@ -37,13 +37,19 @@ namespace PrioritySales
                     MessageBox.Show("Сервер возможно отключен или недоступен в данный момент времени , уточните параметры сервера в настройках и повторите подключение \n Текст исключения: " + exc.Message);
                     try
                     {
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { AuthFormClassic.status = false; }));
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).BackColor = Color.DarkRed; }));
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() {
+                            AuthFormClassic.status = false;
+                            (Application.OpenForms[1] as AuthFormClassic).BackColor = Color.DarkRed;
+                        }));
+
                         System.Threading.Thread.Sleep(1000);
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).BackColor = Color.DodgerBlue; }));
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).ButtonSend.Enabled = true; }));
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).PassTextBox.Text = ""; }));
-                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { (Application.OpenForms[1] as AuthFormClassic).PassTextBox.Focus(); }));
+
+                        (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() {
+                            (Application.OpenForms[1] as AuthFormClassic).BackColor = Color.DodgerBlue;
+                            (Application.OpenForms[1] as AuthFormClassic).ButtonSend.Enabled = true;
+                            (Application.OpenForms[1] as AuthFormClassic).PassTextBox.Text = String.Empty;
+                            (Application.OpenForms[1] as AuthFormClassic).PassTextBox.Focus();
+                        }));
                     }
                     catch { Application.Exit(); }
                 }

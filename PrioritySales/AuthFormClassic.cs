@@ -273,7 +273,7 @@ namespace PrioritySales
             switch (e.KeyCode)
             {
                 case Keys.Up:
-                    LabelUserText.Text = "";
+                    LabelUserText.Text = String.Empty;
                     e.SuppressKeyPress = true;
                     LabelUserText.Focus();
                     break;
@@ -287,7 +287,7 @@ namespace PrioritySales
                         BackPanelPassText.BackColor = Color.Red;
                         break;
                 case Keys.Escape:
-                    PassTextBox.Text = "";
+                        PassTextBox.Text = String.Empty;
                     break;
             }
         }
@@ -297,7 +297,7 @@ namespace PrioritySales
             switch (e.KeyCode)
             {
                 case Keys.Up:
-                    PassTextBox.Text = "";
+                    PassTextBox.Text = String.Empty;
                     e.SuppressKeyPress = true;
                     PassTextBox.Focus();
                     break;
@@ -320,7 +320,7 @@ namespace PrioritySales
                         ButtonSend.ForeColor = Color.Red;
                     break;
                 case Keys.Escape:
-                    PassTextBox.Text = "";
+                    PassTextBox.Text = String.Empty;
                     e.SuppressKeyPress = true;
                     PassTextBox.Focus();
                     break;

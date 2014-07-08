@@ -27,7 +27,7 @@ namespace BalanceModule
         private bool drag = false;
         private Point start_point = new Point(0, 0);
         private bool draggable = true;
-        private string exclude_list = "";
+        private string exclude_list = String.Empty;
 
         private int[] data_delete = new int[5000];
         private int CountMysqlTimeoutException = 10;
@@ -251,13 +251,13 @@ namespace BalanceModule
                 while (!(r == 99 || r == 55 || r == 30))
                 {
                     r = cas.GetState();
-                    string str = "";
+                    string str = String.Empty;
                     cas.GetTransStatus(m_ip, ref str);  //ipadress
                     list_msg(str);
                     Thread.Sleep(500);
                 }
 
-                string dataplu = "";
+                string dataplu = String.Empty;
 
                 try
                 {
@@ -283,7 +283,7 @@ namespace BalanceModule
 
                 count_error = 0;
 
-                this.Invoke((Action)delegate { label2.Text = ""; });
+                this.Invoke((Action)delegate { label2.Text = String.Empty; });
                 this.Invoke((Action)delegate { label2.Refresh(); });
 
                 this.Invoke((Action)delegate { checkedListBox1.SetItemChecked(checkedListBox1.Items.IndexOf(m_ip + ":" + m_port + " " + m_name),true); });
@@ -355,7 +355,7 @@ namespace BalanceModule
             string EntryTime = DateTime.Now.ToLongTimeString().Replace(":", "_");
             string EntryDate = DateTime.Today.ToShortDateString().Replace(".", "_");
 
-            this.Invoke((Action)delegate { label2.Text = ""; });
+            this.Invoke((Action)delegate { label2.Text = String.Empty; });
 
             while (count <= count_error)
             {
@@ -414,7 +414,7 @@ namespace BalanceModule
                 while (!(r == 99 || r == 55))
                 {
                     r = cas.GetState();
-                    string str = "";
+                    string str = String.Empty;
                     cas.GetTransStatus(m_ip, ref str);
                     list_msg(str);
                     Thread.Sleep(300);
@@ -424,7 +424,7 @@ namespace BalanceModule
                 cas.DisconnectAll();
             }
 
-            this.Invoke((Action)delegate { label2.Text = ""; });
+            this.Invoke((Action)delegate { label2.Text = String.Empty; });
             this.Invoke((Action)delegate { label2.Refresh(); });
 
             return;

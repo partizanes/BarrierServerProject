@@ -10,7 +10,7 @@ namespace BarrierServerProject
 {
     class Packages
     {
-        public static string StatusString = "";
+        public static string StatusString = String.Empty;
         public static Connector connector = new Connector();
 
         public static void parse(string p_id, int com, string msg, User user,System.Net.Sockets.Socket r_client)

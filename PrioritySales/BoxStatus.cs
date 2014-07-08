@@ -59,7 +59,7 @@ namespace PrioritySales
 
             if (Connector.ExecuteNonQuery("INSERT IGNORE INTO `message`(`userid`,`msg_priority`,`msg_color`,`msg`,`msg_datetime`) VALUES ( (SELECT id FROM users WHERE username = '" + MainFormClassic.UserName + "'),'" + priority + "','" + msg_color + "','" + message + "','" + datetime + "')"))
             {
-                MainFormClassic.msgdesk.TextBoxMessage.Text = "";
+                MainFormClassic.msgdesk.TextBoxMessage.Text = String.Empty;
                 MainFormClassic.msgdesk.TextBoxMessage.ForeColor = Color.Silver;
 
                 if (Server.server.Connected)
@@ -67,7 +67,7 @@ namespace PrioritySales
             }
 
             this.Hide();
-            this.textBox1.Text = "";
+            this.textBox1.Text = String.Empty;
         }
     }
 }

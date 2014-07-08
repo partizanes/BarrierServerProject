@@ -245,7 +245,7 @@ namespace PrioritySales
         private void CleanPanelEdited(string _MsgId)
         {
             LabelMsgIdEdited.Text = _MsgId;
-            TextBoxEditedPriority.Text = "";
+            TextBoxEditedPriority.Text = String.Empty;
             TextboxMsgEdited.Text = "Загрузка...";
         }
 
@@ -325,7 +325,7 @@ namespace PrioritySales
         private void TextBoxEditedPriority_TextChanged(object sender, EventArgs e)
         {
             try {
-                if (TextBoxEditedPriority.Text == "")
+                if (TextBoxEditedPriority.Text == String.Empty)
                     return;
 
                 if(MainFormClassic.UserGroup == 1 && (int.Parse(TextBoxEditedPriority.Text)) > 3)
@@ -334,7 +334,7 @@ namespace PrioritySales
             catch (System.Exception ex)
             {
                 Log.log_write("[TextBoxEditedPriority_TextChanged]" + ex.Message, "EXCEPTION", "exception");
-                TextBoxEditedPriority.Text = ""; 
+                TextBoxEditedPriority.Text = String.Empty;
                 MessageBox.Show(ex.Message); 
             }
             
