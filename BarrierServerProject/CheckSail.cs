@@ -176,27 +176,30 @@ namespace BarrierServerProject
                             int id = dr.GetInt32(0);
 
                             double turn_count = dr.GetDouble(1);
-                            double sail_price = dr.GetDouble(2);
+                            double sail_count = dr.GetDouble(2);
 
-                            if (turn_count < sail_price)
+                            if (turn_count < sail_count)
                             {
                                 TasksAdd(id, 1, " Нужна прогрузка цены на кассу", 3);
                                 TasksAdd(id, 2, " Продано больше чем нужно", 3);
                                 continue;
                             }
 
-                            if (turn_count == sail_price)
+                            if (turn_count == sail_count)
                             {
                                 TasksAdd(id, 1, " Нужна прогрузка цены на касску", 2);
                                 continue;
                             }
 
-                            if (turn_count < (sail_price + 1))
+                            if (turn_count <= (sail_count + (Math.Ceiling(turn_count / 100))))
                             {
-                                //TODO товар на подходе 99 status;
+                                Color.WriteLineColor("Товар почти продан " + id, ConsoleColor.DarkYellow);
+
+                                string uquery = @"UPDATE `priority` SET `status` = 1 WHERE id =" + id;
+                                Packages.connector.ExecuteNonQuery(uquery);
                             }
 
-                            if (turn_count > sail_price) 
+                            if (turn_count > sail_count) 
                             {
                                 //Все ок! 
                             }

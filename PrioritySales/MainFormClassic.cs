@@ -1414,7 +1414,16 @@ namespace PrioritySales
 
                 MainFormClassic.prioritydetails.dataGridViewMainForm.Focus();
 
-                string index = dataGridViewMainForm.SelectedRows[0].Cells[0].Value.ToString();
+                string index = dataGridViewMainForm.SelectedRows[0].Cells[0].Value.ToString(); //WARNING
+
+                if (index == null)
+                {
+                    Log.ExcWrite("[подробноToolStripMenuItem_Click] index is Null");
+                    return;
+                }
+
+                //clean table order loading
+                (Application.OpenForms[1] as AuthFormClassic).Invoke((MethodInvoker)(delegate() { prioritydetails.dataGridViewMainForm.Rows.Clear(); }));
 
                 LoadPriorityDetails(index);
             }
