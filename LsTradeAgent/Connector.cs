@@ -14,8 +14,8 @@ namespace LsTradeAgent
         public static string IpCashServer = Config.GetParametr("IpCashServer");
         private static int CommandTimeout = int.Parse(Config.GetParametr("CommandTimeout"));
         public static int ConnectTimeout = int.Parse(Config.GetParametr("ConnectTimeout"));
-        public static string BarrierStringConnecting = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=" + ConnectTimeout + ";", IpCashServer, "partizanes", "***REMOVED***", BarrierDataBase);
-        public static string UkmStringConnecting = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60" + ConnectTimeout + ";", IpCashServer, "partizanes", "***REMOVED***", UkmDataBase);
+        public static string BarrierStringConnecting = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=" + ConnectTimeout + ";", IpCashServer, "", "", BarrierDataBase);
+        public static string UkmStringConnecting = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60" + ConnectTimeout + ";", IpCashServer, "", "", UkmDataBase);
 
 
         public static Boolean ExecuteNonQuery(string str)
