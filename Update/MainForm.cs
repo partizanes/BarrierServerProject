@@ -67,7 +67,7 @@ namespace Update
         {
             try 
             {
-                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=" + ConnectTimeout + ";", IpCashServer, "PrioritySail", "***REMOVED***", UpdateServerBase)))
+                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=" + ConnectTimeout + ";", IpCashServer, "PrioritySail", "", UpdateServerBase)))
                 {
                     conn.Open();
 
@@ -103,7 +103,7 @@ namespace Update
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=" + ConnectTimeout + ";", IpCashServer, "PrioritySail", "***REMOVED***", UpdateServerBase)))
+                using (MySqlConnection conn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=" + ConnectTimeout + ";", IpCashServer, "PrioritySail", "", UpdateServerBase)))
                 {
                     conn.Open();
 
