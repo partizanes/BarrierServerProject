@@ -14,8 +14,8 @@ namespace PrioritySales
         public static string IpCashServer = Config.GetParametr("IpCashServer");
         public static int CommandTimeout = int.Parse(Config.GetParametr("CommandTimeout"));
         public static int ConnectTimeout = int.Parse(Config.GetParametr("ConnectTimeout"));
-        public static string BarrierStringConnecting = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=" + ConnectTimeout + ";", IpCashServer, "BarrierServerR", "***REMOVED***", BarrierDataBase);
-        public static string UkmStringConnecting = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60" + ConnectTimeout + ";", IpCashServer, "BarrierServerR", "***REMOVED***", UkmDataBase);
+        public static string BarrierStringConnecting = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=" + ConnectTimeout + ";", IpCashServer, "BarrierServerR", "", BarrierDataBase);
+        public static string UkmStringConnecting = string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60" + ConnectTimeout + ";", IpCashServer, "BarrierServerR", "", UkmDataBase);
 
         public static Boolean ExecuteNonQuery(string str)
         {
