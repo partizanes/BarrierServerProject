@@ -180,7 +180,7 @@ namespace LsTradeAgent
                             return;
                         }
 
-                        using (MySqlConnection MySqlconn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "partizanes", "***REMOVED***", Config.GetParametr("BarrierDataBase"))))
+                        using (MySqlConnection MySqlconn = new MySqlConnection(string.Format("server={0};uid={1};pwd={2};database={3};Connect Timeout=60;", Config.GetParametr("IpCashServer"), "", "", Config.GetParametr("BarrierDataBase"))))
                         {
                             MySqlCommand MySqlCmd = new MySqlCommand();
 
