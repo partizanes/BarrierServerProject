@@ -435,7 +435,7 @@ namespace BalanceModule
 
             MySqlDataReader reader;
 
-            connStr = string.Format("server={0};uid={1};pwd={2};database={3};", "192.168.2.100", "partizanes", "***REMOVED***", "ukmserver");
+            connStr = string.Format("server={0};uid={1};pwd={2};database={3};", "192.168.2.100", "", "", "ukmserver");
             
             serverConn = new MySqlConnection(connStr);
 
